@@ -1,0 +1,67 @@
+ERROR - 2023-03-03 08:26:26 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARCUS'.
+CRITICAL - 2023-03-03 08:26:26 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARCUS'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Customer_model.php(26): CodeIgniter\Database\BaseConnection->query('select IDCUST,IDGRP,TEXTSNAM,NAMECUST from ARCUS')
+ 2 APPPATH\Controllers\Customer.php(21): App\Models\Customer_model->get_customer()
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->index()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 08:59:31 --> Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found
+in APPPATH\Controllers\Customer.php on line 43.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:10:26 --> Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found
+in APPPATH\Controllers\Customer.php on line 43.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:10:27 --> Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found
+in APPPATH\Controllers\Customer.php on line 43.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:17:16 --> Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found
+in APPPATH\Controllers\Customer.php on line 43.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:17:18 --> Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found
+in APPPATH\Controllers\Customer.php on line 43.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:17:19 --> Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found
+in APPPATH\Controllers\Customer.php on line 43.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:19:44 --> include(D:\xampp\htdocs\Andritz-Sage\vendor\composer/../phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php): failed to open stream: No such file or directory
+in VENDORPATH\composer\ClassLoader.php on line 582.
+ 1 VENDORPATH\composer\ClassLoader.php(582): CodeIgniter\Debug\Exceptions->errorHandler(2, 'include(D:\\xampp\\htdocs\\Andritz-Sage\\vendor\\composer/../phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php): failed to open stream: No such file or directory', 'VENDORPATH\\composer\\ClassLoader.php', 582, [...])
+ 2 VENDORPATH\composer\ClassLoader.php(582): include()
+ 3 VENDORPATH\composer\ClassLoader.php(433): Composer\Autoload\{closure}('VENDORPATH\\composer/../phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php')
+ 4 [internal function]: Composer\Autoload\ClassLoader->loadClass('PhpOffice\\PhpSpreadsheet\\Spreadsheet')
+ 5 APPPATH\Controllers\Customer.php(43): spl_autoload_call('PhpOffice\\PhpSpreadsheet\\Spreadsheet')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-03 09:19:54 --> include(D:\xampp\htdocs\Andritz-Sage\vendor\composer/../phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php): failed to open stream: No such file or directory
+in VENDORPATH\composer\ClassLoader.php on line 582.
+ 1 VENDORPATH\composer\ClassLoader.php(582): CodeIgniter\Debug\Exceptions->errorHandler(2, 'include(D:\\xampp\\htdocs\\Andritz-Sage\\vendor\\composer/../phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php): failed to open stream: No such file or directory', 'VENDORPATH\\composer\\ClassLoader.php', 582, [...])
+ 2 VENDORPATH\composer\ClassLoader.php(582): include()
+ 3 VENDORPATH\composer\ClassLoader.php(433): Composer\Autoload\{closure}('VENDORPATH\\composer/../phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php')
+ 4 [internal function]: Composer\Autoload\ClassLoader->loadClass('PhpOffice\\PhpSpreadsheet\\Spreadsheet')
+ 5 APPPATH\Controllers\Customer.php(43): spl_autoload_call('PhpOffice\\PhpSpreadsheet\\Spreadsheet')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Customer->export_excel()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Customer))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

@@ -1,0 +1,20 @@
+/*
+ * File ini berisi CSS ubahan untuk tampilan siteman
+*/
+
+/* Sebagai contoh:
+ * - Perubahan css di bawah memungkinkan penggunaan gambar untuk latar belakang halaman siteman.
+ *   Gambar yang digunakan harus ditempatkan di desa/css/images/img1.jpg
+ *
+*/
+
+/* Contoh mengubah warna latar belakang deretan tombol menu utama
+*/
+div.contentm{
+	background-color: #f4f4da; /* misalnya coba ganti menjadi #c8f1c8 */
+}
+
+.unread-b {
+	font-weight: bold;
+	font-size: 105%;
+}

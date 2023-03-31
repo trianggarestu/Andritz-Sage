@@ -1,0 +1,21 @@
+Koneksi PHP/ CI 4 to DB MSSQL
+
+1. Install msodbcsql.msi
+2. copy FIle php_sqlsrv_74_ts_x64.dll & php_pdo_sqlsrv_74_ts_x64.dll ke folder XAMPP/php/ext ( Pakai yang x86 kalau pakai os 32 bit)
+3. Edit file php.ini di XAMPP/php/php.ini
+   Tambahkan : 
+	extension=php_sqlsrv_74_ts_x64.dll
+	extension=php_pdo_sqlsrv_74_ts_x64.dll
+4. Save File
+5. Restart xampp lalu setting connection di source Codeigniter
+
+Setting Source CI 4
+
+1. Ganti file env jadi .env di root folder apps
+2. Edit .env
+3. Rubah source seperti di bawah
+ 	database.default.hostname = ICT-NOTEBOOK
+ 	database.default.database = ANDRITZ_db
+ 	database.default.username = sa
+ 	database.default.password = sweethome
+ 	database.default.DBDriver = sqlsrv

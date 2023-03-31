@@ -1,0 +1,120 @@
+<div class="box box-info">
+						<div class="box-header with-border">
+
+							<div class="box-body">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+											<form id="mainform" name="mainform" action="" method="post">
+												<div class="row">
+													<div class="col-sm-9">
+
+													</div>
+													<div class="col-sm-3">
+														<div class="box-tools">
+															<div class="input-group input-group-sm pull-right">
+																<input name="cari" id="cari" class="form-control" placeholder="search..." type="text" value="" onkeypress="">
+																<div class="input-group-btn">
+																	<button type="submit" class="btn btn-default" onclick=""><i class="fa fa-search"></i></button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<div class="table-responsive">
+															<table class="table table-bordered table-striped dataTable table-hover">
+																<thead class="bg-gray disabled color-palette">
+																	<tr>
+																		<th><input type="checkbox" id="checkall" /></th>
+																		<th>No</th>
+																		<th>Action</th>
+																		<th>From User</th>
+																		<th>From Email</th>
+																		<th>Subject</th>
+																		<th nowrap>Date</th>
+																		<th nowrap>Read Status</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<?php
+																	$no = 1;
+																	foreach ($mailbox_list as $data) : ?>
+																		<tr <?php if ($data['readstatus'] != 1) : ?>style='background-color:#ffeeaa;' <?php endif; ?>>
+																			<td><input type="checkbox" name="id_cb[]" value="<?= $data['id'] ?>" /></td>
+																			<td><?= $no++ ?></td>
+																			<td nowrap>
+																				<?php if ($data['is_archived'] == 0) : ?>
+																					<a href="#" data-href="<?= base_url("mailbox/go_archive/$data[id]") ?>" class="btn bg-maroon btn-flat btn-sm" title="Arsipkan" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-file-archive-o"></i></a>
+																				<?php endif ?>
+																				<a href="<?= base_url("mailbox/read_notif/{$data['id']}") ?>" class="btn bg-navy btn-flat btn-sm" title="Read Message"><i class="fa fa-list">&nbsp;</i></a>
+																				<?php if ($data['readstatus'] == 1) : ?>
+																					<a href="<?= base_url('mailbox/mark_unread/' . $data['id']) ?>" class="btn bg-navy btn-flat btn-sm" title="Mark as unread"><i class="fa fa-envelope-o"></i></a>
+																				<?php else : ?>
+																					<a href="<?= base_url('mailbox/mark_read/' . $data['id']) ?>" class="btn bg-navy btn-flat btn-sm" title="Mark as read"><i class="fa fa-envelope-open-o"></i></a>
+																				<?php endif; ?>
+																			</td>
+																			<td nowrap><?= $data['from_user'] ?></td>
+																			<td><?= $data['from_email'] ?></td>
+																			<td width="40%"><?= $data['subject'] ?></td>
+																			<td><?= $data['sending_date'] ?></td>
+																			<td nowrap><?= $data['readstatus'] == 1 ? 'Read' : 'Unread' ?></td>
+																		</tr>
+																	<?php endforeach; ?>
+																</tbody>
+															</table>
+														</div>
+
+														<div class="table-responsive mailbox-messages">
+															<table class="table table-hover table-striped">
+																<tbody>
+																	<?php
+																	$no = 1;
+																	foreach ($mailbox_list as $data) : ?>
+																		<tr>
+																			<td><input type="checkbox"></td>
+																			<td class="mailbox-star"><?= $no++ ?></td>
+																			<td class="mailbox-name"><strong><?= $data['from_user'] ?></strong></td>
+																			<td class="mailbox-name"><?= $data['from_email'] ?></td>
+																			<td class="mailbox-subject"><?= $data['subject'] ?>
+																			</td>
+																			<td class="mailbox-attachment"></td>
+																			<td class="mailbox-date"><?= $data['sending_date'] ?></td>
+																			<td nowrap><?= $data['readstatus'] == 1 ? 'Read' : 'Unread' ?></td>
+																		</tr>
+
+																	<?php endforeach; ?>
+																</tbody>
+															</table>
+															<!-- /.table -->
+														</div>
+													</div>
+												</div>
+											</form>
+
+										</div>
+									</div>
+								</div>
+								<div class='modal fade' id='confirm-delete' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+									<div class='modal-dialog'>
+										<div class='modal-content'>
+											<div class='modal-header'>
+												<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+												<h4 class='modal-title' id='myModalLabel'><i class='fa fa-exclamation-triangle text-red'></i> Konfirmasi</h4>
+											</div>
+											<div class='modal-body btn-info'>
+												Apakah Anda yakin ingin mengarsipkan data ini?
+											</div>
+											<div class='modal-footer'>
+												<button type="button" class="btn btn-social btn-flat btn-warning btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Tutup</button>
+												<a class='btn-ok'>
+													<button type="button" class="btn btn-social btn-flat btn-danger btn-sm" id="ok-delete"><i class='fa fa-file-archive-o'></i> Arsipkan</button>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>

@@ -1,0 +1,75 @@
+INFO - 2023-03-07 07:53:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 07:54:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-03-07 07:54:24 --> Undefined variable: menu_nav
+in APPPATH\Views\view_nav.php on line 30.
+ 1 APPPATH\Views\view_nav.php(30): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: menu_nav', 'APPPATH\\Views\\view_nav.php', 30, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\view_nav.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('view_nav', [], true)
+ 5 APPPATH\Controllers\SalesOrder.php(13): view('view_nav')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\SalesOrder->index()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SalesOrder))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-07 07:58:11 --> Undefined variable: menu_nav
+in APPPATH\Views\view_nav.php on line 30.
+ 1 APPPATH\Views\view_nav.php(30): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: menu_nav', 'APPPATH\\Views\\view_nav.php', 30, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\view_nav.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('view_nav', [], true)
+ 5 APPPATH\Controllers\SalesOrder.php(13): view('view_nav')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\SalesOrder->index()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SalesOrder))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-07 08:04:32 --> Undefined variable: menu_nav
+in APPPATH\Views\view_nav.php on line 30.
+ 1 APPPATH\Views\view_nav.php(30): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: menu_nav', 'APPPATH\\Views\\view_nav.php', 30, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\view_nav.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('view_nav', [], true)
+ 5 APPPATH\Controllers\SalesOrder.php(13): view('view_nav')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\SalesOrder->index()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SalesOrder))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-07 08:31:34 --> syntax error, unexpected ';', expecting ']'
+in APPPATH\Controllers\SalesOrder.php on line 29.
+ 1 SYSTEMPATH\Router\Router.php(507): CodeIgniter\Router\AutoRouter->getRoute('SalesOrder')
+ 2 SYSTEMPATH\Router\Router.php(206): CodeIgniter\Router\Router->autoRoute('SalesOrder')
+ 3 SYSTEMPATH\CodeIgniter.php(815): CodeIgniter\Router\Router->handle('SalesOrder')
+ 4 SYSTEMPATH\CodeIgniter.php(449): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-07 08:31:38 --> syntax error, unexpected ';', expecting ']'
+in APPPATH\Controllers\SalesOrder.php on line 29.
+ 1 SYSTEMPATH\Router\Router.php(507): CodeIgniter\Router\AutoRouter->getRoute('salesorder')
+ 2 SYSTEMPATH\Router\Router.php(206): CodeIgniter\Router\Router->autoRoute('salesorder')
+ 3 SYSTEMPATH\CodeIgniter.php(815): CodeIgniter\Router\Router->handle('salesorder')
+ 4 SYSTEMPATH\CodeIgniter.php(449): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-03-07 08:32:03 --> syntax error, unexpected ';', expecting ']'
+in APPPATH\Controllers\SalesOrder.php on line 29.
+ 1 SYSTEMPATH\Router\Router.php(507): CodeIgniter\Router\AutoRouter->getRoute('SalesOrder')
+ 2 SYSTEMPATH\Router\Router.php(206): CodeIgniter\Router\Router->autoRoute('SalesOrder')
+ 3 SYSTEMPATH\CodeIgniter.php(815): CodeIgniter\Router\Router->handle('SalesOrder')
+ 4 SYSTEMPATH\CodeIgniter.php(449): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-03-07 08:32:35 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name '0'.
+CRITICAL - 2023-03-07 08:32:35 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name '0'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Administration_model.php(33): CodeIgniter\Database\BaseConnection->query('select a.IDNAVL1 as breadcrumb_idnavh,a.NAVL1NAME as breadcrumb_navh,b.NAVDL1NAME as breadcrumb_navd,b.NAVLINK from webot_NAVIGATIONH a inner join webot_NAVIGATIONDL1 b on b.IDNAVL1=a.IDNAVL1 where b.NAVLINK=\'salesorder\' and a.inactive="0"')
+ 2 APPPATH\Controllers\SalesOrder.php(26): App\Models\Administration_model->get_activenavh('salesorder')
+ 3 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\SalesOrder->__construct()
+ 4 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-03-07 08:52:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 08:52:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 08:54:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 08:54:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 08:54:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 16:00:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-03-07 16:00:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
