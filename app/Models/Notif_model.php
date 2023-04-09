@@ -74,10 +74,26 @@ class Notif_model extends Model
 		$query = $this->db->query("select USERNAME,NAME,EMAIL,GROUPID from webot_USERAUTH where GROUPID='$groupuser' order by USERNAME asc");
 		return $query->getResultArray();
 	}
+
 	function get_mailbox_archive($user)
 	{
 		$query = $this->db->query("select * from webot_MAILBOX where is_archived=1 and is_trashed=0 and is_deleted=0 and to_user='$user' order by sending_date desc, id desc");
 		return $query->getResultArray();
+	}
+
+	function get_mailbox_sent($user)
+	{
+		$query = $this->db->query("select * from webot_MAILBOX where is_trashed=0 and is_deleted=0 and from_user='$user' order by sending_date desc, id desc");
+		return $query->getResultArray();
+	}
+
+	function count_mailbox_sent($user)
+	{
+		$builder = $this->db->table('webot_MAILBOX');
+		$builder->where('is_trashed', 0);
+		$builder->where('is_deleted', 0);
+		$builder->where('from_user', $user);
+		return $builder->countAllResults();
 	}
 
 	function count_mailbox_archive($user)

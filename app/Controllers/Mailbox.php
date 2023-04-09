@@ -177,6 +177,28 @@ class Mailbox extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
+    public function sent()
+    {
+        $user = session()->get('username');
+        $keylog = session()->GET('keylog');
+        $mailbox_data = $this->NotifModel->get_mailbox_sent($user);
+        //$activenavd='';
+        $data['chklgn'] = $keylog;
+        $data['pengguna'] = $this->header_data;
+        $data = array(
+            'mailbox_list' => $mailbox_data,
+            'ct_messages' => $this->NotifModel->count_mailbox_sent($user),
+            'mailbox_active' => 'Sent',
+            //'usernamelgn' => $user,
+        );
+
+        //return view('/admin/template',$data);
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('mailbox/view_mailbox', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
     public function trash()
     {
         $user = session()->get('username');
