@@ -17,7 +17,7 @@ class Administration_model extends Model
     {
         $query = $this->db->query('select a.IDNAVL1 as mhid,a.NAVL1NAME as mhname,a.ICONDESC as mhicon, '
             . 'b.NAVDL1NAME as mdname,b.NAVLINK as mdcontroller,b.fa_icon as mdicon '
-            . 'from webot_NAVIGATIONH a  left join webot_NAVIGATIONDL1 b on b.IDNAVL1=a.IDNAVL1 ORDER BY a.NAVL1SORTING,b.NAVDL1SORTING ASC');
+            . 'from webot_NAVIGATIONH a  left join webot_NAVIGATIONDL1 b on b.IDNAVL1=a.IDNAVL1 ORDER BY a.NAVL1SORTING,b.SORTING ASC');
         return $query->getResultArray();
         //return $this->db->table('admin_navd1')
         //->join('admin_navh','admin_navh.idnavh=admin_navd1.idnavh')
