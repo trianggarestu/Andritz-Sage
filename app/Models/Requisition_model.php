@@ -23,7 +23,7 @@ class Requisition_model extends Model
 
     function get_requisition_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'");
+        $query = $this->db->query("select * from webot_ORDERTRACKING where PrNumber IS NULL or PoVendor IS NULL");
         return $query->getResultArray();
     }
 
@@ -49,7 +49,6 @@ class Requisition_model extends Model
     function requisition_update($id, $data)
     {
         $query = $this->db->table('webot_ORDERTRACKING')->update($data, array('ID_SO' => $id));
-        $query = $this->db->query("update webot_ORDERTRACKING SET PrStatus = 'Closed' where ID_SO = $id");
         //Tanpa return juga bisa jalan
         return $query;
     }

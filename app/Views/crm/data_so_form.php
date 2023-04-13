@@ -202,13 +202,8 @@
 									<input type="text" class="form-control input-sm required|numeric" id="so_qty" name="so_qty" placeholder="input here.." value="" />
 								</div>
 								<div class='col-sm-2'>
-									<label>Uom <code> (Choose) </code> </label>
-									<select name="so_uom" class="form-control input-sm">
-										<option value="">--Choose One--</option>
-										<option value="1">Ea</option>
-										<option value="2">Pcs</option>
-									</select>
-
+									<label>Uom <code> (manual input) </code> </label>
+									<input type="text" class="form-control input-sm required" id="so_uom" name="so_uom" placeholder="input here.." value="" />
 								</div>
 							</div>
 						</div>
