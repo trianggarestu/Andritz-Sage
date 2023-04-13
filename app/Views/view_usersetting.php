@@ -36,12 +36,6 @@
 							<input class="form-control input-sm" type="text" name="nama" value="<?= $main['NAME']
 																								?>"></input>
 						</div>
-
-						<div class="form-group">
-							<label for="catatan">Group</label>
-							<input class="form-control input-sm" type="text" name="group" value="#"></input>
-						</div>
-
 						<div class="form-group">
 							<label for="catatan">Old Password</label>
 							<input class="form-control input-sm required" type="password" name="pass_lama"></input>

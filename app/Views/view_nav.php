@@ -11,7 +11,7 @@
 			</div>-->
 		</div>
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header"><i class="fa fa-navicon"></i>Menu</li>
+			<li class="header">Menu</li>
 			<li class="<?php if ($active_navd == 'Administration') {
 							echo 'active';
 						} ?>">
@@ -59,37 +59,12 @@
 						</ul>
 					</li>
 					<!-- END DYNAMIC MENU -->
-					<?php if ($issuperuserlgn == '1') {
+					<?php //if ($issuperuserlgn == '1') { 
 					?>
-						<li class="header"><i class="fa fa-wrench"></i><strong>Settings</strong></li>
+					<li class="header">Settings</li>
 
-						<li class="<?php if ($active_navd == 'menusetup') {
-										echo 'active';
-									} ?>"><a href="<?= base_url() . 'menusetup/'; ?>"><i class="fa fa-navicon text-aqua"></i> <span>Menu Settings</span></a></li>
-						<li class="treeview <?php if ($menunav['mhid'] == 'mailsetup') {
-												echo 'active';
-											} ?>">
-							<a href="#">
-								<i class="fa fa-gears text-aqua"></i> <span>E-mail Settings</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == 'mailsetup') {
-																			echo 'active';
-																		} ?>">
-									<a href="<?= base_url() . 'mailsetup'; ?>"><i class="fa fa-paper-plane"></i>Mail Sender Setup</a>
-								</li>
-								<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == 'emailtemplate') {
-																			echo 'active';
-																		} ?>">
-									<a href="<?= base_url() . 'emailtemplate'; ?>"><i class="fa  fa-sticky-note"></i>E-mail Templates</a>
-								</li>
-							</ul>
-						</li>
-						<li><a href="<?= base_url() . 'userauth/'; ?>"><i class="fa fa-user text-aqua"></i> <span>User Access</span></a></li>
-					<?php }
+					<li><a href="<?= base_url() . '/admin/administration'; ?>"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+					<?php //} 
 					?>
 		</ul>
 	</section>
