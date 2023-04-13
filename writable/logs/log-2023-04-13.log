@@ -1,0 +1,91 @@
+INFO - 2023-04-13 06:12:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-04-13 06:12:41 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+CRITICAL - 2023-04-13 06:12:41 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Menusetup_model.php(26): CodeIgniter\Database\BaseConnection->query('select * from webot_NAVIGATIONDL1 where IDNAVL1=\'favicon.ico\' order by SORTING asc')
+ 2 APPPATH\Controllers\Menusetup.php(84): App\Models\Menusetup_model->get_submenu('FCPATH\\favicon.ico')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Menusetup->sub('FCPATH\\favicon.ico')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Menusetup))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-04-13 06:12:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-04-13 06:12:43 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+CRITICAL - 2023-04-13 06:12:43 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Menusetup_model.php(26): CodeIgniter\Database\BaseConnection->query('select * from webot_NAVIGATIONDL1 where IDNAVL1=\'favicon.ico\' order by SORTING asc')
+ 2 APPPATH\Controllers\Menusetup.php(84): App\Models\Menusetup_model->get_submenu('FCPATH\\favicon.ico')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Menusetup->sub('FCPATH\\favicon.ico')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Menusetup))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-04-13 06:12:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-04-13 06:12:44 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+CRITICAL - 2023-04-13 06:12:44 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Menusetup_model.php(26): CodeIgniter\Database\BaseConnection->query('select * from webot_NAVIGATIONDL1 where IDNAVL1=\'favicon.ico\' order by SORTING asc')
+ 2 APPPATH\Controllers\Menusetup.php(84): App\Models\Menusetup_model->get_submenu('FCPATH\\favicon.ico')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Menusetup->sub('FCPATH\\favicon.ico')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Menusetup))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-04-13 06:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-04-13 06:12:45 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type int.
+CRITICAL - 2023-04-13 06:12:45 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type int.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Menusetup_model.php(52): CodeIgniter\Database\BaseConnection->query('SELECT * FROM webot_NAVIGATIONDL1 where IDNAVDL1=\'favicon.ico\'')
+ 2 APPPATH\Controllers\Menusetup.php(114): App\Models\Menusetup_model->get_submenu_data('FCPATH\\favicon.ico')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Menusetup->subform('FCPATH\\favicon.ico')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Menusetup))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-04-13 06:12:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-04-13 06:12:49 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+CRITICAL - 2023-04-13 06:12:49 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Conversion failed when converting the varchar value 'favicon.ico' to data type smallint.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Menusetup_model.php(26): CodeIgniter\Database\BaseConnection->query('select * from webot_NAVIGATIONDL1 where IDNAVL1=\'favicon.ico\' order by SORTING asc')
+ 2 APPPATH\Controllers\Menusetup.php(84): App\Models\Menusetup_model->get_submenu('FCPATH\\favicon.ico')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Menusetup->sub('FCPATH\\favicon.ico')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Menusetup))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-04-13 06:12:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:12:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:13:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:14:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-04-13 06:14:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
