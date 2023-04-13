@@ -109,7 +109,9 @@ class OrderTracking extends BaseController
             ->setCellValue('P1', '')
             ->setCellValue('Q1', 'Pr Date')
             ->setCellValue('R1', 'PR Number')
-            ->setCellValue('S1', '');
+            ->setCellValue('S1', '')
+            ->setCellValue('T1', 'Po Vendor')
+            ->setCellValue('U1', 'Po Vendor Date');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -134,7 +136,9 @@ class OrderTracking extends BaseController
                 ->setCellValue('P' . $rows, '')
                 ->setCellValue('Q' . $rows, $data['PrDate'])
                 ->setCellValue('R' . $rows, $data['PrNumber'])
-                ->setCellValue('S' . $rows, '');
+                ->setCellValue('S' . $rows, '')
+                ->setCellValue('T' . $rows, $data['PoVendor'])
+                ->setCellValue('T' . $rows, $data['PoVendorDate']);
             $rows++;
         }
         // tulis dalam format .xlsx
