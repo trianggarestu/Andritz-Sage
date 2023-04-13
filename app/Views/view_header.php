@@ -9,7 +9,7 @@
 	</title>
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" href="<?= base_url() ?>assets/images/logo/favicon.ico" />
 
 	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="<?= base_url() ?>rss.xml" />
 

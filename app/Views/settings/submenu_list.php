@@ -30,7 +30,9 @@
 							<a href="<?= base_url('menusetup') ?>" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-o-left"></i>Back to Menu Settings</a>
 
 						</div>
-
+						<div class="box-header with-border">
+							<h3 class="box-title"><strong>Sub Menu of <?= $menuh ?></strong> (<small><?= $menuh_comment ?></small>)</h3>
+						</div>
 						<div class="box-body">
 
 							<div class="row">

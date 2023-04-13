@@ -79,7 +79,7 @@
 								<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == 'mailsetup') {
 																			echo 'active';
 																		} ?>">
-									<a href="<?= base_url() . 'mailsetup'; ?>"><i class="fa fa-paper-plane"></i>Mail Sender Setup</a>
+									<a href="<?= base_url() . 'mailsendersetup'; ?>"><i class="fa fa-paper-plane"></i>Mail Sender Setup</a>
 								</li>
 								<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == 'emailtemplate') {
 																			echo 'active';

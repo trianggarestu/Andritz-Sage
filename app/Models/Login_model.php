@@ -24,7 +24,7 @@ class Login_model extends Model
         return $query->getRowArray();
     }
 
-    public function dataLevel($user)
+    public function datalevel($user)
     {
         $query = $this->db->query('select ISSUPERUSER from webot_USERAUTH where USERNAME=' . "'$user'" . '');
         $result = $query->getRowArray();

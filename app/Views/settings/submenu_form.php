@@ -21,8 +21,8 @@
 				<div class="col-md-12">
 					<div class="box box-primary">
 						<div class="box-header with-border">
-							<a href="<?= base_url('menusetup/sub/' . $submenu['IDNAVL1']) ?>" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-o-left"></i>Back to Menu Settings</a>
-
+							<a href="<?= base_url('menusetup/sub/' . $submenu['IDNAVL1']) ?>" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-o-left"></i>Back to Sub Menu Settings</a>
+							<a href="<?= base_url('menusetup') ?>" class="btn btn-social btn-flat btn-primary btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-o-left"></i> Back to Menu Settings</a>
 						</div>
 						<div class="box-body">
 							<div class="form-group">
