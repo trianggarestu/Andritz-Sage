@@ -48,8 +48,10 @@ class Administration extends BaseController
                 'usernamelgn'   => $infouser['usernamelgn'],
             ];
             // Assign the model result to the badly named Class Property
+            $activenavh = 'Administration';
             $activenavd = 'Administration';
             $this->nav_data = [
+                'active_navh' => $activenavh,
                 'active_navd' => $activenavd,
                 'menu_nav' => $this->AdministrationModel->get_navigation(),
                 //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),

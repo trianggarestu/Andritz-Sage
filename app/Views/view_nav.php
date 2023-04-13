@@ -66,7 +66,7 @@
 						<li class="<?php if ($active_navd == 'menusetup') {
 										echo 'active';
 									} ?>"><a href="<?= base_url() . 'menusetup/'; ?>"><i class="fa fa-navicon text-aqua"></i> <span>Menu Settings</span></a></li>
-						<li class="treeview <?php if ($menunav['mhid'] == 'mailsetup') {
+						<li class="treeview <?php if ($active_navh == 'mailsetup') {
 												echo 'active';
 											} ?>">
 							<a href="#">
@@ -76,12 +76,12 @@
 								</span>
 							</a>
 							<ul class="treeview-menu">
-								<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == 'mailsetup') {
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'mailsendersetup') {
 																			echo 'active';
 																		} ?>">
 									<a href="<?= base_url() . 'mailsendersetup'; ?>"><i class="fa fa-paper-plane"></i>Mail Sender Setup</a>
 								</li>
-								<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == 'emailtemplate') {
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'emailtemplate') {
 																			echo 'active';
 																		} ?>">
 									<a href="<?= base_url() . 'emailtemplate'; ?>"><i class="fa  fa-sticky-note"></i>E-mail Templates</a>

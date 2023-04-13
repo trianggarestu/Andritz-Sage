@@ -2,7 +2,7 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="box-header with-border">
-														<h3 class="box-title"><strong>Backup Database SID</strong></h3>
+														<h3 class="box-title"><strong>E-Mail Notification Setup</strong></h3>
 													</div>
 													<div class="box-body">
 														<div class="row">
@@ -13,21 +13,27 @@
 																			<tr>
 																				<td style="padding-top:20px;padding-bottom:10px;">
 																					<div class="form-group">
-																						<label for="file" class="col-md-4 col-lg-3 control-label">Backup Seluruh Database SID (.sql)</label>
-																						<div class="col-sm-12 col-md-3 col-lg-2">
-																							<a href="<?= site_url("database") ?>/exec_backup" class="btn btn-social btn-flat btn-block btn-info btn-sm"><i class="fa fa-download"></i> Unduh</a>
+																						<label for="file" class="col-md-4 col-lg-3 control-label">Enabled / Disabled E-mail Notification</label>
+																						<div class="btn-group col-xs-12 col-sm-7" data-toggle="buttons">
+																							<label id="sx3" class="btn btn-info btn-flat btn-sm col-xs-6 col-sm-4 col-lg-2 form-check-label active">
+																								<input id="g1" type="radio" name="aktif" class="form-check-input" type="radio" value="1" checked autocomplete="off"> Enabled
+																							</label>
+																							<label id="sx4" class="btn btn-info btn-flat btn-sm col-xs-6 col-sm-4 col-lg-2 form-check-label ">
+																								<input id="g2" type="radio" name="aktif" class="form-check-input" type="radio" value="0" autocomplete="off"> Disabled
+																							</label>
 																						</div>
 																					</div>
+
 																				</td>
 																			</tr>
 																		</tbody>
 																	</table>
 																</form>
-																<p>Proses Unduh akan mengunduh keseluruhan database SID anda.</p>
+
 																<div class="row">
 																	<ul>
-																		<li> Usahakan untuk melakukan backup secara rutin dan terjadwal. </li>
-																		<li> Backup yang dihasilkan sebaiknya disimpan di komputer terpisah dari server SID. </li>
+																		<li> Setup Enabled untuk mengaktifkan E-mail Notification. </li>
+																		<li> Setup Disabled untuk menonaktifkan E-mail Notification. </li>
 																	</ul>
 																</div>
 																<p class="text-muted text-red well well-sm no-shadow" style="margin-top: 10px;">
@@ -36,49 +42,15 @@
 															</div>
 														</div>
 													</div>
-												</div>
-												<div class="col-md-12">
-													<div class="box-header with-border">
-														<h3 class="box-title"><strong>Restore Database SID</strong></h3>
-													</div>
-													<div class="box-body">
-														<div class="row">
-															<div class="col-sm-12">
-																<p>Backup yang dibuat dapat dipergunakan untuk mengembalikan database SID anda apabila ada masalah. Klik tombol Restore di bawah untuk menggantikan keseluruhan database SID dengan data hasil backup terdahulu.</p>
-																<form action="<?= $form_action ?>" method="post" enctype="multipart/form-data" class="form-horizontal">
+													<div class='box-footer'>
+														<div class='col-xs-12'>
 
-																	<p>Batas maksimal pengunggahan berkas <strong> MB.</strong></p>
-																	<p>Proses ini akan membutuhkan waktu beberapa menit, menyesuaikan dengan spesifikasi
-																		komputer server SID dan sambungan internet yang tersedia.</p>
-																	<p></p>
-																	<table class="table table-bordered table-hover">
-																		<tbody>
-																			<tr>
-																				<td style="padding-top:20px;padding-bottom:10px;">
-																					<div class="form-group">
-																						<label for="file" class="col-md-2 col-lg-3 control-label">Pilih File .Sql:</label>
-																						<div class="col-sm-12 col-md-5 col-lg-5">
-																							<div class="input-group input-group-sm">
-																								<input type="text" class="form-control" id="file_path" name="userfile">
-																								<input type="file" class="hidden" id="file" name="userfile" data-submit="restore" accept="application/sql">
-																								<span class="input-group-btn">
-																									<button type="button" class="btn btn-info btn-flat" id="file_browser"><i class="fa fa-search"></i> Browse</button>
-																								</span>
-																							</div>
-																						</div>
-																						<div class="col-sm-12 col-md-3 col-lg-2">
-																							<button type="submit" id="restore" class="btn btn-block btn-success btn-sm" disabled="disabled"><i class="fa fa-spin fa-refresh"></i> Restore</button>
-																						</div>
-																					</div>
-																				</td>
-																			</tr>
-																		</tbody>
-																	</table>
-																</form>
-															</div>
+															<button type='submit' class='btn btn-block btn-success btn-sm'><i class='fa fa-check'></i> Save</button>
+
 														</div>
 													</div>
 												</div>
+
 											</div>
 										</div>
 										</div>

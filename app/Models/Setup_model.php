@@ -14,7 +14,7 @@ class Setup_model extends Model
         $this->urut_model = new Urut_Model('webot_NAVIGATIONDL1', 'IDNAVDL1', 'IDNAVL1');
     }
 
-    // get all
+    // Menu Settings
     function get_menuheader()
     {
         $query = $this->db->query('select * from webot_NAVIGATIONH order by NAVL1SORTING asc');
@@ -70,6 +70,21 @@ class Setup_model extends Model
 
         return FALSE;
     }
+
+
+    public function get_mailsender()
+    {
+        $query = $this->db->query("SELECT * FROM webot_MAILSENDER where ID='1'");
+        return $query->getRowArray();
+    }
+
+    public function mailsender_update($id, $data)
+    {
+        $query = $this->db->table('webot_MAILSENDER')->update($data, array('ID' => $id));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
 
     // $arah:
     //		1 - turun

@@ -55,17 +55,17 @@ class Mailsendersetup extends BaseController
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'mailsendersetup';
                 $activenavh = 'mailsetup';
+                $activenavd = 'mailsendersetup';
+
                 $this->nav_data = [
-                    'active_navd' => $activenavd,
                     'active_navh' => $activenavh,
+                    'active_navd' => $activenavd,
                     'menu_nav' => $this->AdministrationModel->get_navigation(),
                     //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
                     //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                     //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
                 ];
-                //}
             }
         }
     }

@@ -15,7 +15,7 @@
 																			<td class="col-sm-6">
 																				<div class="input-group">
 																					<span class="input-group-addon input-sm "><i class="fa fa-globe"></i></span>
-																					<input id="sender_hostname" name="sender_hostname" class="form-control input-sm required" type="text" placeholder="Navigation Name" value="<?php echo set_value($mailsender_data['HOSTNAME']); ?>" maxlength="50"></input>
+																					<input id="sender_hostname" name="sender_hostname" class="form-control input-sm required" type="text" placeholder="Navigation Name" value="<?= ($mailsender_data['HOSTNAME']); ?>" maxlength="50"></input>
 																				</div>
 																			</td>
 																		</tr>
@@ -75,9 +75,9 @@
 																		</tr>
 																		<tr>
 
-																			<td colspan="2" class="col-sm-12 text-center">
+																			<td colspan="2" class="col-sm-12">
 																				<p class="text-muted text-red well well-sm no-shadow" style="margin-top: 10px;">
-																					<small><strong><i class="fa fa-info-circle text-red"></i><?= validation_list_errors() ?></strong></small>
+																					<small><strong><?= validation_list_errors() ?></strong></small>
 																				</p>
 																			</td>
 																		</tr>
