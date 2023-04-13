@@ -33,9 +33,6 @@
 								<li class="<?php if ($mailbox_active == 'Archive') { ?>active<?php } ?>">
 									<a href="<?= base_url() ?>mailbox/archive/"><i class="fa fa-archive"></i>Archive</a>
 								</li>
-								<li class="<?php if ($mailbox_active == 'Sent') { ?>active<?php } ?>">
-									<a href="<?= base_url() ?>mailbox/sent/"><i class="fa fa-paper-plane"></i>Sent</a>
-								</li>
 								<li class="<?php if ($mailbox_active == 'Trash') { ?>active<?php } ?>">
 									<a href="<?= base_url() ?>mailbox/trash/"><i class="fa fa-trash-o"></i>Trash</a>
 								</li>
