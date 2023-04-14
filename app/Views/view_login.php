@@ -30,7 +30,7 @@
 
 </head>
 
-<body class="hold-transition login-page" style="background-image: url(assets/images/loginbg.jpg);">
+<body class="hold-transition login-page" style="background-image: url(<?= base_url() ?>assets/images/loginbg.jpg); background-repeat: no-repeat; background-size: cover; overflow:hidden; background-attachment: fixed; ">
 
   <script language="JavaScript" type="text/javascript">
     function cursor() {
