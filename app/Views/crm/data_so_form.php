@@ -51,7 +51,7 @@
 										<label class="text-right"><strong>CONTRACT :</strong></label>
 									</div>
 								</div>
-								<?php //$validation = \Config\Services::validation();
+								<?php $validation = \Config\Services::validation();
 								?>
 								<div class='col-sm-4'>
 									<div class='form-group'>

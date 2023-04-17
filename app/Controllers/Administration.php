@@ -78,4 +78,11 @@ class Administration extends BaseController
         echo view('home/view_homepage', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+    public function testdata()
+    {
+        $groupuser = 2;
+        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+        print_r($notiftouser_data);
+    }
 }

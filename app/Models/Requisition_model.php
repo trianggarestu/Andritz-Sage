@@ -23,7 +23,8 @@ class Requisition_model extends Model
 
     function get_requisition_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'");
+        $query = $this->db->query("select * from webot_ORDERTRACKING");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
 

@@ -34,4 +34,10 @@ class Administration_model extends Model
 
         return $query->getRowArray();
     }
+
+    function get_mailsender()
+    {
+        $query = $this->db->query("SELECT * FROM webot_MAILSENDER where ID='1'");
+        return $query->getRowArray();
+    }
 }

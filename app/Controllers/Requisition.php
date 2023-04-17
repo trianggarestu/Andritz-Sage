@@ -153,6 +153,12 @@ class Requisition extends BaseController
         foreach ($notiftouser_data as $sendto_user) {
 
             $data_email = array(
+                'hostname' => $sendto_user['HOSTNAME'],
+                'sendername' => $sendto_user['SENDERNAME'],
+                'senderemail' => $sendto_user['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                'passwordemail' => $sendto_user['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                'ssl' => $sendto_user['SSL'],
+                'smtpport' => $sendto_user['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
                 'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_so['PrNumber'],
                 'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
@@ -280,6 +286,12 @@ Order Tracking Administrator',
 
     private function send($data_email)
     {
+        $hostname           = $data_email['hostname'];
+        $sendername         = $data_email['sendername'];
+        $senderemail        = $data_email['senderemail'];
+        $passwordemail      = $data_email['passwordemail'];
+        $ssl                = $data_email['ssl'];
+        $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
@@ -289,16 +301,16 @@ Order Tracking Administrator',
         try {
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
-            $mail->Host       = 'mail.mustikacl.co.id';
+            $mail->Host       = $hostname;
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'ict@mustikacl.co.id'; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = 'ictmcl2021'; // silahkan ganti dengan password email Anda
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port       = 465;
+            $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
+            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            $mail->SMTPSecure = $ssl;
+            $mail->Port       = $smtpport;
 
-            $mail->setFrom('ict@mustikacl.co.id', 'Prototype Order Tracking Andritz'); // silahkan ganti dengan alamat email Anda
+            $mail->setFrom($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
             $mail->addAddress($to);
-            $mail->addReplyTo('ict@mustikacl.co.id', 'Prototype Order Tracking Andritz'); // silahkan ganti dengan alamat email Anda
+            $mail->addReplyTo($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
             // Content
             $mail->isHTML(true);
             $mail->Subject = $subject;
@@ -306,10 +318,10 @@ Order Tracking Administrator',
 
             $mail->send();
             session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/salesorder'));
+            return redirect()->to(base_url('/requisition'));
         } catch (Exception $e) {
             session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/salesorder'));
+            return redirect()->to(base_url('/requisition'));
         }
     }
 }
