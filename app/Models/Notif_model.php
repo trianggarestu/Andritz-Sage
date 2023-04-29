@@ -71,7 +71,7 @@ class Notif_model extends Model
 
 	function get_sendto_user($groupuser)
 	{
-		$query = $this->db->query("select b.HOSTNAME,b.SENDERNAME,b.SENDEREMAIL,b.PASSWORDEMAIL,b.SSL,b.SMTPPORT,a.USERNAME,a.NAME,a.EMAIL,a.GROUPID from webot_USERAUTH a left join webot_MAILSENDER b on b.ID=1 where GROUPID='$groupuser' order by USERNAME asc");
+		$query = $this->db->query("select a.USERNAME,a.NAME,a.EMAIL,a.GROUPID from webot_USERAUTH a where GROUPID='$groupuser' order by USERNAME asc");
 		return $query->getResultArray();
 	}
 

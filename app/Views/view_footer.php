@@ -74,10 +74,33 @@
 						}
 					}, 500);
 
+					if ($('#success-code').val() == 1) {
+						notify = 'messagesuccess';
+						notify_msg = 'Data berhasil disimpan';
+					} else if ($('#success-code').val() == -1) {
+						notify = 'error';
+						notify_msg = 'Data gagal disimpan';
+					} else if ($('#success-code').val() == -2) {
+						notify = 'error';
+						notify_msg = 'Data gagal disimpan, nama id sudah ada!';
+					} else if ($('#success-code').val() == -3) {
+						notify = 'error';
+						notify_msg = 'Data gagal disimpan, nama id sudah ada!';
+					} else if ($('#success-code').val() == 4) {
+						notify = 'success';
+						notify_msg = 'Data berhasil dihapus';
+					} else if ($('#success-code').val() == -4) {
+						notify = 'error';
+						notify_msg = 'Data gagal dihapus';
+					} else {
+						notify = '';
+						notify_msg = '';
+					}
 					notification(notify, notify_msg);
 					$('#success-code').val('');
 				});
 			</script>
+			<?= session()->GET('success') == 0; ?>
 
 			</body>
 

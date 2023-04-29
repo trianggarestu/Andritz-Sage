@@ -77,14 +77,16 @@
 
 																			<td colspan="2" class="col-sm-12">
 																				<p class="text-muted text-red well well-sm no-shadow" style="margin-top: 10px;">
-																					<small><strong><?= validation_list_errors() ?></strong></small>
+
+																					<small>
+																						<strong><?= validation_list_errors() ?></strong></small>
 																				</p>
 																			</td>
 																		</tr>
 																		<tr>
 																			<td colspan="2" class="col-sm-12 text-right">
 																				<input type="hidden" id="id" name="id" value="<?= $mailsender_data['ID'] ?>">
-																				<button type='submit' class='btn btn-social btn-flat btn-info btn-sm confirm'><i class='fa fa-check'></i> Update Settings</button>
+																				<button type='submit' class='btn btn-social btn-flat btn-success btn-sm confirm'><i class='fa fa-check'></i> Update Settings</button>
 																			</td>
 																		</tr>
 																	</table>

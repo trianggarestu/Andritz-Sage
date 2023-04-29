@@ -312,16 +312,17 @@ class SalesOrder extends BaseController
                 //inisiasi proses kirim ke group
                 $groupuser = 2;
                 $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-                //$sender = $this->AdministrationModel->get_mailsender();
-                foreach ($notiftouser_data as $sendto_user) {
+                $sender = $this->AdministrationModel->get_mailsender();
 
+
+                foreach ($notiftouser_data as $sendto_user) {
                     $data_email = array(
-                        'hostname'       => $sendto_user['HOSTNAME'],
-                        'sendername'       => $sendto_user['SENDERNAME'],
-                        'senderemail'       => $sendto_user['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                        'passwordemail'       => $sendto_user['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                        'ssl'       => $sendto_user['SSL'],
-                        'smtpport'       => $sendto_user['SMTPPORT'],
+                        'hostname'       => $sender['HOSTNAME'],
+                        'sendername'       => $sender['SENDERNAME'],
+                        'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                        'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                        'ssl'       => $sender['SSL'],
+                        'smtpport'       => $sender['SMTPPORT'],
                         'to_email' => $sendto_user['EMAIL'],
                         'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
                         'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
@@ -336,16 +337,19 @@ class SalesOrder extends BaseController
                 <br><br>
                 Order Tracking Administrator',
                     );
-
-                    $sending_mail = $this->send($data_email);
-                    if ($sending_mail) {
-                        $data_notif = array(
-                            'contract' =>  $data['ContractNo'],
-                            'from_user' => $this->header_data['usernamelgn'],
-                            'from_email' => $this->header_data['emaillgn'],
-                            'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
-                            'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
-                            'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+                    if ($sender['OFFLINESTAT'] == 0) {
+                        $sending_mail = $this->send($data_email);
+                    } else {
+                        $sending_mail = "";
+                    }
+                    //if ($sending_mail) {
+                    $data_notif = array(
+                        'contract' =>  $data['ContractNo'],
+                        'from_user' => $this->header_data['usernamelgn'],
+                        'from_email' => $this->header_data['emaillgn'],
+                        'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
+                        'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
+                        'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
                     
                         Please to follow up CRM No :' . $this->request->getPost('crm_no') . ' / Customer PO : ' . $this->request->getPost('po_cust') . ' from ' . $this->request->getPost('ct_namecust') . ' is pending for you to request PR/PO.
                         <br><br>
@@ -357,23 +361,23 @@ class SalesOrder extends BaseController
                         <br><br>
                         Order Tracking Administrator',
 
-                            'sending_date' => $audtdate,
-                            'is_read' => 0,
-                            'updated_at' => $audtdate,
-                            'is_archived' => 0,
-                            'to_user' => $sendto_user['USERNAME'],
-                            'to_email' => $sendto_user['EMAIL'],
-                            'to_name' => ucwords(strtolower($sendto_user['NAME'])),
-                            'is_trashed' => 0,
-                            'is_deleted' => 0,
-                            'is_attached' => 0,
-                            'is_star' => 0,
-                            'sending_status' => 1,
-                        );
-                        $this->SalesorderModel->mailbox_insert($data_notif);
-                    } else {
-                        return redirect()->to(base_url('/salesorder'));
-                    }
+                        'sending_date' => $audtdate,
+                        'is_read' => 0,
+                        'updated_at' => $audtdate,
+                        'is_archived' => 0,
+                        'to_user' => $sendto_user['USERNAME'],
+                        'to_email' => $sendto_user['EMAIL'],
+                        'to_name' => ucwords(strtolower($sendto_user['NAME'])),
+                        'is_trashed' => 0,
+                        'is_deleted' => 0,
+                        'is_attached' => 0,
+                        'is_star' => 0,
+                        'sending_status' => 1,
+                    );
+                    $this->SalesorderModel->mailbox_insert($data_notif);
+
+                    return redirect()->to(base_url('/salesorder'));
+                    //}
                 }
 
                 session()->setFlashdata('messagesuccess', 'Create Record Success');

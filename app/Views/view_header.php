@@ -162,7 +162,7 @@
 				</div>
 			</nav>
 		</header>
-		<input id="success-code" type="hidden" value="<? //= $_SESSION['success'] 
+		<input id="success-code" type="hidden" value="<?= session()->getFlashdata('messagesuccess')
 														?>">
 		<!-- Untuk menampilkan modal bootstrap umum  -->
 		<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

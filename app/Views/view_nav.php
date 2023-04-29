@@ -11,7 +11,7 @@
 			</div>-->
 		</div>
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header"><i class="fa fa-navicon"></i>Menu</li>
+			<li class="header"><i class="fa fa-navicon"></i><strong>Menu</strong></li>
 			<li class="<?php if ($active_navd == 'Administration') {
 							echo 'active';
 						} ?>">
@@ -88,7 +88,13 @@
 								</li>
 							</ul>
 						</li>
-						<li><a href="<?= base_url() . 'userauth/'; ?>"><i class="fa fa-user text-aqua"></i> <span>User Access</span></a></li>
+						<li class="treeview <?php if ($active_navh == 'usersettings') {
+												echo 'active';
+											} ?>">
+							<a href="#">
+								<i class="fa fa-user text-aqua"></i> <span>User Settings</span>
+							</a>
+						</li>
 					<?php }
 					?>
 		</ul>
