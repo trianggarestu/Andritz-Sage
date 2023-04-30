@@ -29,35 +29,42 @@
 			//if ($chkusernav>0) {
 			$key = 0;
 			$navh = '';
-			foreach ($menu_nav as $menunav) :
-				if ($navh != $menunav['mhid']) {
+			if (!empty($menu_nav)) {
+				foreach ($menu_nav as $menunav) :
+
+					if ($navh != $menunav['mhid']) {
 			?>
-					<?php if ($navh <> '') {
-						echo '</ul></li>';
-					} ?>
+						<?php if ($navh <> '') {
+							echo '</ul></li>';
+						}
+						?>
 
-					<li class="treeview <?php if ($menunav['mhid'] == $idnavactive) {
-											echo 'active';
-										} ?>">
-						<a href="#">
-							<i class="fa <?php echo $menunav['mhicon']; ?>"></i> <span><?php echo $menunav['mhname']; ?></span>
-							<span class="pull-right-container">
-								<i class="fa fa-angle-left pull-right"></i>
-							</span>
-						</a>
-						<ul class="treeview-menu">
-							<?php
-							$navh = $menunav['mhid']; ?>
+						<li class="treeview <?php if ($menunav['mhid'] == $idnavactive) {
+												echo 'active';
+											} ?>">
+							<a href="#">
+								<i class="fa <?php echo $menunav['mhicon']; ?>"></i> <span><?php echo $menunav['mhname']; ?></span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<?php
+								$navh = $menunav['mhid']; ?>
 
-						<?php } ?>
-						<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == $active_navd) {
-																	echo 'active';
-																} ?>"><a href="<?= base_url() . $menunav['mdcontroller']; ?>"><i class="fa <?= $menunav['mdicon']; ?>"></i><?php echo $menunav['mdname']; ?></a></li>
-					<?php endforeach;
-				//} 
-					?>
-						</ul>
-					</li>
+							<?php } ?>
+							<li style="padding-left: 15px;" class="<?php if ($menunav['mdcontroller'] == $active_navd) {
+																		echo 'active';
+																	} ?>"><a href="<?= base_url() . $menunav['mdcontroller']; ?>"><i class="fa <?= $menunav['mdicon']; ?>"></i><?php echo $menunav['mdname']; ?></a></li>
+						<?php
+
+					endforeach;
+
+					//} 
+						?>
+							</ul>
+						</li>
+					<?php } ?>
 					<!-- END DYNAMIC MENU -->
 					<?php if ($issuperuserlgn == '1') {
 					?>
@@ -93,7 +100,22 @@
 											} ?>">
 							<a href="#">
 								<i class="fa fa-user text-aqua"></i> <span>User Settings</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
 							</a>
+							<ul class="treeview-menu">
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'usergroup') {
+																			echo 'active';
+																		} ?>">
+									<a href="<?= base_url() . 'usergroup'; ?>"><i class="fa fa-group"></i>Groups</a>
+								</li>
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'users') {
+																			echo 'active';
+																		} ?>">
+									<a href="<?= base_url() . 'users'; ?>"><i class="fa fa-user-plus"></i>Users</a>
+								</li>
+							</ul>
 						</li>
 					<?php }
 					?>

@@ -58,7 +58,7 @@ class Menusetup extends BaseController
                 $this->nav_data = [
                     'active_navd' => $activenavd,
                     'active_navh' => $activenavh,
-                    'menu_nav' => $this->AdministrationModel->get_navigation(),
+                    'menu_nav' => $this->AdministrationModel->get_navigation($user),
                     //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
                     //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                     //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
