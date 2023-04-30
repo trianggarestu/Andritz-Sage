@@ -105,15 +105,15 @@
 								</span>
 							</a>
 							<ul class="treeview-menu">
-								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'usergroup') {
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'usergroupsetup') {
 																			echo 'active';
 																		} ?>">
-									<a href="<?= base_url() . 'usergroup'; ?>"><i class="fa fa-group"></i>Groups</a>
+									<a href="<?= base_url() . 'usergroupsetup'; ?>"><i class="fa fa-group"></i>Groups</a>
 								</li>
-								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'users') {
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'usersetup') {
 																			echo 'active';
 																		} ?>">
-									<a href="<?= base_url() . 'users'; ?>"><i class="fa fa-user-plus"></i>Users</a>
+									<a href="<?= base_url() . 'usersetup'; ?>"><i class="fa fa-user-plus"></i>Users</a>
 								</li>
 							</ul>
 						</li>

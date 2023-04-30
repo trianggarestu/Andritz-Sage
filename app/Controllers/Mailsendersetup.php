@@ -94,7 +94,7 @@ class Mailsendersetup extends BaseController
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('settings/tab_menu', $nav);
+        echo view('settings/mailsender_tab_menu', $nav);
         echo view('settings/mailsender_form', $data);
         echo view('view_footer', $this->footer_data);
     }
@@ -110,7 +110,7 @@ class Mailsendersetup extends BaseController
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('settings/tab_menu', $nav);
+        echo view('settings/mailsender_tab_menu', $nav);
         echo view('settings/mailsender_notifsetup', $data);
         echo view('view_footer', $this->footer_data);
     }

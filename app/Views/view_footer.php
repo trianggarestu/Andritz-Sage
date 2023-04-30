@@ -5,7 +5,7 @@
 					<strong>ANDRITZ</strong>
 				</div>
 			</footer>
-			</div>
+			<!--</div>-->
 
 			<!-- jQuery 3 -->
 			<script src="<?= base_url() ?>assets/bootstrap/js/jquery.min.js"></script>

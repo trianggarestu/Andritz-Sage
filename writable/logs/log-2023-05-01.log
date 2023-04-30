@@ -1,0 +1,56 @@
+CRITICAL - 2023-05-01 00:04:05 --> Argument 2 passed to CodeIgniter\Database\BaseBuilder::insertBatch() must be of the type bool or null, array given, called in D:\xampp\htdocs\Andritz-Sage\app\Controllers\Usergroupsetup.php on line 226
+in SYSTEMPATH\Database\BaseBuilder.php on line 2170.
+ 1 APPPATH\Controllers\Usergroupsetup.php(226): CodeIgniter\Database\BaseBuilder->insertBatch('webot_USERGROUPROLE', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:05:32 --> Undefined property: App\Controllers\Usergroupsetup::$db
+in APPPATH\Controllers\Usergroupsetup.php on line 224.
+ 1 APPPATH\Controllers\Usergroupsetup.php(224): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Usergroupsetup::$db', 'APPPATH\\Controllers\\Usergroupsetup.php', 224, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:08:16 --> Object of class CodeIgniter\Database\SQLSRV\Connection could not be converted to string
+in APPPATH\Controllers\Usergroupsetup.php on line 225.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:08:46 --> Object of class CodeIgniter\Database\SQLSRV\Connection could not be converted to string
+in APPPATH\Controllers\Usergroupsetup.php on line 225.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:12:34 --> Object of class CodeIgniter\Database\SQLSRV\Connection could not be converted to string
+in APPPATH\Controllers\Usergroupsetup.php on line 225.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:13:16 --> Object of class CodeIgniter\Database\SQLSRV\Connection could not be converted to string
+in APPPATH\Controllers\Usergroupsetup.php on line 225.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:19:21 --> You must set the database table to be used with your query.
+in SYSTEMPATH\Database\BaseConnection.php on line 882.
+ 1 SYSTEMPATH\Model.php(642): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(832): CodeIgniter\Model->builder()
+ 3 APPPATH\Controllers\Usergroupsetup.php(226): CodeIgniter\Model->__call('insert_role', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-01 00:20:00 --> You must set the database table to be used with your query.
+in SYSTEMPATH\Database\BaseConnection.php on line 882.
+ 1 SYSTEMPATH\Model.php(642): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(832): CodeIgniter\Model->builder()
+ 3 APPPATH\Controllers\Usergroupsetup.php(226): CodeIgniter\Model->__call('insert_role', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Usergroupsetup->update_role_action()
+ 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Usergroupsetup))
+ 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

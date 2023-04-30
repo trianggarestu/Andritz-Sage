@@ -79,7 +79,8 @@
 																				<p class="text-muted text-red well well-sm no-shadow" style="margin-top: 10px;">
 
 																					<small>
-																						<strong><?= validation_list_errors() ?></strong></small>
+																						<strong><?= validation_list_errors() ?></strong>
+																					</small>
 																				</p>
 																			</td>
 																		</tr>
