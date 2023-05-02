@@ -30,7 +30,7 @@ class Requisition_model extends Model
 
     function get_requisition_close()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING ");
+        $query = $this->db->query("select * from webot_ORDERTRACKING where PrStatus = 'Closed'");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
