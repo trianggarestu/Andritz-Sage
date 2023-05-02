@@ -28,6 +28,13 @@ class Requisition_model extends Model
         return $query->getResultArray();
     }
 
+    function get_requisition_close()
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING ");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
+
     function get_requisition_sage()
     {
         $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER in (select distinct RQNNUMBER from DATAN1.dbo.POPORH1)");

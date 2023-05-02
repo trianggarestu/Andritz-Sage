@@ -76,7 +76,7 @@ class RequisitionList extends BaseController
 
     public function index()
     {
-        $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        $requisitiondata = $this->RequisitionModel->get_requisition_close();
 
 
         $data = array(
