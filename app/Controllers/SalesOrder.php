@@ -19,14 +19,13 @@ class SalesOrder extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
     private $db_name;
-    private $validasi;
     public function __construct()
     {
         //parent::__construct();
         helper(['form', 'url']);
         $this->db_name = \Config\Database::connect();
-        $this->validasi = \Config\Services::validation();
 
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
@@ -71,8 +70,17 @@ class SalesOrder extends BaseController
                 //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
             ];
 
-            //$this->db_name = $db->database();
-            //}
+            date_default_timezone_set('Asia/Jakarta');
+            $today = date("d/m/Y H:i:s");
+
+            $this->audtuser = [
+                'TODAY' => $today,
+                'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                'AUDTUSER' => $infouser['usernamelgn'],
+                'AUDTORG' => $this->db_name->database,
+
+            ];
         }
     }
 
@@ -82,6 +90,7 @@ class SalesOrder extends BaseController
         $data = array(
             'ct_no' => '',
             'ct_desc' => '',
+            'ct_manager' => '',
             'ct_salesperson' => '',
             'ct_custno' => '',
             'ct_custname' => '',
@@ -91,7 +100,6 @@ class SalesOrder extends BaseController
             'po_cust' => '',
             'prj_startdate' => '',
             'inventory_no' => '',
-            'audtorg' => '',
             'item_data' => $this->SalesorderModel->get_icitem(),
             'form_action' => '',
             'validation' => \Config\Services::validation(),
@@ -110,6 +118,7 @@ class SalesOrder extends BaseController
             $data = array(
                 'ct_no' => '',
                 'ct_desc' => '',
+                'ct_manager' => '',
                 'ct_salesperson' => '',
                 'ct_custno' => '',
                 'ct_custname' => '',
@@ -119,7 +128,6 @@ class SalesOrder extends BaseController
                 'po_cust' => '',
                 'prj_startdate' => '',
                 'inventory_no' => '',
-                'audtorg' => $this->db_name->database,
                 'item_data' => $this->SalesorderModel->get_icitem(),
                 'form_action' => base_url("salesorder/save_salesorder"),
                 //'validation' => \Config\Services::validation(),
@@ -130,17 +138,17 @@ class SalesOrder extends BaseController
             if ($row) {
                 $data = array(
                     'ct_no' => trim($row['CONTRACT']),
-                    'ct_desc' => $row['DESC'],
-                    'ct_salesperson' => $row['NAME'],
-                    'ct_custno' => $row['CUSTOMER'],
-                    'ct_custname' => $row['NAMECUST'],
-                    'ct_email' => $row['EMAIL1'],
+                    'ct_desc' => trim($row['DESC']),
+                    'ct_manager' => trim($row['MANAGER']),
+                    'ct_salesperson' => trim($row['NAME']),
+                    'ct_custno' => trim($row['CUSTOMER']),
+                    'ct_custname' => trim($row['NAMECUST']),
+                    'ct_email' => trim($row['EMAIL1']),
                     'prj_no' => '',
                     'prj_desc' => '',
                     'po_cust' => '',
                     'prj_startdate' => '',
                     'inventory_no' => '',
-                    'audtorg' => $this->db_name->database,
                     'item_data' => $this->SalesorderModel->get_icitem(),
                     'form_action' => base_url("salesorder/save_salesorder"),
                     //'validation' => \Config\Services::validation(),
@@ -162,6 +170,7 @@ class SalesOrder extends BaseController
             $data = array(
                 'ct_no' => '',
                 'ct_desc' => '',
+                'ct_manager' => '',
                 'ct_salesperson' => '',
                 'ct_custno' => '',
                 'ct_custname' => '',
@@ -173,7 +182,6 @@ class SalesOrder extends BaseController
                 'inventory_no' => '',
                 'item_data' => $this->SalesorderModel->get_icitem(),
                 'form_action' => base_url("salesorder/save_salesorder"),
-                //'validation' => \Config\Services::validation(),
 
             );
         } else {
@@ -186,14 +194,15 @@ class SalesOrder extends BaseController
                 $n_podate = $dd . '-' . $mm . '-' . $yyyy;
                 $data = array(
                     'ct_no' => trim($row['CONTRACT']),
-                    'ct_desc' => $row['DESC'],
-                    'ct_salesperson' => $row['NAME'],
-                    'ct_custno' => $row['CUSTOMER'],
-                    'ct_custname' => $row['NAMECUST'],
-                    'ct_email' => $row['EMAIL1'],
-                    'prj_no' => $row['PROJECT'],
-                    'prj_desc' => $row['Prj_Desc'],
-                    'po_cust' => $row['PONUMBER'],
+                    'ct_desc' => trim($row['DESC']),
+                    'ct_manager' => trim($row['MANAGER']),
+                    'ct_salesperson' => trim($row['NAME']),
+                    'ct_custno' => trim($row['CUSTOMER']),
+                    'ct_custname' => trim($row['NAMECUST']),
+                    'ct_email' => trim($row['EMAIL1']),
+                    'prj_no' => trim($row['PROJECT']),
+                    'prj_desc' => trim($row['Prj_Desc']),
+                    'po_cust' => trim($row['PONUMBER']),
                     'prj_startdate' => $n_podate,
                     'inventory_no' => '',
                     'item_data' => $this->SalesorderModel->get_icitem(),
@@ -263,69 +272,102 @@ class SalesOrder extends BaseController
     public function save_salesorder()
     {
         if (!$this->validate([
-            'ct_no' => 'required',
-            'prj_no' => 'required',
-            'crm_no' => 'required',
+            'ct_no' => 'required|min_length[3]',
+            'ct_desc' => 'required',
+            'ct_salesperson' => 'required',
+            'ct_custno' => 'required',
+            'ct_email' => 'required|valid_email',
+            'ct_namecust' => 'required',
+            'prj_no' => 'required|min_length[3]',
+            'prj_desc' => 'required|alpha_numeric_space',
+            'po_cust' => 'required',
+            'prj_startdate' => 'required',
+            'crm_no' => 'required|min_length[1]',
             'req_date' => 'required',
-            //'po_cust' => 'required',
-            //'ord_desc' => 'required',
-            //'so_remarks' => 'required',
+            'ord_desc' => 'required',
+            'so_service' => 'required',
+            'so_remarks' => 'required|min_length[3]',
             'inventory_no' => 'required',
             'material_no' => 'required',
-            'so_qty' => 'required',
+            'so_qty' => 'required|numeric|greater_than[0]',
             'so_uom' => 'required',
 
         ])) {
+            $ct_no = $this->request->getPost('ct_no');
             $prj_no = $this->request->getPost('prj_no');
-            session()->setFlashdata('messagefailed', 'Input Failed, Complete data before save!..');
+            if (($ct_no == "")) {
+                session()->setFlashdata('messagefailed', 'Input Failed, Select Contract!..');
+                return redirect()->to(base_url('/salesorder'))->withInput();
+            } else if (($ct_no <> "") and $prj_no == "") {
+                session()->setFlashdata('messagefailed', 'Input Failed, Select Project!..');
+                return redirect()->to(base_url('/salesorder/selectcontract/' . $ct_no))->withInput();
+            } else if (($ct_no <> "") and $prj_no <> "") {
+                session()->setFlashdata('messagefailed', 'Input Failed, Complete the data before save!..');
+                return redirect()->to(base_url('/salesorder/selectproject/' . $ct_no . '/' . $prj_no))->withInput();
+            }
+
             //echo $prj_no;
             //echo $this->validate;
-            return redirect()->to(base_url('/salesorder'))->withInput();
+
         } else {
-            $today = date("d/m/Y");
-            $audtdate = substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2);
+            // Check Status Mail Notification
+            $sender = $this->AdministrationModel->get_mailsender();
+            $prj_startdate = $this->request->getPost('prj_startdate');
+            $req_date = $this->request->getPost('req_date');
+            $podatecust = substr($prj_startdate, 6, 4) . "" . substr($prj_startdate, 3, 2) . "" . substr($prj_startdate, 0, 2);
+            $crmreqdate = substr($req_date, 6, 4) . "" . substr($req_date, 3, 2) . "" . substr($req_date, 0, 2);
+            $groupuser = 2;
             $data = array(
-                'ContractNo' => $this->request->getPost('ct_no'),
-                'ProjectNo' => $this->request->getPost('prj_no'),
-                'CustomerNo' => $this->request->getPost('ct_custno'),
-                'CustomerName' => $this->request->getPost('ct_namecust'),
-                'CustomerEmail' => $this->request->getPost('ct_email'),
-                'CrmNo' => $this->request->getPost('crm_no'),
-                'PoCustomer' => $this->request->getPost('po_cust'),
-                'InventoryNo' => $this->request->getPost('inventory_no'),
-                'InventoryDesc' => $this->request->getPost('ord_desc'),
-                'MaterialNo' => $this->request->getPost('material_no'),
-                'PoDate' => $this->request->getPost('prj_startdate'),
-                'ReqDate' => $this->request->getPost('req_date'),
-                'SalesPerson' => $this->request->getPost('ct_salesperson'),
-                'OrderDesc' => $this->request->getPost('so_remarks'),
-                'Qty' => $this->request->getPost('so_qty'),
-                'Uom' => $this->request->getPost('so_uom'),
-                'JobType' => 1,
-                'AUDTORG' => $this->db_name->database,
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'CONTRACT' => $this->request->getPost('ct_no'),
+                'CTDESC' => $this->request->getPost('ct_desc'),
+                'MANAGER' => $this->request->getPost('ct_manager'),
+                'SALESNAME' => $this->request->getPost('ct_salesperson'),
+                'PROJECT' => $this->request->getPost('prj_no'),
+                'PRJDESC' => $this->request->getPost('prj_desc'),
+                'PONUMBERCUST' => $this->request->getPost('po_cust'),
+                'PODATECUST' => $podatecust,
+                'CUSTOMER' => $this->request->getPost('ct_custno'),
+                'NAMECUST' => $this->request->getPost('ct_namecust'),
+                'EMAIL1CUST' => $this->request->getPost('ct_email'),
+                'CRMNO' => $this->request->getPost('crm_no'),
+                'CRMREQDATE' => $crmreqdate,
+                'ORDERDESC' => $this->request->getPost('ord_desc'),
+                'SERVICETYPE' => $this->request->getPost('so_service'),
+                'CRMREMARKS' => $this->request->getPost('so_remarks'),
+                'ITEMNO' => $this->request->getPost('inventory_no'),
+                'MATERIALNO' => $this->request->getPost('material_no'),
+                'STOCKUNIT' => $this->request->getPost('so_uom'),
+                'QTY' => $this->request->getPost('so_qty'),
+                'OTPROCESS' => $groupuser,
+                'POSTINGSTAT' => 0,
+                'OFFLINESTAT' => $sender['OFFLINESTAT'],
             );
 
             //print_r($data_notif);
-            $so_insert = $this->SalesorderModel->so_insert($data);
-            //print_r($_POST);
-            if ($so_insert) {
-                //inisiasi proses kirim ke group
-                $groupuser = 2;
-                $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-                $sender = $this->AdministrationModel->get_mailsender();
+            $so_insert = $this->SalesorderModel->csr_insert($data);
 
+            if ($sender['OFFLINESTAT'] == 0) {
+                //print_r($_POST);
+                if ($so_insert) {
+                    //inisiasi proses kirim ke group
 
-                foreach ($notiftouser_data as $sendto_user) {
-                    $data_email = array(
-                        'hostname'       => $sender['HOSTNAME'],
-                        'sendername'       => $sender['SENDERNAME'],
-                        'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                        'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                        'ssl'       => $sender['SSL'],
-                        'smtpport'       => $sender['SMTPPORT'],
-                        'to_email' => $sendto_user['EMAIL'],
-                        'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
-                        'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+                    $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                    foreach ($notiftouser_data as $sendto_user) {
+                        $data_email = array(
+                            'hostname'       => $sender['HOSTNAME'],
+                            'sendername'       => $sender['SENDERNAME'],
+                            'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                            'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                            'ssl'       => $sender['SSL'],
+                            'smtpport'       => $sender['SMTPPORT'],
+                            'to_email' => $sendto_user['EMAIL'],
+                            'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
+                            'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
                 
                 Please to follow up CRM No :' . $this->request->getPost('crm_no') . ' / Customer PO : ' . $this->request->getPost('po_cust') . ' from ' . $this->request->getPost('ct_namecust') . ' is pending for you to request PR/PO.
                 <br><br>
@@ -336,20 +378,18 @@ class SalesOrder extends BaseController
                 Thanks for your cooperation. 
                 <br><br>
                 Order Tracking Administrator',
-                    );
-                    if ($sender['OFFLINESTAT'] == 0) {
+                        );
+
                         $sending_mail = $this->send($data_email);
-                    } else {
-                        $sending_mail = "";
-                    }
-                    //if ($sending_mail) {
-                    $data_notif = array(
-                        'contract' =>  $data['ContractNo'],
-                        'from_user' => $this->header_data['usernamelgn'],
-                        'from_email' => $this->header_data['emaillgn'],
-                        'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
-                        'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
-                        'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                        if ($sending_mail) {
+                            $data_notif = array(
+                                'contract' =>  $data['ContractNo'],
+                                'from_user' => $this->header_data['usernamelgn'],
+                                'from_email' => $this->header_data['emaillgn'],
+                                'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
+                                'subject' => 'Pending Sales Order Allert. Contract No : ' . $data['ContractNo'],
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
                     
                         Please to follow up CRM No :' . $this->request->getPost('crm_no') . ' / Customer PO : ' . $this->request->getPost('po_cust') . ' from ' . $this->request->getPost('ct_namecust') . ' is pending for you to request PR/PO.
                         <br><br>
@@ -361,22 +401,23 @@ class SalesOrder extends BaseController
                         <br><br>
                         Order Tracking Administrator',
 
-                        'sending_date' => $audtdate,
-                        'is_read' => 0,
-                        'updated_at' => $audtdate,
-                        'is_archived' => 0,
-                        'to_user' => $sendto_user['USERNAME'],
-                        'to_email' => $sendto_user['EMAIL'],
-                        'to_name' => ucwords(strtolower($sendto_user['NAME'])),
-                        'is_trashed' => 0,
-                        'is_deleted' => 0,
-                        'is_attached' => 0,
-                        'is_star' => 0,
-                        'sending_status' => 1,
-                    );
-                    $this->SalesorderModel->mailbox_insert($data_notif);
-
-                    return redirect()->to(base_url('/salesorder'));
+                                'sending_date' => $audtdate,
+                                'is_read' => 0,
+                                'updated_at' => $audtdate,
+                                'is_archived' => 0,
+                                'to_user' => $sendto_user['USERNAME'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'to_name' => ucwords(strtolower($sendto_user['NAME'])),
+                                'is_trashed' => 0,
+                                'is_deleted' => 0,
+                                'is_attached' => 0,
+                                'is_star' => 0,
+                                'sending_status' => 1,
+                            );
+                            $this->SalesorderModel->mailbox_insert($data_notif);
+                        }
+                    }
+                    //return redirect()->to(base_url('/salesorder'));
                     //}
                 }
 
@@ -429,14 +470,5 @@ class SalesOrder extends BaseController
             session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
             return redirect()->to(base_url('/salesorder'));
         }
-    }
-
-
-
-
-    private function get_db_name()
-    {
-        $db = \Config\Database::connect();
-        return $this->$db->database;
     }
 }

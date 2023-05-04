@@ -26,7 +26,7 @@ class Salesorder_model extends Model
         $query = $this->db->query("select a.CTUNIQ,a.CONTRACT,a." . '"DESC"' . ",a.CUSTOMER,b.NAMECUST,a.MANAGER,c." . '"NAME"' . " from PMCONTS a "
             . "left join ARCUS b on b.IDCUST=a.CUSTOMER "
             . "left join PMSTAFF c on c.STAFFCODE=a.MANAGER "
-            . "where a.STATUS=30 and a.CUSTOMER<>'' and a.CONTRACT NOT IN (select ContractNo from webot_ORDERTRACKING) ");
+            . "where a.STATUS=30 and a.CUSTOMER<>'' and a.CONTRACT NOT IN (select CONTRACT from webot_CSR where POSTINGSTAT<>2) ");
 
         if ($query->getResult() > 0) {
             /*foreach ($query->getResultArray() as $row) {
@@ -70,7 +70,7 @@ class Salesorder_model extends Model
 
     function get_so_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where PrNumber IS NULL");
+        $query = $this->db->query("select * from webot_ORDERTRACKING where RQNNUMBER IS NULL");
         return $query->getResultArray();
     }
 
@@ -78,6 +78,12 @@ class Salesorder_model extends Model
     {
         $query = $this->db->query("select ITEMNO," . '"DESC"' . " as ITEMDESC,COMMENT1,COMMENT2,COMMENT3,COMMENT4 from ICITEM where INACTIVE=0");
         return $query->getResultArray();
+    }
+
+    function csr_insert($data)
+    {
+        $query = $this->db->table('webot_CSR')->insert($data);
+        return $query;
     }
 
     function so_insert($data)

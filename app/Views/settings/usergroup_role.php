@@ -43,12 +43,13 @@
 
 												<th>Check Menu</td>
 											</tr>
+
 										</thead>
 										<tbody>
 											<tr>
-												<td></td>
-												<td></td>
-												<td></td>
+												<th>&nbsp;</th>
+												<th></th>
+												<th></th>
 											</tr>
 											<?php
 											echo form_open($form_action, array('target' => '', 'id' => 'formgrouprole'));
@@ -95,17 +96,26 @@
 												<input type="hidden" name="IDNAVDL1[<?php echo $userrole['IDNAVDL1']; ?>]" value="<?php echo $userrole['IDNAVDL1']; ?>" />
 											<?php endforeach; ?>
 										</tbody>
+										<tfoot>
+											<tr>
+												<td>&nbsp;</td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td></td>
+												<td></td>
+												<td style="text-align: center;">
+													<input type="hidden" name="idgrusergroup" value="<?php echo $groupid; ?>" />
+													<button type='submit' name="saved_grouprole" class='btn btn-social btn-flat btn-info btn-sm confirm'><i class='fa fa-check'></i> <?= $button ?></button>
+												</td>
+											</tr>
+										</tfoot>
 									</table>
-									<div class='box-footer'>
-										<div class='col-xs-9'>
-											<div class='col-sm-3'>
-											</div>
-											<div class="col-sm-6">
-												<input type="hidden" name="idgrusergroup" value="<?php echo $groupid; ?>" />
-												<button type='submit' name="saved_grouprole" class='btn btn-social btn-flat btn-info btn-sm confirm'><i class='fa fa-check'></i> <?= $button ?></button>
-											</div>
-										</div>
-									</div>
+
+
+
+
 								</div>
 							</div>
 						</div>
