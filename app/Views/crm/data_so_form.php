@@ -160,18 +160,17 @@
 									<label>Order Description <code> (manual input) </code> </label>
 									<input type="text" class="form-control input-sm required" id="ord_desc" name="ord_desc" placeholder="input here.." value="" />
 								</div>
-								<div class='col-sm-2'>
+								<div class='col-sm-4'>
 									<label>Service Type <code> (choose) </code> </label>
 									<select name="so_service" class="form-control input-sm">
 										<option value="">--Choose One--</option>
-										<option value="Services">SERVICES</option>
-										<option value="Material">MATERIAL</option>
+
+										<option value="SERVICES">SERVICES</option>
+										<option value="MATERIAL">MATERIAL</option>
+
 									</select>
 								</div>
-								<div class='col-sm-2'>
-									<label>Remarks <code> (manual input) </code> </label>
-									<input type="text" class="form-control input-sm required" id="so_remarks" name="so_remarks" placeholder="input here.." value="" />
-								</div>
+
 
 							</div>
 							<div class="row">
@@ -211,6 +210,20 @@
 
 								</div>
 							</div>
+							<div class="row">
+								<div class='col-sm-6'>
+									<label>Remarks <code> (manual input) </code> </label>
+									<input type="text" class="form-control input-sm required" id="so_remarks" name="so_remarks" placeholder="input here.." value="" />
+								</div>
+								<div class='col-sm-6'>
+									<p class="text-muted text-red well well-sm" style="margin-top: 10px;">
+										Error Message :
+										<small>
+											<strong><?= validation_list_errors() ?></strong>
+										</small>
+									</p>
+								</div>
+							</div>
 						</div>
 
 					</div>
@@ -221,6 +234,7 @@
 				</div>
 				<div class='box-footer'>
 					<div class='col-xs-12'>
+						<input type="hidden" id="ct_manager" name="ct_manager" value="<?= $ct_manager ?>">
 						<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
 						<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> Save & Send Notif to next process</button>
 					</div>
