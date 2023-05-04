@@ -164,8 +164,10 @@
 									<label>Service Type <code> (choose) </code> </label>
 									<select name="so_service" class="form-control input-sm">
 										<option value="">--Choose One--</option>
+
 										<option value="SERVICES">SERVICES</option>
 										<option value="MATERIAL">MATERIAL</option>
+
 									</select>
 								</div>
 
