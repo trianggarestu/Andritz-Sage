@@ -70,9 +70,9 @@
 <body class="skin-blue sidebar-mini fixed ">
 	<div class="wrapper">
 		<header class="main-header">
-			<a href="<?= site_url() ?>first" target="_blank" class="logo">
-				<span class="logo-mini"><b>SAGE</b></span>
-				<span class="logo-lg"><b>PROTOTYPE</b></span>
+			<a href="#" class="logo">
+				<span class="logo-mini"><b>ANDRITZ</b></span>
+				<span class="logo-lg"><b>PT. ANDRITZ</b></span>
 			</a>
 			<nav class="navbar navbar-static-top">
 				<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -162,15 +162,8 @@
 				</div>
 			</nav>
 		</header>
-		<input id="success-code" type="hidden" value="<?= session()->getFlashdata('messagesuccess')
-														?>">
-		<!-- Untuk menampilkan modal bootstrap umum  -->
-		<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class='modal-dialog'>
-				<div class='modal-content'>
 
-					<div class="fetched-data"></div>
-				</div>
-			</div>
-		</div>
+		?>
+
+
 	</div>

@@ -19,6 +19,17 @@
 			<li class="active">Form</li>
 		</ol>
 	</section>
+
+	<input id="success-code" type="hidden" value="<?= $success_code ?>">
+	<!-- Untuk menampilkan modal bootstrap umum  -->
+	<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+
+				<div class="fetched-data"></div>
+			</div>
+		</div>
+	</div>
 	<section class="content" id="maincontent">
 		<form action="<?= $form_action;
 						?>" method="post">
@@ -51,17 +62,14 @@
 										<label class="text-right"><strong>CONTRACT :</strong></label>
 									</div>
 								</div>
-								<?php $validation = \Config\Services::validation();
-								?>
+
 								<div class='col-sm-4'>
 									<div class='form-group'>
 										<label>Contract </label>
-										<div class="input-group <?= ($validation->hasError('ct_no')) ? 'has-error' : '';
-																?>">
+										<div class="input-group">
 											<span class="input-group-addon input-sm"><a href="<?= base_url(); ?>salesorder/form_select_contractopen/" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-search"></i></a></span>
 											<input type="text" maxlength="10" size="10" class="form-control input-sm required" name="ct_no" id="ct_no" placeholder="Contract Number" value="<?= $ct_no ?>" readonly>
-											<span class="help-block"><?= $validation->getError('ct_no');
-																		?></span>
+
 
 										</div></input>
 									</div>
@@ -135,13 +143,14 @@
 							</div>
 							<div class="row">
 								<div class="col-sm-12">
-									<div class="form-group subtitle_head">
+									<div class="form-group subtitle_head  <?= ($validation->hasError('crm_no')) ? 'has-error' : ''; ?>">
 										<label class="text-right"><strong>CRM :</strong></label>
 									</div>
 								</div>
 								<div class='col-sm-2'>
 									<label>CRM Number<code> (manual input)) </code> </label>
-									<input type="text" class="form-control input-sm required" id="crm_no" name="crm_no" placeholder="input here.." value="" />
+									<input type="text" class="form-control input-sm required" id="crm_no" name="crm_no" placeholder="input here.." value="<?= $crm_no ?>" />
+
 								</div>
 
 								<div class='col-sm-2'>
@@ -152,28 +161,31 @@
 											<div class="input-group-addon">
 												<i class="fa fa-calendar"></i>
 											</div>
-											<input class="datepicker form-control input-sm pull-right" id="req_date" name="req_date" type="text" value="">
+											<input class="datepicker form-control input-sm pull-right" id="req_date" name="req_date" type="text" value="<?= $req_date ?>">
 										</div>
 									</div>
 								</div>
 								<div class='col-sm-4'>
 									<label>Order Description <code> (manual input) </code> </label>
-									<input type="text" class="form-control input-sm required" id="ord_desc" name="ord_desc" placeholder="input here.." value="" />
+									<input type="text" class="form-control input-sm required" id="ord_desc" name="ord_desc" placeholder="input here.." value="<?= $order_desc ?>" />
 								</div>
 								<div class='col-sm-4'>
-									<label>Service Type <code> (choose) </code> </label>
-									<select name="so_service" class="form-control input-sm">
-										<option value="">--Choose One--</option>
-
-										<option value="SERVICES">SERVICES</option>
-										<option value="MATERIAL">MATERIAL</option>
-
-									</select>
+									<label>Remarks <code> (manual input) </code> </label>
+									<input type="text" class="form-control input-sm required" id="so_remarks" name="so_remarks" placeholder="input here.." value="<?= $order_remarks ?>" />
 								</div>
 
 
 							</div>
 							<div class="row">
+								<div class='col-sm-2'>
+									<label>Service Type <code> (choose) </code> </label>
+									<select name="so_service" class="form-control input-sm">
+										<option value="">--Choose One--</option>
+										<option value="SPAREPARTS">SPAREPARTS</option>
+										<option value="SERVICES">SERVICES</option>
+
+									</select>
+								</div>
 								<div class='col-sm-4'>
 									<div class='form-group'>
 										<label for="contract">Inventory No</label>
@@ -191,14 +203,14 @@
 										</select>
 									</div>
 								</div>
-								<div class='col-sm-4'>
+								<div class='col-sm-2'>
 									<label>Material No <code> (auto filled) </code> </label>
-									<input type="text" class="form-control input-sm required" id="material_no" name="material_no" placeholder="" value="" />
+									<input type="text" class="form-control input-sm required" id="material_no" name="material_no" placeholder="" value="<?= $material_no ?>" />
 								</div>
 
 								<div class='col-sm-2'>
 									<label>Qty <code> (manual input) </code> </label>
-									<input type="text" class="form-control input-sm required|numeric" id="so_qty" name="so_qty" placeholder="input here.." value="" />
+									<input type="text" class="form-control input-sm required|numeric" id="so_qty" name="so_qty" placeholder="input here.." value="<?= $qty ?>" />
 								</div>
 								<div class='col-sm-2'>
 									<label>Uom <code> (Choose) </code> </label>
@@ -211,17 +223,8 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class='col-sm-6'>
-									<label>Remarks <code> (manual input) </code> </label>
-									<input type="text" class="form-control input-sm required" id="so_remarks" name="so_remarks" placeholder="input here.." value="" />
-								</div>
-								<div class='col-sm-6'>
-									<p class="text-muted text-red well well-sm" style="margin-top: 10px;">
-										Error Message :
-										<small>
-											<strong><?= validation_list_errors() ?></strong>
-										</small>
-									</p>
+								<div class='col-sm-12'>
+									<?= validation_list_errors() ?>
 								</div>
 							</div>
 						</div>
@@ -236,7 +239,7 @@
 					<div class='col-xs-12'>
 						<input type="hidden" id="ct_manager" name="ct_manager" value="<?= $ct_manager ?>">
 						<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
-						<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> Save & Send Notif to next process</button>
+						<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> Save</button>
 					</div>
 				</div>
 

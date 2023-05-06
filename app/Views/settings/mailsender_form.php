@@ -76,12 +76,7 @@
 																		<tr>
 
 																			<td colspan="2" class="col-sm-12">
-																				<p class="text-muted text-red well well-sm no-shadow" style="margin-top: 10px;">
-
-																					<small>
-																						<strong><?= validation_list_errors() ?></strong>
-																					</small>
-																				</p>
+																				<?= validation_list_errors() ?>
 																			</td>
 																		</tr>
 																		<tr>

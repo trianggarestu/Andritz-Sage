@@ -70,8 +70,20 @@ class Salesorder_model extends Model
 
     function get_so_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where RQNNUMBER IS NULL");
+        $query = $this->db->query("select * from webot_CSR where POSTINGSTAT <>2 order by CSRUNIQ desc");
         return $query->getResultArray();
+    }
+
+    function get_csruniq_open($contract, $project, $custno, $itemno, $crmno)
+    {
+        $query = $this->db->query("select CSRUNIQ from webot_CSR where POSTINGSTAT =0 and CONTRACT='$contract' and PROJECT='$project' and CUSTOMER='$custno' and ITEMNO='$itemno' and CRMNO='$crmno'");
+        return $query->getRowArray();
+    }
+
+    function get_csr_open($csruniq)
+    {
+        $query = $this->db->query("select * from webot_CSR where POSTINGSTAT <>2 and CSRUNIQ='$csruniq'");
+        return $query->getRowArray();
     }
 
     function get_icitem()
@@ -86,7 +98,21 @@ class Salesorder_model extends Model
         return $query;
     }
 
-    function so_insert($data)
+    function csr_post_update($csruniq, $data)
+    {
+        $query = $this->db->table('webot_CSR')->update($data, array('CSRUNIQ' => $csruniq));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
+    function set_csr_delete($csruniq, $data)
+    {
+        $query = $this->db->table('webot_CSR')->update($data, array('CSRUNIQ' => $csruniq));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
+    function ot_insert($data)
     {
         $query = $this->db->table('webot_ORDERTRACKING')->insert($data);
         return $query;

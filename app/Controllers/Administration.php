@@ -43,6 +43,7 @@ class Administration extends BaseController
                 'emaillgn' => $infouser['emaillgn'],
                 'issuperuserlgn' => $infouser['issuperuserlgn'],
                 'notif_messages' => $mailbox_unread,
+                'success_code' => session()->get('success'),
             ];
             $this->footer_data = [
                 'usernamelgn'   => $infouser['usernamelgn'],

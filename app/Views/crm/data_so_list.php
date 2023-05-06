@@ -13,6 +13,19 @@
 		</ol>
 	</section>
 
+	<input id="success-code" type="hidden" value="<?= $success_code ?>">
+	<!-- Untuk menampilkan modal bootstrap umum  -->
+	<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+				<div class='modal-header'>
+					<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+					<h4 class='modal-title' id='myModalLabel'> Pengaturan Pengguna</h4>
+				</div>
+				<div class="fetched-data"></div>
+			</div>
+		</div>
+	</div>
 	<section class="content" id="maincontent">
 		<div class="row">
 			<div class="col-md-12">
@@ -31,14 +44,13 @@
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
 											<div class="col-sm-6">
-												<code> { only viewed <strong>Sales Order</strong> data that waiting to be processed by the requester }</code>
 											</div>
 											<div class="col-sm-6">
 												<div class="box-tools">
 													<div class="input-group input-group-sm pull-right">
-														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();}">
+														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="">
 														<div class="input-group-btn">
-															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
+															<button type="submit" class="btn btn-default" onclick=""><i class="fa fa-search"></i></button>
 														</div>
 													</div>
 												</div>
@@ -64,8 +76,10 @@
 																<th>Req Date</th>
 																<th>Sales Person</th>
 																<th>Order Description</th>
+																<th>Service Type</th>
 																<th>Qty</th>
 																<th>UoM</th>
+																<th>Status</th>
 
 															</tr>
 														</thead>
@@ -74,35 +88,61 @@
 															$no = 0;
 
 															?>
-															<?php foreach ($so_data as $ot_list) { ?>
+															<?php foreach ($so_data as $ot_list) {
+																$crmpodate = substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4); ?>
 																<tr>
 																	<td><?= ++$no; ?></td>
 																	<td nowrap>
-																		<a href="#" title="Update" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-																		<? //= base_url("salesorderlist/update/" . $ot_list['ID_SO']) 
-																		?>
-																		<a href="#" class="btn btn-default btn-sm" title="Resend Notif">
-																			<i class="fa fa-send-o"></i>
-																		</a>
-																		<a href="#" title="Delete" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></a>
-
+																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 0)) { ?>
+																			<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="SO View">
+																				<i class="fa fa-file"></i>
+																			</a>
+																		<?php } ?>
+																		<?php if ($ot_list['POSTINGSTAT'] == 0) { ?>
+																			<a href="<?= base_url("salesorder/update/" . $ot_list['CSRUNIQ']) ?>" title="Update" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+																		<?php } ?>
+																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 1)) { ?>
+																			<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Posting & Sending Notif">
+																				<i class="fa fa-send-o"></i>
+																			</a>
+																		<?php } ?>
+																		<?php if ($ot_list['POSTINGSTAT'] == 0) { ?>
+																			<a href="#" title="Delete" class="btn btn-default btn-sm" data-toggle="modal" data-target="#confirm-delete" data-href="<?= base_url("salesorderlist/deletedata/$ot_list[CSRUNIQ]") ?>"><i class="fa fa-trash"></i></a>
+																		<?php } ?>
 
 
 																	</td>
-																	<td><?= $ot_list['CustomerName']; ?></td>
-																	<td><?= $ot_list['CustomerEmail']; ?></td>
-																	<td nowrap><?= $ot_list['ContractNo']; ?></td>
-																	<td nowrap><?= $ot_list['ProjectNo']; ?></td>
-																	<td><?= $ot_list['CrmNo']; ?></td>
-																	<td><?= $ot_list['PoCustomer']; ?></td>
-																	<td><?= $ot_list['PoDate']; ?></td>
-																	<td><?= $ot_list['InventoryNo']; ?></td>
-																	<td><?= $ot_list['MaterialNo']; ?></td>
-																	<td><?= $ot_list['ReqDate']; ?></td>
-																	<td><?= $ot_list['SalesPerson']; ?></td>
-																	<td><?= $ot_list['OrderDesc']; ?></td>
-																	<td><?= $ot_list['Qty']; ?></td>
-																	<td><?= $ot_list['Uom']; ?></td>
+																	<td><?= $ot_list['NAMECUST']; ?></td>
+																	<td><?= $ot_list['EMAIL1CUST']; ?></td>
+																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
+																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
+																	<td><?= $ot_list['CRMNO']; ?></td>
+																	<td><?= $ot_list['PONUMBERCUST']; ?></td>
+																	<td><?= $crmpodate; ?></td>
+																	<td><?= $ot_list['ITEMNO']; ?></td>
+																	<td><?= $ot_list['MATERIALNO']; ?></td>
+																	<td><?= $ot_list['CRMREQDATE']; ?></td>
+																	<td><?= $ot_list['SALESNAME']; ?></td>
+																	<td><?= $ot_list['ORDERDESC']; ?></td>
+																	<td><?= $ot_list['SERVICETYPE']; ?></td>
+																	<td><?= $ot_list['QTY']; ?></td>
+																	<td><?= $ot_list['STOCKUNIT']; ?></td>
+																	<td>
+																		<?php $postingstat = $ot_list['POSTINGSTAT'];
+																		switch ($postingstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Deleted";
+																				break;
+																			default:
+																				echo "Open";
+																		} ?>
+																	</td>
 																</tr>
 
 															<?php } ?>
@@ -192,3 +232,5 @@
 		</div>
 	</div>
 </div>
+
+<?php echo view('settings/confirm_delete') ?>

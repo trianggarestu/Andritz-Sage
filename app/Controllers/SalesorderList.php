@@ -17,7 +17,8 @@ class SalesorderList extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
-    private $db;
+    private $audtuser;
+    private $db_name;
 
     public function __construct()
     {
@@ -27,7 +28,8 @@ class SalesorderList extends BaseController
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
         $this->SalesorderModel = new Salesorder_model();
-        $this->db = \Config\Database::connect();
+        $this->db_name = \Config\Database::connect();
+
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -50,6 +52,7 @@ class SalesorderList extends BaseController
                 'emaillgn' => $infouser['emaillgn'],
                 'issuperuserlgn' => $infouser['issuperuserlgn'],
                 'notif_messages' => $mailbox_unread,
+
             ];
             $this->footer_data = [
                 'usernamelgn'   => $infouser['usernamelgn'],
@@ -66,21 +69,55 @@ class SalesorderList extends BaseController
                 //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
             ];
             //}
+
+            date_default_timezone_set('Asia/Jakarta');
+            $today = date("d/m/Y H:i:s");
+
+            $this->audtuser = [
+                'TODAY' => $today,
+                'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                'AUDTUSER' => $infouser['usernamelgn'],
+                'AUDTORG' => $this->db_name->database,
+
+            ];
         }
     }
 
     public function index()
     {
+        session()->remove('success');
         $so_data = $this->SalesorderModel->get_so_open();
+
         $data = array(
             'so_data' => $so_data,
-            'audtorg' => $this->db->database,
+            'success_code' => session()->get('success'),
         );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
         echo view('crm/data_so_list', $data);
         echo view('view_footer', $this->footer_data);
+    }
+
+    public function deletedata($csruniq = '')
+    {
+        $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
+        if ($getcsropen['POSTINGSTAT'] == 0) {
+            $data = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'POSTINGSTAT' => 2,
+            );
+            $this->SalesorderModel->set_csr_delete($csruniq, $data);
+            session()->set('success', '1');
+            return redirect()->to(base_url('/salesorderlist'));
+        } else {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('/salesorderlist'));
+        }
     }
 
     public function export_excel()
@@ -103,6 +140,7 @@ class SalesorderList extends BaseController
             ->setCellValue('K1', 'ReqDate')
             ->setCellValue('L1', 'SalesPerson')
             ->setCellValue('M1', 'Order Description')
+            ->setCellValue('M1', 'Service Type')
             ->setCellValue('N1', 'Qty')
             ->setCellValue('O1', 'Uom')
             ->setCellValue('P1', 'Status');
@@ -113,20 +151,21 @@ class SalesorderList extends BaseController
         foreach ($so_data as $data) {
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['CustomerName'])
-                ->setCellValue('C' . $rows, $data['CustomerEmail'])
-                ->setCellValue('D' . $rows, $data['ContractNo'])
-                ->setCellValue('E' . $rows, $data['ProjectNo'])
-                ->setCellValue('F' . $rows, $data['CrmNo'])
-                ->setCellValue('G' . $rows, $data['PoCustomer'])
-                ->setCellValue('J' . $rows, $data['PoDate'])
-                ->setCellValue('H' . $rows, $data['InventoryNo'])
-                ->setCellValue('I' . $rows, $data['MaterialNo'])
-                ->setCellValue('K' . $rows, $data['ReqDate'])
-                ->setCellValue('L' . $rows, $data['SalesPerson'])
-                ->setCellValue('M' . $rows, $data['OrderDesc'])
-                ->setCellValue('N' . $rows, $data['Qty'])
-                ->setCellValue('O' . $rows, $data['Uom'])
+                ->setCellValue('B' . $rows, $data['NAMECUST'])
+                ->setCellValue('C' . $rows, $data['EMAIL1CUST'])
+                ->setCellValue('D' . $rows, $data['CONTRACT'])
+                ->setCellValue('E' . $rows, $data['PROJECT'])
+                ->setCellValue('F' . $rows, $data['CRMNO'])
+                ->setCellValue('G' . $rows, $data['PONUMBERCUST'])
+                ->setCellValue('J' . $rows, $data['PODATECUST'])
+                ->setCellValue('H' . $rows, $data['ITEMNO'])
+                ->setCellValue('I' . $rows, $data['MATERIALNO'])
+                ->setCellValue('K' . $rows, $data['CRMREQDATE'])
+                ->setCellValue('L' . $rows, $data['SALESNAME'])
+                ->setCellValue('M' . $rows, $data['ORDERDESC'])
+                ->setCellValue('M' . $rows, $data['SERVICETYPE'])
+                ->setCellValue('N' . $rows, $data['QTY'])
+                ->setCellValue('O' . $rows, $data['STOCKUNIT'])
                 ->setCellValue('P' . $rows, 'Waiting processed by Requester');
             $rows++;
         }

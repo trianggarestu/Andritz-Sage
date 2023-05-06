@@ -1,5 +1,7 @@
 <?php if (!empty($errors)) : ?>
-	<div class="errors text-red" role="alert">
+
+	<div class="text-muted errors text-red well well-sm" role="alert">
+		Error Message :
 		<ul>
 			<?php foreach ($errors as $error) : ?>
 				<li><?= esc($error) ?></li>
@@ -7,4 +9,5 @@
 		</ul>
 
 	</div>
+
 <?php endif ?>
