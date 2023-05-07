@@ -160,6 +160,11 @@
 															<td><strong><?= $csropen_data['MATERIALNO']; ?></strong></td>
 														</tr>
 														<tr>
+															<td width="300">Item Description </td>
+															<td width="1">:</td>
+															<td><strong><?= $csropen_data['ITEMDESC']; ?></strong></td>
+														</tr>
+														<tr>
 															<td width="300">Qty. </td>
 															<td width="1">:</td>
 															<td><strong><?= number_format($csropen_data['QTY'], 0, ",", ".") . ' (' . trim($csropen_data['STOCKUNIT']) . ')'; ?></strong></td>

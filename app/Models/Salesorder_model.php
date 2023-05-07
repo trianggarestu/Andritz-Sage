@@ -82,7 +82,7 @@ class Salesorder_model extends Model
 
     function get_csr_open($csruniq)
     {
-        $query = $this->db->query("select * from webot_CSR where POSTINGSTAT <>2 and CSRUNIQ='$csruniq'");
+        $query = $this->db->query("select a.*," . 'b."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM b on b.ITEMNO=a.ITEMNO where a.POSTINGSTAT <>2 and a.CSRUNIQ='$csruniq'");
         return $query->getRowArray();
     }
 

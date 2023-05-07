@@ -180,8 +180,12 @@
 									<label>Service Type <code> (choose) </code> </label>
 									<select name="so_service" class="form-control input-sm">
 										<option value="">--Choose One--</option>
-										<option value="SPAREPARTS">SPAREPARTS</option>
-										<option value="SERVICES">SERVICES</option>
+										<option value="SPAREPARTS" <?php if ($service_type == "SPAREPARTS") {
+																		echo "selected";
+																	} ?>>SPAREPARTS</option>
+										<option value="SERVICES" <?php if ($service_type == "SERVICES") {
+																		echo "selected";
+																	} ?>>SERVICES</option>
 
 									</select>
 								</div>
@@ -193,9 +197,11 @@
 											<?php foreach ($item_data as $icitem) :
 											?>
 												<option value="<?= trim($icitem['ITEMNO'])
-																?>"><?= trim($icitem['ITEMNO'])
-																	?> - <?= $icitem['ITEMDESC']
-																			?>
+																?>" <?php if ($inventory_no == trim($icitem['ITEMNO'])) {
+																		echo "selected";
+																	} ?>><?= trim($icitem['ITEMNO'])
+																			?> - <?= $icitem['ITEMDESC']
+																					?>
 												</option>
 											<?php endforeach;
 											?>
@@ -215,8 +221,12 @@
 									<label>Uom <code> (Choose) </code> </label>
 									<select name="so_uom" class="form-control input-sm">
 										<option value="">--Choose One--</option>
-										<option value="Ea">Ea</option>
-										<option value="Pcs">Pcs</option>
+										<option value="Ea" <?php if ($stock_unit == "Ea") {
+																echo "selected";
+															} ?>>Ea</option>
+										<option value="Pcs" <?php if ($stock_unit == "Pcs") {
+																echo "selected";
+															} ?>>Pcs</option>
 									</select>
 
 								</div>
