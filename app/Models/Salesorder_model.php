@@ -98,6 +98,13 @@ class Salesorder_model extends Model
         return $query;
     }
 
+    function csr_update($csruniq, $data)
+    {
+        $query = $this->db->table('webot_CSR')->update($data, array('CSRUNIQ' => $csruniq));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
     function csr_post_update($csruniq, $data)
     {
         $query = $this->db->table('webot_CSR')->update($data, array('CSRUNIQ' => $csruniq));

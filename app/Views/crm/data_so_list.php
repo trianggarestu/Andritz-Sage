@@ -6,16 +6,25 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Sales Order Open</h1>
+		<h1>Sales Order List</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
 			<li class="active">Sales Order List</li>
 		</ol>
 	</section>
-
 	<input id="success-code" type="hidden" value="<?= $success_code ?>">
 	<!-- Untuk menampilkan modal bootstrap umum  -->
 	<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+
+				<div class="fetched-data"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Untuk menampilkan modal bootstrap umum  -->
+	<!--<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class='modal-dialog'>
 			<div class='modal-content'>
 				<div class='modal-header'>
@@ -26,13 +35,14 @@
 			</div>
 		</div>
 	</div>
+-->
 	<section class="content" id="maincontent">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<a href="<?= base_url() ?>salesorder" title="Tambah Data Warga" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-plus"></i> Add Sales Order</a>
-						<a href="#" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Cetak" target="_blank"><i class="fa fa-print"></i> Preview
+						<a href="<?= base_url() ?>salesorder" title="Add Sales Order" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-plus"></i> Add Sales Order</a>
+						<a href="<?= base_url("salesorderlist/preview") ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Cetak" target="_blank"><i class="fa fa-print"></i> Preview
 						</a>
 						<a href="<?= base_url("salesorderlist/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
 						</a>
@@ -89,11 +99,15 @@
 
 															?>
 															<?php foreach ($so_data as $ot_list) {
-																$crmpodate = substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4); ?>
+
+																$crmpodate = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" .  substr($ot_list['PODATECUST'], 0, 4);
+																$crmreqdate = substr($ot_list['CRMREQDATE'], 4, 2) . '/' . substr($ot_list['CRMREQDATE'], 6, 2) . '/' . substr($ot_list['CRMREQDATE'], 0, 4);
+															?>
 																<tr>
 																	<td><?= ++$no; ?></td>
 																	<td nowrap>
-																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 0)) { ?>
+																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 0)) {
+																			$bysetting = 1; ?>
 																			<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="SO View">
 																				<i class="fa fa-file"></i>
 																			</a>
@@ -121,11 +135,11 @@
 																	<td><?= $crmpodate; ?></td>
 																	<td><?= $ot_list['ITEMNO']; ?></td>
 																	<td><?= $ot_list['MATERIALNO']; ?></td>
-																	<td><?= $ot_list['CRMREQDATE']; ?></td>
+																	<td><?= $crmreqdate; ?></td>
 																	<td><?= $ot_list['SALESNAME']; ?></td>
 																	<td><?= $ot_list['ORDERDESC']; ?></td>
 																	<td><?= $ot_list['SERVICETYPE']; ?></td>
-																	<td><?= $ot_list['QTY']; ?></td>
+																	<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
 																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td>
 																		<?php $postingstat = $ot_list['POSTINGSTAT'];
@@ -153,9 +167,9 @@
 										</div>
 									</form>
 									<div class="row">
-										<!-- Pagination template
-											<div class="col-sm-6">
-											
+										<!-- Pagination template-->
+										<div class="col-sm-6">
+
 										</div>
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">
@@ -206,7 +220,7 @@
 												</ul>
 											</div>
 										</div>
-													-->
+
 									</div>
 								</div>
 							</div>

@@ -15,6 +15,8 @@ class Mailbox extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
+
     public function __construct()
     {
         //parent::__construct();
@@ -58,9 +60,16 @@ class Mailbox extends BaseController
                 //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                 //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
             ];
-            //}
 
+            date_default_timezone_set('Asia/Jakarta');
+            $today = date("d/m/Y H:i:s");
 
+            $this->audtuser = [
+                'TODAY' => $today,
+                'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+
+            ];
         }
     }
 
@@ -229,23 +238,30 @@ class Mailbox extends BaseController
         $row = $this->NotifModel->get_notif_by_id($id);
 
         if ($row) {
-            $today = date("d.m.Y");
-            $audtdate = substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2);
             $is_read = array(
-                'is_read' => 1,
-                'updated_at' => $audtdate,
+                'IS_READ' => 1,
+                'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
             );
             $this->NotifModel->update_is_read($id, $is_read);
-
+            $sending_date = substr($row['SENDING_DATE'], 4, 2) . "/" . substr($row['SENDING_DATE'], 6, 2) . "/" .  substr($row['SENDING_DATE'], 0, 4);
+            $time = strlen($row['SENDING_TIME']);
+            if ($time == 5) {
+                $n_time = '0' . $row['SENDING_TIME'];
+            } else if ($time == 6) {
+                $n_time = $row['SENDING_TIME'];
+            }
+            $sending_time = substr($n_time, 0, 2) . ":" . substr($n_time, 3, 2) . ":" .  substr($n_time, 5, 2);
             $data = array(
-                'id' => $row['id'],
-                'from_email' => $row['from_email'],
-                'from_name' => $row['from_name'],
-                'to_email' => $row['to_email'],
-                'to_name' => $row['to_name'],
-                'sending_date' => $row['sending_date'],
-                'subject' => $row['subject'],
-                'message' => $row['message'],
+                'id' => $row['MAILSEQ'],
+                'from_email' => $row['FROM_EMAIL'],
+                'from_name' => $row['FROM_NAME'],
+                'to_email' => $row['TO_EMAIL'],
+                'to_name' => $row['TO_NAME'],
+                'sending_date' => $sending_date,
+                'sending_time' => $sending_time,
+                'subject' => $row['SUBJECT'],
+                'message' => $row['MESSAGE'],
             );
             echo view('mailbox/ajax_view_messages', $data);
         }
@@ -254,7 +270,7 @@ class Mailbox extends BaseController
     public function mark_read($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_read'] == 0) {
+        if ($chkmail['IS_READ'] == 0) {
             $this->NotifModel->mark_read($id, 1);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -263,7 +279,7 @@ class Mailbox extends BaseController
     public function mark_unread($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_read'] == 1) {
+        if ($chkmail['IS_READ'] == 1) {
             $this->NotifModel->mark_read($id, 0);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -272,7 +288,7 @@ class Mailbox extends BaseController
     public function mark_archive($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_archived'] == 0) {
+        if ($chkmail['IS_ARCHIVED'] == 0) {
             $this->NotifModel->mark_archive($id, 1);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -281,7 +297,7 @@ class Mailbox extends BaseController
     public function mark_atoinbox($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_archived'] == 1) {
+        if ($chkmail['IS_ARCHIVED'] == 1) {
             $this->NotifModel->mark_archive($id, 0);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -290,7 +306,7 @@ class Mailbox extends BaseController
     public function mark_trash($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_trashed'] == 0) {
+        if ($chkmail['IS_TRASHED'] == 0) {
             $this->NotifModel->mark_trash($id, 1);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -299,7 +315,7 @@ class Mailbox extends BaseController
     public function mark_ttoinbox($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_trashed'] == 1) {
+        if ($chkmail['IS_TRASHED'] == 1) {
             $this->NotifModel->mark_trash($id, 0, 0);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -308,7 +324,7 @@ class Mailbox extends BaseController
     public function mark_star($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_star'] == 0) {
+        if ($chkmail['IS_STAR'] == 0) {
             $this->NotifModel->mark_star($id, 1);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
@@ -317,7 +333,7 @@ class Mailbox extends BaseController
     public function mark_unstar($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
-        if ($chkmail['is_star'] == 1) {
+        if ($chkmail['IS_STAR'] == 1) {
             $this->NotifModel->mark_star($id, 0);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }

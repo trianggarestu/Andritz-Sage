@@ -52,6 +52,7 @@ class SalesorderList extends BaseController
                 'emaillgn' => $infouser['emaillgn'],
                 'issuperuserlgn' => $infouser['issuperuserlgn'],
                 'notif_messages' => $mailbox_unread,
+                'success_code' => session()->get('success'),
 
             ];
             $this->footer_data = [
@@ -86,7 +87,7 @@ class SalesorderList extends BaseController
 
     public function index()
     {
-        session()->remove('success');
+        //session()->remove('success');
         $so_data = $this->SalesorderModel->get_so_open();
 
         $data = array(
@@ -98,6 +99,7 @@ class SalesorderList extends BaseController
         echo view('view_nav', $this->nav_data);
         echo view('crm/data_so_list', $data);
         echo view('view_footer', $this->footer_data);
+        session()->remove('success');
     }
 
     public function deletedata($csruniq = '')
@@ -120,11 +122,23 @@ class SalesorderList extends BaseController
         }
     }
 
+    public function preview()
+    {
+        $so_data = $this->SalesorderModel->get_so_open();
+        $data = array(
+            'so_data' => $so_data,
+            'success_code' => session()->get('success'),
+        );
+
+        echo view('crm/data_so_list_preview', $data);
+    }
+
     public function export_excel()
     {
         //$peoples = $this->builder->get()->getResultArray();
         $so_data = $this->SalesorderModel->get_so_open();
         $spreadsheet = new Spreadsheet();
+
         // tulis header/nama kolom 
         $spreadsheet->setActiveSheetIndex(0)
             ->setCellValue('A1', 'No')
@@ -149,6 +163,30 @@ class SalesorderList extends BaseController
         // tulis data mobil ke cell
         $no = 1;
         foreach ($so_data as $data) {
+            $postingstat =  $data['POSTINGSTAT'];
+            switch ($postingstat) {
+                case "0":
+                    $postingstatus = "Open";
+                    break;
+                case "1":
+                    $postingstatus = "Posted";
+                    break;
+                case "2":
+                    $postingstatus = "Deleted";
+                    break;
+                default:
+                    $postingstatus = "Open";
+            }
+
+            $dd = substr($data['PODATECUST'], 6, 2);
+            $mm = substr($data['PODATECUST'], 4, 2);
+            $yyyy = substr($data['PODATECUST'], 0, 4);
+            $pocustdate = $mm . '/' . $dd . '/' . $yyyy;
+
+            $dd = substr($data['CRMREQDATE'], 6, 2);
+            $mm = substr($data['CRMREQDATE'], 4, 2);
+            $yyyy = substr($data['CRMREQDATE'], 0, 4);
+            $reqdate = $mm . '/' . $dd . '/' . $yyyy;
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
                 ->setCellValue('B' . $rows, $data['NAMECUST'])
@@ -156,22 +194,23 @@ class SalesorderList extends BaseController
                 ->setCellValue('D' . $rows, $data['CONTRACT'])
                 ->setCellValue('E' . $rows, $data['PROJECT'])
                 ->setCellValue('F' . $rows, $data['CRMNO'])
+
                 ->setCellValue('G' . $rows, $data['PONUMBERCUST'])
-                ->setCellValue('J' . $rows, $data['PODATECUST'])
+                ->setCellValue('J' . $rows, trim($pocustdate))
                 ->setCellValue('H' . $rows, $data['ITEMNO'])
                 ->setCellValue('I' . $rows, $data['MATERIALNO'])
-                ->setCellValue('K' . $rows, $data['CRMREQDATE'])
+                ->setCellValue('K' . $rows, trim($reqdate))
                 ->setCellValue('L' . $rows, $data['SALESNAME'])
                 ->setCellValue('M' . $rows, $data['ORDERDESC'])
                 ->setCellValue('M' . $rows, $data['SERVICETYPE'])
                 ->setCellValue('N' . $rows, $data['QTY'])
                 ->setCellValue('O' . $rows, $data['STOCKUNIT'])
-                ->setCellValue('P' . $rows, 'Waiting processed by Requester');
+                ->setCellValue('P' . $rows, $postingstatus);
             $rows++;
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'Sales_Order_Open_data';
+        $fileName = 'Sales_Order_data';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

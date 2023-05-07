@@ -97,39 +97,39 @@
 													<td><input type="checkbox"></td>
 													<td class="mailbox-star">
 														<?php if ($mailbox_active != 'Trash') { ?>
-															<a href="<?php if ($data['is_star'] == 0) {
-																			echo base_url("mailbox/mark_star/" . $data['id']);
+															<a href="<?php if ($data['IS_STAR'] == 0) {
+																			echo base_url("mailbox/mark_star/" . $data['MAILSEQ']);
 																		} else {
-																			echo base_url("mailbox/mark_unstar/" . $data['id']);
-																		} ?>"><?php if ($data['is_star'] == 0) { ?><i class="fa fa-star-o text-yellow"></i><?php } else { ?><i class="fa fa-star text-yellow"></i><?php } ?>
+																			echo base_url("mailbox/mark_unstar/" . $data['MAILSEQ']);
+																		} ?>"><?php if ($data['IS_STAR'] == 0) { ?><i class="fa fa-star-o text-yellow"></i><?php } else { ?><i class="fa fa-star text-yellow"></i><?php } ?>
 															</a>
 														<?php } ?>
 													</td>
-													<td class="mailbox-name <?php if ($data['is_read'] == 0) {
+													<td class="mailbox-name <?php if ($data['IS_READ'] == 0) {
 																				echo 'unread-b';
 																			}; ?>">
 
-														<?= ucwords(strtolower($data['from_name'])); ?>
+														<?= ucwords(strtolower($data['FROM_NAME'])); ?>
 
 
 													</td>
-													<td class="mailbox-name <?php if ($data['is_read'] == 0) {
+													<td class="mailbox-name <?php if ($data['IS_READ'] == 0) {
 																				echo 'unread-b';
 																			}; ?>">
-														<?= $data['from_email'] ?>
+														<?= $data['FROM_EMAIL'] ?>
 													</td>
-													<td class="mailbox-subject <?php if ($data['is_read'] == 0) {
+													<td class="mailbox-subject <?php if ($data['IS_READ'] == 0) {
 																					echo 'unread-b';
 																				}; ?>">
-														<a href="<?= base_url(); ?>mailbox/view_messages/<?= $data['id'] ?>" data-remote="false" data-toggle="modal" data-tittle="View Messages" data-target="#modalBox">
-															<?= $data['subject'] ?> ...
+														<a href="<?= base_url(); ?>mailbox/view_messages/<?= $data['MAILSEQ'] ?>" data-remote="false" data-toggle="modal" data-tittle="View Messages" data-target="#modalBox">
+															<?= $data['SUBJECT'] ?> ...
 														</a>
 													</td>
-													<td class="mailbox-attachment"><?php if ($data['is_attached'] == 1) { ?><i class="fa fa-paperclip"></i><?php } ?></td>
-													<td class="mailbox-date <?php if ($data['is_read'] == 0) {
+													<td class="mailbox-attachment"><?php if ($data['IS_ATTACHED'] == 1) { ?><i class="fa fa-paperclip"></i><?php } ?></td>
+													<td class="mailbox-date <?php if ($data['IS_READ'] == 0) {
 																				echo 'unread-b';
 																			}; ?>"><?php
-																					$sending_date = substr($data['sending_date'], 6, 2) . "/" . substr($data['sending_date'], 4, 2) . "/" . substr($data['sending_date'], 0, 4);
+																					$sending_date = substr($data['SENDING_DATE'], 6, 2) . "/" . substr($data['SENDING_DATE'], 4, 2) . "/" . substr($data['SENDING_DATE'], 0, 4);
 																					echo $sending_date;
 																					?></td>
 													<td>
@@ -138,12 +138,12 @@
 															<?php if ($mailbox_active == 'Trash') {
 																echo '';
 															} else {
-																if ($data['is_read'] == 0) { ?>
-																	<a href="<?= base_url("mailbox/mark_read/" . $data['id']) ?>" class="btn btn-default btn-sm" title="Mark as read">
+																if ($data['IS_READ'] == 0) { ?>
+																	<a href="<?= base_url("mailbox/mark_read/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Mark as read">
 																		<i class="fa fa-envelope-open-o"></i>
 																	</a>
 																<?php } else { ?>
-																	<a href="<?= base_url("mailbox/mark_unread/" . $data['id']) ?>" class="btn btn-default btn-sm" title="Mark as unread">
+																	<a href="<?= base_url("mailbox/mark_unread/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Mark as unread">
 																		<i class="fa fa-envelope-o"></i>
 																	</a> <?php }
 																	} ?>
@@ -152,19 +152,19 @@
 															if ($mailbox_active == 'Trash') {
 																echo '';
 															} else {
-																if ($data['is_archived'] == 0) { ?>
-																	<a href="<?= base_url("mailbox/mark_archive/" . $data['id']) ?>" class="btn btn-default btn-sm" title="Archive"><i class="fa fa-archive"></i></a>
+																if ($data['IS_ARCHIVED'] == 0) { ?>
+																	<a href="<?= base_url("mailbox/mark_archive/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Archive"><i class="fa fa-archive"></i></a>
 																<?php } else { ?>
-																	<a href="<?= base_url("mailbox/mark_atoinbox/" . $data['id']) ?>" class="btn btn-default btn-sm" title="Move to inbox"><i class="fa fa-inbox"></i></a>
+																	<a href="<?= base_url("mailbox/mark_atoinbox/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to inbox"><i class="fa fa-inbox"></i></a>
 															<?php }
 															}
 															?>
 
 															<?php
-															if ($data['is_trashed'] == 0) { ?>
-																<a href="<?= base_url("mailbox/mark_trash/" . $data['id']) ?>" class="btn btn-default btn-sm" title="Move to trash"><i class="fa fa-trash-o"></i></a>
+															if ($data['IS_TRASHED'] == 0) { ?>
+																<a href="<?= base_url("mailbox/mark_trash/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to trash"><i class="fa fa-trash-o"></i></a>
 															<?php } else { ?>
-																<a href="<?= base_url("mailbox/mark_ttoinbox/" . $data['id']) ?>" class="btn btn-default btn-sm" title="Move to inbox"><i class="fa fa-inbox"></i></a>
+																<a href="<?= base_url("mailbox/mark_ttoinbox/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to inbox"><i class="fa fa-inbox"></i></a>
 															<?php }
 															?>
 														</div>

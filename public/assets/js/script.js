@@ -235,19 +235,19 @@ $(document).ready(function()
 	$('.datepicker').datepicker(
 	{
 		weekStart : 1,
-		language:'id',
-		format: 'dd-mm-yyyy',
+		language:'en',
+		format: 'mm/dd/yyyy',
 		autoclose: true
 	});
 	$('#tgl_mulai').datetimepicker({
-		locale:'id',
-		format: 'DD-MM-YYYY',
+		locale:'en',
+		format: 'MM/DD/YYYY',
 		useCurrent: false,
 		date: moment(new Date())
 	});
 	$('#tgl_akhir').datetimepicker({
-		locale:'id',
-		format: 'DD-MM-YYYY',
+		locale:'en',
+		format: 'MM/DD/YYYY',
 		useCurrent: false,
 		minDate: moment(new Date()).add(-1, 'day'), // Todo: mengapa harus dikurangi -- bug?
 		date: moment(new Date()).add(1, 'M')
@@ -261,15 +261,15 @@ $(document).ready(function()
 	});
 
 	$('#tgljam_mulai').datetimepicker({
-		locale:'id',
-		format: 'DD-MM-YYYY HH:mm',
+		locale:'en',
+		format: 'MM/DD/YYYY HH:mm',
 		useCurrent: false,
 		date: moment(new Date()),
 		sideBySide:true
 	});
 	$('#tgljam_akhir').datetimepicker({
-		locale:'id',
-		format: 'DD-MM-YYYY HH:mm',
+		locale:'en',
+		format: 'MM/DD/YYYY HH:mm',
 		useCurrent: false,
 		minDate: moment(new Date()).add(-1, 'day'), // Todo: mengapa harus dikurangi -- bug?
 		date: moment(new Date()).add(1, 'day'),
@@ -284,81 +284,81 @@ $(document).ready(function()
 
 	$('.tgl_jam').datetimepicker(
 	{
-		format: 'DD-MM-YYYY HH:mm:ss',
-		locale:'id'
+		format: 'MM/DD/YYYY HH:mm:ss',
+		locale:'en'
 	});
 	$('.tgl').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
+		format: 'MM/DD/YYYY',
 		useCurrent: false,
-		locale:'id'
+		locale:'en'
 	});
 	$('#tgl_1').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
-		locale:'id'
+		format: 'MM/DD/YYYY',
+		locale:'en'
 	});
 	$('.tgl_1').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
-		locale:'id'
+		format: 'MM/DD/YYYY',
+		locale:'en'
 	});
 	$('#tgl_2').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
-		locale:'id'
+		format: 'MM/DD/YYYY',
+		locale:'en'
 	});
 	$('#tgl_3').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
-		locale:'id'
+		format: 'MM/DD/YYYY',
+		locale:'en'
 	});
 	$('#tgl_4').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
-		locale:'id'
+		format: 'MM/DD/YYYY',
+		locale:'en'
 	});
 	$('#tgl_5').datetimepicker(
 	{
-		format: 'DD-MM-YYYY',
-		locale:'id'
+		format: 'MM/DD/YYYY',
+		locale:'en'
 	});
 	$('#tgl_6').datetimepicker(
 	{
-			format: 'DD-MM-YYYY',
-			locale:'id'
+			format: 'MM/DD/YYYY',
+			locale:'en'
 	});
 	$('#jam_1').datetimepicker(
 	{
 		format: 'HH:mm:ss',
-		locale:'id'
+		locale:'en'
 	});
 	$('#jam_2').datetimepicker(
 	{
 		format: 'HH:mm:ss',
-		locale:'id'
+		locale:'en'
 	});
 	$('#jam_3').datetimepicker(
 	{
 		format: 'HH:mm:ss',
-		locale:'id'
+		locale:'en'
 	});
 
 	$('#jammenit_1').datetimepicker(
 	{
 		format: 'HH:mm',
-		locale:'id'
+		locale:'en'
 	});
 	$('#jammenit_2').datetimepicker(
 	{
 		format: 'HH:mm',
-		locale:'id'
+		locale:'en'
 	});
 
 	$('#jammenit_3').datetimepicker(
 	{
 		format: 'HH:mm',
-		locale:'id'
+		locale:'en'
 	});
 
 	$('[data-rel="popover"]').popover(

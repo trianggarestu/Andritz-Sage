@@ -37,11 +37,10 @@
 				<div class="col-md-12">
 					<div class="box box-info">
 						<div class="box-header with-border">
-							<a href="<?= base_url(); ?>salesorder" title="Reset Data" onclick="<?php echo base_url(); ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class='fa fa-refresh'></i> Reset Sales Order Form</a>
-
 							<a href="<?= base_url(); ?>salesorderlist" class="btn btn-social btn-flat btn-info btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Back to Sales Order List">
 								<i class="fa fa-arrow-circle-left "></i>Back to Sales Order List
 							</a>
+							<a href="<?= base_url(); ?>salesorder" title="Reset Data" onclick="<?php echo base_url(); ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class='fa fa-refresh'></i> Reset Sales Order Form</a>
 						</div>
 
 						<div class="box-body">
@@ -161,7 +160,7 @@
 											<div class="input-group-addon">
 												<i class="fa fa-calendar"></i>
 											</div>
-											<input class="datepicker form-control input-sm pull-right" id="req_date" name="req_date" type="text" value="<?= $req_date ?>">
+											<input class="datepicker form-control input-sm pull-right" id="req_date" name="req_date" type="text" value="<?= $req_date ?>" readonly>
 										</div>
 									</div>
 								</div>
@@ -238,6 +237,7 @@
 				<div class='box-footer'>
 					<div class='col-xs-12'>
 						<input type="hidden" id="ct_manager" name="ct_manager" value="<?= $ct_manager ?>">
+						<input type="hidden" id="csr_uniq" name="csr_uniq" value="<?= $csr_uniq ?>">
 						<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
 						<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> Save</button>
 					</div>

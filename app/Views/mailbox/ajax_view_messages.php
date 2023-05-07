@@ -33,10 +33,7 @@
                         <span class="mailbox-read-time pull-right">Date :</span>
                     </div>
                     <div class="col-md-9 mailbox-read-time">
-                        <span><?php
-                                $send_date = substr($sending_date, 6, 2) . "/" . substr($sending_date, 4, 2) . "/" . substr($sending_date, 0, 4);
-                                echo $send_date;
-                                ?></span>
+                        <span><?php echo $sending_date; ?></span>
                     </div>
 
                     <div class="col-md-3 mailbox-read-time">

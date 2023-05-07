@@ -95,18 +95,29 @@
 										<?php foreach ($notif_messages as $notifications) : ?>
 											<li><!-- start message -->
 
-												<a href="<?= base_url(); ?>mailbox/view_messages/<?= $notifications['id'] ?>" data-remote="false" data-toggle="modal" data-tittle="View Messages" data-target="#modalBox">
+												<a href="<?= base_url(); ?>mailbox/view_messages/<?= $notifications['MAILSEQ'] ?>" data-remote="false" data-toggle="modal" data-tittle="View Messages" data-target="#modalBox">
 													<div class="pull-left">
 														<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="img-circle" alt="User Image">
 													</div>
 													<h4>
-														<?= ucwords(strtolower($notifications['from_name'])); ?>
+														<?= ucwords(strtolower($notifications['FROM_NAME'])); ?>
 														<small><i class="fa fa-clock-o"></i>
 															<?php
-															$sending_date = substr($notifications['sending_date'], 6, 2) . "/" . substr($notifications['sending_date'], 4, 2) . "/" . substr($notifications['sending_date'], 0, 4);
-															echo $sending_date; ?></small>
+															$todaydate = date("m/d/Y");
+															$sending_date = substr($notifications['SENDING_DATE'], 4, 2) . "/" . substr($notifications['SENDING_DATE'], 6, 2) . "/" . substr($notifications['SENDING_DATE'], 0, 4);
+															$time = strlen($notifications['SENDING_TIME']);
+															if ($time == 5) {
+																$sending_time = substr($notifications['SENDING_TIME'], 0, 1) . ":" . substr($notifications['SENDING_TIME'], 2, 2);
+															} else if ($time == 6) {
+																$sending_time = substr($notifications['SENDING_TIME'], 0, 2) . ":" . substr($notifications['SENDING_TIME'], 3, 2);
+															}
+															if ($todaydate == $sending_date) {
+																echo $sending_time;
+															} else {
+																echo $sending_date;
+															} ?></small>
 													</h4>
-													<p><?= substr($notifications['subject'], 0, 30); ?></p>
+													<p><?= substr($notifications['SUBJECT'], 0, 30); ?></p>
 												</a>
 											</li>
 										<?php endforeach; ?>
@@ -163,7 +174,15 @@
 			</nav>
 		</header>
 
-		?>
-
-
-	</div>
+		<!-- Untuk menampilkan modal bootstrap umum  -->
+		<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class='modal-dialog'>
+				<div class='modal-content'>
+					<!--<div class='modal-header'>
+						<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+						<h4 class='modal-title' id='myModalLabel'> Pengaturan Pengguna</h4>
+					</div>-->
+					<div class="fetched-data"></div>
+				</div>
+			</div>
+		</div>
