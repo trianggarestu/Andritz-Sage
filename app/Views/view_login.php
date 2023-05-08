@@ -46,7 +46,7 @@
 
   <div class="login-box">
     <div class="login-logo">
-      <a href="<?php echo base_url(); ?>"><b>Login Page </b><br>Order Tracking Prototype</a>
+      <a href="<?php echo base_url(); ?>"><b>Login Page </b><br>Order Tracking PT.Andritz</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
