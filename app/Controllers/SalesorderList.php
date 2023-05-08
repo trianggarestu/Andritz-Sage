@@ -87,13 +87,19 @@ class SalesorderList extends BaseController
 
     public function index()
     {
+        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
-        $so_data = $this->SalesorderModel->get_so_open();
+        $so_data = $this->SalesorderModel->select('*')
+            ->where('POSTINGSTAT !=', 2)
+            ->paginate(10);
 
         $data = array(
             'so_data' => $so_data,
             'success_code' => session()->get('success'),
+            'pager' => $this->SalesorderModel->pager,
+            'currentpage' => $currentpage
         );
+
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);

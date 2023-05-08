@@ -13,7 +13,7 @@ use CodeIgniter\Model;
 class Salesorder_model extends Model
 {
 
-    //protected $table = 'ARCUS';
+    protected $table = 'webot_CSR';
     function __construct()
     {
         parent::__construct();
