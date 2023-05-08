@@ -76,11 +76,10 @@ class Requisition extends BaseController
 
     public function index()
     {
-        $requisitiondata = $this->RequisitionModel->get_requisition_open();
-
 
         $data = array(
-            'requisition_data' => $requisitiondata,
+            'requisition_data' => $this->RequisitionModel->paginate(10),
+            'pager' => $this->RequisitionModel->pager
         );
 
         echo view('view_header', $this->header_data);

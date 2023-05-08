@@ -73,49 +73,47 @@
 															</tr>
 														</thead>
 														<tbody>
-															<?php
-															$no = 0;
 
-															?>
 															<?php foreach ($requisition_data as $ot_list) {
-																if ($ot_list['PrDate'] == '') {
+																if ($ot_list['CRMREQDATE'] == '') {
 																	$pr_date = '';
 																} else {
-																	$pr_date = substr($ot_list['PrDate'], 6, 2) . "/" . substr($ot_list['PrDate'], 4, 2) . "/" . substr($ot_list['PrDate'], 0, 4);
+																	$pr_date = substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
 																}
 															?>
 
 																<tr>
-																	<td><?= ++$no; ?></td>
+																	<td><?= $ot_list['CSRUNIQ']; ?></td>
 																	<td nowrap>
-																		<a href="<?= base_url("requisition/update/" . $ot_list['ID_SO']) ?>" title="Update" class="btn btn-default btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i></a>
-																		<a href="<?= base_url("requisition/sending_notif/" . $ot_list['ID_SO']) ?>" class="btn btn-default btn-sm" title="Resend Notif">
+																		<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ']) ?>" title="Update" class="btn btn-default btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i></a>
+																		<a href="<?= base_url("requisition/sending_notif/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Resend Notif">
 																			<i class="fa fa-send-o"></i>
 																		</a>
 
 																	</td>
-																	<td><?= $ot_list['CustomerName']; ?></td>
-																	<td nowrap><?= $ot_list['ContractNo']; ?></td>
-																	<td nowrap><?= $ot_list['ProjectNo']; ?></td>
-																	<td><?= $ot_list['CrmNo']; ?></td>
-																	<td><?= $ot_list['InventoryNo']; ?></td>
-																	<td><?= $ot_list['MaterialNo']; ?></td>
-																	<td><?= $ot_list['ReqDate']; ?></td>
-																	<td><?= $ot_list['SalesPerson']; ?></td>
-																	<td><?= $ot_list['OrderDesc']; ?></td>
-																	<td><?= $ot_list['Qty']; ?></td>
-																	<td><?= $ot_list['Uom']; ?></td>
+																	<td><?= $ot_list['NAMECUST']; ?></td>
+																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
+																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
+																	<td><?= $ot_list['CRMNO']; ?></td>
+																	<td><?= $ot_list['ITEMNO']; ?></td>
+																	<td><?= $ot_list['MATERIALNO']; ?></td>
+																	<td><?= $ot_list['CRMREQDATE']; ?></td>
+																	<td><?= $ot_list['SALESNAME']; ?></td>
+																	<td><?= $ot_list['ORDERDESC']; ?></td>
+																	<td><?= $ot_list['QTY']; ?></td>
+																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['PrNumber']; ?></td>
+																	<td></td>
 																	<td><?= $pr_date; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['PoVendor']; ?></td>
-																	<td><?= $ot_list['PoVendorDate']; ?></td>
+																	<td><?= $ot_list['PONUMBERCUST']; ?></td>
+																	<td><?= $ot_list['PODATECUST']; ?></td>
 																</tr>
 
 															<?php } ?>
 														</tbody>
 													</table>
+													<div><?= $pager->links(); ?> </div>
 												</div>
 											</div>
 										</div>

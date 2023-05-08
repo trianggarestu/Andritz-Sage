@@ -13,7 +13,8 @@ use CodeIgniter\Model;
 class Requisition_model extends Model
 {
 
-    //protected $table = 'ARCUS';
+    protected $table = 'webot_CSR';
+
     function __construct()
     {
         parent::__construct();
@@ -23,7 +24,7 @@ class Requisition_model extends Model
 
     function get_requisition_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where PrNumber is null");
+        $query = $this->db->query("select * from webot_CSR");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
