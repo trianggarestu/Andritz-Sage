@@ -6,10 +6,10 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Order Tracking</h1>
+		<h1>Unfullfilled Order Tracking</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-			<li class="active">Order Tracking</li>
+			<li class="active">Order Tracking Open</li>
 		</ol>
 	</section>
 
@@ -48,61 +48,61 @@
 											<div class="col-sm-12">
 												<div class="table-responsive">
 													<table class="table table-bordered table-striped dataTable table-hover nowrap">
-														<thead class="bg-gray disabled color-palette">
+														<thead class="bg-gray color-palette">
 															<tr>
 																<th>No</th>
-																<th>Contract</th>
-																<th nowrap>Customer Name</th>
-																<th>Customer Email</th>
-																<th>Project No.</th>
-																<th>CRM Number</th>
-																<th>PO Customer</th>
-																<th nowrap>PO Date</th>
-																<th nowrap>Req. Date</th>
-																<th>Sales Person</th>
-																<th>Inventory No</th>
-																<th>Material No</th>
-																<th>Order Description</th>
-																<th>Qty</th>
-																<th>Uom</th>
+																<th class="bg-orange">Contract</th>
+																<th class="bg-orange" nowrap>Customer Name</th>
+																<th class="bg-orange">Customer Email</th>
+																<th class="bg-orange">Project No.</th>
+																<th class="bg-orange">CRM Number</th>
+																<th class="bg-orange">PO Customer</th>
+																<th class="bg-orange" nowrap>PO Date</th>
+																<th class="bg-orange" nowrap>Req. Date</th>
+																<th class="bg-orange">Sales Person</th>
+																<th class="bg-orange">Inventory No</th>
+																<th class="bg-orange">Material No</th>
+																<th class="bg-orange">Order Description</th>
+																<th class="bg-orange">Qty</th>
+																<th class="bg-orange">Uom</th>
 																<th style="background-color: white;"></th>
-																<th>PR Number</th>
-																<th>PR Date</th>
+																<th class="bg-yellow">PR Number</th>
+																<th class="bg-yellow">PR Date</th>
 																<th style="background-color: white;"></th>
-																<th>PO Vendor</th>
-																<th>PO Date</th>
-																<th>ETD</th>
-																<th>Cargo Readiness</th>
-																<th>Origin Country</th>
-																<th>Remarks</th>
+																<th class="bg-green">PO Vendor</th>
+																<th class="bg-green">PO Date</th>
+																<th class="bg-green">ETD</th>
+																<th class="bg-green">Cargo Readiness</th>
+																<th class="bg-green">Origin Country</th>
+																<th class="bg-green">Remarks</th>
 																<th style="background-color: white;"></th>
-																<th>ETD Origin</th>
-																<th>ATD Origin</th>
-																<th>ETA Port</th>
-																<th>PIB</th>
-																<th>Vend. Shipment Stat</th>
+																<th class="bg-blue">ETD Origin</th>
+																<th class="bg-blue">ATD Origin</th>
+																<th class="bg-blue">ETA Port</th>
+																<th class="bg-blue">PIB</th>
+																<th class="bg-blue">Shipment Status</th>
 																<th style="background-color: white;"></th>
-																<th>GR Date</th>
-																<th>Qty</th>
-																<th>Status</th>
+																<th class="bg-success">GR Date</th>
+																<th class="bg-success">Qty</th>
+																<th class="bg-success">Status</th>
 																<th style="background-color: white;"></th>
-																<th>Delivery Date</th>
-																<th>DN Number</th>
-																<th>Received Date</th>
-																<th>Delivered</th>
-																<th>Outstanding</th>
-																<th>PO Status</th>
-																<th>DN Status</th>
+																<th class="bg-olive">Delivery Date</th>
+																<th class="bg-olive">DN Number</th>
+																<th class="bg-olive">Received Date</th>
+																<th class="bg-olive">Delivered</th>
+																<th class="bg-olive">Outstanding</th>
+																<th class="bg-olive">PO Status</th>
+																<th class="bg-olive">DN Status</th>
 																<th style="background-color: white;"></th>
-																<th>Invoice Date</th>
-																<th>Status</th>
+																<th class="bg-info">Invoice Date</th>
+																<th class="bg-info">Status</th>
 																<th style="background-color: white;"></th>
-																<th>RR Status</th>
+																<th class="bg-danger">RR Status</th>
 																<th style="background-color: white;"></th>
-																<th>PO Cust to PR</th>
-																<th>PO to PO</th>
-																<th>ON TIME DEL</th>
-																<th>PO to DN</th>
+																<th class="bg-secondary">PO Cust to PR</th>
+																<th class="bg-secondary">PO to PO</th>
+																<th class="bg-secondary">ON TIME DEL</th>
+																<th class="bg-secondary">PO to DN</th>
 
 															</tr>
 														</thead>
@@ -112,62 +112,59 @@
 
 															?>
 															<?php foreach ($ordtrack_data as $ot_list) {
+																$pocust_date = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4);
+																$crmreq_date = substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
 
-																if ($ot_list['PrDate'] == '') {
-																	$pr_date = '';
-																} else {
-																	$pr_date = substr($ot_list['PrDate'], 6, 2) . "/" . substr($ot_list['PrDate'], 4, 2) . "/" . substr($ot_list['PrDate'], 0, 4);
-																}
 															?>
 																<tr>
 																	<td><?= ++$no; ?></td>
-																	<td><?= $ot_list['ContractNo']; ?></td>
-																	<td><?= $ot_list['CustomerName']; ?></td>
-																	<td><?= $ot_list['CustomerEmail']; ?></td>
-																	<td><?= $ot_list['ProjectNo']; ?></td>
-																	<td><?= $ot_list['CrmNo']; ?></td>
-																	<td><?= $ot_list['PoCustomer']; ?></td>
-																	<td><?= $ot_list['PoDate']; ?></td>
-																	<td><?= $ot_list['ReqDate']; ?></td>
-																	<td><?= $ot_list['SalesPerson']; ?></td>
-																	<td><?= $ot_list['InventoryNo']; ?></td>
-																	<td><?= $ot_list['MaterialNo']; ?></td>
-																	<td><?= $ot_list['OrderDesc']; ?></td>
-																	<td><?= $ot_list['Qty']; ?></td>
-																	<td><?= $ot_list['Uom']; ?></td>
+																	<td><?= $ot_list['CONTRACT']; ?></td>
+																	<td><?= $ot_list['NAMECUST']; ?></td>
+																	<td><?= $ot_list['EMAIL1CUST']; ?></td>
+																	<td><?= $ot_list['PROJECT']; ?></td>
+																	<td><?= $ot_list['CRMNO']; ?></td>
+																	<td><?= $ot_list['PONUMBERCUST']; ?></td>
+																	<td><?= $pocust_date; ?></td>
+																	<td><?= $crmreq_date; ?></td>
+																	<td><?= $ot_list['SALESNAME']; ?></td>
+																	<td><?= $ot_list['ITEMNO']; ?></td>
+																	<td><?= $ot_list['MATERIALNO']; ?></td>
+																	<td><?= $ot_list['ORDERDESC']; ?></td>
+																	<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
+																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['PrNumber']; ?></td>
-																	<td><?= $pr_date; ?></td>
+																	<td><?= $ot_list['RQNNUMBER']; ?></td>
+																	<td><?= $ot_list['RQNDATE']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['PoVendor']; ?></td>
-																	<td><?= $ot_list['PoVendorDate']; ?></td>
-																	<td><?= $ot_list['EtdDate']; ?></td>
-																	<td><?= $ot_list['CargoreadinessDate']; ?></td>
-																	<td><?= $ot_list['OriginCountry']; ?></td>
-																	<td><?= $ot_list['Remarks']; ?></td>
+																	<td><?= $ot_list['PONUMBER']; ?></td>
+																	<td><?= $ot_list['PODATE']; ?></td>
+																	<td><?= $ot_list['ETDDATE']; ?></td>
+																	<td><?= $ot_list['CARGOREADINESSDATE']; ?></td>
+																	<td><?= $ot_list['ORIGINCOUNTRY']; ?></td>
+																	<td><?= $ot_list['POREMARKS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['EtdOriginDate']; ?></td>
-																	<td><?= $ot_list['AtdOriginDate']; ?></td>
-																	<td><?= $ot_list['EtaPortDate']; ?></td>
-																	<td><?= $ot_list['PIBDate']; ?></td>
-																	<td><?= $ot_list['PoReceiptStatus']; ?></td>
+																	<td><?= $ot_list['ETDORIGINDATE']; ?></td>
+																	<td><?= $ot_list['ATDORIGINDATE']; ?></td>
+																	<td><?= $ot_list['ETAPORTDATE']; ?></td>
+																	<td><?= $ot_list['PIBDATE']; ?></td>
+																	<td><?= $ot_list['VENDSHISTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['GrDate']; ?></td>
-																	<td><?= $ot_list['GrQty']; ?></td>
-																	<td><?= $ot_list['GrStatus']; ?></td>
+																	<td><?= $ot_list['RECPDATE']; ?></td>
+																	<td><?= $ot_list['RECPQTY']; ?></td>
+																	<td><?= $ot_list['GRSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['ShDeliveryDate']; ?></td>
-																	<td><?= $ot_list['ShDnNumber']; ?></td>
-																	<td><?= $ot_list['ShReceiptDate']; ?></td>
-																	<td><?= $ot_list['ShDelivered']; ?></td>
-																	<td><?= $ot_list['ShOutstanding']; ?></td>
-																	<td><?= $ot_list['ShPoStatus']; ?></td>
-																	<td><?= $ot_list['ShDnStatus']; ?></td>
+																	<td><?= $ot_list['SHIDATE']; ?></td>
+																	<td><?= $ot_list['SHINUMBER']; ?></td>
+																	<td><?= $ot_list['CUSTRCPDATE']; ?></td>
+																	<td><?= $ot_list['QTYDELIVERED']; ?></td>
+																	<td><?= $ot_list['QTYOUTSTANDING']; ?></td>
+																	<td><?= $ot_list['POCUSTSTATUS']; ?></td>
+																	<td><?= $ot_list['DELIVERYSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['FinInvDate']; ?></td>
-																	<td><?= $ot_list['FinStatus']; ?></td>
+																	<td><?= $ot_list['INVOICEDATE']; ?></td>
+																	<td><?= $ot_list['FINSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['FinRrStatus']; ?></td>
+																	<td><?= $ot_list['RRSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td></td>
 																	<td></td>
