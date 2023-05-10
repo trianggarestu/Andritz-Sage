@@ -95,7 +95,7 @@
 														</thead>
 														<tbody>
 															<?php
-															$no = 0;
+															$no = 0 + (5 * ($currentpage - 1));
 
 															?>
 															<?php foreach ($so_data as $ot_list) {
@@ -173,7 +173,8 @@
 										</div>
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">
-												<ul class="pagination">
+												<div><?= $pager->links(); ?> </div>
+												<!-- <ul class="pagination">
 													<?php //if ($paging->start_link) : 
 													?>
 													<li>
@@ -217,7 +218,7 @@
 													</li>
 													<?php //endif; 
 													?>
-												</ul>
+												</ul>-->
 											</div>
 										</div>
 
