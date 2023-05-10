@@ -6,7 +6,7 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Unfullfilled Order Tracking</h1>
+		<h1>Unfulfilled Order Tracking</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
 			<li class="active">Order Tracking Open</li>
@@ -114,6 +114,11 @@
 															<?php foreach ($ordtrack_data as $ot_list) {
 																$pocust_date = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4);
 																$crmreq_date = substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
+																if ($ot_list['RQNDATE'] == '') {
+																	$rqn_date = '';
+																} else {
+																	$rqn_date = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
+																}
 
 															?>
 																<tr>
@@ -134,7 +139,7 @@
 																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['RQNNUMBER']; ?></td>
-																	<td><?= $ot_list['RQNDATE']; ?></td>
+																	<td><?= $rqn_date; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['PONUMBER']; ?></td>
 																	<td><?= $ot_list['PODATE']; ?></td>

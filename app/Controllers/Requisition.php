@@ -12,9 +12,10 @@ use PHPMailer\PHPMailer\Exception;
 
 use App\Models\Login_model;
 use App\Models\Administration_model;
-use App\Models\Settingnavheader_model;
+//use App\Models\Settingnavheader_model;
 use App\Models\Notif_model;
 use App\Models\Requisition_model;
+use App\Models\Ordertracking_model;
 
 //use App\Controllers\AdminController;
 
@@ -24,14 +25,19 @@ class Requisition extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
+    private $db_name;
     public function __construct()
     {
         //parent::__construct();
         helper('form', 'url');
+        $this->db_name = \Config\Database::connect();
+
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
         $this->RequisitionModel = new Requisition_model();
+        $this->OrdertrackingModel = new Ordertracking_model();
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -54,6 +60,7 @@ class Requisition extends BaseController
                 'emaillgn' => $infouser['emaillgn'],
                 'issuperuserlgn' => $infouser['issuperuserlgn'],
                 'notif_messages' => $mailbox_unread,
+                'success_code' => session()->get('success'),
             ];
             $this->footer_data = [
                 'usernamelgn'   => $infouser['usernamelgn'],
@@ -69,18 +76,44 @@ class Requisition extends BaseController
                 //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                 //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
             ];
-            //}
+
+            date_default_timezone_set('Asia/Jakarta');
+            $today = date("d/m/Y H:i:s");
+
+            $this->audtuser = [
+                'TODAY' => $today,
+                'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                'AUDTUSER' => $infouser['usernamelgn'],
+                'AUDTORG' => $this->db_name->database,
+
+            ];
         }
     }
 
 
     public function index()
     {
+        /*$paginateData = $this->RequisitionModel->select('webot_CSR.*,b.RQNDATE,b.RQNNUMBER')
+            ->join('webot_REQUISITION b', 'b.CSRUNIQ = webot_CSR.CSRUNIQ', 'left')
+            ->where('webot_CSR.POSTINGSTAT', 1)
+            ->where('b.RQNNUMBER is NULL')
+            ->orderBy('webot_CSR.CSRUNIQ', 'DESC')
+            ->paginate(2);
+
 
         $data = array(
-            'requisition_data' => $this->RequisitionModel->paginate(10),
-            'pager' => $this->RequisitionModel->pager
+            'requisition_data' => $paginateData,
+            'pager' => $this->RequisitionModel->pager,
         );
+        */
+        session()->remove('success');
+        session()->set('success', '0');
+        $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        $data = array(
+            'requisition_data' => $requisitiondata,
+        );
+
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
@@ -88,60 +121,152 @@ class Requisition extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
-    public function update($id_so)
+    public function update($id_so, $postingstat)
     {
         $get_so = $this->RequisitionModel->get_so_by_id($id_so);
+        $get_pr = $this->RequisitionModel->get_requisition_by_so($id_so);
         if ($get_so) {
+            if (!empty($get_pr['CSRUNIQ']) and $get_pr['POSTINGSTAT'] == 0) {
+                $act = 'requisition/update_action';
+                $id_pr = $get_pr['RQNUNIQ'];
+            } else {
+                $act = 'requisition/insert_action';
+                $id_pr = '';
+            }
+
             $data = array(
-                'id_so' => trim($get_so['ID_SO']),
-                'ct_no' => trim($get_so['ContractNo']),
-                'prj_no' => trim($get_so['ProjectNo']),
-                'crm_no' => trim($get_so['CrmNo']),
-                'cust_no' => trim($get_so['CustomerNo']),
-                'cust_name' => trim($get_so['CustomerName']),
-                'cust_email' => trim($get_so['CustomerEmail']),
-                'cust_po' => trim($get_so['PoCustomer']),
-                'po_date' => trim($get_so['PoDate']),
-                'req_date' => trim($get_so['ReqDate']),
-                'salesperson' => trim($get_so['SalesPerson']),
-                'inventory_no' => trim($get_so['InventoryNo']),
-                'material_no' => trim($get_so['MaterialNo']),
-                'inventory_desc' => trim($get_so['InventoryDesc']),
-                'order_desc' => trim($get_so['OrderDesc']),
-                'qty' => trim($get_so['Qty']),
-                'uom' => trim($get_so['Uom']),
+                'id_so' => trim($get_so['CSRUNIQ']),
+                'ct_no' => trim($get_so['CONTRACT']),
+                'prj_no' => trim($get_so['PROJECT']),
+                'crm_no' => trim($get_so['CRMNO']),
+                'cust_no' => trim($get_so['CUSTOMER']),
+                'cust_name' => trim($get_so['NAMECUST']),
+                'cust_email' => trim($get_so['EMAIL1CUST']),
+                'cust_po' => trim($get_so['PONUMBERCUST']),
+                'po_date' => trim($get_so['PODATECUST']),
+                'req_date' => trim($get_so['CRMREQDATE']),
+                'salesperson' => trim($get_so['SALESNAME']),
+                'inventory_no' => trim($get_so['ITEMNO']),
+                'material_no' => trim($get_so['MATERIALNO']),
+                'inventory_desc' => trim($get_so['ITEMDESC']),
+                'order_desc' => trim($get_so['ORDERDESC']),
+                'qty' => trim($get_so['QTY']),
+                'uom' => trim($get_so['STOCKUNIT']),
                 'requisition_list' => $this->RequisitionModel->get_requisition_sage(),
-                'form_action' => base_url("requisition/update_action"),
+                'form_action' => base_url($act),
+                'post_stat' => $postingstat,
+                'id_pr' => $id_pr,
             );
         }
-
-
         echo view('requisition/ajax_add_requisition', $data);
     }
 
-    public function update_action()
+
+
+    public function insert_action()
     {
+        $id_so = $this->request->getPost('id_so');
+        $id_pr = $this->request->getPost('id_pr');
         if (null == ($this->request->getPost('id_so'))) {
-            session()->setFlashdata('messagefailed', 'Data not found.');
+            session()->set('success', '-1');
             return redirect()->to(base_url('requisition'));
         } else {
-            $id = $this->request->getPost('id_so');
+            $sender = $this->AdministrationModel->get_mailsender();
             $rqnnumber = $this->request->getPost('rqnnumber');
+            $post_stat = $this->request->getPost('post_stat');
+            $get_so = $this->RequisitionModel->get_so_by_id($id_so);
             $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
+            $trackingprocess = 3;
             if ($choose_rqn) {
-                $data = array(
-                    'PrNumber' => $choose_rqn["RQNNUMBER"],
-                    'PrDate' => $choose_rqn["DATE"],
+                $data1 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'CSRUNIQ' => $get_so['CSRUNIQ'],
+                    'CONTRACT' => $get_so['CONTRACT'],
+                    'PROJECT' => $get_so['PROJECT'],
+                    'CUSTOMER' => $get_so['CUSTOMER'],
+                    'ITEMNO' => $get_so['ITEMNO'],
+                    'RQNDATE' => $choose_rqn["DATE"],
+                    'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
+                    'OTPROCESS' => $trackingprocess,
+                    'POSTINGSTAT' => $post_stat,
+                    'OFFLINESTAT' => $sender['OFFLINESTAT'],
                 );
+                $this->RequisitionModel->requisition_insert($data1);
 
-                $this->RequisitionModel->requisition_update($id, $data);
-                session()->setFlashdata('messagesuccess', 'Update Record Success');
+                if ($post_stat == 1) {
+                    $data2 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
+                        'RQNDATE' => $choose_rqn["DATE"],
+                    );
+
+                    $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+                }
+                session()->set('success', '1');
                 return redirect()->to(base_url('requisition'));
             }
         }
     }
 
-    public function sending_notif($id_so)
+    public function update_action()
+    {
+        $id_so = $this->request->getPost('id_so');
+        $id_pr = $this->request->getPost('id_pr');
+        if (null == ($this->request->getPost('id_so'))) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('requisition'));
+        } else {
+            $sender = $this->AdministrationModel->get_mailsender();
+            $rqnnumber = $this->request->getPost('rqnnumber');
+            $post_stat = $this->request->getPost('post_stat');
+            $get_so = $this->RequisitionModel->get_so_by_id($id_so);
+            $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
+            $trackingprocess = 3;
+            if ($choose_rqn) {
+                $data1 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'CSRUNIQ' => $get_so['CSRUNIQ'],
+                    'CONTRACT' => $get_so['CONTRACT'],
+                    'PROJECT' => $get_so['PROJECT'],
+                    'CUSTOMER' => $get_so['CUSTOMER'],
+                    'ITEMNO' => $get_so['ITEMNO'],
+                    'RQNDATE' => $choose_rqn["DATE"],
+                    'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
+                    'OTPROCESS' => $trackingprocess,
+                    'POSTINGSTAT' => $post_stat,
+                    'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                );
+                $this->RequisitionModel->requisition_update($id_pr, $data1);
+
+                if ($post_stat == 1) {
+                    $data2 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
+                        'RQNDATE' => $choose_rqn["DATE"],
+                    );
+
+                    $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+                }
+                session()->set('success', '1');
+                return redirect()->to(base_url('requisition'));
+            }
+        }
+    }
+
+
+    public function sendnotif($id_so)
     {
         //inisiasi proses kirim ke group
         $groupuser = 3;

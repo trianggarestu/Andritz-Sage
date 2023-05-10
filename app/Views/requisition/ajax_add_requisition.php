@@ -69,7 +69,7 @@
                                         <td>
                                             Inventory No. : <?= $inventory_no ?><br>
                                             Material No. : <?= $material_no ?><br>
-                                            Description : <?= $inventory_desc ?><br>
+                                            Description : <?= $inventory_desc ?> <br>
                                             Qty : <?= $qty ?><br>
                                             Uom : <?= $uom ?>
                                         </td>
@@ -111,6 +111,8 @@
         <div class="modal-footer">
 
             <input type="hidden" id="id_so" name="id_so" value="<?= $id_so ?>">
+            <input type="hidden" id="id_pr" name="id_pr" value="<?= $id_pr ?>">
+            <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
             <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
             <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> Save</button>
         </div>

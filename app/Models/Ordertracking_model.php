@@ -26,4 +26,11 @@ class Ordertracking_model extends Model
         $query = $this->db->query('select * from webot_ORDERTRACKING');
         return $query->getResultArray();
     }
+
+    function get_ot_by_id($id_so)
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING "
+            . "where CSRUNIQ='$id_so' ");
+        return $query->getRowArray();
+    }
 }

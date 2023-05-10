@@ -15,6 +15,7 @@ use App\Models\Administration_model;
 use App\Models\Settingnavheader_model;
 use App\Models\Notif_model;
 use App\Models\Requisition_model;
+use App\Models\Ordertracking_model;
 
 //use App\Controllers\AdminController;
 
@@ -24,14 +25,18 @@ class RequisitionList extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
+    private $db_name;
     public function __construct()
     {
         //parent::__construct();
         helper('form', 'url');
+        $this->db_name = \Config\Database::connect();
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
         $this->RequisitionModel = new Requisition_model();
+        $this->OrdertrackingModel = new Ordertracking_model();
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -54,12 +59,13 @@ class RequisitionList extends BaseController
                 'emaillgn' => $infouser['emaillgn'],
                 'issuperuserlgn' => $infouser['issuperuserlgn'],
                 'notif_messages' => $mailbox_unread,
+                'success_code' => session()->get('success'),
             ];
             $this->footer_data = [
                 'usernamelgn'   => $infouser['usernamelgn'],
             ];
             // Assign the model result to the badly named Class Property
-            $activenavd = 'requisition';
+            $activenavd = 'requisitionlist';
             $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
             $this->nav_data = [
                 'active_navd' => $activenavd,
@@ -69,19 +75,47 @@ class RequisitionList extends BaseController
                 //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                 //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
             ];
-            //}
+
+            date_default_timezone_set('Asia/Jakarta');
+            $today = date("d/m/Y H:i:s");
+
+            $this->audtuser = [
+                'TODAY' => $today,
+                'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                'AUDTUSER' => $infouser['usernamelgn'],
+                'AUDTORG' => $this->db_name->database,
+
+            ];
         }
     }
 
 
     public function index()
     {
-        $requisitiondata = $this->RequisitionModel->get_requisition_close();
+        session()->remove('success');
+        session()->set('success', '0');
+        $paginateData = $this->RequisitionModel->select('webot_REQUISITION.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
+        b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        c.PONUMBER,c.PODATE')
+            ->join('webot_CSR b', 'b.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
+            ->join('webot_PO c', 'c.RQNUNIQ = webot_REQUISITION.RQNUNIQ', 'left')
+            ->where('webot_REQUISITION.POSTINGSTAT', 1)
+            ->orderBy('webot_REQUISITION.RQNUNIQ', 'ASC')
+            ->paginate(50);
+
+
+        $data = array(
+            'requisition_data' => $paginateData,
+            'pager' => $this->RequisitionModel->pager,
+        );
+
+        /*$requisitiondata = $this->RequisitionModel->get_requisition_close();
 
 
         $data = array(
             'requisition_data' => $requisitiondata,
-        );
+        );*/
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);

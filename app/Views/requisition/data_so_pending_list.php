@@ -12,13 +12,23 @@
 			<li class="active">Sales Order List Waiting to process</li>
 		</ol>
 	</section>
+	<!-- Untuk menampilkan modal bootstrap action success, failed  -->
+	<input id="success-code" type="hidden" value="<?= $success_code ?>">
+	<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+
+				<div class="fetched-data"></div>
+			</div>
+		</div>
+	</div>
 
 	<section class="content" id="maincontent">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<a href="#" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh</a>
+						<a href="<?= base_url() ?>requisition/" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
 						<a href="#" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview"><i class="fa fa-print"></i> Preview
 						</a>
 						<a href="<?= base_url("salesorderlist/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
@@ -47,73 +57,93 @@
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="table-responsive">
-													<table class="table table-bordered table-striped dataTable table-hover nowrap">
-														<thead class="bg-gray disabled color-palette">
+													<table class="table table-bordered table-striped dataTable table-hover">
+														<thead class="bg-gray disabled">
 															<tr>
 																<th>No.</th>
-																<th>Action</th>
 																<th>Customer Name</th>
 																<th>Contract No.</th>
 																<th>Project No.</th>
+																<th>Project Desc.</th>
 																<th>CRM Number</th>
-																<th>Inventory No</th>
-																<th>Material No</th>
 																<th>Req Date</th>
-																<th>Sales Person</th>
-																<th>Order Description</th>
-																<th>Qty</th>
-																<th>UoM</th>
 																<th style="background-color: white;"></th>
+																<th>Action</th>
 																<th>PR Number</th>
 																<th>PR Date</th>
 																<th style="background-color: white;"></th>
-																<th>PO Vendor</th>
-																<th>PO Date</th>
+
 
 															</tr>
 														</thead>
 														<tbody>
 
-															<?php foreach ($requisition_data as $ot_list) {
-																if ($ot_list['CRMREQDATE'] == '') {
+															<?php
+															$no = 1;
+															foreach ($requisition_data as $ot_list) {
+																$crmreq_date = substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
+																if ($ot_list['RQNDATE'] == '') {
 																	$pr_date = '';
 																} else {
-																	$pr_date = substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
+																	$pr_date = substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
 																}
 															?>
 
 																<tr>
-																	<td><?= $ot_list['CSRUNIQ']; ?></td>
-																	<td nowrap>
-																		<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ']) ?>" title="Update" class="btn btn-default btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i></a>
-																		<a href="<?= base_url("requisition/sending_notif/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Resend Notif">
-																			<i class="fa fa-send-o"></i>
-																		</a>
-
-																	</td>
+																	<td><?= $no++; ?></td>
 																	<td><?= $ot_list['NAMECUST']; ?></td>
 																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
 																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
-																	<td><?= $ot_list['CRMNO']; ?></td>
-																	<td><?= $ot_list['ITEMNO']; ?></td>
-																	<td><?= $ot_list['MATERIALNO']; ?></td>
-																	<td><?= $ot_list['CRMREQDATE']; ?></td>
-																	<td><?= $ot_list['SALESNAME']; ?></td>
-																	<td><?= $ot_list['ORDERDESC']; ?></td>
-																	<td><?= $ot_list['QTY']; ?></td>
-																	<td><?= $ot_list['STOCKUNIT']; ?></td>
+																	<td nowrap><?= $ot_list['PRJDESC']; ?></td>
+																	<td nowrap><?= $ot_list['CRMNO']; ?></td>
+																	<td nowrap><?= $crmreq_date; ?></td>
+
 																	<td style="background-color: white;"></td>
-																	<td></td>
-																	<td><?= $pr_date; ?></td>
+																	<td nowrap>
+																		<div class="btn-group">
+																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
+																			<ul class="dropdown-menu" role="menu">
+																				<?php if (is_null($ot_list['RQNNUMBER'])) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Select Requisition & Post</a>
+																					</li>
+
+																					<li>
+																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Select Requisition Only</a>
+																					</li>
+																				<?php endif;
+																				?>
+																				<?php if (!empty($ot_list['RQNNUMBER']) and $ot_list['POSTINGSTAT'] == 0) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Check & Posting Requisition</a>
+																					</li>
+																				<?php endif;
+																				?>
+																				<?php if ($ot_list['POSTINGSTAT'] == 1 and $ot_list['OFFLINESTAT'] == 1) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("requisition/sendnotif/" . $ot_list['RQNUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
+																					</li>
+																				<?php endif;
+																				?>
+
+																			</ul>
+																		</div>
+
+																	</td>
+																	<td nowrap><?= $ot_list['RQNNUMBER']; ?></td>
+																	<td nowrap><?= $pr_date; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['PONUMBERCUST']; ?></td>
-																	<td><?= $ot_list['PODATECUST']; ?></td>
+
 																</tr>
 
 															<?php } ?>
 														</tbody>
 													</table>
-													<div><?= $pager->links(); ?> </div>
+													<div><?php //= $pager->links(); 
+															?> </div>
 												</div>
 											</div>
 										</div>
@@ -198,3 +228,5 @@
 		</div>
 	</div>
 </div>
+
+<?php echo view('settings/confirm_delete') ?>

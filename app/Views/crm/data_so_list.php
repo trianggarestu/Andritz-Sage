@@ -178,7 +178,7 @@
 													?>
 													<li>
 														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->start_link) 
-																	?>" aria-label="First"><span aria-hidden="true">Awal</span></a>
+																	?>" aria-label="First"><span aria-hidden="true">First</span></a>
 													</li>
 													<?php //endif; 
 													?>
@@ -213,7 +213,7 @@
 													?>
 													<li>
 														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->end_link) 
-																	?>" aria-label="Last"><span aria-hidden="true">Akhir</span></a>
+																	?>" aria-label="Last"><span aria-hidden="true">Last</span></a>
 													</li>
 													<?php //endif; 
 													?>
@@ -232,8 +232,6 @@
 	</section>
 </div>
 
-<?php //$this->load->view('global/confirm_delete'); 
-?>
 
 <div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class='modal-dialog'>
