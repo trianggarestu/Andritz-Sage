@@ -129,9 +129,11 @@ class Requisition extends BaseController
             if (!empty($get_pr['CSRUNIQ']) and $get_pr['POSTINGSTAT'] == 0) {
                 $act = 'requisition/update_action';
                 $id_pr = $get_pr['RQNUNIQ'];
+                $rqnnumber = $get_pr['RQNNUMBER'];
             } else {
                 $act = 'requisition/insert_action';
                 $id_pr = '';
+                $rqnnumber = '';
             }
 
             $data = array(
@@ -156,6 +158,7 @@ class Requisition extends BaseController
                 'form_action' => base_url($act),
                 'post_stat' => $postingstat,
                 'id_pr' => $id_pr,
+                'rqn_number' => $rqnnumber,
             );
         }
         echo view('requisition/ajax_add_requisition', $data);
@@ -166,7 +169,7 @@ class Requisition extends BaseController
     public function insert_action()
     {
         $id_so = $this->request->getPost('id_so');
-        $id_pr = $this->request->getPost('id_pr');
+        $rqnuniq = $this->request->getPost('id_pr');
         if (null == ($this->request->getPost('id_so'))) {
             session()->set('success', '-1');
             return redirect()->to(base_url('requisition'));
@@ -176,7 +179,8 @@ class Requisition extends BaseController
             $post_stat = $this->request->getPost('post_stat');
             $get_so = $this->RequisitionModel->get_so_by_id($id_so);
             $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
-            $trackingprocess = 3;
+
+            $groupuser = 3;
             if ($choose_rqn) {
                 $data1 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
@@ -190,13 +194,14 @@ class Requisition extends BaseController
                     'ITEMNO' => $get_so['ITEMNO'],
                     'RQNDATE' => $choose_rqn["DATE"],
                     'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
-                    'OTPROCESS' => $trackingprocess,
+                    'OTPROCESS' => $groupuser,
                     'POSTINGSTAT' => $post_stat,
                     'OFFLINESTAT' => $sender['OFFLINESTAT'],
                 );
                 $this->RequisitionModel->requisition_insert($data1);
 
                 if ($post_stat == 1) {
+
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -207,17 +212,92 @@ class Requisition extends BaseController
                     );
 
                     $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+
+                    if ($sender['OFFLINESTAT'] == 0) {
+                        $get_rqn = $this->RequisitionModel->get_requisition_post($rqnuniq);
+                        $rqndate = substr($get_rqn['RQNDATE'], 6, 2) . "/" . substr($get_rqn['RQNDATE'], 4, 2) . "/" . substr($get_rqn['RQNDATE'], 0, 4);
+
+                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                        foreach ($notiftouser_data as $sendto_user) {
+                            $data_email = array(
+                                'hostname'       => $sender['HOSTNAME'],
+                                'sendername'       => $sender['SENDERNAME'],
+                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'ssl'       => $sender['SSL'],
+                                'smtpport'       => $sender['SMTPPORT'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_rqn['RQNNUMBER'],
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                    Please to follow up Requisition Number :' . $get_rqn['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $get_rqn['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
+        <br><br>
+        You can access Order Tracking System Portal via the URL below:
+        <br>
+        Http://jktsms025:...
+        <br>
+        Thanks for your cooperation. 
+        <br><br>
+        Order Tracking Administrator',
+                            );
+
+                            $sending_mail = $this->send($data_email);
+
+                            if ($sending_mail) {
+                                $data_notif = array(
+                                    'FROM_USER' => $this->header_data['usernamelgn'],
+                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                    'TO_USER' => $sendto_user['USERNAME'],
+                                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                    'SUBJECT' => 'Pending Requisition Allert. Requisition No : ' . $get_rqn['RQNNUMBER'],
+                                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                                    Please to follow up Requisition Number :' . $get_rqn['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $get_rqn['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
+                        <br><br>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'IS_READ' => 0,
+                                    'IS_ARCHIVED' => 0,
+                                    'IS_TRASHED' => 0,
+                                    'IS_DELETED' => 0,
+                                    'IS_ATTACHED' => 0,
+                                    'IS_STAR' => 0,
+                                    'IS_READSENDER' => 0,
+                                    'SENDING_STATUS' => 1,
+                                    'OTPROCESS' => $groupuser,
+                                    'UNIQPROCESS' => $get_rqn['RQNUNIQ'],
+                                );
+
+                                $this->NotifModel->mailbox_insert($data_notif);
+                            }
+                        }
+                    }
                 }
-                session()->set('success', '1');
-                return redirect()->to(base_url('requisition'));
             }
         }
+        session()->set('success', '1');
+        return redirect()->to(base_url('/requisition'));
+        session()->remove('success');
     }
+
 
     public function update_action()
     {
         $id_so = $this->request->getPost('id_so');
-        $id_pr = $this->request->getPost('id_pr');
+        $rqnuniq = $this->request->getPost('id_pr');
         if (null == ($this->request->getPost('id_so'))) {
             session()->set('success', '-1');
             return redirect()->to(base_url('requisition'));
@@ -227,7 +307,8 @@ class Requisition extends BaseController
             $post_stat = $this->request->getPost('post_stat');
             $get_so = $this->RequisitionModel->get_so_by_id($id_so);
             $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
-            $trackingprocess = 3;
+
+            $groupuser = 3;
             if ($choose_rqn) {
                 $data1 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
@@ -241,13 +322,14 @@ class Requisition extends BaseController
                     'ITEMNO' => $get_so['ITEMNO'],
                     'RQNDATE' => $choose_rqn["DATE"],
                     'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
-                    'OTPROCESS' => $trackingprocess,
+                    'OTPROCESS' => $groupuser,
                     'POSTINGSTAT' => $post_stat,
                     'OFFLINESTAT' => $sender['OFFLINESTAT'],
                 );
-                $this->RequisitionModel->requisition_update($id_pr, $data1);
+                $this->RequisitionModel->requisition_update($rqnuniq, $data1);
 
                 if ($post_stat == 1) {
+
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -258,36 +340,127 @@ class Requisition extends BaseController
                     );
 
                     $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+
+                    if ($sender['OFFLINESTAT'] == 0) {
+                        $get_rqn = $this->RequisitionModel->get_requisition_post($rqnuniq);
+                        $rqndate = substr($get_rqn['RQNDATE'], 6, 2) . "/" . substr($get_rqn['RQNDATE'], 4, 2) . "/" . substr($get_rqn['RQNDATE'], 0, 4);
+
+                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                        foreach ($notiftouser_data as $sendto_user) {
+                            $data_email = array(
+                                'hostname'       => $sender['HOSTNAME'],
+                                'sendername'       => $sender['SENDERNAME'],
+                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'ssl'       => $sender['SSL'],
+                                'smtpport'       => $sender['SMTPPORT'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_rqn['RQNNUMBER'],
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                    Please to follow up Requisition Number :' . $get_rqn['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $get_rqn['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
+        <br><br>
+        You can access Order Tracking System Portal via the URL below:
+        <br>
+        Http://jktsms025:...
+        <br>
+        Thanks for your cooperation. 
+        <br><br>
+        Order Tracking Administrator',
+                            );
+
+                            $sending_mail = $this->send($data_email);
+
+                            if ($sending_mail) {
+                                $data_notif = array(
+                                    'FROM_USER' => $this->header_data['usernamelgn'],
+                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                    'TO_USER' => $sendto_user['USERNAME'],
+                                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                    'SUBJECT' => 'Pending Requisition Allert. Requisition No : ' . $get_rqn['RQNNUMBER'],
+                                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                                    Please to follow up Requisition Number :' . $get_rqn['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $get_rqn['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
+                        <br><br>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'IS_READ' => 0,
+                                    'IS_ARCHIVED' => 0,
+                                    'IS_TRASHED' => 0,
+                                    'IS_DELETED' => 0,
+                                    'IS_ATTACHED' => 0,
+                                    'IS_STAR' => 0,
+                                    'IS_READSENDER' => 0,
+                                    'SENDING_STATUS' => 1,
+                                    'OTPROCESS' => $groupuser,
+                                    'UNIQPROCESS' => $get_rqn['RQNUNIQ'],
+                                );
+
+                                $this->NotifModel->mailbox_insert($data_notif);
+                            }
+                        }
+                        //return redirect()->to(base_url('/salesorder'));
+                        //}
+                        //}
+
+                        session()->set('success', '1');
+                        return redirect()->to(base_url('/requisition'));
+                        session()->remove('success');
+                    }
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/requisition'));
+                    session()->remove('success');
                 }
-                session()->set('success', '1');
-                return redirect()->to(base_url('requisition'));
             }
         }
     }
 
 
-    public function sendnotif($id_so)
+    public function sendnotif($rqnuniq)
     {
-        //inisiasi proses kirim ke group
+
+        $getreq = $this->RequisitionModel->get_requisition_post($rqnuniq);
+        $sender = $this->AdministrationModel->get_mailsender();
         $groupuser = 3;
+
+        //inisiasi proses kirim ke group
+        $data2 = array(
+            'AUDTDATE' => $this->audtuser['AUDTDATE'],
+            'AUDTTIME' => $this->audtuser['AUDTTIME'],
+            'AUDTUSER' => $this->audtuser['AUDTUSER'],
+            'AUDTORG' => $this->audtuser['AUDTORG'],
+            'OFFLINESTAT' => 0,
+        );
+        //inisiasi proses kirim ke group
         $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-        $get_so = $this->RequisitionModel->get_so_by_id($id_so);
-        $today = date("d/m/Y");
-        $audtdate = substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2);
+        $rqndate = substr($getreq['RQNDATE'], 6, 2) . "/" . substr($getreq['RQNDATE'], 4, 2) . "/" . substr($getreq['RQNDATE'], 0, 4);
         foreach ($notiftouser_data as $sendto_user) {
 
             $data_email = array(
-                'hostname' => $sendto_user['HOSTNAME'],
-                'sendername' => $sendto_user['SENDERNAME'],
-                'senderemail' => $sendto_user['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                'passwordemail' => $sendto_user['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                'ssl' => $sendto_user['SSL'],
-                'smtpport' => $sendto_user['SMTPPORT'],
+                'hostname'       => $sender['HOSTNAME'],
+                'sendername'       => $sender['SENDERNAME'],
+                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                'ssl'       => $sender['SSL'],
+                'smtpport'       => $sender['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_so['PrNumber'],
+                'subject' => 'Pending Requisition Allert. Requisition No : ' . $getreq['RQNNUMBER'],
                 'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
 
-Please to follow up Requisition Number :' . $get_so['PrNumber'] . ' / Contract : ' . $get_so['ContractNo'] . ' is pending for you to process Purchase Order Vendor.
+Please to follow up Requisition Number :' . $getreq['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $getreq['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
 <br><br>
 You can access Order Tracking System Portal via the URL below:
 <br>
@@ -301,14 +474,16 @@ Order Tracking Administrator',
             $sending_mail = $this->send($data_email);
             if ($sending_mail) {
                 $data_notif = array(
-                    'contract' =>  $get_so['ContractNo'],
-                    'from_user' => $this->header_data['usernamelgn'],
-                    'from_email' => $this->header_data['emaillgn'],
-                    'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_so['PrNumber'],
-                    'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+                    'FROM_USER' => $this->header_data['usernamelgn'],
+                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                    'TO_USER' => $sendto_user['USERNAME'],
+                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                    'SUBJECT' => 'Pending Requisition Allert. Requisition No : ' . $getreq['RQNNUMBER'],
+                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
     
-                    Please to follow up Requisition Number :' . $get_so['PrNumber'] . ' / Contract : ' . $get_so['ContractNo'] . ' is pending for you to process Purchase Order Vendor.
+                    Please to follow up Requisition Number :' . $getreq['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $getreq['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
         <br><br>
         You can access Order Tracking System Portal via the URL below:
         <br>
@@ -318,20 +493,23 @@ Order Tracking Administrator',
         <br><br>
         Order Tracking Administrator',
 
-                    'sending_date' => $audtdate,
-                    'is_read' => 0,
-                    'updated_at' => $audtdate,
-                    'is_archived' => 0,
-                    'to_user' => $sendto_user['USERNAME'],
-                    'to_email' => $sendto_user['EMAIL'],
-                    'to_name' => ucwords(strtolower($sendto_user['NAME'])),
-                    'is_trashed' => 0,
-                    'is_deleted' => 0,
-                    'is_attached' => 0,
-                    'is_star' => 0,
-                    'sending_status' => 1,
+                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                    'IS_READ' => 0,
+                    'IS_ARCHIVED' => 0,
+                    'IS_TRASHED' => 0,
+                    'IS_DELETED' => 0,
+                    'IS_ATTACHED' => 0,
+                    'IS_STAR' => 0,
+                    'IS_READSENDER' => 0,
+                    'SENDING_STATUS' => 1,
+                    'OTPROCESS' => $groupuser,
+                    'UNIQPROCESS' => $getreq['RQNUNIQ'],
                 );
                 $this->NotifModel->mailbox_insert($data_notif);
+                $this->RequisitionModel->rqn_post_update($rqnuniq, $data2);
             } else {
                 return redirect()->to(base_url('/requisition'));
             }

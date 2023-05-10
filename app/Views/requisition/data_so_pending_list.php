@@ -63,8 +63,9 @@
 																<th>No.</th>
 																<th>Customer Name</th>
 																<th>Contract No.</th>
+																<th>Contract Name</th>
 																<th>Project No.</th>
-																<th>Project Desc.</th>
+
 																<th>CRM Number</th>
 																<th>Req Date</th>
 																<th style="background-color: white;"></th>
@@ -93,8 +94,8 @@
 																	<td><?= $no++; ?></td>
 																	<td><?= $ot_list['NAMECUST']; ?></td>
 																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
+																	<td nowrap><?= $ot_list['CTDESC']; ?></td>
 																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
-																	<td nowrap><?= $ot_list['PRJDESC']; ?></td>
 																	<td nowrap><?= $ot_list['CRMNO']; ?></td>
 																	<td nowrap><?= $crmreq_date; ?></td>
 

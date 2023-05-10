@@ -89,9 +89,11 @@
                                                     $rqn_date = substr($data['DATE'], 6, 2) . "/" . substr($data['DATE'], 4, 2) . "/" . substr($data['DATE'], 0, 4);
                                                 ?>
                                                     <option value="<?= trim($data['RQNNUMBER'])
-                                                                    ?>"><?= trim($data['RQNNUMBER'])
-                                                                        ?> - <?= $rqn_date . " - " . $data['DESCRIPTIO']
-                                                                                ?>
+                                                                    ?>" <?php if ($rqn_number == $data['RQNNUMBER']) {
+                                                                            echo "selected";
+                                                                        } ?>><?= trim($data['RQNNUMBER'])
+                                                                                ?> - <?= $rqn_date . " - " . $data['DESCRIPTIO']
+                                                                                        ?>
                                                     </option>
                                                 <?php endforeach;
                                                 ?>

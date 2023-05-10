@@ -124,10 +124,4 @@ class Salesorder_model extends Model
         $query = $this->db->table('webot_ORDERTRACKING')->insert($data);
         return $query;
     }
-
-    function mailbox_insert($data_notif)
-    {
-        $query = $this->db->table('webot_MAILBOX')->insert($data_notif);
-        return $query;
-    }
 }

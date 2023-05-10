@@ -44,7 +44,7 @@ class Requisition_model extends Model
 
     function get_requisition_sage()
     {
-        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER in (select distinct RQNNUMBER from DATAN1.dbo.POPORH1)");
+        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");
         return $query->getResultArray();
     }
 
@@ -67,6 +67,12 @@ class Requisition_model extends Model
         return $query->getRowArray();
     }
 
+    function get_requisition_post($rqnuniq)
+    {
+        $query = $this->db->query("select * from webot_REQUISITION where POSTINGSTAT=1 and RQNUNIQ='$rqnuniq' ");
+        return $query->getRowArray();
+    }
+
     function requisition_insert($data1)
     {
         $query = $this->db->table('webot_REQUISITION')->insert($data1);
@@ -76,6 +82,13 @@ class Requisition_model extends Model
     function requisition_update($id_pr, $data1)
     {
         $query = $this->db->table('webot_REQUISITION')->update($data1, array('RQNUNIQ' => $id_pr));
+        return $query;
+    }
+
+    function rqn_post_update($rqnuniq, $data2)
+    {
+        $query = $this->db->table('webot_REQUISITION')->update($data2, array('RQNUNIQ' => $rqnuniq));
+        //Tanpa return juga bisa jalan
         return $query;
     }
 

@@ -800,7 +800,7 @@ Order Tracking Administrator',
                     'OTPROCESS' => $groupuser,
                     'UNIQPROCESS' => $getcsropen['CSRUNIQ'],
                 );
-                $this->SalesorderModel->mailbox_insert($data_notif);
+                $this->NotifModel->mailbox_insert($data_notif);
                 $this->SalesorderModel->csr_post_update($csruniq, $data2);
             }
         }
