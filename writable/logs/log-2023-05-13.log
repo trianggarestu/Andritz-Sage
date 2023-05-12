@@ -1,0 +1,105 @@
+CRITICAL - 2023-05-13 00:06:54 --> Undefined index: CTNUMBER
+in APPPATH\Controllers\Requisitionlist.php on line 315.
+ 1 APPPATH\Controllers\Requisitionlist.php(315): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: CTNUMBER', 'APPPATH\\Controllers\\Requisitionlist.php', 315, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-13 00:06:57 --> Undefined index: CTNUMBER
+in APPPATH\Controllers\Requisitionlist.php on line 315.
+ 1 APPPATH\Controllers\Requisitionlist.php(315): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: CTNUMBER', 'APPPATH\\Controllers\\Requisitionlist.php', 315, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-13 00:06:57 --> Uncaught PhpOffice\PhpSpreadsheet\Exception: Spreadsheet objects cannot be json encoded in E:\xampp\htdocs\Andritz-Sage\vendor\phpoffice\phpspreadsheet\src\PhpSpreadsheet\Spreadsheet.php:1655
+Stack trace:
+#0 [internal function]: PhpOffice\PhpSpreadsheet\Spreadsheet->jsonSerialize()
+#1 E:\xampp\htdocs\Andritz-Sage\system\Format\JSONFormatter.php(38): json_encode(Array, 960, 512)
+#2 E:\xampp\htdocs\Andritz-Sage\system\API\ResponseTrait.php(346): CodeIgniter\Format\JSONFormatter->format(Array)
+#3 E:\xampp\htdocs\Andritz-Sage\system\API\ResponseTrait.php(99): CodeIgniter\Debug\Exceptions->format(Array)
+#4 E:\xampp\htdocs\Andritz-Sage\system\Debug\Exceptions.php(145): CodeIgniter\Debug\Exceptions->respond(Array, 500)
+#5 [internal function]: CodeIgniter\Debug\Exceptions->exceptionHandler(Object(ErrorException))
+#6 {main}
+  thrown
+【Previous Exception】
+ErrorException
+Undefined index: CTNUMBER
+#0 E:\xampp\htdocs\Andritz-Sage\app\Controllers\Requisitionlist.php(315): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index...', 'E:\\xampp\\htdocs...', 315, Array)
+#1 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+#2 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+#3 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#4 E:\xampp\htdocs\Andritz-Sage\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#5 {main}
+in VENDORPATH\phpoffice\phpspreadsheet\src\PhpSpreadsheet\Spreadsheet.php on line 1655.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2023-05-13 00:07:49 --> Undefined index: CRMDESC
+in APPPATH\Controllers\Requisitionlist.php on line 319.
+ 1 APPPATH\Controllers\Requisitionlist.php(319): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: CRMDESC', 'APPPATH\\Controllers\\Requisitionlist.php', 319, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-13 00:07:50 --> Undefined index: CRMDESC
+in APPPATH\Controllers\Requisitionlist.php on line 319.
+ 1 APPPATH\Controllers\Requisitionlist.php(319): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: CRMDESC', 'APPPATH\\Controllers\\Requisitionlist.php', 319, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-13 00:07:50 --> Uncaught PhpOffice\PhpSpreadsheet\Exception: Spreadsheet objects cannot be json encoded in E:\xampp\htdocs\Andritz-Sage\vendor\phpoffice\phpspreadsheet\src\PhpSpreadsheet\Spreadsheet.php:1655
+Stack trace:
+#0 [internal function]: PhpOffice\PhpSpreadsheet\Spreadsheet->jsonSerialize()
+#1 E:\xampp\htdocs\Andritz-Sage\system\Format\JSONFormatter.php(38): json_encode(Array, 960, 512)
+#2 E:\xampp\htdocs\Andritz-Sage\system\API\ResponseTrait.php(346): CodeIgniter\Format\JSONFormatter->format(Array)
+#3 E:\xampp\htdocs\Andritz-Sage\system\API\ResponseTrait.php(99): CodeIgniter\Debug\Exceptions->format(Array)
+#4 E:\xampp\htdocs\Andritz-Sage\system\Debug\Exceptions.php(145): CodeIgniter\Debug\Exceptions->respond(Array, 500)
+#5 [internal function]: CodeIgniter\Debug\Exceptions->exceptionHandler(Object(ErrorException))
+#6 {main}
+  thrown
+【Previous Exception】
+ErrorException
+Undefined index: CRMDESC
+#0 E:\xampp\htdocs\Andritz-Sage\app\Controllers\Requisitionlist.php(319): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index...', 'E:\\xampp\\htdocs...', 319, Array)
+#1 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+#2 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+#3 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#4 E:\xampp\htdocs\Andritz-Sage\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#5 {main}
+in VENDORPATH\phpoffice\phpspreadsheet\src\PhpSpreadsheet\Spreadsheet.php on line 1655.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2023-05-13 00:08:22 --> Undefined index: UOM
+in APPPATH\Controllers\Requisitionlist.php on line 322.
+ 1 APPPATH\Controllers\Requisitionlist.php(322): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: UOM', 'APPPATH\\Controllers\\Requisitionlist.php', 322, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-13 00:08:24 --> Undefined index: UOM
+in APPPATH\Controllers\Requisitionlist.php on line 322.
+ 1 APPPATH\Controllers\Requisitionlist.php(322): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: UOM', 'APPPATH\\Controllers\\Requisitionlist.php', 322, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-05-13 00:08:24 --> Uncaught PhpOffice\PhpSpreadsheet\Exception: Spreadsheet objects cannot be json encoded in E:\xampp\htdocs\Andritz-Sage\vendor\phpoffice\phpspreadsheet\src\PhpSpreadsheet\Spreadsheet.php:1655
+Stack trace:
+#0 [internal function]: PhpOffice\PhpSpreadsheet\Spreadsheet->jsonSerialize()
+#1 E:\xampp\htdocs\Andritz-Sage\system\Format\JSONFormatter.php(38): json_encode(Array, 960, 512)
+#2 E:\xampp\htdocs\Andritz-Sage\system\API\ResponseTrait.php(346): CodeIgniter\Format\JSONFormatter->format(Array)
+#3 E:\xampp\htdocs\Andritz-Sage\system\API\ResponseTrait.php(99): CodeIgniter\Debug\Exceptions->format(Array)
+#4 E:\xampp\htdocs\Andritz-Sage\system\Debug\Exceptions.php(145): CodeIgniter\Debug\Exceptions->respond(Array, 500)
+#5 [internal function]: CodeIgniter\Debug\Exceptions->exceptionHandler(Object(ErrorException))
+#6 {main}
+  thrown
+【Previous Exception】
+ErrorException
+Undefined index: UOM
+#0 E:\xampp\htdocs\Andritz-Sage\app\Controllers\Requisitionlist.php(322): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index...', 'E:\\xampp\\htdocs...', 322, Array)
+#1 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(934): App\Controllers\RequisitionList->export_excel()
+#2 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RequisitionList))
+#3 E:\xampp\htdocs\Andritz-Sage\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#4 E:\xampp\htdocs\Andritz-Sage\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#5 {main}
+in VENDORPATH\phpoffice\phpspreadsheet\src\PhpSpreadsheet\Spreadsheet.php on line 1655.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
