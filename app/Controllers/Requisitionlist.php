@@ -103,7 +103,7 @@ class RequisitionList extends BaseController
             ->join('webot_PO c', 'c.RQNUNIQ = webot_REQUISITION.RQNUNIQ', 'left')
             ->where('webot_REQUISITION.POSTINGSTAT', 1)
             ->orderBy('webot_REQUISITION.RQNUNIQ', 'ASC')
-            ->paginate(50);
+            ->paginate(10);
 
 
         $data = array(
@@ -258,57 +258,79 @@ Order Tracking Administrator',
         //$peoples = $this->builder->get()->getResultArray();
         $requisitiondata = $this->RequisitionModel->get_requisition_open();
         $spreadsheet = new Spreadsheet();
+
         // tulis header/nama kolom 
         $spreadsheet->setActiveSheetIndex(0)
             ->setCellValue('A1', 'No')
-            ->setCellValue('B1', 'ContractNo')
-            ->setCellValue('C1', 'ProjectNo')
-            ->setCellValue('D1', 'CustomerName')
-            ->setCellValue('E1', 'CustomerEmail')
-            ->setCellValue('F1', 'CrmNo')
-            ->setCellValue('G1', 'PoCustomer')
-            ->setCellValue('H1', 'InventoryNo')
-            ->setCellValue('I1', 'MaterialNo')
-            ->setCellValue('J1', 'PoDate')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'OrderDescription')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', '')
-            ->setCellValue('Q1', 'Pr Date')
-            ->setCellValue('R1', 'PR Number')
+            ->setCellValue('B1', 'RQNNUMBER')
+            ->setCellValue('C1', 'RQNDATE')
+            ->setCellValue('D1', 'CUSTOMER NAME')
+            ->setCellValue('E1', 'CONRACT NO')
+            ->setCellValue('F1', 'CONTRACT DESC')
+            ->setCellValue('G1', 'PROJECT NO')
+            ->setCellValue('H1', 'CRM NO')
+            ->setCellValue('I1', 'CRM DESC')
+            ->setCellValue('J1', 'CRM DATE')
+            ->setCellValue('K1', 'ITEM NO')
+            ->setCellValue('L1', 'QTY')
+            ->setCellValue('M1', 'UOM')
+            ->setCellValue('N1', 'STATUS')
+
+
+
             ->setCellValue('S1', '');
 
         $rows = 2;
         // tulis data mobil ke cell
         $no = 1;
         foreach ($requisitiondata as $data) {
+            $postingstat =  $data['POSTINGSTAT'];
+            switch ($postingstat) {
+                case "0":
+                    $postingstatus = "Open";
+                    break;
+                case "1":
+                    $postingstatus = "Posted";
+                    break;
+                case "2":
+                    $postingstatus = "Deleted";
+                    break;
+                default:
+                    $postingstatus = "Open";
+            }
+        }
+        $dd = substr($data['RQNDATE'], 6, 2);
+        $mm = substr($data['RQNDATE'], 4, 2);
+        $yyyy = substr($data['RQNDATE'], 0, 4);
+        $rqndate = $mm . '/' . $dd . '/' . $yyyy;
+
+        $dd = substr($data['CRMREQDATE'], 6, 2);
+        $mm = substr($data['CRMREQDATE'], 4, 2);
+        $yyyy = substr($data['CRMREQDATE'], 0, 4);
+        $reqdate = $mm . '/' . $dd . '/' . $yyyy;
+        foreach ($requisitiondata as $data) {
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['ContractNo'])
-                ->setCellValue('C' . $rows, $data['ProjectNo'])
-                ->setCellValue('D' . $rows, $data['CustomerName'])
-                ->setCellValue('E' . $rows, $data['CustomerEmail'])
-                ->setCellValue('F' . $rows, $data['CrmNo'])
-                ->setCellValue('G' . $rows, $data['PoCustomer'])
-                ->setCellValue('H' . $rows, $data['InventoryNo'])
-                ->setCellValue('I' . $rows, $data['MaterialNo'])
-                ->setCellValue('J' . $rows, $data['PoDate'])
-                ->setCellValue('K' . $rows, $data['ReqDate'])
-                ->setCellValue('L' . $rows, $data['SalesPerson'])
-                ->setCellValue('M' . $rows, $data['OrderDesc'])
-                ->setCellValue('N' . $rows, $data['Qty'])
-                ->setCellValue('O' . $rows, $data['Uom'])
-                ->setCellValue('P' . $rows, '')
-                ->setCellValue('Q' . $rows, $data['PrDate'])
-                ->setCellValue('R' . $rows, $data['PrNumber'])
+                ->setCellValue('B' . $rows, $data['RQNNUMBER'])
+                ->setCellValue('C' . $rows, trim($rqndate))
+                ->setCellValue('D' . $rows, $data['NAMECUST'])
+                ->setCellValue('E' . $rows, $data['CONTRACT'])
+                ->setCellValue('F' . $rows, $data['CTDESC'])
+                ->setCellValue('G' . $rows, $data['PROJECT'])
+                ->setCellValue('H' . $rows, $data['CRMNO'])
+                ->setCellValue('I' . $rows, trim($reqdate))
+                ->setCellValue('J' . $rows, $data['ORDERDESC'])
+                ->setCellValue('K' . $rows, $data['MATERIALNO'])
+                ->setCellValue('L' . $rows, $data['QTY'])
+                ->setCellValue('M' . $rows, $data['STOCKUNIT'])
+                ->setCellValue('N' . $rows, $postingstatus)
+
                 ->setCellValue('S' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'Ordertracking_data';
+        $fileName = 'PR_data';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -317,6 +339,16 @@ Order Tracking Administrator',
 
         $writer->save('php://output');
         exit();
+    }
+    public function preview()
+    {
+        $pr_data = $this->RequisitionModel->get_requisition_open();
+        $data = array(
+            'pr_data' => $pr_data,
+            'success_code' => session()->get('success'),
+        );
+
+        echo view('requisition/data_pr_list_preview', $data);
     }
 
     private function send($data_email)
