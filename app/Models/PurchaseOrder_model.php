@@ -10,7 +10,7 @@ use CodeIgniter\Model;
  *
  * @author ICT-Notebook
  */
-class PurchaseOrder_model extends Model
+class Purchaseorder_model extends Model
 {
 
     //protected $table = 'ARCUS';
@@ -20,17 +20,41 @@ class PurchaseOrder_model extends Model
     }
 
 
+    function get_requisition_pending()
+    {
+        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
+        b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        from webot_REQUISITION a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        left join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
+        where a.POSTINGSTAT=1 and c.RQNUNIQ is NULL");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
+
+    function get_requisition_by_id($rqnuniq)
+    {
+        $query = $this->db->query("select * from webot_REQUISITION where POSTINGSTAT=1 and RQNUNIQ='$rqnuniq' ");
+        return $query->getRowArray();
+    }
+
+    function get_po_list__sage_by_rqn($rqnnumber)
+    {
+        $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE from POPORH1 where RQNNUMBER='$rqnnumber'");
+        return $query->getResultArray();
+    }
 
     function get_PurchaseOrder_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where PrNumber is null");
+        $query = $this->db->query("select * from webot_REQUISITION WHERE POSTINGSTAT=1");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
 
     function get_PurchaseOrder_close()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where PrStatus = 'Closed' or PrNumber is not null");
+        $query = $this->db->query("select * from webot_ORDERTRACKING");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }

@@ -36,14 +36,16 @@ class Usergroupsetup extends BaseController
             exit();
         } else {
             $user = session()->get('username');
+            $infouser = $this->LoginModel->datapengguna($user);
             $chksu = $this->LoginModel->datalevel($user);
             if ($chksu == 0) {
                 //header("HTTP/1.1 401 Unauthorized"); //Status Code 401 = Unauthorized
                 header('Location: ' . base_url('administration'));
                 exit();
+            } else if (session()->get('keylog') != $infouser['passlgn']) {
+                header('Location: ' . base_url('administration'));
+                exit();
             } else {
-
-                $infouser = $this->LoginModel->datapengguna($user);
                 $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
                 $this->header_data = [
                     'usernamelgn'   => $infouser['usernamelgn'],

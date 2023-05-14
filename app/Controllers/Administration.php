@@ -22,7 +22,7 @@ class Administration extends BaseController
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
-        //$this->SettingnavheaderModel = new Settingnavheader_model();
+
         if (empty(session()->get('keylog'))) {
             //Tidak Bisa menggunakan redirect kalau condition session di construct
             //return redirect()->to(base_url('/login'));
@@ -30,36 +30,38 @@ class Administration extends BaseController
             exit();
         } else {
             $user = session()->get('username');
-            /*$chksu = $this->LoginModel->datalevel($user);
-            if ($chksu == 0) {
-                redirect('administration');
-            } else {
-                */
             $infouser = $this->LoginModel->datapengguna($user);
-            $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
-            $this->header_data = [
-                'usernamelgn'   => $infouser['usernamelgn'],
-                'namalgn' => $infouser['namalgn'],
-                'emaillgn' => $infouser['emaillgn'],
-                'issuperuserlgn' => $infouser['issuperuserlgn'],
-                'notif_messages' => $mailbox_unread,
-                'success_code' => session()->get('success'),
-            ];
-            $this->footer_data = [
-                'usernamelgn'   => $infouser['usernamelgn'],
-            ];
-            // Assign the model result to the badly named Class Property
-            $activenavh = 'Administration';
-            $activenavd = 'Administration';
-            $this->nav_data = [
-                'active_navh' => $activenavh,
-                'active_navd' => $activenavd,
-                'menu_nav' => $this->AdministrationModel->get_navigation($user),
-                //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
-                //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
-                //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
-            ];
-            //}
+            if (session()->get('keylog') == $infouser['passlgn']) {
+
+
+
+                $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
+                $this->header_data = [
+                    'usernamelgn'   => $infouser['usernamelgn'],
+                    'namalgn' => $infouser['namalgn'],
+                    'emaillgn' => $infouser['emaillgn'],
+                    'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'notif_messages' => $mailbox_unread,
+                    'success_code' => session()->get('success'),
+                ];
+                $this->footer_data = [
+                    'usernamelgn'   => $infouser['usernamelgn'],
+                ];
+                // Assign the model result to the badly named Class Property
+                $activenavh = 'Administration';
+                $activenavd = 'Administration';
+                $this->nav_data = [
+                    'active_navh' => $activenavh,
+                    'active_navd' => $activenavd,
+                    'menu_nav' => $this->AdministrationModel->get_navigation($user),
+                    //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
+                    //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
+                    //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+                ];
+            } else {
+                header('Location: ' . base_url());
+                exit();
+            }
         }
     }
 

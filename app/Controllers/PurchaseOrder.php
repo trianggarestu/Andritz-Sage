@@ -12,9 +12,11 @@ use PHPMailer\PHPMailer\Exception;
 
 use App\Models\Login_model;
 use App\Models\Administration_model;
-use App\Models\Settingnavheader_model;
+//use App\Models\Settingnavheader_model;
 use App\Models\Notif_model;
+use App\Models\Requisition_model;
 use App\Models\PurchaseOrder_model;
+use App\Models\Ordertracking_model;
 
 //use App\Controllers\AdminController;
 
@@ -24,14 +26,19 @@ class PurchaseOrder extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
+    private $db_name;
     public function __construct()
     {
         //parent::__construct();
         helper('form', 'url');
+        $this->db_name = \Config\Database::connect();
+
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
-        $this->PurchaseOrderModel = new PurchaseOrder_model();
+        $this->PurchaseorderModel = new Purchaseorder_model();
+        $this->OrdertrackingModel = new Ordertracking_model();
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -41,106 +48,90 @@ class PurchaseOrder extends BaseController
             exit();
         } else {
             $user = session()->get('username');
-            /*$chksu = $this->LoginModel->datalevel($user);
-            if ($chksu == 0) {
-                redirect('administration');
-            } else {
-                */
             $infouser = $this->LoginModel->datapengguna($user);
-            $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
-            $this->header_data = [
-                'usernamelgn'   => $infouser['usernamelgn'],
-                'namalgn' => $infouser['namalgn'],
-                'emaillgn' => $infouser['emaillgn'],
-                'issuperuserlgn' => $infouser['issuperuserlgn'],
-                'notif_messages' => $mailbox_unread,
-            ];
-            $this->footer_data = [
-                'usernamelgn'   => $infouser['usernamelgn'],
-            ];
-            // Assign the model result to the badly named Class Property
-            $activenavd = 'PurchaseOrder';
-            $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
-            $this->nav_data = [
-                'active_navd' => $activenavd,
-                'active_navh' => $activenavh,
-                'menu_nav' => $this->AdministrationModel->get_navigation($user),
-                //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
-                //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
-                //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
-            ];
-            //}
+            if (session()->get('keylog') == $infouser['passlgn']) {
+
+
+                $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
+                $this->header_data = [
+                    'usernamelgn'   => $infouser['usernamelgn'],
+                    'namalgn' => $infouser['namalgn'],
+                    'emaillgn' => $infouser['emaillgn'],
+                    'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'notif_messages' => $mailbox_unread,
+                    'success_code' => session()->get('success'),
+                ];
+                $this->footer_data = [
+                    'usernamelgn'   => $infouser['usernamelgn'],
+                ];
+                // Assign the model result to the badly named Class Property
+                $activenavd = 'purchaseorder';
+                $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
+                $this->nav_data = [
+                    'active_navd' => $activenavd,
+                    'active_navh' => $activenavh,
+                    'menu_nav' => $this->AdministrationModel->get_navigation($user),
+                    //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
+                    //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
+                    //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+                ];
+
+                date_default_timezone_set('Asia/Jakarta');
+                $today = date("d/m/Y H:i:s");
+
+                $this->audtuser = [
+                    'TODAY' => $today,
+                    'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                    'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                    'AUDTUSER' => $infouser['usernamelgn'],
+                    'AUDTORG' => $this->db_name->database,
+
+                ];
+            } else {
+                header('Location: ' . base_url());
+                exit();
+            }
         }
     }
 
 
     public function index()
     {
-        $PurchaseOrderdata = $this->PurchaseOrderModel->get_PurchaseOrder_Close();
+        $purchaseorderdata = $this->PurchaseorderModel->get_requisition_pending();
 
 
         $data = array(
-            'PurchaseOrder_data' => $PurchaseOrderdata,
+            'purchaseOrder_data' => $purchaseorderdata,
         );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('purchaseorder/data_pr_list', $data);
+        echo view('purchaseorder/data_pr_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
 
-    public function update($id_so)
+    public function update($rqnuniq, $postingstat)
     {
-        $get_so = $this->PurchaseOrderModel->get_so_by_id($id_so);
-        if ($get_so) {
+        $get_pr = $this->PurchaseorderModel->get_requisition_by_id($rqnuniq);
+
+        if ($get_pr) {
+            $rqnnumber = trim($get_pr['RQNNUMBER']);
             $data = array(
-                'id_so' => trim($get_so['ID_SO']),
-                'ct_no' => trim($get_so['ContractNo']),
-                'prj_no' => trim($get_so['ProjectNo']),
-                'crm_no' => trim($get_so['CrmNo']),
-                'cust_no' => trim($get_so['CustomerNo']),
-                'cust_name' => trim($get_so['CustomerName']),
-                'cust_email' => trim($get_so['CustomerEmail']),
-                'cust_po' => trim($get_so['PoCustomer']),
-                'po_date' => trim($get_so['PoDate']),
-                'req_date' => trim($get_so['ReqDate']),
-                'salesperson' => trim($get_so['SalesPerson']),
-                'inventory_no' => trim($get_so['InventoryNo']),
-                'material_no' => trim($get_so['MaterialNo']),
-                'inventory_desc' => trim($get_so['InventoryDesc']),
-                'order_desc' => trim($get_so['OrderDesc']),
-                'qty' => trim($get_so['Qty']),
-                'uom' => trim($get_so['Uom']),
-                'PurchaseOrder_list' => $this->PurchaseOrderModel->get_PurchaseOrder_sage(),
-                'form_action' => base_url("PurchaseOrder/update_action"),
+                'rqnuniq' => trim($get_pr['RQNUNIQ']),
+                'ct_no' => trim($get_pr['CONTRACT']),
+                'prj_no' => trim($get_pr['PROJECT']),
+                'cust_no' => trim($get_pr['CUSTOMER']),
+                'rqn_date' => trim($get_pr['RQNDATE']),
+                'po_number' => '',
+                'posage_list' => $this->PurchaseorderModel->get_po_list__sage_by_rqn($rqnnumber),
+                'form_action' => 'insert_action',
+                'post_stat' => $postingstat,
             );
         }
-
-
-        echo view('PurchaseOrder/ajax_add_PurchaseOrder', $data);
+        echo view('purchaseorder/ajax_add_purchaseorder', $data);
     }
 
-    public function update_action()
-    {
-        if (null == ($this->request->getPost('id_so'))) {
-            session()->setFlashdata('messagefailed', 'Data not found.');
-            return redirect()->to(base_url('PurchaseOrder'));
-        } else {
-            $id = $this->request->getPost('id_so');
-            $rqnnumber = $this->request->getPost('rqnnumber');
-            $choose_rqn = $this->PurchaseOrderModel->get_PurchaseOrder_by_id($rqnnumber);
-            if ($choose_rqn) {
-                $data = array(
-                    'PrNumber' => $choose_rqn["RQNNUMBER"],
-                    'PrDate' => $choose_rqn["DATE"],
-                );
 
-                $this->PurchaseOrderModel->PurchaseOrder_update($id, $data);
-                session()->setFlashdata('messagesuccess', 'Update Record Success');
-                return redirect()->to(base_url('PurchaseOrder'));
-            }
-        }
-    }
 
     public function sending_notif($id_so)
     {

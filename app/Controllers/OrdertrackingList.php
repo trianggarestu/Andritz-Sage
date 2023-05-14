@@ -36,35 +36,35 @@ class OrdertrackingList extends BaseController
             exit();
         } else {
             $user = session()->get('username');
-            /*$chksu = $this->LoginModel->datalevel($user);
-            if ($chksu == 0) {
-                redirect('administration');
-            } else {
-                */
             $infouser = $this->LoginModel->datapengguna($user);
-            $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
-            $this->header_data = [
-                'usernamelgn'   => $infouser['usernamelgn'],
-                'namalgn' => $infouser['namalgn'],
-                'emaillgn' => $infouser['emaillgn'],
-                'issuperuserlgn' => $infouser['issuperuserlgn'],
-                'notif_messages' => $mailbox_unread,
-            ];
-            $this->footer_data = [
-                'usernamelgn'   => $infouser['usernamelgn'],
-            ];
-            // Assign the model result to the badly named Class Property
-            $activenavd = 'ordertracking';
-            $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
-            $this->nav_data = [
-                'active_navd' => $activenavd,
-                'active_navh' => $activenavh,
-                'menu_nav' => $this->AdministrationModel->get_navigation($user),
-                //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
-                //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
-                //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
-            ];
-            //}
+
+            if (session()->get('keylog') == $infouser['passlgn']) {
+                $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
+                $this->header_data = [
+                    'usernamelgn'   => $infouser['usernamelgn'],
+                    'namalgn' => $infouser['namalgn'],
+                    'emaillgn' => $infouser['emaillgn'],
+                    'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'notif_messages' => $mailbox_unread,
+                ];
+                $this->footer_data = [
+                    'usernamelgn'   => $infouser['usernamelgn'],
+                ];
+                // Assign the model result to the badly named Class Property
+                $activenavd = 'ordertracking';
+                $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
+                $this->nav_data = [
+                    'active_navd' => $activenavd,
+                    'active_navh' => $activenavh,
+                    'menu_nav' => $this->AdministrationModel->get_navigation($user),
+                    //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
+                    //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
+                    //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+                ];
+            } else {
+                header('Location: ' . base_url());
+                exit();
+            }
         }
     }
 

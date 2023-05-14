@@ -1,0 +1,17 @@
+INFO - 2023-05-12 09:27:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-12 09:27:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-12 09:27:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-12 09:27:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-12 09:27:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-12 09:27:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-05-12 09:27:39 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name 'PrStatus'.
+CRITICAL - 2023-05-12 09:27:39 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name 'PrStatus'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\PurchaseOrder_model.php(33): CodeIgniter\Database\BaseConnection->query('select * from webot_ORDERTRACKING where PrStatus = \'Closed\' or PrNumber is not null')
+ 2 APPPATH\Controllers\PurchaseOrder.php(79): App\Models\PurchaseOrder_model->get_PurchaseOrder_close()
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\PurchaseOrder->index()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PurchaseOrder))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-12 12:41:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-12 12:41:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
