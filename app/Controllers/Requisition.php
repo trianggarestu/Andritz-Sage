@@ -132,10 +132,14 @@ class Requisition extends BaseController
                 $act = 'requisition/update_action';
                 $id_pr = $get_pr['RQNUNIQ'];
                 $rqnnumber = $get_pr['RQNNUMBER'];
+                $podatecust = substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
             } else {
                 $act = 'requisition/insert_action';
                 $id_pr = '';
                 $rqnnumber = '';
+                $podatecust = substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
             }
 
             $data = array(
@@ -147,8 +151,8 @@ class Requisition extends BaseController
                 'cust_name' => trim($get_so['NAMECUST']),
                 'cust_email' => trim($get_so['EMAIL1CUST']),
                 'cust_po' => trim($get_so['PONUMBERCUST']),
-                'po_date' => trim($get_so['PODATECUST']),
-                'req_date' => trim($get_so['CRMREQDATE']),
+                'po_date' => $podatecust,
+                'req_date' => $crmreqdate,
                 'salesperson' => trim($get_so['SALESNAME']),
                 'inventory_no' => trim($get_so['ITEMNO']),
                 'material_no' => trim($get_so['MATERIALNO']),

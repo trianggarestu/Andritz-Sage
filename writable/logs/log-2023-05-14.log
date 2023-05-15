@@ -27343,3 +27343,1200 @@ in APPPATH\Controllers\Notif.php on line 14.
  3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
  4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:44:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:44:21 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:44:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:44:21 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:45:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:45:22 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:45:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:45:22 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:46:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:46:23 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:46:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:46:23 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:47:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:47:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:47:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:47:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:48:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:48:25 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:48:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:48:25 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:49:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:49:26 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:49:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:49:26 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:50:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:50:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:50:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:50:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:51:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:51:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:51:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:51:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:52:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:52:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:52:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:52:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:53:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:53:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:53:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:53:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:54:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:54:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:54:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:54:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:55:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:55:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:55:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:55:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:56:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:56:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:56:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:56:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:57:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:57:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:57:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:57:28 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:58:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:58:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:58:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:58:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:59:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:59:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 15:59:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 15:59:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:00:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:00:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:00:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:00:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:01:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:01:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:01:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:01:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:02:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:02:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:02:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:02:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:03:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:03:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:03:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:03:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:04:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:04:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:04:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:04:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:05:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:05:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:05:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:05:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:27 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:47 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:47 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:06:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:49 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:49 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:50 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:50 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:06:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:53 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:06:53 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:06:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:07:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:07:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:02 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:02 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:07:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:12 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:12 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:07:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:22 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:22 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:32 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:32 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:07:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:35 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:35 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:45 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:45 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:55 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:07:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:07:55 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:05 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:05 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:15 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:15 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:25 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:25 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:35 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:35 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:45 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:45 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:46 --> Undefined index: PrDate
+in APPPATH\Views\purchaseorder\data_pr_list.php on line 81.
+ 1 APPPATH\Views\purchaseorder\data_pr_list.php(81): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: PrDate', 'APPPATH\\Views\\purchaseorder\\data_pr_list.php', 81, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\purchaseorder\\data_pr_list.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('PurchaseOrder/data_pr_list', [], true)
+ 5 APPPATH\Controllers\PurchaseOrderList.php(89): view('PurchaseOrder/data_pr_list', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\PurchaseOrderList->index()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PurchaseOrderList))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:08:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:49 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:49 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:08:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:53 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:08:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:08:54 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:04 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:04 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:34 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:34 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:44 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:44 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:53 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:09:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:09:54 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:03 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:04 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:13 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:33 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:34 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:44 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:44 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:54 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:10:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:10:54 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:03 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:04 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:24 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:34 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:34 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:43 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:44 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:53 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:11:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:11:54 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:04 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:04 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:07 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:07 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:10 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:10 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:14 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:18 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:18 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:22 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:23 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:25 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:25 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:28 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:28 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-05-14 16:12:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:38 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:38 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:48 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:48 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:58 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:12:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:12:58 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:13:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:13:08 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:13:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:13:08 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:13:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:13:18 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:13:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:13:18 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:13:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:13:28 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-05-14 16:13:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-05-14 16:13:28 --> Undefined property: App\Controllers\Notif::$LoginModel
+in APPPATH\Controllers\Notif.php on line 14.
+ 1 APPPATH\Controllers\Notif.php(14): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Notif::$LoginModel', 'APPPATH\\Controllers\\Notif.php', 14, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(906): App\Controllers\Notif->__construct()
+ 3 SYSTEMPATH\CodeIgniter.php(490): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
