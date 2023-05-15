@@ -30,11 +30,11 @@ class Administration extends BaseController
             exit();
         } else {
             $user = session()->get('username');
-            $infouser = $this->LoginModel->datapengguna($user);
-            if (session()->get('keylog') == $infouser['passlgn']) {
+            $chkuser = $this->LoginModel->datapengguna($user);
+            if (session()->get('keylog') == $chkuser['passlgn']) {
 
 
-
+                $infouser = $this->LoginModel->datapengguna($user);
                 $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
                 $this->header_data = [
                     'usernamelgn'   => $infouser['usernamelgn'],

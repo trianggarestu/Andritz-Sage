@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Login_model;
 use App\Models\Notif_model;
 
 class Notif extends BaseController
@@ -9,16 +10,17 @@ class Notif extends BaseController
 
 	public function __construct()
 	{
+		$this->LoginModel = new Login_model();
 		$this->NotifModel = new Notif_model();
 		$user = session()->get('username');
-		$infouser = $this->LoginModel->datapengguna($user);
+		$chkuser = $this->LoginModel->datapengguna($user);
 
 		if (empty(session()->get('keylog'))) {
 			//Tidak Bisa menggunakan redirect kalau condition session di construct
 			//return redirect()->to(base_url('/login'));
 			header('Location: ' . base_url());
 			exit();
-		} else if (session()->get('keylog') != $infouser['passlgn']) {
+		} else if (session()->get('keylog') != $chkuser['passlgn']) {
 			header('Location: ' . base_url('administration'));
 			exit();
 		} else {
