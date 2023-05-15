@@ -105,6 +105,7 @@
 															<?php
 															$todaydate = date("m/d/Y");
 															$sending_date = substr($notifications['SENDING_DATE'], 4, 2) . "/" . substr($notifications['SENDING_DATE'], 6, 2) . "/" . substr($notifications['SENDING_DATE'], 0, 4);
+															$sending_date = date('M d Y', strtotime($sending_date));
 															$time = strlen($notifications['SENDING_TIME']);
 															if ($time == 5) {
 																$sending_time = substr($notifications['SENDING_TIME'], 0, 1) . ":" . substr($notifications['SENDING_TIME'], 2, 2);

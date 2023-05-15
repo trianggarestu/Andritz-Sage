@@ -39,6 +39,13 @@ class Purchaseorder_model extends Model
         return $query->getRowArray();
     }
 
+    function get_po_by_requisition($rqnuniq)
+    {
+        $query = $this->db->query("select * from webot_PO where RQNUNIQ='$rqnuniq' ");
+        return $query->getRowArray();
+    }
+
+
     function get_po_list__sage_by_rqn($rqnnumber)
     {
         $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE from POPORH1 where RQNNUMBER='$rqnnumber'");

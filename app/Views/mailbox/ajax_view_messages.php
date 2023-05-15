@@ -33,7 +33,7 @@
                         <span class="mailbox-read-time pull-right">Date :</span>
                     </div>
                     <div class="col-md-9 mailbox-read-time">
-                        <span><?php echo $sending_date; ?></span>
+                        <span><?php echo $sending_date . ', ' . $sending_time; ?></span>
                     </div>
 
                     <div class="col-md-3 mailbox-read-time">

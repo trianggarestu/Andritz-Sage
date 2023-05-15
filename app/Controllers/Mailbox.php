@@ -245,13 +245,14 @@ class Mailbox extends BaseController
             );
             $this->NotifModel->update_is_read($id, $is_read);
             $sending_date = substr($row['SENDING_DATE'], 4, 2) . "/" . substr($row['SENDING_DATE'], 6, 2) . "/" .  substr($row['SENDING_DATE'], 0, 4);
+            $sending_date = date('M d Y', strtotime($sending_date));
             $time = strlen($row['SENDING_TIME']);
             if ($time == 5) {
                 $n_time = '0' . $row['SENDING_TIME'];
             } else if ($time == 6) {
                 $n_time = $row['SENDING_TIME'];
             }
-            $sending_time = substr($n_time, 0, 2) . ":" . substr($n_time, 3, 2) . ":" .  substr($n_time, 5, 2);
+            $sending_time = substr($n_time, 0, 2) . ":" . substr($n_time, 3, 2);
             $data = array(
                 'id' => $row['MAILSEQ'],
                 'from_email' => $row['FROM_EMAIL'],

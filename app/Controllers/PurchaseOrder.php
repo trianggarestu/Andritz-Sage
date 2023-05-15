@@ -113,9 +113,23 @@ class PurchaseOrder extends BaseController
     public function update($rqnuniq, $postingstat)
     {
         $get_pr = $this->PurchaseorderModel->get_requisition_by_id($rqnuniq);
+        $get_po = $this->PurchaseorderModel->get_po_by_requisition($rqnuniq);
 
         if ($get_pr) {
-            $rqnnumber = trim($get_pr['RQNNUMBER']);
+            if (!empty($get_po['RQNUNIQ']) and $get_po['POSTINGSTAT'] == 0) {
+                $act = 'purchaseorder/update_action';
+                $id_po = $get_pr['POUNIQ'];
+                $rqnnumber = $get_pr['RQNNUMBER'];
+                $povendordate = substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 0, 4);
+                $etddate = substr($get_po['ETDDATE'], 6, 2) . "/" . substr($get_po['ETDDATE'], 4, 2) . "/" . substr($get_po['ETDDATE'], 0, 4);
+            } else {
+                $act = 'purchaseorder/insert_action';
+                $id_po = '';
+                $rqnnumber = $get_pr['RQNNUMBER'];
+                $povendordate = '';
+                $etddate = '';
+            }
+
             $data = array(
                 'rqnuniq' => trim($get_pr['RQNUNIQ']),
                 'ct_no' => trim($get_pr['CONTRACT']),
@@ -123,9 +137,13 @@ class PurchaseOrder extends BaseController
                 'cust_no' => trim($get_pr['CUSTOMER']),
                 'rqn_date' => trim($get_pr['RQNDATE']),
                 'po_number' => '',
+                'etd_date' => $etddate,
+                'origin_country' => '',
+                'po_remarks' => '',
                 'posage_list' => $this->PurchaseorderModel->get_po_list__sage_by_rqn($rqnnumber),
-                'form_action' => 'insert_action',
+                'form_action' => base_url($act),
                 'post_stat' => $postingstat,
+                'pouniq' => $id_po,
             );
         }
         echo view('purchaseorder/ajax_add_purchaseorder', $data);
