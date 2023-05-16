@@ -6,10 +6,10 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Unfulfilled Order Tracking</h1>
+		<h1>Outstanding Order Tracking</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-			<li class="active">Order Tracking Open</li>
+			<li class="active">Outstanding Order Tracking</li>
 		</ol>
 	</section>
 
@@ -31,7 +31,7 @@
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
 											<div class="col-sm-6">
-												<code> { only viewed unfullfilled data <strong>order tracking</strong> }</code>
+												<code> { only viewed outstanding data <strong>order tracking</strong> }</code>
 											</div>
 											<div class="col-sm-6">
 												<div class="box-tools">

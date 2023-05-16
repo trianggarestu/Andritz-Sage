@@ -6,7 +6,7 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Purchase Requisition List Waiting to process by Procurement</h1>
+		<h1>Waiting List Purchase Requisition to process by Procurement</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
 			<li class="active">Requisition List Waiting to process</li>

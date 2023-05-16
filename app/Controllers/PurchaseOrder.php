@@ -83,7 +83,7 @@ class PurchaseOrder extends BaseController
                     'TODAY' => $today,
                     'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
-                    'AUDTUSER' => $infouser['usernamelgn'],
+                    'AUDTUSER' => trim($infouser['usernamelgn']),
                     'AUDTORG' => $this->db_name->database,
 
                 ];

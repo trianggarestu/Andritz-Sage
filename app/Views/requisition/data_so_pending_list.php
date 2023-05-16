@@ -6,10 +6,10 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Sales Order List Waiting to process by Requester</h1>
+		<h1>Waiting List Sales Order to process by Requester</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-			<li class="active">Sales Order List Waiting to process</li>
+			<li class="active">Waiting List Sales Order</li>
 		</ol>
 	</section>
 	<!-- Untuk menampilkan modal bootstrap action success, failed  -->
