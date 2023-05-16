@@ -44,7 +44,9 @@ class Requisition_model extends Model
 
     function get_requisition_sage()
     {
-        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");
+        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  
+        from ENRQNH where RQNNUMBER in (select RQNNUMBER from POPORH1 where RQNNUMBER<>'') and
+        RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");
         return $query->getResultArray();
     }
 

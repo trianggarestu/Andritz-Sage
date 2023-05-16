@@ -118,28 +118,31 @@ class PurchaseOrder extends BaseController
         if ($get_pr) {
             if (!empty($get_po['RQNUNIQ']) and $get_po['POSTINGSTAT'] == 0) {
                 $act = 'purchaseorder/update_action';
-                $id_po = $get_pr['POUNIQ'];
+                $id_po = $get_po['POUNIQ'];
                 $rqnnumber = $get_pr['RQNNUMBER'];
-                $povendordate = substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 0, 4);
+                $ponumber = $get_po['PONUMBER'];
+                $origincountry = trim($get_po['ORIGINCOUNTRY']);
+                $poremarks = trim($get_po['POREMARKS']);
+                //$povendordate = substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 0, 4);
                 $etddate = substr($get_po['ETDDATE'], 6, 2) . "/" . substr($get_po['ETDDATE'], 4, 2) . "/" . substr($get_po['ETDDATE'], 0, 4);
             } else {
                 $act = 'purchaseorder/insert_action';
                 $id_po = '';
                 $rqnnumber = $get_pr['RQNNUMBER'];
-                $povendordate = '';
+                $ponumber = '';
+                $origincountry = '';
+                $poremarks = '';
+                //$povendordate = '';
                 $etddate = '';
             }
 
             $data = array(
+                'csruniq' => trim($get_pr['CSRUNIQ']),
                 'rqnuniq' => trim($get_pr['RQNUNIQ']),
-                'ct_no' => trim($get_pr['CONTRACT']),
-                'prj_no' => trim($get_pr['PROJECT']),
-                'cust_no' => trim($get_pr['CUSTOMER']),
-                'rqn_date' => trim($get_pr['RQNDATE']),
-                'po_number' => '',
+                'po_number' => $ponumber,
                 'etd_date' => $etddate,
-                'origin_country' => '',
-                'po_remarks' => '',
+                'origin_country' => $origincountry,
+                'po_remarks' => $poremarks,
                 'posage_list' => $this->PurchaseorderModel->get_po_list__sage_by_rqn($rqnnumber),
                 'form_action' => base_url($act),
                 'post_stat' => $postingstat,
@@ -149,6 +152,297 @@ class PurchaseOrder extends BaseController
         echo view('purchaseorder/ajax_add_purchaseorder', $data);
     }
 
+    public function insert_action()
+    {
+        $id_so = $this->request->getPost('id_so');
+        $id_pr = $this->request->getPost('id_pr');
+        $id_po = $this->request->getPost('id_po');
+        $etd_date = $this->request->getPost('etd_date');
+        if (null == $id_pr) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('purchaseorder'));
+        } else {
+            $sender = $this->AdministrationModel->get_mailsender();
+            $ponumber = $this->request->getPost('po_number');
+            $post_stat = $this->request->getPost('post_stat');
+            $get_pr = $this->PurchaseorderModel->get_requisition_by_id($id_pr);
+            $choose_po = $this->PurchaseorderModel->get_posage_by_id($ponumber);
+            $n_etd_date = substr($etd_date, 6, 4) . substr($etd_date, 0, 2) . substr($etd_date, 3, 2);
+            $groupuser = 4;
+            if ($choose_po) {
+                $data1 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'RQNUNIQ' => $get_pr['RQNUNIQ'],
+                    'RQNNUMBER' => $get_pr['RQNNUMBER'],
+                    'PODATE' => $choose_po["PODATE"],
+                    'PONUMBER' => $choose_po["PONUMBER"],
+                    'ETDDATE' => $n_etd_date,
+                    'ORIGINCOUNTRY' => $this->request->getPost('origin_country'),
+                    'POREMARKS' => $this->request->getPost('po_remarks'),
+                    'OTPROCESS' => $groupuser,
+                    'POSTINGSTAT' => $post_stat,
+                    'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                );
+                $this->PurchaseorderModel->purchaseorder_insert($data1);
+
+                if ($post_stat == 1) {
+
+                    $data2 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'PODATE' => $choose_po["PODATE"],
+                        'PONUMBER' => $choose_po["PONUMBER"],
+                        'ETDDATE' => $n_etd_date,
+                        'ORIGINCOUNTRY' => $this->request->getPost('origin_country'),
+                        'POREMARKS' => $this->request->getPost('po_remarks'),
+                    );
+
+                    $this->PurchaseorderModel->ot_purchaseorder_update($id_so, $data2);
+
+                    if ($sender['OFFLINESTAT'] == 0) {
+                        $get_po = $this->PurchaseorderModel->get_purchaseorder_post($id_po);
+                        $podate = substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 0, 4);
+                        $etddate = substr($get_po['ETDDATE'], 6, 2) . "/" . substr($get_po['ETDDATE'], 4, 2) . "/" . substr($get_po['ETDDATE'], 0, 4);
+                        $cargo_r_date = substr($get_po['CARGOREADINESSDATE'], 6, 2) . "/" . substr($get_po['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_po['CARGOREADINESSDATE'], 0, 4);
+
+                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                        foreach ($notiftouser_data as $sendto_user) {
+                            $data_email = array(
+                                'hostname'       => $sender['HOSTNAME'],
+                                'sendername'       => $sender['SENDERNAME'],
+                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'ssl'       => $sender['SSL'],
+                                'smtpport'       => $sender['SMTPPORT'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'subject' => 'Pending Purchase Order Allert. PO Number : ' . $get_po['PONUMBER'],
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                    Please to follow up PO Number :' . $get_po['PONUMBER'] . '(' . $podate . ') is pending for you to process Logistics Team.
+        <br><br>
+        PO Number :' . $get_po['PONUMBER'] . '<br>
+        PO Date :' . $podate . '<br>
+        ETD Date :' . $etddate . '<br>
+        Cargo Readiness Date :' . $cargo_r_date . '<br>
+        Origin Country :' . $get_po['ORIGINCOUNTRY'] . '<br>
+        Remarks :' . $get_po['POREMARKS'] . '<br><hr>
+        You can access Order Tracking System Portal via the URL below:
+        <br>
+        Http://jktsms025:...
+        <br>
+        Thanks for your cooperation. 
+        <br><br>
+        Order Tracking Administrator',
+                            );
+
+                            $sending_mail = $this->send($data_email);
+
+                            if ($sending_mail) {
+                                $data_notif = array(
+                                    'FROM_USER' => $this->header_data['usernamelgn'],
+                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                    'TO_USER' => $sendto_user['USERNAME'],
+                                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                    'SUBJECT' => 'Pending Purchase Order Allert. PO Number : ' . $get_po['PONUMBER'],
+                                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                                    Please to follow up PO Number :' . $get_po['PONUMBER'] . '(' . $podate . ') is pending for you to process Logistics Team.
+                        <br><br>
+                        PO Number :' . $get_po['PONUMBER'] . '<br>
+                        PO Date :' . $podate . '<br>
+                        ETD Date :' . $etddate . '<br>
+                        Cargo Readiness Date :' . $cargo_r_date . '<br>
+                        Origin Country :' . $get_po['ORIGINCOUNTRY'] . '<br>
+                        Remarks :' . $get_po['POREMARKS'] . '<br><hr>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'IS_READ' => 0,
+                                    'IS_ARCHIVED' => 0,
+                                    'IS_TRASHED' => 0,
+                                    'IS_DELETED' => 0,
+                                    'IS_ATTACHED' => 0,
+                                    'IS_STAR' => 0,
+                                    'IS_READSENDER' => 0,
+                                    'SENDING_STATUS' => 1,
+                                    'OTPROCESS' => $groupuser,
+                                    'UNIQPROCESS' => $get_po['POUNIQ'],
+                                );
+
+                                $this->NotifModel->mailbox_insert($data_notif);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        session()->set('success', '1');
+        return redirect()->to(base_url('/purchaseorder'));
+        session()->remove('success');
+    }
+
+    public function update_action()
+    {
+        $id_so = $this->request->getPost('id_so');
+        $id_pr = $this->request->getPost('id_pr');
+        $id_po = $this->request->getPost('id_po');
+        $etd_date = $this->request->getPost('etd_date');
+        if (null == $id_pr) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('purchaseorder'));
+        } else {
+            $sender = $this->AdministrationModel->get_mailsender();
+            $ponumber = $this->request->getPost('po_number');
+            $post_stat = $this->request->getPost('post_stat');
+            $get_pr = $this->PurchaseorderModel->get_requisition_by_id($id_pr);
+            $choose_po = $this->PurchaseorderModel->get_posage_by_id($ponumber);
+            $n_etd_date = substr($etd_date, 6, 4) . substr($etd_date, 0, 2) . substr($etd_date, 3, 2);
+            $groupuser = 4;
+            if ($choose_po) {
+                $data1 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'RQNUNIQ' => $get_pr['RQNUNIQ'],
+                    'RQNNUMBER' => $get_pr['RQNNUMBER'],
+                    'PODATE' => $choose_po["PODATE"],
+                    'PONUMBER' => $choose_po["PONUMBER"],
+                    'ETDDATE' => $n_etd_date,
+                    'ORIGINCOUNTRY' => $this->request->getPost('origin_country'),
+                    'POREMARKS' => $this->request->getPost('po_remarks'),
+                    'OTPROCESS' => $groupuser,
+                    'POSTINGSTAT' => $post_stat,
+                    'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                );
+                $this->PurchaseorderModel->purchaseorder_update($id_po, $data1);
+
+                if ($post_stat == 1) {
+
+                    $data2 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'PODATE' => $choose_po["PODATE"],
+                        'PONUMBER' => $choose_po["PONUMBER"],
+                        'ETDDATE' => $n_etd_date,
+                        'ORIGINCOUNTRY' => $this->request->getPost('origin_country'),
+                        'POREMARKS' => $this->request->getPost('po_remarks'),
+                    );
+
+                    $this->PurchaseorderModel->ot_purchaseorder_update($id_so, $data2);
+
+                    if ($sender['OFFLINESTAT'] == 0) {
+                        $get_po = $this->PurchaseorderModel->get_purchaseorder_post($id_po);
+                        $podate = substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 0, 4);
+                        $etddate = substr($get_po['ETDDATE'], 6, 2) . "/" . substr($get_po['ETDDATE'], 4, 2) . "/" . substr($get_po['ETDDATE'], 0, 4);
+                        $cargo_r_date = substr($get_po['CARGOREADINESSDATE'], 6, 2) . "/" . substr($get_po['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_po['CARGOREADINESSDATE'], 0, 4);
+
+                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                        foreach ($notiftouser_data as $sendto_user) {
+                            $data_email = array(
+                                'hostname'       => $sender['HOSTNAME'],
+                                'sendername'       => $sender['SENDERNAME'],
+                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'ssl'       => $sender['SSL'],
+                                'smtpport'       => $sender['SMTPPORT'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'subject' => 'Pending Purchase Order Allert. PO Number : ' . $get_po['PONUMBER'],
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                    Please to follow up PO Number :' . $get_po['PONUMBER'] . '(' . $podate . ') is pending for you to process Logistics Team.
+        <br><br>
+        PO Number :' . $get_po['PONUMBER'] . '<br>
+        PO Date :' . $podate . '<br>
+        ETD Date :' . $etddate . '<br>
+        Cargo Readiness Date :' . $cargo_r_date . '<br>
+        Origin Country :' . $get_po['ORIGINCOUNTRY'] . '<br>
+        Remarks :' . $get_po['POREMARKS'] . '<br><hr>
+        You can access Order Tracking System Portal via the URL below:
+        <br>
+        Http://jktsms025:...
+        <br>
+        Thanks for your cooperation. 
+        <br><br>
+        Order Tracking Administrator',
+                            );
+
+                            $sending_mail = $this->send($data_email);
+
+                            if ($sending_mail) {
+                                $data_notif = array(
+                                    'FROM_USER' => $this->header_data['usernamelgn'],
+                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                    'TO_USER' => $sendto_user['USERNAME'],
+                                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                    'SUBJECT' => 'Pending Purchase Order Allert. PO Number : ' . $get_po['PONUMBER'],
+                                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+    
+                                    Please to follow up PO Number :' . $get_po['PONUMBER'] . '(' . $podate . ') is pending for you to process Logistics Team.
+                        <br><br>
+                        PO Number :' . $get_po['PONUMBER'] . '<br>
+                        PO Date :' . $podate . '<br>
+                        ETD Date :' . $etddate . '<br>
+                        Cargo Readiness Date :' . $cargo_r_date . '<br>
+                        Origin Country :' . $get_po['ORIGINCOUNTRY'] . '<br>
+                        Remarks :' . $get_po['POREMARKS'] . '<br><hr>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'IS_READ' => 0,
+                                    'IS_ARCHIVED' => 0,
+                                    'IS_TRASHED' => 0,
+                                    'IS_DELETED' => 0,
+                                    'IS_ATTACHED' => 0,
+                                    'IS_STAR' => 0,
+                                    'IS_READSENDER' => 0,
+                                    'SENDING_STATUS' => 1,
+                                    'OTPROCESS' => $groupuser,
+                                    'UNIQPROCESS' => $get_po['POUNIQ'],
+                                );
+
+                                $this->NotifModel->mailbox_insert($data_notif);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        session()->set('success', '1');
+        return redirect()->to(base_url('/purchaseorder'));
+        session()->remove('success');
+    }
 
 
     public function sending_notif($id_so)

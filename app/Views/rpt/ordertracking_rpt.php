@@ -120,6 +120,14 @@
 																	$rqn_date = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
 																}
 
+																if ($ot_list['PODATE'] == '') {
+																	$po_date = '';
+																	$etd_date = '';
+																} else {
+																	$po_date = substr($ot_list['PODATE'], 4, 2) . "/" . substr($ot_list['PODATE'], 6, 2) . "/" . substr($ot_list['PODATE'], 0, 4);
+																	$etd_date = substr($ot_list['ETDDATE'], 4, 2) . "/" . substr($ot_list['ETDDATE'], 6, 2) . "/" . substr($ot_list['ETDDATE'], 0, 4);
+																}
+
 															?>
 																<tr>
 																	<td><?= ++$no; ?></td>
@@ -142,9 +150,11 @@
 																	<td><?= $rqn_date; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['PONUMBER']; ?></td>
-																	<td><?= $ot_list['PODATE']; ?></td>
-																	<td><?= $ot_list['ETDDATE']; ?></td>
-																	<td><?= $ot_list['CARGOREADINESSDATE']; ?></td>
+																	<td><?= $po_date; ?></td>
+																	<td><?= $etd_date; ?></td>
+																	<td <?php if (empty($ot_list['CARGOREADINESSDATE'])) {
+																			echo 'style="background-color: red;"';
+																		} ?>><?= $ot_list['CARGOREADINESSDATE']; ?></td>
 																	<td><?= $ot_list['ORIGINCOUNTRY']; ?></td>
 																	<td><?= $ot_list['POREMARKS']; ?></td>
 																	<td style="background-color: white;"></td>

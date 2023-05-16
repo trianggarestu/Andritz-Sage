@@ -108,7 +108,7 @@
 																					</li>
 
 																					<li>
-																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Select Requisition Only</a>
+																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Select Requisition & Save</a>
 																					</li>
 																				<?php endif;
 																				?>

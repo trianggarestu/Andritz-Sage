@@ -87,7 +87,13 @@
 															foreach ($purchaseOrder_data as $po_list) {
 																$crmreq_date = substr($po_list['CRMREQDATE'], 6, 2) . "/" . substr($po_list['CRMREQDATE'], 4, 2) . "/" . substr($po_list['CRMREQDATE'], 0, 4);
 																$rqn_date = substr($po_list['RQNDATE'], 6, 2) . "/" . substr($po_list['RQNDATE'], 4, 2) . "/" . substr($po_list['RQNDATE'], 0, 4);
-
+																if ($po_list['PODATE'] == '') {
+																	$po_date = '';
+																	$etd_date = '';
+																} else {
+																	$po_date = substr($po_list['PODATE'], 6, 2) . "/" . substr($po_list['PODATE'], 4, 2) . "/" . substr($po_list['PODATE'], 0, 4);
+																	$etd_date = substr($po_list['ETDDATE'], 6, 2) . "/" . substr($po_list['ETDDATE'], 4, 2) . "/" . substr($po_list['ETDDATE'], 0, 4);
+																}
 															?>
 
 																<tr>
@@ -95,9 +101,9 @@
 																	<td style="vertical-align: top;" nowrap><?php echo $po_list['CONTRACT'] . "/" . $po_list['PROJECT'] . "/" . $po_list['CRMNO'] . "<br><strong>" .
 																												$po_list['CTDESC'] . "</strong><br><small>( " .
 																												trim($po_list['NAMECUST']) . " )</small>"; ?></td>
-																	<td style="vertical-align: top;"><?= $po_list['ITEMNO'] . "/" . $po_list['MATERIALNO'] . "<br><strong>" . $po_list['ITEMDESC'] . "</strong><br>" .
-																											"Type : " . $po_list['SERVICETYPE'] ?></td>
-																	<td style="vertical-align: top;"><?= number_format($po_list['QTY'], 0, ",", ".") . ' <br>(' . trim($po_list['STOCKUNIT']) . ')'; ?></td>
+																	<td style="vertical-align: top;" nowrap><?= $po_list['ITEMNO'] . "/" . $po_list['MATERIALNO'] . "<br><strong>" . $po_list['ITEMDESC'] . "</strong><br>" .
+																												"Type : " . $po_list['SERVICETYPE'] ?></td>
+																	<td style="vertical-align: top;" nowrap><?= number_format($po_list['QTY'], 0, ",", ".") . ' (' . trim($po_list['STOCKUNIT']) . ')'; ?></td>
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
 
@@ -109,12 +115,22 @@
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-																				<?php //if (is_null($ot_list['RQNNUMBER'])) :
+																				<?php if (is_null($po_list['PONUMBER'])) :
 																				?>
-																				<li>
-																					<a href="<?= base_url("purchaseorder/update/" . $po_list['RQNUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Update Data PO</a>
-																				</li>
-																				<?php //endif;
+																					<li>
+																						<a href="<?= base_url("purchaseorder/update/" . $po_list['RQNUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Update Data PO & Posting</a>
+																					</li>
+																					<li>
+																						<a href="<?= base_url("purchaseorder/update/" . $po_list['RQNUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Update Data PO & Save</a>
+																					</li>
+																				<?php endif;
+																				?>
+																				<?php if (!empty($po_list['PONUMBER']) and $po_list['POPOSTINGSTAT'] == 0) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("purchaseorder/update/" . $po_list['RQNUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Update Data PO & Posting</a>
+																					</li>
+																				<?php endif;
 																				?>
 
 
@@ -122,11 +138,11 @@
 																		</div>
 
 																	</td>
-																	<td style="vertical-align: top;" nowrap></td>
-																	<td style="vertical-align: top;" nowrap>PO Date</td>
-																	<td style="vertical-align: top;" nowrap>ETD</td>
-																	<td style="vertical-align: top;" nowrap></td>
-																	<td style="vertical-align: top;" nowrap></td>
+																	<td style="vertical-align: top;" nowrap><?= $po_list['PONUMBER'] ?></td>
+																	<td style="vertical-align: top;" nowrap><?= $po_date ?></td>
+																	<td style="vertical-align: top;" nowrap><?= $etd_date ?></td>
+																	<td style="vertical-align: top;" nowrap><?= $po_list['ORIGINCOUNTRY'] ?></td>
+																	<td style="vertical-align: top;" nowrap><?= $po_list['POREMARKS'] ?></td>
 
 																</tr>
 
