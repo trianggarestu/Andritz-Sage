@@ -128,6 +128,13 @@
 																	$etd_date = substr($ot_list['ETDDATE'], 4, 2) . "/" . substr($ot_list['ETDDATE'], 6, 2) . "/" . substr($ot_list['ETDDATE'], 0, 4);
 																}
 
+																if ($ot_list['CARGOREADINESSDATE'] == '') {
+																	$cargoreadiness_date = '';
+																} else {
+																	$cargoreadiness_date = substr($ot_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 0, 4);
+																}
+
+
 															?>
 																<tr>
 																	<td><?= ++$no; ?></td>
@@ -154,7 +161,7 @@
 																	<td><?= $etd_date; ?></td>
 																	<td <?php if (empty($ot_list['CARGOREADINESSDATE'])) {
 																			echo 'style="background-color: red;"';
-																		} ?>><?= $ot_list['CARGOREADINESSDATE']; ?></td>
+																		} ?>><?= $cargoreadiness_date; ?></td>
 																	<td><?= $ot_list['ORIGINCOUNTRY']; ?></td>
 																	<td><?= $ot_list['POREMARKS']; ?></td>
 																	<td style="background-color: white;"></td>

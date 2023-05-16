@@ -24,12 +24,12 @@ class Purchaseorder_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.PODATE,c.PONUMBER,c.ETDDATE,c.ORIGINCOUNTRY,c.POREMARKS,c.POSTINGSTAT as POPOSTINGSTAT
+        c.POUNIQ,c.PODATE,c.PONUMBER,c.ETDDATE,c.CARGOREADINESSDATE,c.ORIGINCOUNTRY,c.POREMARKS,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
         from webot_REQUISITION a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
         left join ICITEM it on it.ITEMNO=b.ITEMNO
         left join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
-        where (a.POSTINGSTAT=1 and c.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and c.POSTINGSTAT=0)");
+        where (a.POSTINGSTAT=1 and c.RQNNUMBER IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
@@ -52,8 +52,14 @@ class Purchaseorder_model extends Model
         return $query->getRowArray();
     }
 
+    function get_po_by_pouniq($pouniq)
+    {
+        $query = $this->db->query("select * from webot_PO where POUNIQ='$pouniq' ");
+        return $query->getRowArray();
+    }
 
-    function get_po_list__sage_by_rqn($rqnnumber)
+
+    function get_po_list_sage_by_rqn($rqnnumber)
     {
         $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE from POPORH1 where RQNNUMBER='$rqnnumber'");
         return $query->getResultArray();
@@ -103,6 +109,13 @@ class Purchaseorder_model extends Model
     function purchaseorder_update($id_po, $data1)
     {
         $query = $this->db->table('webot_PO')->update($data1, array('POUNIQ' => $id_po));
+        return $query;
+    }
+
+    function po_post_update($pouniq, $data2)
+    {
+        $query = $this->db->table('webot_PO')->update($data2, array('POUNIQ' => $pouniq));
+        //Tanpa return juga bisa jalan
         return $query;
     }
 

@@ -28,10 +28,10 @@
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<a href="<?= base_url() ?>requisition/" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
-						<a href="#" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview"><i class="fa fa-print"></i> Preview
+						<a href="<?= base_url() ?>purchaseorder/" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
+						<a href="<?= base_url("purchaseorder/preview") ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview"><i class="fa fa-print"></i> Preview
 						</a>
-						<a href="<?= base_url("salesorderlist/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
+						<a href="<?= base_url("purchaseorder/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
 						</a>
 					</div>
 					<div class="box-body">
@@ -63,7 +63,8 @@
 																<th style="vertical-align: top;">No.</th>
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
 																<th style="vertical-align: top;">Inventory No./Material No.<br>
-																	Description</th>
+																	Inventory Desc.<br>
+																	Service Type</th>
 																<th style="vertical-align: top;">Qty</th>
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
@@ -74,6 +75,7 @@
 																<th style="vertical-align: top;">PO Vendor</th>
 																<th style="vertical-align: top;">PO Date</th>
 																<th style="vertical-align: top;">ETD</th>
+																<th style="vertical-align: top;">Cargo<br>Readiness</th>
 																<th style="vertical-align: top;">Origin Country</th>
 																<th style="vertical-align: top;">Remarks</th>
 
@@ -93,6 +95,12 @@
 																} else {
 																	$po_date = substr($po_list['PODATE'], 6, 2) . "/" . substr($po_list['PODATE'], 4, 2) . "/" . substr($po_list['PODATE'], 0, 4);
 																	$etd_date = substr($po_list['ETDDATE'], 6, 2) . "/" . substr($po_list['ETDDATE'], 4, 2) . "/" . substr($po_list['ETDDATE'], 0, 4);
+																}
+
+																if ($po_list['CARGOREADINESSDATE'] == '') {
+																	$cargo_readiness_date = '';
+																} else {
+																	$cargo_readiness_date = substr($po_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($po_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($po_list['CARGOREADINESSDATE'], 0, 4);
 																}
 															?>
 
@@ -132,7 +140,20 @@
 																					</li>
 																				<?php endif;
 																				?>
-
+																				<?php if (!empty($po_list['PONUMBER']) and $po_list['POPOSTINGSTAT'] == 1 and empty($po_list['CARGOREADINESSDATE'])) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("purchaseorder/update_cargoreadiness/" . $po_list['POUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-calendar-plus-o"></i> Update Cargo Readiness & Posting</a>
+																					</li>
+																				<?php endif;
+																				?>
+																				<?php if ($po_list['POPOSTINGSTAT'] == 1 and $po_list['POOFFLINESTAT'] == 1 and !empty($po_list['CARGOREADINESSDATE'])) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("purchaseorder/sendnotif/" . $po_list['POUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
+																					</li>
+																				<?php endif;
+																				?>
 
 																			</ul>
 																		</div>
@@ -141,6 +162,7 @@
 																	<td style="vertical-align: top;" nowrap><?= $po_list['PONUMBER'] ?></td>
 																	<td style="vertical-align: top;" nowrap><?= $po_date ?></td>
 																	<td style="vertical-align: top;" nowrap><?= $etd_date ?></td>
+																	<th style="vertical-align: top;" nowrap><?= $cargo_readiness_date ?></th>
 																	<td style="vertical-align: top;" nowrap><?= $po_list['ORIGINCOUNTRY'] ?></td>
 																	<td style="vertical-align: top;" nowrap><?= $po_list['POREMARKS'] ?></td>
 

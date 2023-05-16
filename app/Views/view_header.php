@@ -103,7 +103,7 @@
 														<?= ucwords(strtolower($notifications['FROM_NAME'])); ?>
 														<small><i class="fa fa-clock-o"></i>
 															<?php
-															$todaydate = date("m/d/Y");
+															$todaydate = date("M d Y");
 															$sending_date = substr($notifications['SENDING_DATE'], 4, 2) . "/" . substr($notifications['SENDING_DATE'], 6, 2) . "/" . substr($notifications['SENDING_DATE'], 0, 4);
 															$sending_date = date('M d Y', strtotime($sending_date));
 															$time = strlen($notifications['SENDING_TIME']);
