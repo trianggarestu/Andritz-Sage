@@ -91,13 +91,12 @@ class SalesorderList extends BaseController
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
         $so_data = $this->SalesorderModel->select('*')
-            ->where('POSTINGSTAT !=', 2)
-            ->paginate(10);
+            ->where('POSTINGSTAT !=', 2);
 
         $data = array(
-            'so_data' => $so_data,
+            'so_data' => $so_data->paginate(2, 'so_data'),
             'success_code' => session()->get('success'),
-            'pager' => $this->SalesorderModel->pager,
+            'pager' => $so_data->pager,
             'currentpage' => $currentpage
         );
 

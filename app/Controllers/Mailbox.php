@@ -190,14 +190,24 @@ class Mailbox extends BaseController
     {
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        $mailbox_data = $this->NotifModel->get_mailbox_sent($user);
+        $mailbox_data = $this->NotifModel->select('*')
+            ->where('FROM_USER=', $user)
+            ->orderBy('SENDING_DATE', 'DESC')
+            ->orderBy('MAILSEQ', 'DESC');
+        //$mailbox_data = $this->NotifModel->get_mailbox_sent($user);
+
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
+        $perpage = 5;
         $data = array(
-            'mailbox_list' => $mailbox_data,
+            'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
+            'pager' => $mailbox_data->pager,
             'ct_messages' => $this->NotifModel->count_mailbox_sent($user),
             'mailbox_active' => 'Sent',
+            'perpage' => $perpage,
+            'currentpage' => $mailbox_data->pager->getCurrentPage('mailbox_list'),
+            'totalpages'  => $mailbox_data->pager->getPageCount('mailbox_list'),
             //'usernamelgn' => $user,
         );
 

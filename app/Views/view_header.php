@@ -104,8 +104,11 @@
 														<small><i class="fa fa-clock-o"></i>
 															<?php
 															$todaydate = date("M d Y");
+															$todayyear = date("Y");
 															$sending_date = substr($notifications['SENDING_DATE'], 4, 2) . "/" . substr($notifications['SENDING_DATE'], 6, 2) . "/" . substr($notifications['SENDING_DATE'], 0, 4);
 															$sending_date = date('M d Y', strtotime($sending_date));
+															$sending_date_y = date('Y', strtotime($sending_date));
+															$sending_date_thisyear = date('M d', strtotime($sending_date));
 															$time = strlen($notifications['SENDING_TIME']);
 															if ($time == 5) {
 																$sending_time = substr($notifications['SENDING_TIME'], 0, 1) . ":" . substr($notifications['SENDING_TIME'], 2, 2);
@@ -115,7 +118,11 @@
 															if ($todaydate == $sending_date) {
 																echo $sending_time;
 															} else {
-																echo $sending_date;
+																if ($todayyear == $sending_date_y) {
+																	echo $sending_date_thisyear;
+																} else {
+																	echo $sending_date;
+																}
 															} ?></small>
 													</h4>
 													<p><?= substr($notifications['SUBJECT'], 0, 30); ?></p>

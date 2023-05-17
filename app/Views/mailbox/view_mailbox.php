@@ -70,9 +70,21 @@
 								<button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
 								<div class="pull-right">
 									<!--1-50/200-->
+									<?php
+									if ($currentpage == 1) {
+										echo '1-' . $perpage . ' of ' . $ct_messages;
+									} else if ($currentpage > 1) {
+										if (($perpage * $currentpage) > $ct_messages) {
+											echo (($perpage * ($currentpage - 1) + 1)) . '-' . $ct_messages . ' of ' . $ct_messages;
+										} else {
+											echo (($perpage * ($currentpage - 1) + 1)) . '-' . ($perpage * $currentpage) . ' of ' . $ct_messages;
+										}
+									}
+									//$currentPage . ' of ' . $totalPages . ' pages '  //$ct_messages 
+									?>
 									<div class="btn-group">
-										<button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-										<button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+										<?= $pager->links('mailbox_list', 'bootstrap_mailbox');
+										?>
 									</div>
 									<!-- /.btn-group -->
 								</div>
@@ -129,8 +141,27 @@
 													<td class="mailbox-date <?php if ($data['IS_READ'] == 0) {
 																				echo 'unread-b';
 																			}; ?>"><?php
-																					$sending_date = substr($data['SENDING_DATE'], 6, 2) . "/" . substr($data['SENDING_DATE'], 4, 2) . "/" . substr($data['SENDING_DATE'], 0, 4);
-																					echo $sending_date;
+																					$todaydate = date("M d Y");
+																					$todayyear = date("Y");
+																					$sending_date = substr($data['SENDING_DATE'], 4, 2) . "/" . substr($data['SENDING_DATE'], 6, 2) . "/" . substr($data['SENDING_DATE'], 0, 4);
+																					$sending_date = date('M d Y', strtotime($sending_date));
+																					$sending_date_y = date('Y', strtotime($sending_date));
+																					$sending_date_thisyear = date('M d', strtotime($sending_date));
+																					$time = strlen($data['SENDING_TIME']);
+																					if ($time == 5) {
+																						$sending_time = substr($data['SENDING_TIME'], 0, 1) . ":" . substr($data['SENDING_TIME'], 2, 2);
+																					} else if ($time == 6) {
+																						$sending_time = substr($data['SENDING_TIME'], 0, 2) . ":" . substr($data['SENDING_TIME'], 3, 2);
+																					}
+																					if ($todaydate == $sending_date) {
+																						echo $sending_time;
+																					} else {
+																						if ($todayyear == $sending_date_y) {
+																							echo $sending_date_thisyear;
+																						} else {
+																							echo $sending_date;
+																						}
+																					}
 																					?></td>
 													<td>
 														<div class="btn-group">
@@ -194,9 +225,21 @@
 								<button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
 								<div class="pull-right">
 									<!--1-50/200-->
+									<?php
+									if ($currentpage == 1) {
+										echo '1-' . $perpage . ' of ' . $ct_messages;
+									} else if ($currentpage > 1) {
+										if (($perpage * $currentpage) > $ct_messages) {
+											echo (($perpage * ($currentpage - 1) + 1)) . '-' . $ct_messages . ' of ' . $ct_messages;
+										} else {
+											echo (($perpage * ($currentpage - 1) + 1)) . '-' . ($perpage * $currentpage) . ' of ' . $ct_messages;
+										}
+									}
+									//$currentPage . ' of ' . $totalPages . ' pages '  //$ct_messages 
+									?>
 									<div class="btn-group">
-										<button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-										<button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+										<?= $pager->links('mailbox_list', 'bootstrap_mailbox');
+										?>
 									</div>
 									<!-- /.btn-group -->
 								</div>

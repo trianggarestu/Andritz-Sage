@@ -13,7 +13,7 @@ use CodeIgniter\Model;
 class Notif_model extends Model
 {
 
-	//protected $table = 'ARCUS';
+	protected $table = 'webot_MAILBOX';
 	function __construct()
 	{
 		parent::__construct();

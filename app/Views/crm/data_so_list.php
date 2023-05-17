@@ -173,7 +173,11 @@
 										</div>
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">
-												<div><?= $pager->links(); ?> </div>
+												<div><?= $pager->links('so_data', 'bootstrap_pagination');
+														//$pager = \Config\Services::pager();
+														?>
+													<?php //= $pager->links('so_data', 'bootstrap_pagination');
+													?></div>
 												<!-- <ul class="pagination">
 													<?php //if ($paging->start_link) : 
 													?>
@@ -219,6 +223,7 @@
 													<?php //endif; 
 													?>
 												</ul>-->
+
 											</div>
 										</div>
 
