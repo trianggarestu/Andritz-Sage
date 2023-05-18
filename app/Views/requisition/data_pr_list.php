@@ -83,11 +83,11 @@
 															$no = 0;
 															?>
 															<?php foreach ($requisition_data as $ot_list) {
-																$crmreq_date = substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
-																$pocust_date = substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4);
-																$rqn_date = substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
+																$crmreq_date = substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
+																$pocust_date = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4);
+																$rqn_date = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
 																if (!empty($ot_list['PODATE'])) {
-																	$po_date = substr($ot_list['PODATE'], 6, 2) . "/" . substr($ot_list['PODATE'], 4, 2) . "/" . substr($ot_list['PODATE'], 0, 4);
+																	$po_date = substr($ot_list['PODATE'], 4, 2) . "/" . substr($ot_list['PODATE'], 6, 2) . "/" . substr($ot_list['PODATE'], 0, 4);
 																} else {
 																	$po_date = "";
 																}

@@ -84,20 +84,20 @@
 															<?php
 															$no = 1;
 															foreach ($purchaseOrder_data as $po_list) {
-																$crmreq_date = substr($po_list['CRMREQDATE'], 6, 2) . "/" . substr($po_list['CRMREQDATE'], 4, 2) . "/" . substr($po_list['CRMREQDATE'], 0, 4);
-																$rqn_date = substr($po_list['RQNDATE'], 6, 2) . "/" . substr($po_list['RQNDATE'], 4, 2) . "/" . substr($po_list['RQNDATE'], 0, 4);
+																$crmreq_date = substr($po_list['CRMREQDATE'], 4, 2) . "/" . substr($po_list['CRMREQDATE'], 6, 2) . "/" . substr($po_list['CRMREQDATE'], 0, 4);
+																$rqn_date = substr($po_list['RQNDATE'], 4, 2) . "/" . substr($po_list['RQNDATE'], 6, 2) . "/" . substr($po_list['RQNDATE'], 0, 4);
 																if ($po_list['PODATE'] == '') {
 																	$po_date = '';
 																	$etd_date = '';
 																} else {
-																	$po_date = substr($po_list['PODATE'], 6, 2) . "/" . substr($po_list['PODATE'], 4, 2) . "/" . substr($po_list['PODATE'], 0, 4);
-																	$etd_date = substr($po_list['ETDDATE'], 6, 2) . "/" . substr($po_list['ETDDATE'], 4, 2) . "/" . substr($po_list['ETDDATE'], 0, 4);
+																	$po_date = substr($po_list['PODATE'], 4, 2) . "/" . substr($po_list['PODATE'], 6, 2) . "/" . substr($po_list['PODATE'], 0, 4);
+																	$etd_date = substr($po_list['ETDDATE'], 4, 2) . "/" . substr($po_list['ETDDATE'], 6, 2) . "/" . substr($po_list['ETDDATE'], 0, 4);
 																}
 
 																if ($po_list['CARGOREADINESSDATE'] == '') {
 																	$cargo_readiness_date = '';
 																} else {
-																	$cargo_readiness_date = substr($po_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($po_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($po_list['CARGOREADINESSDATE'], 0, 4);
+																	$cargo_readiness_date = substr($po_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($po_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($po_list['CARGOREADINESSDATE'], 0, 4);
 																}
 															?>
 

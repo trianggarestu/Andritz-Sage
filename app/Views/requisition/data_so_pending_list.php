@@ -79,11 +79,11 @@
 															<?php
 															$no = 1;
 															foreach ($requisition_data as $ot_list) {
-																$crmreq_date = substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
+																$crmreq_date = substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
 																if ($ot_list['RQNDATE'] == '') {
 																	$pr_date = '';
 																} else {
-																	$pr_date = substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
+																	$pr_date = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
 																}
 															?>
 
