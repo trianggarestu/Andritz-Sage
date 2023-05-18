@@ -29,10 +29,7 @@
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<a href="<?= base_url() ?>purchaseorder/" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
-						<a href="<?= base_url("purchaseorder/preview") ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview"><i class="fa fa-print"></i> Preview
-						</a>
-						<a href="<?= base_url("purchaseorder/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
-						</a>
+
 					</div>
 					<div class="box-body">
 						<div class="row">
@@ -106,9 +103,9 @@
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;" nowrap><?php echo $po_list['CONTRACT'] . "/" . $po_list['PROJECT'] . "/" . $po_list['CRMNO'] . "<br><strong>" .
-																												$po_list['CTDESC'] . "</strong><br><small>( " .
-																												trim($po_list['NAMECUST']) . " )</small>"; ?></td>
+																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $po_list['CONTRACT'] ?></a></strong> <?php echo "/" . $po_list['PROJECT'] . "/" . $po_list['CRMNO'] . "<br><strong>" .
+																																												$po_list['CTDESC'] . "</strong><br><small>( " .
+																																												trim($po_list['NAMECUST']) . " )</small>"; ?></td>
 																	<td style="vertical-align: top;" nowrap><?= $po_list['ITEMNO'] . "/" . $po_list['MATERIALNO'] . "<br><strong>" . $po_list['ITEMDESC'] . "</strong><br>" .
 																												"Type : " . $po_list['SERVICETYPE'] ?></td>
 																	<td style="vertical-align: top;" nowrap><?= number_format($po_list['QTY'], 0, ",", ".") . ' (' . trim($po_list['STOCKUNIT']) . ')'; ?></td>

@@ -64,6 +64,7 @@ class Mailbox extends BaseController
                     'TODAY' => $today,
                     'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                    'AUDTUSER' => $infouser['usernamelgn'],
 
                 ];
             } else {
@@ -102,16 +103,30 @@ class Mailbox extends BaseController
     {
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        $mailbox_data = $this->NotifModel->get_mailbox_unread($user);
+        $mailbox_data = $this->NotifModel->select('*')
+            ->where('IS_READ=', 0)
+            ->where('IS_ARCHIVED=', 0)
+            ->where('IS_TRASHED=', 0)
+            ->where('IS_DELETED=', 0)
+            ->where('TO_USER=', $user)
+            ->orderBy('SENDING_DATE', 'DESC')
+            ->orderBy('MAILSEQ', 'DESC');
+        //$mailbox_data = $this->NotifModel->get_mailbox_unread($user);
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
+        $perpage = 20;
         $data = array(
-            'mailbox_list' => $mailbox_data,
+            'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
+            'pager' => $mailbox_data->pager,
             'ct_messages' => $this->NotifModel->count_new_notif($user),
             'mailbox_active' => 'Inbox (unread)',
-            //'usernamelgn' => $user,
+            'perpage' => $perpage,
+            'currentpage' => $mailbox_data->pager->getCurrentPage('mailbox_list'),
+            'totalpages'  => $mailbox_data->pager->getPageCount('mailbox_list'),
+            'usernamelgn' => $user,
         );
+
 
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);
@@ -124,16 +139,29 @@ class Mailbox extends BaseController
     {
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        $mailbox_data = $this->NotifModel->get_mailbox_in($user);
+        $mailbox_data = $this->NotifModel->select('*')
+            ->where('IS_ARCHIVED=', 0)
+            ->where('IS_TRASHED=', 0)
+            ->where('IS_DELETED=', 0)
+            ->where('TO_USER=', $user)
+            ->orderBy('SENDING_DATE', 'DESC')
+            ->orderBy('MAILSEQ', 'DESC');
+        //$mailbox_data = $this->NotifModel->get_mailbox_in($user);
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
+        $perpage = 20;
         $data = array(
-            'mailbox_list' => $mailbox_data,
+            'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
+            'pager' => $mailbox_data->pager,
             'ct_messages' => $this->NotifModel->count_mailbox_in($user),
             'mailbox_active' => 'Inbox',
+            'perpage' => $perpage,
+            'currentpage' => $mailbox_data->pager->getCurrentPage('mailbox_list'),
+            'totalpages'  => $mailbox_data->pager->getPageCount('mailbox_list'),
             //'usernamelgn' => $user,
         );
+
 
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);
@@ -146,16 +174,35 @@ class Mailbox extends BaseController
     {
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        $mailbox_data = $this->NotifModel->get_mailbox_star($user);
+        $mailbox_data = $this->NotifModel->select('*')
+            ->where('IS_STAR=', 1)
+            ->where('IS_TRASHED=', 0)
+            ->where('IS_DELETED=', 0)
+            ->where('TO_USER=', $user)
+            ->orderBy('SENDING_DATE', 'DESC')
+            ->orderBy('MAILSEQ', 'DESC');
+        //$mailbox_data = $this->NotifModel->get_mailbox_star($user);
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
+        $perpage = 20;
         $data = array(
+            'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
+            'pager' => $mailbox_data->pager,
+            'ct_messages' => $this->NotifModel->count_mailbox_star($user),
+            'mailbox_active' => 'Star',
+            'perpage' => $perpage,
+            'currentpage' => $mailbox_data->pager->getCurrentPage('mailbox_list'),
+            'totalpages'  => $mailbox_data->pager->getPageCount('mailbox_list'),
+            //'usernamelgn' => $user,
+        );
+
+        /*$data = array(
             'mailbox_list' => $mailbox_data,
             'ct_messages' => $this->NotifModel->count_mailbox_star($user),
             'mailbox_active' => 'Star',
             //'usernamelgn' => $user,
-        );
+        );*/
 
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);
@@ -168,16 +215,38 @@ class Mailbox extends BaseController
     {
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        $mailbox_data = $this->NotifModel->get_mailbox_archive($user);
+        $mailbox_data = $this->NotifModel->select('*')
+            ->groupStart()
+            ->where('IS_ARCHIVED=', 1)
+            ->where('IS_TRASHED=', 0)
+            ->where('IS_DELETED=', 0)
+            ->where('TO_USER=', $user)
+            ->groupEnd()
+            ->orderBy('SENDING_DATE', 'DESC')
+            ->orderBy('MAILSEQ', 'DESC');
+        //$mailbox_data = $this->NotifModel->get_mailbox_archive($user);
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
+        $perpage = 20;
         $data = array(
+            'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
+            'pager' => $mailbox_data->pager,
+            'ct_messages' => $this->NotifModel->count_mailbox_archive($user),
+            'mailbox_active' => 'Archive',
+            'perpage' => $perpage,
+            'currentpage' => $mailbox_data->pager->getCurrentPage('mailbox_list'),
+            'totalpages'  => $mailbox_data->pager->getPageCount('mailbox_list'),
+            //'usernamelgn' => $user,
+        );
+
+
+        /*$data = array(
             'mailbox_list' => $mailbox_data,
             'ct_messages' => $this->NotifModel->count_mailbox_archive($user),
             'mailbox_active' => 'Archive',
             //'usernamelgn' => $user,
-        );
+        );*/
 
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);
@@ -191,15 +260,19 @@ class Mailbox extends BaseController
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
         $mailbox_data = $this->NotifModel->select('*')
+            ->where('IS_ARCHIVEDSENDER=', 0)
+            ->where('IS_TRASHEDSENDER=', 0)
+            ->where('IS_DELETEDSENDER=', 0)
             ->where('FROM_USER=', $user)
             ->orderBy('SENDING_DATE', 'DESC')
             ->orderBy('MAILSEQ', 'DESC');
+
         //$mailbox_data = $this->NotifModel->get_mailbox_sent($user);
 
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
-        $perpage = 5;
+        $perpage = 20;
         $data = array(
             'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
             'pager' => $mailbox_data->pager,
@@ -214,7 +287,7 @@ class Mailbox extends BaseController
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('mailbox/view_mailbox', $data);
+        echo view('mailbox/view_mailbox_sent', $data);
         echo view('view_footer', $this->footer_data);
     }
 
@@ -222,16 +295,42 @@ class Mailbox extends BaseController
     {
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        $mailbox_data = $this->NotifModel->get_mailbox_trash($user);
+        $mailbox_data = $this->NotifModel->select('*')
+            ->groupStart()
+            ->where('IS_TRASHED=', 1)
+            ->where('IS_DELETED=', 0)
+            ->where('TO_USER=', $user)
+            ->groupEnd()
+            ->orgroupStart()
+            ->where('IS_TRASHEDSENDER=', 1)
+            ->where('IS_DELETEDSENDER=', 0)
+            ->where('FROM_USER=', $user)
+            ->groupEnd()
+            ->orderBy('SENDING_DATE', 'DESC')
+            ->orderBy('MAILSEQ', 'DESC');
+
+        //$mailbox_data = $this->NotifModel->get_mailbox_trash($user);
         //$activenavd='';
         $data['chklgn'] = $keylog;
         $data['pengguna'] = $this->header_data;
+        $perpage = 20;
         $data = array(
+            'mailbox_list' => $mailbox_data->paginate($perpage, 'mailbox_list'),
+            'pager' => $mailbox_data->pager,
+            'ct_messages' => $this->NotifModel->count_mailbox_trash($user),
+            'mailbox_active' => 'Trash',
+            'perpage' => $perpage,
+            'currentpage' => $mailbox_data->pager->getCurrentPage('mailbox_list'),
+            'totalpages'  => $mailbox_data->pager->getPageCount('mailbox_list'),
+            'usernamelgn' => $user,
+        );
+
+        /*$data = array(
             'mailbox_list' => $mailbox_data,
             'ct_messages' => $this->NotifModel->count_mailbox_trash($user),
             'mailbox_active' => 'Trash',
             //'usernamelgn' => $user,
-        );
+        );*/
 
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);
@@ -323,6 +422,7 @@ class Mailbox extends BaseController
         }
     }
 
+
     public function mark_ttoinbox($id = '')
     {
         $chkmail = $this->NotifModel->get_notif_by_id($id);
@@ -346,6 +446,42 @@ class Mailbox extends BaseController
         $chkmail = $this->NotifModel->get_notif_by_id($id);
         if ($chkmail['IS_STAR'] == 1) {
             $this->NotifModel->mark_star($id, 0);
+            return redirect()->to($_SERVER['HTTP_REFERER']);
+        }
+    }
+
+    public function mark_senderread($id = '')
+    {
+        $chkmail = $this->NotifModel->get_notif_by_id($id);
+        if ($chkmail['IS_READSENDER'] == 0) {
+            $this->NotifModel->mark_senderread($id, 1);
+            return redirect()->to($_SERVER['HTTP_REFERER']);
+        }
+    }
+
+    public function mark_senderunread($id = '')
+    {
+        $chkmail = $this->NotifModel->get_notif_by_id($id);
+        if ($chkmail['IS_READSENDER'] == 1) {
+            $this->NotifModel->mark_senderread($id, 0);
+            return redirect()->to($_SERVER['HTTP_REFERER']);
+        }
+    }
+
+    public function mark_sendertrash($id = '')
+    {
+        $chkmail = $this->NotifModel->get_notif_by_id($id);
+        if ($chkmail['IS_TRASHEDSENDER'] == 0) {
+            $this->NotifModel->mark_sendertrash($id, 1);
+            return redirect()->to($_SERVER['HTTP_REFERER']);
+        }
+    }
+
+    public function mark_senderarchive($id = '')
+    {
+        $chkmail = $this->NotifModel->get_notif_by_id($id);
+        if ($chkmail['IS_ARCHIVEDSENDER'] == 0) {
+            $this->NotifModel->mark_senderarchive($id, 1);
             return redirect()->to($_SERVER['HTTP_REFERER']);
         }
     }

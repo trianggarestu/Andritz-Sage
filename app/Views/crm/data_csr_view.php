@@ -30,16 +30,14 @@
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<a href="<?= base_url('salesorderlist') ?>" title="Back to Sales Order List" class="btn btn-social btn-flat bg-aqua btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Sales Order List</a>
-						<?php if ($csropen_data['OFFLINESTAT'] == 1) {
+						<?php if ($csropen_data['POSTINGSTAT'] == 0 or $csropen_data['OFFLINESTAT'] == 1) {
 						?>
 							<a href="<?= base_url($link_action . $csropen_data['CSRUNIQ']) ?>" class="btn btn-social btn-flat <?= $btn_color ?> btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Posting"><i class="fa  fa-paper-plane-o"></i>
 								<?= $button;
 								?>
 							</a>
-						<?php }
-						?>
-						<?php if ($csropen_data['POSTINGSTAT'] == 0) {
-						?>
+
+
 							<a href="<?= base_url('salesorder/update/' . $csropen_data['CSRUNIQ']) ?>" title="Edit" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Form Entry</a>
 						<?php } ?>
 					</div>

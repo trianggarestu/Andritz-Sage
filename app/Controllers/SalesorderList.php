@@ -92,9 +92,9 @@ class SalesorderList extends BaseController
         //session()->remove('success');
         $so_data = $this->SalesorderModel->select('*')
             ->where('POSTINGSTAT !=', 2);
-
+        $perpage = 20;
         $data = array(
-            'so_data' => $so_data->paginate(2, 'so_data'),
+            'so_data' => $so_data->paginate($perpage, 'so_data'),
             'success_code' => session()->get('success'),
             'pager' => $so_data->pager,
             'currentpage' => $currentpage

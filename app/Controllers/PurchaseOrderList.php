@@ -12,7 +12,6 @@ use PHPMailer\PHPMailer\Exception;
 
 use App\Models\Login_model;
 use App\Models\Administration_model;
-use App\Models\Settingnavheader_model;
 use App\Models\Notif_model;
 use App\Models\PurchaseOrder_model;
 
@@ -24,14 +23,18 @@ class PurchaseOrderList extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
+    private $db_name;
     public function __construct()
     {
         //parent::__construct();
         helper('form', 'url');
+        $this->db_name = \Config\Database::connect();
+
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
-        $this->PurchaseOrderModel = new PurchaseOrder_model();
+        $this->PurchaseorderModel = new Purchaseorder_model();
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -52,12 +55,13 @@ class PurchaseOrderList extends BaseController
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
                     'notif_messages' => $mailbox_unread,
+                    'success_code' => session()->get('success'),
                 ];
                 $this->footer_data = [
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'PurchaseOrderList';
+                $activenavd = 'purchaseorderlist';
                 $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
                 $this->nav_data = [
                     'active_navd' => $activenavd,
@@ -66,6 +70,18 @@ class PurchaseOrderList extends BaseController
                     //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
                     //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                     //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+                ];
+
+                date_default_timezone_set('Asia/Jakarta');
+                $today = date("d/m/Y H:i:s");
+
+                $this->audtuser = [
+                    'TODAY' => $today,
+                    'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                    'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                    'AUDTUSER' => trim($infouser['usernamelgn']),
+                    'AUDTORG' => $this->db_name->database,
+
                 ];
             } else {
                 header('Location: ' . base_url());
@@ -77,145 +93,31 @@ class PurchaseOrderList extends BaseController
 
     public function index()
     {
-        $PurchaseOrderdata = $this->PurchaseOrderModel->get_PurchaseOrder_Close();
+        session()->remove('success');
+        session()->set('success', '0');
+        $purchaseorder_data = $this->PurchaseorderModel->select('webot_PO.*,a.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT')
+            ->join('webot_REQUISITION a', 'a.RQNUNIQ = webot_PO.RQNUNIQ', 'left')
+            ->join('webot_CSR b', 'b.CSRUNIQ = webot_PO.CSRUNIQ', 'left')
+            ->where('webot_PO.POSTINGSTAT=', 1)
+            ->where('webot_PO.CARGOREADINESSDATE>=', 1)
 
+            ->orderBy('POUNIQ', 'DESC');
+        //$Purchaseorderdata = $this->PurchaseOrderModel->get_PurchaseOrder_Close();
+        $perpage = 20;
 
         $data = array(
-            'PurchaseOrder_data' => $PurchaseOrderdata,
+            'purchaseorder_data' => $purchaseorder_data->paginate($perpage, 'po_posting_list'),
+            'pager' => $purchaseorder_data->pager,
+            'ct_po_posting' => $this->PurchaseorderModel->count_po_posting(),
+            'perpage' => $perpage,
+            'currentpage' => $purchaseorder_data->pager->getCurrentPage('po_posting_list'),
+            'totalpages'  => $purchaseorder_data->pager->getPageCount('po_posting_list'),
         );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('PurchaseOrder/data_pr_list', $data);
+        echo view('purchaseorder/data_po_list.php', $data);
         echo view('view_footer', $this->footer_data);
-    }
-
-    public function update($id_so)
-    {
-        $get_so = $this->PurchaseOrderListModel->get_so_by_id($id_so);
-        if ($get_so) {
-            $data = array(
-                'id_so' => trim($get_so['ID_SO']),
-                'ct_no' => trim($get_so['ContractNo']),
-                'prj_no' => trim($get_so['ProjectNo']),
-                'crm_no' => trim($get_so['CrmNo']),
-                'cust_no' => trim($get_so['CustomerNo']),
-                'cust_name' => trim($get_so['CustomerName']),
-                'cust_email' => trim($get_so['CustomerEmail']),
-                'cust_po' => trim($get_so['PoCustomer']),
-                'po_date' => trim($get_so['PoDate']),
-                'req_date' => trim($get_so['ReqDate']),
-                'salesperson' => trim($get_so['SalesPerson']),
-                'inventory_no' => trim($get_so['InventoryNo']),
-                'material_no' => trim($get_so['MaterialNo']),
-                'inventory_desc' => trim($get_so['InventoryDesc']),
-                'order_desc' => trim($get_so['OrderDesc']),
-                'qty' => trim($get_so['Qty']),
-                'uom' => trim($get_so['Uom']),
-                'PurchaseOrderList_list' => $this->PurchaseOrderListModel->get_PurchaseOrderList_sage(),
-                'form_action' => base_url("PurchaseOrderList/update_action"),
-            );
-        }
-
-
-        echo view('PurchaseOrderList/ajax_add_PurchaseOrderList', $data);
-    }
-
-    public function update_action()
-    {
-        if (null == ($this->request->getPost('id_so'))) {
-            session()->setFlashdata('messagefailed', 'Data not found.');
-            return redirect()->to(base_url('PurchaseOrderList'));
-        } else {
-            $id = $this->request->getPost('id_so');
-            $rqnnumber = $this->request->getPost('rqnnumber');
-            $choose_rqn = $this->PurchaseOrderListModel->get_PurchaseOrderList_by_id($rqnnumber);
-            if ($choose_rqn) {
-                $data = array(
-                    'PrNumber' => $choose_rqn["RQNNUMBER"],
-                    'PrDate' => $choose_rqn["DATE"],
-                );
-
-                $this->PurchaseOrderListModel->PurchaseOrderList_update($id, $data);
-                session()->setFlashdata('messagesuccess', 'Update Record Success');
-                return redirect()->to(base_url('PurchaseOrderList'));
-            }
-        }
-    }
-
-    public function sending_notif($id_so)
-    {
-        //inisiasi proses kirim ke group
-        $groupuser = 3;
-        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-        $get_so = $this->PurchaseOrderListModel->get_so_by_id($id_so);
-        $today = date("d/m/Y");
-        $audtdate = substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2);
-        foreach ($notiftouser_data as $sendto_user) {
-
-            $data_email = array(
-                'hostname' => $sendto_user['HOSTNAME'],
-                'sendername' => $sendto_user['SENDERNAME'],
-                'senderemail' => $sendto_user['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                'passwordemail' => $sendto_user['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                'ssl' => $sendto_user['SSL'],
-                'smtpport' => $sendto_user['SMTPPORT'],
-                'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending PurchaseOrderList Allert. PurchaseOrderList No : ' . $get_so['PrNumber'],
-                'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-
-Please to follow up PurchaseOrderList Number :' . $get_so['PrNumber'] . ' / Contract : ' . $get_so['ContractNo'] . ' is pending for you to process Purchase Order Vendor.
-<br><br>
-You can access Order Tracking System Portal via the URL below:
-<br>
-Http://jktsms025:...
-<br>
-Thanks for your cooperation. 
-<br><br>
-Order Tracking Administrator',
-            );
-
-            $sending_mail = $this->send($data_email);
-            if ($sending_mail) {
-                $data_notif = array(
-                    'contract' =>  $get_so['ContractNo'],
-                    'from_user' => $this->header_data['usernamelgn'],
-                    'from_email' => $this->header_data['emaillgn'],
-                    'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'subject' => 'Pending PurchaseOrderList Allert. PurchaseOrderList No : ' . $get_so['PrNumber'],
-                    'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                    Please to follow up PurchaseOrderList Number :' . $get_so['PrNumber'] . ' / Contract : ' . $get_so['ContractNo'] . ' is pending for you to process Purchase Order Vendor.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-
-                    'sending_date' => $audtdate,
-                    'is_read' => 0,
-                    'updated_at' => $audtdate,
-                    'is_archived' => 0,
-                    'to_user' => $sendto_user['USERNAME'],
-                    'to_email' => $sendto_user['EMAIL'],
-                    'to_name' => ucwords(strtolower($sendto_user['NAME'])),
-                    'is_trashed' => 0,
-                    'is_deleted' => 0,
-                    'is_attached' => 0,
-                    'is_star' => 0,
-                    'sending_status' => 1,
-                );
-                $this->NotifModel->mailbox_insert($data_notif);
-            } else {
-                return redirect()->to(base_url('/PurchaseOrderList'));
-            }
-        }
-
-        session()->setFlashdata('messagesuccess', 'Create Record Success');
-        return redirect()->to(base_url('/PurchaseOrderList'));
     }
 
 
@@ -274,7 +176,7 @@ Order Tracking Administrator',
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'Ordertracking_data';
+        $fileName = 'PurchaseOrder_Listing';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -283,46 +185,5 @@ Order Tracking Administrator',
 
         $writer->save('php://output');
         exit();
-    }
-
-    private function send($data_email)
-    {
-        $hostname           = $data_email['hostname'];
-        $sendername         = $data_email['sendername'];
-        $senderemail        = $data_email['senderemail'];
-        $passwordemail      = $data_email['passwordemail'];
-        $ssl                = $data_email['ssl'];
-        $smtpport           = $data_email['smtpport'];
-        $to                 = $data_email['to_email'];
-        $subject             = $data_email['subject'];
-        $message             = $data_email['message'];
-
-        $mail = new PHPMailer(true);
-
-        try {
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->isSMTP();
-            $mail->Host       = $hostname;
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
-            $mail->SMTPSecure = $ssl;
-            $mail->Port       = $smtpport;
-
-            $mail->setFrom($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
-            $mail->addAddress($to);
-            $mail->addReplyTo($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body    = $message;
-
-            $mail->send();
-            session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/PurchaseOrderList'));
-        } catch (Exception $e) {
-            session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/PurchaseOrderList'));
-        }
     }
 }

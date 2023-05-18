@@ -43,7 +43,7 @@
 							<a href="<?= base_url(); ?>salesorderlist" class="btn btn-social btn-flat btn-info btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Back to Sales Order List">
 								<i class="fa fa-arrow-circle-left "></i>Back to Sales Order List
 							</a>
-							<a href="<?= base_url(); ?>salesorder" title="Reset Data" onclick="<?php echo base_url(); ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class='fa fa-refresh'></i> Reset Sales Order Form</a>
+							<a href="<?= base_url(); ?>salesorder" title="Reset Data" onclick="<?php echo base_url(); ?>" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class='fa fa-refresh'></i> Reset Sales Order Form</a>
 						</div>
 
 						<div class="box-body">

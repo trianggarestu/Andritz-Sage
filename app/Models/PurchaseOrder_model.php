@@ -13,7 +13,8 @@ use CodeIgniter\Model;
 class Purchaseorder_model extends Model
 {
 
-    //protected $table = 'ARCUS';
+    protected $table = 'webot_PO';
+
     function __construct()
     {
         parent::__construct();
@@ -72,11 +73,46 @@ class Purchaseorder_model extends Model
         return $query->getResultArray();
     }
 
-    function get_PurchaseOrder_close()
+    function get_purchaseorder_close()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING");
+        $query = $this->db->query("select * from webot_PO where POSTINGSTAT=1");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
+    }
+
+    function get_pobeforeetd()
+    {
+        $query = $this->db->query("select x.*,y.RQNDATE,z.CONTRACT,z.CTDESC,z.NAMECUST,z.ITEMNO,z.QTY,z.STOCKUNIT from (
+            select *,
+            convert(nvarchar(20),cast(cast(ETDDATE as nvarchar(20)) as date), 101) as F_ETDDATE,
+            DATEDIFF(day, convert(nvarchar(20),cast(cast(ETDDATE as nvarchar(20)) as date), 101),GETDATE())as diff 
+            from webot_PO
+            ) x 
+            left join webot_REQUISITION y on y.RQNUNIQ=x.RQNUNIQ
+            left join webot_CSR z on z.CSRUNIQ=x.CSRUNIQ
+            where x.POSTINGSTAT=1 and x.CARGOREADINESSDATE>=1 and x.diff>=-15
+            order by x.ETDDATE asc");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
+
+    function count_po_posting()
+    {
+        $builder = $this->db->table('webot_PO');
+        $builder->join('webot_REQUISITION a', 'a.RQNUNIQ = webot_PO.RQNUNIQ', 'left');
+        $builder->join('webot_CSR b', 'b.CSRUNIQ = webot_PO.CSRUNIQ', 'left');
+        $builder->where('webot_PO.POSTINGSTAT', 1);
+        $builder->where('webot_PO.CARGOREADINESSDATE>=', 1);
+        return $builder->countAllResults();
+    }
+
+    function count_po_beforeetd()
+    {
+        $builder = $this->db->table('webot_PO');
+        $builder->where('webot_PO.POSTINGSTAT', 1);
+        $builder->where('webot_PO.CARGOREADINESSDATE>=', 1);
+        $builder->where('DATEDIFF(day, convert(nvarchar(20),cast(cast(ETDDATE as nvarchar(20)) as date), 101),GETDATE())>=', -15);
+        return $builder->countAllResults();
     }
 
     function get_PurchaseOrder_sage()

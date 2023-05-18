@@ -71,9 +71,8 @@
 								<div class="pull-right">
 									<!--1-50/200-->
 									<?php
-									if ($currentpage == 1) {
-										echo '1-' . $perpage . ' of ' . $ct_messages;
-									} else if ($currentpage > 1) {
+									if ($ct_messages > 0) {
+
 										if (($perpage * $currentpage) > $ct_messages) {
 											echo (($perpage * ($currentpage - 1) + 1)) . '-' . $ct_messages . ' of ' . $ct_messages;
 										} else {
@@ -102,7 +101,14 @@
 											</tr>
 											<?php } else {
 											$no = 1;
-											foreach ($mailbox_list as $data) :
+											foreach ($mailbox_list as $data) {
+												if ($data['FROM_USER'] == $usernamelgn || $data['TO_USER'] != $usernamelgn) {
+													$isread = $data['IS_READSENDER'];
+													$istrash = $data['IS_TRASHEDSENDER'];
+												} else {
+													$isread = $data['IS_READ'];
+													$istrash = $data['IS_TRASHED'];
+												}
 											?>
 
 												<tr>
@@ -192,18 +198,23 @@
 															?>
 
 															<?php
-															if ($data['IS_TRASHED'] == 0) { ?>
-																<a href="<?= base_url("mailbox/mark_trash/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to trash"><i class="fa fa-trash-o"></i></a>
+															if ($data['IS_TRASHED'] == 0 or $data['IS_TRASHEDSENDER'] == 0) {
+
+															?>
+																<a href="<?= base_url("mailbox/mark_trash/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to inbox"><i class="fa fa-trash-o"></i></a>
+
 															<?php } else { ?>
-																<a href="<?= base_url("mailbox/mark_ttoinbox/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to inbox"><i class="fa fa-inbox"></i></a>
-															<?php }
+																<a href="<?= base_url("mailbox/mark_ttosent/" . $data['MAILSEQ']) ?>" class="btn btn-default btn-sm" title="Move to trash"><i class="fa fa-paper-plane"></i></a>
+															<?php
+															}
+
 															?>
 														</div>
 													</td>
 
 												</tr>
 
-										<?php endforeach;
+										<?php }
 										} ?>
 									</tbody>
 								</table>
@@ -226,9 +237,8 @@
 								<div class="pull-right">
 									<!--1-50/200-->
 									<?php
-									if ($currentpage == 1) {
-										echo '1-' . $perpage . ' of ' . $ct_messages;
-									} else if ($currentpage > 1) {
+									if ($ct_messages > 0) {
+
 										if (($perpage * $currentpage) > $ct_messages) {
 											echo (($perpage * ($currentpage - 1) + 1)) . '-' . $ct_messages . ' of ' . $ct_messages;
 										} else {

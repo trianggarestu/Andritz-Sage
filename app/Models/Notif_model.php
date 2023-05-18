@@ -69,42 +69,46 @@ class Notif_model extends Model
 		return $builder->countAllResults();
 	}
 
-	function get_sendto_user($groupuser)
-	{
-		$query = $this->db->query("select a.USERNAME,a.NAME,a.EMAIL,a.GROUPID from webot_USERAUTH a where GROUPID='$groupuser' order by USERNAME asc");
-		return $query->getResultArray();
-	}
-
 	function get_mailbox_archive($user)
 	{
 		$query = $this->db->query("select * from webot_MAILBOX where IS_ARCHIVED=1 and IS_TRASHED=0 and IS_DELETED=0 and TO_USER='$user' order by SENDING_DATE desc, MAILSEQ desc");
 		return $query->getResultArray();
 	}
 
+	function count_mailbox_archive($user)
+	{
+		$builder = $this->db->table('webot_MAILBOX');
+		$builder->groupStart();
+		$builder->where('IS_ARCHIVED', 1);
+		$builder->where('IS_TRASHED', 0);
+		$builder->where('IS_DELETED', 0);
+		$builder->where('TO_USER', $user);
+		$builder->groupEnd();
+		return $builder->countAllResults();
+	}
+
 	function get_mailbox_sent($user)
 	{
-		$query = $this->db->query("select * from webot_MAILBOX where IS_TRASHED=0 and IS_DELETED=0 and FROM_USER='$user' order by SENDING_DATE desc, MAILSEQ desc");
+		$query = $this->db->query("select * from webot_MAILBOX where IS_ARCHIVED=0 and IS_TRASHED=0 and IS_DELETED=0 and FROM_USER='$user' order by SENDING_DATE desc, MAILSEQ desc");
 		return $query->getResultArray();
 	}
 
 	function count_mailbox_sent($user)
 	{
 		$builder = $this->db->table('webot_MAILBOX');
-		$builder->where('IS_TRASHED', 0);
-		$builder->where('IS_DELETED', 0);
+		$builder->where('IS_ARCHIVEDSENDER', 0);
+		$builder->where('IS_TRASHEDSENDER', 0);
+		$builder->where('IS_DELETEDSENDER', 0);
 		$builder->where('FROM_USER', $user);
 		return $builder->countAllResults();
 	}
 
-	function count_mailbox_archive($user)
+	function get_sendto_user($groupuser)
 	{
-		$builder = $this->db->table('webot_MAILBOX');
-		$builder->where('IS_ARCHIVED', 1);
-		$builder->where('IS_TRASHED', 0);
-		$builder->where('IS_DELETED', 0);
-		$builder->where('TO_USER', $user);
-		return $builder->countAllResults();
+		$query = $this->db->query("select a.USERNAME,a.NAME,a.EMAIL,a.GROUPID from webot_USERAUTH a where GROUPID='$groupuser' order by USERNAME asc");
+		return $query->getResultArray();
 	}
+
 
 	function get_mailbox_trash($user)
 	{
@@ -115,9 +119,16 @@ class Notif_model extends Model
 	function count_mailbox_trash($user)
 	{
 		$builder = $this->db->table('webot_MAILBOX');
-		$builder->where('IS_TRASHED', 0);
+		$builder->groupStart();
+		$builder->where('IS_TRASHED', 1);
 		$builder->where('IS_DELETED', 0);
 		$builder->where('TO_USER', $user);
+		$builder->groupEnd();
+		$builder->orgroupStart();
+		$builder->where('IS_TRASHEDSENDER', 1);
+		$builder->where('IS_DELETEDSENDER', 0);
+		$builder->where('FROM_USER', $user);
+		$builder->groupEnd();
 		return $builder->countAllResults();
 	}
 
@@ -143,6 +154,7 @@ class Notif_model extends Model
 		return $outp;
 	}
 
+
 	public function mark_archive($id = '', $val = 0)
 	{
 		$sql = "UPDATE webot_MAILBOX SET IS_ARCHIVED = ? WHERE MAILSEQ = ?";
@@ -161,8 +173,33 @@ class Notif_model extends Model
 
 	public function mark_star($id = '', $val = 0)
 	{
-		$sql = "UPDATE webot_MAILBOX SET IS_START = ? WHERE MAILSEQ = ?";
+		$sql = "UPDATE webot_MAILBOX SET IS_STAR = ? WHERE MAILSEQ = ?";
 		$outp = $this->db->query($sql, array($val, $id));
+		//Tanpa return juga bisa jalan
+		return $outp;
+	}
+
+	// Untuk update dari sisi Sender  
+	public function mark_senderread($id = '', $val = 0)
+	{
+		$sql = "UPDATE webot_MAILBOX SET IS_READSENDER = ? WHERE MAILSEQ = ?";
+		$outp = $this->db->query($sql, array($val, $id));
+		//Tanpa return juga bisa jalan
+		return $outp;
+	}
+
+	public function mark_senderarchive($id = '', $val = 0)
+	{
+		$sql = "UPDATE webot_MAILBOX SET IS_ARCHIVEDSENDER = ? WHERE MAILSEQ = ?";
+		$outp = $this->db->query($sql, array($val, $id));
+		//Tanpa return juga bisa jalan
+		return $outp;
+	}
+
+	public function mark_sendertrash($id = '', $val = 0, $arch = 0)
+	{
+		$sql = "UPDATE webot_MAILBOX SET IS_TRASHEDSENDER = ?, IS_ARCHIVEDSENDER=? WHERE MAILSEQ = ?";
+		$outp = $this->db->query($sql, array($val, $arch, $id));
 		//Tanpa return juga bisa jalan
 		return $outp;
 	}

@@ -26,7 +26,10 @@ class Administration extends BaseController
         if (empty(session()->get('keylog'))) {
             //Tidak Bisa menggunakan redirect kalau condition session di construct
             //return redirect()->to(base_url('/login'));
-            header('Location: ' . base_url());
+            //session()->destroy();
+            //header('Location: ' . base_url());
+            throw new \CodeIgniter\Router\Exceptions\RedirectException('login');
+
             exit();
         } else {
             $user = session()->get('username');
