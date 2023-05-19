@@ -97,11 +97,10 @@ class ArrangeShipment extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
-        $purchaseorderdata = $this->LogisticsModel->get_po_pending_to_arrangeshipment();
-
+        $logisticsdata = $this->LogisticsModel->get_po_pending_to_arrangeshipment();
 
         $data = array(
-            'purchaseOrder_data' => $purchaseorderdata,
+            'logistics_data' => $logisticsdata,
         );
 
         echo view('view_header', $this->header_data);
@@ -110,8 +109,240 @@ class ArrangeShipment extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
+    public function update($pouniq, $postingstat)
+    {
+        $get_po = $this->LogisticsModel->get_po_by_id($pouniq);
+        $get_log = $this->LogisticsModel->get_log_by_po($pouniq);
+
+        if ($get_po) {
+            if (!empty($get_log['LOGUNIQ'])) {
+                if ($postingstat == 0) {
+                    $button_text = 'Save';
+                } else {
+                    $button_text = 'Save & Posting';
+                }
+                $act = 'arrangeshipment/update_action';
+                $button = $button_text;
+                $posting_status = $get_log['POSTINGSTAT'];
+                $id_log = $get_log['LOGUNIQ'];
+                $vendorshistatus = trim($get_log['VENDSHISTATUS']);
+                $etdorigindate = substr($get_log['ETDORIGINDATE'], 4, 2) . "/" . substr($get_log['ETDORIGINDATE'], 6, 2) . "/" . substr($get_log['ETDORIGINDATE'], 0, 4);
+                if ($get_log['ATDORIGINDATE'] == null) {
+                    $atdorigindate = '';
+                } else {
+                    $atdorigindate = substr($get_log['ATDORIGINDATE'], 4, 2) . "/" . substr($get_log['ATDORIGINDATE'], 6, 2) . "/" . substr($get_log['ATDORIGINDATE'], 0, 4);
+                }
+                if ($get_log['ETAPORTDATE'] == null) {
+                    $etaportdate = '';
+                } else {
+                    $etaportdate = substr($get_log['ETAPORTDATE'], 4, 2) . "/" . substr($get_log['ETAPORTDATE'], 6, 2) . "/" . substr($get_log['ETAPORTDATE'], 0, 4);
+                }
+                if ($get_log['PIBDATE'] == null) {
+                    $pibdate = '';
+                } else {
+                    $pibdate = substr($get_log['PIBDATE'], 4, 2) . "/" . substr($get_log['PIBDATE'], 6, 2) . "/" . substr($get_log['PIBDATE'], 0, 4);
+                }
+            } else {
+                if ($postingstat == 0) {
+                    $button_text = 'Save';
+                } else {
+                    $button_text = 'Save & Posting';
+                }
+
+                $act = 'arrangeshipment/insert_action';
+                $button = $button_text;
+                $posting_status = 0;
+                $id_log = '';
+                $vendorshistatus = '';
+                $etdorigindate = '';
+                $atdorigindate = '';
+                $etaportdate = '';
+                $pibdate = '';
+            }
+            $po_date = substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 0, 4);
+            $etd_date = substr($get_po['ETDDATE'], 4, 2) . "/" . substr($get_po['ETDDATE'], 6, 2) . "/" . substr($get_po['ETDDATE'], 0, 4);
+            $cargoreadiness_date = substr($get_po['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_po['CARGOREADINESSDATE'], 6, 2) . "/" . substr($get_po['CARGOREADINESSDATE'], 0, 4);
+            $data = array(
+                'loguniq' => $id_log,
+                'csruniq' => trim($get_po['CSRUNIQ']),
+                'pouniq' => trim($get_po['POUNIQ']),
+                'po_number' => trim($get_po['PONUMBER']),
+                'po_date' => $po_date,
+                'etd_date' => $etd_date,
+                'cargoreadiness_date' => $cargoreadiness_date,
+                'po_remarks' => trim($get_po['POREMARKS']),
+                'vendorshistatus' => $vendorshistatus,
+                'etdorigin_date' => $etdorigindate,
+                'atdorigin_date' => $atdorigindate,
+                'etaport_date' => $etaportdate,
+                'pib_date' => $pibdate,
+                'form_action' => base_url($act),
+                'button' => $button,
+                'post_stat' => $postingstat,
+                'post_stat_data' => $posting_status,
+            );
+        }
+        echo view('logistics/ajax_add_shipmentpo', $data);
+    }
 
 
+    public function insert_action()
+    {
+        $id_so = $this->request->getPost('id_so');
+        $id_po = $this->request->getPost('id_po');
+        $po_number = $this->request->getPost('po_number');
+        $id_log = $this->request->getPost('id_log');
+        $etdorigin_date = $this->request->getPost('etdorigin_date');
+        $atdorigin_date = $this->request->getPost('atdorigin_date');
+        $etaport_date = $this->request->getPost('etaport_date');
+        $pib_date = $this->request->getPost('pib_date');
+        $vendorshi_status = $this->request->getPost('vendorshi_status');
+        $post_stat = $this->request->getPost('post_stat');
+        if (null == $id_po and null == $etdorigin_date and null == $vendorshi_status) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('arrangeshipment'));
+        } else {
+            $sender = $this->AdministrationModel->get_mailsender();
+            $n_etdorigin_date = substr($etdorigin_date, 6, 4) . substr($etdorigin_date, 0, 2) . substr($etdorigin_date, 3, 2);
+            if (null == $atdorigin_date) {
+                $n_atdorigin_date = '';
+            } else {
+                $n_atdorigin_date = substr($atdorigin_date, 6, 4) . substr($atdorigin_date, 0, 2) . substr($atdorigin_date, 3, 2);
+            }
+            if (null == $etaport_date) {
+                $n_etaport_date = '';
+            } else {
+                $n_etaport_date = substr($etaport_date, 6, 4) . substr($etaport_date, 0, 2) . substr($etaport_date, 3, 2);
+            }
+            if (null == $pib_date) {
+                $n_pib_date = '';
+            } else {
+                $n_pib_date = substr($pib_date, 6, 4) . substr($pib_date, 0, 2) . substr($pib_date, 3, 2);
+            }
+            $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
+            $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
+            $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
+            $groupuser = 5;
+
+            $data1 = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'CSRUNIQ' => $id_so,
+                'POUNIQ' => $id_po,
+                'PONUMBER' => $po_number,
+                'ETDORIGINDATE' => $n_etdorigin_date,
+                'ATDORIGINDATE' => $n_atdorigin_date,
+                'ETAPORTDATE' => $n_etaport_date,
+                'PIBDATE' => $n_pib_date,
+                'VENDSHISTATUS' => $vendorshi_status,
+                'OTPROCESS' => $groupuser,
+                'POSTINGSTAT' => $post_stat,
+                'OFFLINESTAT' => $sender['OFFLINESTAT'],
+            );
+            $this->LogisticsModel->arrangeshipment_insert($data1);
+
+            if ($post_stat == 1) {
+
+                $data2 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'ETDORIGINDATE' => $n_etdorigin_date,
+                    'ATDORIGINDATE' => $n_atdorigin_date,
+                    'ETAPORTDATE' => $n_etaport_date,
+                    'PIBDATE' => $n_pib_date,
+                    'VENDSHISTATUS' => $vendorshi_status,
+                );
+
+                $this->LogisticsModel->ot_logistics_update($id_so, $data2);
+            }
+        }
+        session()->set('success', '1');
+        return redirect()->to(base_url('/arrangeshipment'));
+        session()->remove('success');
+    }
+
+
+    public function update_action()
+    {
+        $id_so = $this->request->getPost('id_so');
+        $id_po = $this->request->getPost('id_po');
+        $po_number = $this->request->getPost('po_number');
+        $id_log = $this->request->getPost('id_log');
+        $etdorigin_date = $this->request->getPost('etdorigin_date');
+        $atdorigin_date = $this->request->getPost('atdorigin_date');
+        $etaport_date = $this->request->getPost('etaport_date');
+        $pib_date = $this->request->getPost('pib_date');
+        $vendorshi_status = $this->request->getPost('vendorshi_status');
+        $post_stat = $this->request->getPost('post_stat');
+        $post_stat_data = $this->request->getPost('post_stat_data');
+        if (null == $id_po and null == $etdorigin_date and null == $vendorshi_status) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('arrangeshipment'));
+        } else {
+            $sender = $this->AdministrationModel->get_mailsender();
+            $n_etdorigin_date = substr($etdorigin_date, 6, 4) . substr($etdorigin_date, 0, 2) . substr($etdorigin_date, 3, 2);
+            if (null == $atdorigin_date) {
+                $n_atdorigin_date = '';
+            } else {
+                $n_atdorigin_date = substr($atdorigin_date, 6, 4) . substr($atdorigin_date, 0, 2) . substr($atdorigin_date, 3, 2);
+            }
+            if (null == $etaport_date) {
+                $n_etaport_date = '';
+            } else {
+                $n_etaport_date = substr($etaport_date, 6, 4) . substr($etaport_date, 0, 2) . substr($etaport_date, 3, 2);
+            }
+            if (null == $pib_date) {
+                $n_pib_date = '';
+            } else {
+                $n_pib_date = substr($pib_date, 6, 4) . substr($pib_date, 0, 2) . substr($pib_date, 3, 2);
+            }
+            $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
+            $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
+            $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
+            $groupuser = 5;
+            $data1 = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'CSRUNIQ' => $id_so,
+                'POUNIQ' => $id_po,
+                'PONUMBER' => $po_number,
+                'ETDORIGINDATE' => $n_etdorigin_date,
+                'ATDORIGINDATE' => $n_atdorigin_date,
+                'ETAPORTDATE' => $n_etaport_date,
+                'PIBDATE' => $n_pib_date,
+                'VENDSHISTATUS' => $vendorshi_status,
+                'OTPROCESS' => $groupuser,
+                'POSTINGSTAT' => $post_stat,
+                'OFFLINESTAT' => $sender['OFFLINESTAT'],
+            );
+            $this->LogisticsModel->arrangeshipment_update($id_log, $data1);
+
+            if ($post_stat == 1) {
+
+                $data2 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'ETDORIGINDATE' => $n_etdorigin_date,
+                    'ATDORIGINDATE' => $n_atdorigin_date,
+                    'ETAPORTDATE' => $n_etaport_date,
+                    'PIBDATE' => $n_pib_date,
+                    'VENDSHISTATUS' => $vendorshi_status,
+                );
+                $this->LogisticsModel->ot_logistics_update($id_so, $data2);
+            }
+        }
+        session()->set('success', '1');
+        return redirect()->to(base_url('/arrangeshipment'));
+        session()->remove('success');
+    }
 
 
 

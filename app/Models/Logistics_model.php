@@ -30,28 +30,47 @@ class Logistics_model extends Model
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
         left join ICITEM it on it.ITEMNO=b.ITEMNO
         left join webot_LOGISTICS c on c.POUNIQ=a.POUNIQ 
-        where (a.POSTINGSTAT=1 and c.LOGUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
+        where (a.POSTINGSTAT=1 and c.LOGUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1) 
+        or (c.POSTINGSTAT=1 and (c.ETDORIGINDATE is NULL or c.ATDORIGINDATE is NULL or c.ETAPORTDATE is NULL or c.PIBDATE is NULL or c.VENDSHISTATUS is NULL))");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
 
-    function get_requisition_by_id($rqnuniq)
+    function get_po_by_id($pouniq)
     {
-        $query = $this->db->query("select * from webot_REQUISITION where POSTINGSTAT=1 and RQNUNIQ='$rqnuniq' ");
+        $query = $this->db->query("select * from webot_PO where POSTINGSTAT=1 and POUNIQ='$pouniq' ");
         return $query->getRowArray();
     }
 
-    function get_posage_by_id($ponumber)
+    function get_log_by_po($pouniq)
     {
-        $query = $this->db->query("select PONUMBER," . '"DATE"' . " as PODATE,VDCODE,VDNAME,DESCRIPTIO from POPORH1 where PONUMBER='$ponumber' ");
+        $query = $this->db->query("select * from webot_LOGISTICS where POUNIQ='$pouniq' ");
         return $query->getRowArray();
     }
 
-    function get_po_by_requisition($rqnuniq)
+    function arrangeshipment_insert($data1)
     {
-        $query = $this->db->query("select * from webot_PO where RQNUNIQ='$rqnuniq' ");
-        return $query->getRowArray();
+        $query = $this->db->table('webot_LOGISTICS')->insert($data1);
+        return $query;
     }
+
+    function arrangeshipment_update($id_log, $data1)
+    {
+        $query = $this->db->table('webot_LOGISTICS')->update($data1, array('LOGUNIQ' => $id_log));
+        return $query;
+    }
+
+
+    function ot_logistics_update($id_so, $data2)
+    {
+        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
+    // PO 
+
+
 
     function get_po_by_pouniq($pouniq)
     {
@@ -135,29 +154,14 @@ class Logistics_model extends Model
     }
 
 
-    function purchaseorder_insert($data1)
-    {
-        $query = $this->db->table('webot_PO')->insert($data1);
-        return $query;
-    }
 
 
-    function purchaseorder_update($id_po, $data1)
-    {
-        $query = $this->db->table('webot_PO')->update($data1, array('POUNIQ' => $id_po));
-        return $query;
-    }
+
+
 
     function po_post_update($pouniq, $data2)
     {
         $query = $this->db->table('webot_PO')->update($data2, array('POUNIQ' => $pouniq));
-        //Tanpa return juga bisa jalan
-        return $query;
-    }
-
-    function ot_purchaseorder_update($id_so, $data2)
-    {
-        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so));
         //Tanpa return juga bisa jalan
         return $query;
     }
