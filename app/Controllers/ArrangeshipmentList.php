@@ -125,30 +125,24 @@ class ArrangeshipmentList extends BaseController
 
     public function export_excel()
     {
-        //Belum Buat
-        $PurchaseOrderListdata = $this->LogisticsModel->get_logistics_close();
+        //$peoples = $this->builder->get()->getResultArray();
+        $PurchaseOrderListdata = $this->LogisticsModel->get_log_preview();
         $spreadsheet = new Spreadsheet();
         // tulis header/nama kolom 
         $spreadsheet->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'No')
-            ->setCellValue('B1', 'ContractNo')
-            ->setCellValue('C1', 'ProjectNo')
-            ->setCellValue('D1', 'CustomerName')
-            ->setCellValue('E1', 'CustomerEmail')
-            ->setCellValue('F1', 'CrmNo')
-            ->setCellValue('G1', 'PoCustomer')
-            ->setCellValue('H1', 'InventoryNo')
-            ->setCellValue('I1', 'MaterialNo')
-            ->setCellValue('J1', 'PoDate')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'OrderDescription')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', '')
-            ->setCellValue('Q1', 'Pr Date')
-            ->setCellValue('R1', 'PR Number')
-            ->setCellValue('S1', '');
+            ->setCellValue('A1', 'NO')
+            ->setCellValue('B1', 'PONUMBER')
+            ->setCellValue('C1', 'PODATE')
+            ->setCellValue('D1', 'ETD(DATE)')
+            ->setCellValue('E1', 'CARGOREADINESS(DATE)')
+            ->setCellValue('F1', 'ORIGINCOUNTRY')
+            ->setCellValue('G1', 'REMARKS')
+            ->setCellValue('H1', 'STATUSPO')
+            ->setCellValue('I1', 'ETDORIGINDATE')
+            ->setCellValue('J1', 'ATDORIGINDATE')
+            ->setCellValue('K1', 'ETAPORTDATE')
+            ->setCellValue('L1', 'PIBDATE')
+            ->setCellValue('M1', 'SHIPMENTSTATUS');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -156,29 +150,24 @@ class ArrangeshipmentList extends BaseController
         foreach ($PurchaseOrderListdata as $data) {
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['ContractNo'])
-                ->setCellValue('C' . $rows, $data['ProjectNo'])
-                ->setCellValue('D' . $rows, $data['CustomerName'])
-                ->setCellValue('E' . $rows, $data['CustomerEmail'])
-                ->setCellValue('F' . $rows, $data['CrmNo'])
-                ->setCellValue('G' . $rows, $data['PoCustomer'])
-                ->setCellValue('H' . $rows, $data['InventoryNo'])
-                ->setCellValue('I' . $rows, $data['MaterialNo'])
-                ->setCellValue('J' . $rows, $data['PoDate'])
-                ->setCellValue('K' . $rows, $data['ReqDate'])
-                ->setCellValue('L' . $rows, $data['SalesPerson'])
-                ->setCellValue('M' . $rows, $data['OrderDesc'])
-                ->setCellValue('N' . $rows, $data['Qty'])
-                ->setCellValue('O' . $rows, $data['Uom'])
-                ->setCellValue('P' . $rows, '')
-                ->setCellValue('Q' . $rows, $data['PrDate'])
-                ->setCellValue('R' . $rows, $data['PrNumber'])
-                ->setCellValue('S' . $rows, '');
+                ->setCellValue('B' . $rows, $data['PONUMBER'])
+                ->setCellValue('C' . $rows, $data['PODATE'])
+                ->setCellValue('D' . $rows, $data['ETDDATE'])
+                ->setCellValue('E' . $rows, $data['CARGOREADINESSDATE'])
+                ->setCellValue('F' . $rows, $data['ORIGINCOUNTRY'])
+                ->setCellValue('G' . $rows, $data['POREMARKS'])
+                ->setCellValue('H' . $rows, $data['POSTINGSTAT'])
+                ->setCellValue('I' . $rows, $data['ETDORIGINDATE'])
+                ->setCellValue('J' . $rows, $data['ATDORIGINDATE'])
+                ->setCellValue('K' . $rows, $data['ETAPORTDATE'])
+                ->setCellValue('L' . $rows, $data['PIBDATE'])
+                ->setCellValue('M' . $rows, $data['VENDSHISTATUS'])
+                ->setCellValue('Q' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'PurchaseOrder_Listing';
+        $fileName = 'Shipment_Listing';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -187,5 +176,15 @@ class ArrangeshipmentList extends BaseController
 
         $writer->save('php://output');
         exit();
+    }
+    public function preview()
+    {
+        $log_data = $this->LogisticsModel->get_log_preview();
+        $data = array(
+            'log_data' => $log_data,
+            'success_code' => session()->get('success'),
+        );
+
+        echo view('logistics/data_log_list_preview', $data);
     }
 }

@@ -19,7 +19,7 @@
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<a href="<?= base_url() ?>ordertracking/" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
-						<a href="#" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview" target="_blank"><i class="fa fa-print"></i>Preview
+						<a href="<?= base_url("ordertrackinglist/preview") ?>" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Cetak" target="_blank"><i class="fa fa-print"></i> Preview
 						</a>
 						<a href="<?= base_url() ?>ordertracking/export_excel" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download to Excel
 						</a>
@@ -114,7 +114,14 @@
 															<?php foreach ($ordtrack_data as $ot_list) {
 																$pocust_date = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" . substr($ot_list['PODATECUST'], 0, 4);
 																$crmreq_date = substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
-
+																$podate = substr($ot_list['PODATE'], 4, 2) . "/" . substr($ot_list['PODATE'], 6, 2) . "/" . substr($ot_list['PODATE'], 0, 4);
+																$rqndate = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
+																$etd = substr($ot_list['ETDDATE'], 4, 2) . "/" . substr($ot_list['ETDDATE'], 6, 2) . "/" . substr($ot_list['ETDDATE'], 0, 4);
+																$cargo = substr($ot_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 0, 4);
+																$etdorigindate = substr($ot_list['ETDORIGINDATE'], 4, 2) . "/" . substr($ot_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($ot_list['ETDORIGINDATE'], 0, 4);
+																$atdorigindate = substr($ot_list['ATDORIGINDATE'], 4, 2) . "/" . substr($ot_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($ot_list['ATDORIGINDATE'], 0, 4);
+																$etaportdate = substr($ot_list['ETAPORTDATE'], 4, 2) . "/" . substr($ot_list['ETAPORTDATE'], 6, 2) . "/" .  substr($ot_list['ETAPORTDATE'], 0, 4);
+																$pibdate = substr($ot_list['PIBDATE'], 4, 2) . "/" . substr($ot_list['PIBDATE'], 6, 2) . "/" .  substr($ot_list['PIBDATE'], 0, 4);
 															?>
 																<tr>
 																	<td><?= ++$no; ?></td>
@@ -134,19 +141,19 @@
 																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['RQNNUMBER']; ?></td>
-																	<td><?= $ot_list['RQNDATE']; ?></td>
+																	<td><?= $rqndate; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['PONUMBER']; ?></td>
-																	<td><?= $ot_list['PODATE']; ?></td>
-																	<td><?= $ot_list['ETDDATE']; ?></td>
-																	<td><?= $ot_list['CARGOREADINESSDATE']; ?></td>
+																	<td><?= $podate; ?></td>
+																	<td><?= $etd; ?></td>
+																	<td><?= $cargo; ?></td>
 																	<td><?= $ot_list['ORIGINCOUNTRY']; ?></td>
 																	<td><?= $ot_list['POREMARKS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['ETDORIGINDATE']; ?></td>
-																	<td><?= $ot_list['ATDORIGINDATE']; ?></td>
-																	<td><?= $ot_list['ETAPORTDATE']; ?></td>
-																	<td><?= $ot_list['PIBDATE']; ?></td>
+																	<td><?= $etdorigindate; ?></td>
+																	<td><?= $atdorigindate; ?></td>
+																	<td><?= $etaportdate; ?></td>
+																	<td><?= $pibdate; ?></td>
 																	<td><?= $ot_list['VENDSHISTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['RECPDATE']; ?></td>

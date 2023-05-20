@@ -256,7 +256,7 @@ Order Tracking Administrator',
     public function export_excel()
     {
         //$peoples = $this->builder->get()->getResultArray();
-        $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        $requisitiondata = $this->RequisitionModel->get_requisition_close();
         $spreadsheet = new Spreadsheet();
 
         // tulis header/nama kolom 
@@ -342,7 +342,7 @@ Order Tracking Administrator',
     }
     public function preview()
     {
-        $pr_data = $this->RequisitionModel->get_requisition_open();
+        $pr_data = $this->RequisitionModel->get_requisition_close();
         $data = array(
             'pr_data' => $pr_data,
             'success_code' => session()->get('success'),

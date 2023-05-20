@@ -161,4 +161,14 @@ class Purchaseorder_model extends Model
         //Tanpa return juga bisa jalan
         return $query;
     }
+    function get_purchaseorder_preview()
+    {
+        $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT,a.*
+        from webot_PO a 
+        left join webot_CSR b on b.CSRUNIQ= a.CSRUNIQ
+		left join webot_REQUISITION c on a.RQNUNIQ=c.RQNUNIQ and  b.CSRUNIQ = c.CSRUNIQ
+        where (a.POSTINGSTAT=1)");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
 }

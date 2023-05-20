@@ -153,4 +153,14 @@ class OrdertrackingList extends BaseController
         $writer->save('php://output');
         exit();
     }
+    public function preview()
+    {
+        $so_data = $this->OrdertrackingModel->get_ordertracking();
+        $data = array(
+            'so_data' => $so_data,
+            'success_code' => session()->get('success'),
+        );
+
+        echo view('rpt/data_ot_list_preview', $data);
+    }
 }

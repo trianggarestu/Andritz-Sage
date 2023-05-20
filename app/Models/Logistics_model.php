@@ -93,4 +93,13 @@ class Logistics_model extends Model
         //Tanpa return juga bisa jalan
         return $query;
     }
+    function get_log_preview()
+    {
+        $query = $this->db->query("select a.*,b.*
+        from webot_LOGISTICS a 
+        left join webot_PO b on b.POUNIQ = a.POUNIQ
+		where (a.POSTINGSTAT=1)");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
 }
