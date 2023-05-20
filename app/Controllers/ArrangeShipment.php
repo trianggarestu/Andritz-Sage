@@ -121,9 +121,14 @@ class ArrangeShipment extends BaseController
                 } else {
                     $button_text = 'Save & Posting';
                 }
+                if ($get_log['POSTINGSTAT'] == 1) {
+                    $posting_status = $get_log['POSTINGSTAT'];
+                } else {
+                    $posting_status = $postingstat;
+                }
                 $act = 'arrangeshipment/update_action';
                 $button = $button_text;
-                $posting_status = $get_log['POSTINGSTAT'];
+
                 $id_log = $get_log['LOGUNIQ'];
                 $vendorshistatus = trim($get_log['VENDSHISTATUS']);
                 $etdorigindate = substr($get_log['ETDORIGINDATE'], 4, 2) . "/" . substr($get_log['ETDORIGINDATE'], 6, 2) . "/" . substr($get_log['ETDORIGINDATE'], 0, 4);
@@ -151,7 +156,7 @@ class ArrangeShipment extends BaseController
 
                 $act = 'arrangeshipment/insert_action';
                 $button = $button_text;
-                $posting_status = 0;
+                $posting_status = $postingstat;
                 $id_log = '';
                 $vendorshistatus = '';
                 $etdorigindate = '';
@@ -178,7 +183,7 @@ class ArrangeShipment extends BaseController
                 'pib_date' => $pibdate,
                 'form_action' => base_url($act),
                 'button' => $button,
-                'post_stat' => $postingstat,
+                'post_stat' => $posting_status,
                 'post_stat_data' => $posting_status,
             );
         }
@@ -191,7 +196,6 @@ class ArrangeShipment extends BaseController
         $id_so = $this->request->getPost('id_so');
         $id_po = $this->request->getPost('id_po');
         $po_number = $this->request->getPost('po_number');
-        $id_log = $this->request->getPost('id_log');
         $etdorigin_date = $this->request->getPost('etdorigin_date');
         $atdorigin_date = $this->request->getPost('atdorigin_date');
         $etaport_date = $this->request->getPost('etaport_date');
@@ -222,6 +226,12 @@ class ArrangeShipment extends BaseController
             $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
             $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
             $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
+            if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($vendorshi_status) and $post_stat == 1) {
+                $offline_stat = $sender['OFFLINESTAT'];
+            } else {
+                $offline_stat = 1;
+            }
+
             $groupuser = 5;
 
             $data1 = array(
@@ -239,8 +249,9 @@ class ArrangeShipment extends BaseController
                 'VENDSHISTATUS' => $vendorshi_status,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => $post_stat,
-                'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                'OFFLINESTAT' => $offline_stat,
             );
+            print_r($data1);
             $this->LogisticsModel->arrangeshipment_insert($data1);
 
             if ($post_stat == 1) {
@@ -258,6 +269,99 @@ class ArrangeShipment extends BaseController
                 );
 
                 $this->LogisticsModel->ot_logistics_update($id_so, $data2);
+
+                if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($vendorshi_status)) {
+
+                    if ($sender['OFFLINESTAT'] == 0) {
+
+                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                        foreach ($notiftouser_data as $sendto_user) {
+                            $data_email = array(
+                                'hostname'       => $sender['HOSTNAME'],
+                                'sendername'       => $sender['SENDERNAME'],
+                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'ssl'       => $sender['SSL'],
+                                'smtpport'       => $sender['SMTPPORT'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'subject' => 'Pending Logistics Allert. PO Number : ' . $po_number,
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                Please to follow up PO Number :' . $po_number . ', ETD Origin Date :' . $n_etdorigin_date . ') is pending for you to process Inventory Team.
+    <br><br>
+    PO Number :' . $po_number . '<br>
+    ETD Origin Date :' . $n_etdorigin_date . '<br>
+    ATD Origin Date :' . $n_etdorigin_date . '<br>
+    ETA Port Date :' . $n_etaport_date . '<br>
+    PIB Date :' . $n_pib_date . '<br>
+    Shipment Status :' . $vendorshi_status . '<br>
+    <hr>
+    You can access Order Tracking System Portal via the URL below:
+    <br>
+    Http://jktsms025:...
+    <br>
+    Thanks for your cooperation. 
+    <br><br>
+    Order Tracking Administrator',
+                            );
+
+                            $sending_mail = $this->send($data_email);
+
+                            if ($sending_mail) {
+                                $data_notif = array(
+                                    'FROM_USER' => $this->header_data['usernamelgn'],
+                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                    'TO_USER' => $sendto_user['USERNAME'],
+                                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                    'SUBJECT' => 'Pending Logistics Allert. PO Number : ' . $po_number,
+                                    'MESSAGE' => '  Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                                    Please to follow up PO Number :' . $po_number . ', ETD Origin Date :' . $n_etdorigin_date . ') is pending for you to process Inventory Team.
+                        <br><br>
+                        PO Number :' . $po_number . '<br>
+                        ETD Origin Date :' . $n_etdorigin_date . '<br>
+                        ATD Origin Date :' . $n_etdorigin_date . '<br>
+                        ETA Port Date :' . $n_etaport_date . '<br>
+                        PIB Date :' . $n_pib_date . '<br>
+                        Shipment Status :' . $vendorshi_status . '<br>
+                        <hr>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'IS_READ' => 0,
+                                    'IS_ARCHIVED' => 0,
+                                    'IS_TRASHED' => 0,
+                                    'IS_DELETED' => 0,
+                                    'IS_ATTACHED' => 0,
+                                    'IS_STAR' => 0,
+                                    'IS_READSENDER' => 1,
+                                    'IS_ARCHIVEDSENDER' => 0,
+                                    'IS_TRASHEDSENDER' => 0,
+                                    'IS_DELETEDSENDER' => 0,
+                                    'SENDING_STATUS' => 1,
+                                    'OTPROCESS' => $groupuser,
+                                    'UNIQPROCESS' => $id_so,
+                                );
+
+                                $this->NotifModel->mailbox_insert($data_notif);
+                            }
+                        }
+                    }
+                }
             }
         }
         session()->set('success', '1');
@@ -337,6 +441,99 @@ class ArrangeShipment extends BaseController
                     'VENDSHISTATUS' => $vendorshi_status,
                 );
                 $this->LogisticsModel->ot_logistics_update($id_so, $data2);
+
+                if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($vendorshi_status)) {
+
+                    if ($sender['OFFLINESTAT'] == 0) {
+
+                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+                        foreach ($notiftouser_data as $sendto_user) {
+                            $data_email = array(
+                                'hostname'       => $sender['HOSTNAME'],
+                                'sendername'       => $sender['SENDERNAME'],
+                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'ssl'       => $sender['SSL'],
+                                'smtpport'       => $sender['SMTPPORT'],
+                                'to_email' => $sendto_user['EMAIL'],
+                                'subject' => 'Pending Logistics Allert. PO Number : ' . $po_number,
+                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                Please to follow up PO Number :' . $po_number . ', ETD Origin Date :' . $n_etdorigin_date . ') is pending for you to process Inventory Team.
+    <br><br>
+    PO Number :' . $po_number . '<br>
+    ETD Origin Date :' . $n_etdorigin_date . '<br>
+    ATD Origin Date :' . $n_etdorigin_date . '<br>
+    ETA Port Date :' . $n_etaport_date . '<br>
+    PIB Date :' . $n_pib_date . '<br>
+    Shipment Status :' . $vendorshi_status . '<br>
+    <hr>
+    You can access Order Tracking System Portal via the URL below:
+    <br>
+    Http://jktsms025:...
+    <br>
+    Thanks for your cooperation. 
+    <br><br>
+    Order Tracking Administrator',
+                            );
+
+                            $sending_mail = $this->send($data_email);
+
+                            if ($sending_mail) {
+                                $data_notif = array(
+                                    'FROM_USER' => $this->header_data['usernamelgn'],
+                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                    'TO_USER' => $sendto_user['USERNAME'],
+                                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                    'SUBJECT' => 'Pending Logistics Allert. PO Number : ' . $po_number,
+                                    'MESSAGE' => '  Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                                    Please to follow up PO Number :' . $po_number . ', ETD Origin Date :' . $n_etdorigin_date . ') is pending for you to process Inventory Team.
+                        <br><br>
+                        PO Number :' . $po_number . '<br>
+                        ETD Origin Date :' . $n_etdorigin_date . '<br>
+                        ATD Origin Date :' . $n_etdorigin_date . '<br>
+                        ETA Port Date :' . $n_etaport_date . '<br>
+                        PIB Date :' . $n_pib_date . '<br>
+                        Shipment Status :' . $vendorshi_status . '<br>
+                        <hr>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                    'IS_READ' => 0,
+                                    'IS_ARCHIVED' => 0,
+                                    'IS_TRASHED' => 0,
+                                    'IS_DELETED' => 0,
+                                    'IS_ATTACHED' => 0,
+                                    'IS_STAR' => 0,
+                                    'IS_READSENDER' => 1,
+                                    'IS_ARCHIVEDSENDER' => 0,
+                                    'IS_TRASHEDSENDER' => 0,
+                                    'IS_DELETEDSENDER' => 0,
+                                    'SENDING_STATUS' => 1,
+                                    'OTPROCESS' => $groupuser,
+                                    'UNIQPROCESS' => $id_so,
+                                );
+
+                                $this->NotifModel->mailbox_insert($data_notif);
+                            }
+                        }
+                    }
+                }
             }
         }
         session()->set('success', '1');
@@ -344,7 +541,122 @@ class ArrangeShipment extends BaseController
         session()->remove('success');
     }
 
+    public function sendnotif($loguniq)
+    {
+        //check dari sini
+        $get_log = $this->LogisticsModel->get_arrangeshipment_post($loguniq);
+        $sender = $this->AdministrationModel->get_mailsender();
+        $id_so = $get_log['CSRUNIQ'];
+        $po_number = $get_log['PONUMBER'];
+        $vendorshi_status = $get_log['VENDSHISTATUS'];
+        $n_etdorigin_date = substr($get_log['ETDORIGINDATE'], 6, 4) . substr($get_log['ETDORIGINDATE'], 0, 2) . substr($get_log['ETDORIGINDATE'], 3, 2);
+        $n_atdorigin_date = substr($get_log['ATDORIGINDATE'], 6, 4) . substr($get_log['ATDORIGINDATE'], 0, 2) . substr($get_log['ATDORIGINDATE'], 3, 2);
+        $n_etaport_date = substr($get_log['ETAPORTDATE'], 6, 4) . substr($get_log['ETAPORTDATE'], 0, 2) . substr($get_log['ETAPORTDATE'], 3, 2);
+        $n_pib_date = substr($get_log['PIBDATE'], 6, 4) . substr($get_log['PIBDATE'], 0, 2) . substr($get_log['PIBDATE'], 3, 2);
+        $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
+        $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
+        $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
+        $groupuser = 5;
+        //inisiasi proses kirim ke group
+        $data2 = array(
+            'AUDTDATE' => $this->audtuser['AUDTDATE'],
+            'AUDTTIME' => $this->audtuser['AUDTTIME'],
+            'AUDTUSER' => $this->audtuser['AUDTUSER'],
+            'AUDTORG' => $this->audtuser['AUDTORG'],
+            'OFFLINESTAT' => 0,
+        );
 
+        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+
+        foreach ($notiftouser_data as $sendto_user) {
+            $data_email = array(
+                'hostname'       => $sender['HOSTNAME'],
+                'sendername'       => $sender['SENDERNAME'],
+                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                'ssl'       => $sender['SSL'],
+                'smtpport'       => $sender['SMTPPORT'],
+                'to_email' => $sendto_user['EMAIL'],
+                'subject' => 'Pending Logistics Allert. PO Number : ' . $po_number,
+                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                Please to follow up PO Number :' . $po_number . ', ETD Origin Date :' . $n_etdorigin_date . ') is pending for you to process Inventory Team.
+    <br><br>
+    PO Number :' . $po_number . '<br>
+    ETD Origin Date :' . $n_etdorigin_date . '<br>
+    ATD Origin Date :' . $n_etdorigin_date . '<br>
+    ETA Port Date :' . $n_etaport_date . '<br>
+    PIB Date :' . $n_pib_date . '<br>
+    Shipment Status :' . $vendorshi_status . '<br>
+    <hr>
+    You can access Order Tracking System Portal via the URL below:
+    <br>
+    Http://jktsms025:...
+    <br>
+    Thanks for your cooperation. 
+    <br><br>
+    Order Tracking Administrator',
+            );
+
+            $sending_mail = $this->send($data_email);
+
+            if ($sending_mail) {
+                $data_notif = array(
+                    'FROM_USER' => $this->header_data['usernamelgn'],
+                    'FROM_EMAIL' => $this->header_data['emaillgn'],
+                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                    'TO_USER' => $sendto_user['USERNAME'],
+                    'TO_EMAIL' => $sendto_user['EMAIL'],
+                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                    'SUBJECT' => 'Pending Logistics Allert. PO Number : ' . $po_number,
+                    'MESSAGE' => '  Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+
+                                    Please to follow up PO Number :' . $po_number . ', ETD Origin Date :' . $n_etdorigin_date . ') is pending for you to process Inventory Team.
+                        <br><br>
+                        PO Number :' . $po_number . '<br>
+                        ETD Origin Date :' . $n_etdorigin_date . '<br>
+                        ATD Origin Date :' . $n_etdorigin_date . '<br>
+                        ETA Port Date :' . $n_etaport_date . '<br>
+                        PIB Date :' . $n_pib_date . '<br>
+                        Shipment Status :' . $vendorshi_status . '<br>
+                        <hr>
+                        You can access Order Tracking System Portal via the URL below:
+                        <br>
+                        Http://jktsms025:...
+                        <br>
+                        Thanks for your cooperation. 
+                        <br><br>
+                        Order Tracking Administrator',
+
+                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                    'IS_READ' => 0,
+                    'IS_ARCHIVED' => 0,
+                    'IS_TRASHED' => 0,
+                    'IS_DELETED' => 0,
+                    'IS_ATTACHED' => 0,
+                    'IS_STAR' => 0,
+                    'IS_READSENDER' => 1,
+                    'IS_ARCHIVEDSENDER' => 0,
+                    'IS_TRASHEDSENDER' => 0,
+                    'IS_DELETEDSENDER' => 0,
+                    'SENDING_STATUS' => 1,
+                    'OTPROCESS' => $groupuser,
+                    'UNIQPROCESS' => $id_so,
+                );
+
+                $this->NotifModel->mailbox_insert($data_notif);
+                $this->LogisticsModel->logistics_post_update($loguniq, $data2);
+            }
+        }
+        session()->set('success', '1');
+        return redirect()->to(base_url('/arrangeshipment'));
+        session()->remove('success');
+    }
 
     public function export_excel()
     {

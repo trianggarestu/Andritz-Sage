@@ -154,11 +154,32 @@
 																					$sending_date_y = date('Y', strtotime($sending_date));
 																					$sending_date_thisyear = date('M d', strtotime($sending_date));
 																					$time = strlen($data['SENDING_TIME']);
-																					if ($time == 5) {
-																						$sending_time = substr($data['SENDING_TIME'], 0, 1) . ":" . substr($data['SENDING_TIME'], 2, 2);
-																					} else if ($time == 6) {
-																						$sending_time = substr($data['SENDING_TIME'], 0, 2) . ":" . substr($data['SENDING_TIME'], 3, 2);
+																					switch ($time) {
+																						case "0":
+																							$sending_time = '00:00';
+																							break;
+																						case "1":
+																							$sending_time = '00:00';
+																							break;
+																						case "2":
+																							$sending_time = '00:00';
+																							break;
+																						case "3":
+																							$sending_time = '00:0' . substr($data['SENDING_TIME'], 0, 1);
+																							break;
+																						case "4":
+																							$sending_time = '00:' . substr($data['SENDING_TIME'], 0, 2);
+																							break;
+																						case "5":
+																							$sending_time = '0' . substr($data['SENDING_TIME'], 0, 1) . ':' . substr($data['SENDING_TIME'], 1, 2);
+																							break;
+																						case "6":
+																							$sending_time = substr($data['SENDING_TIME'], 0, 2) . ":" . substr($data['SENDING_TIME'], 2, 2);
+																							break;
+																						default:
+																							$sending_time = '00:00';
 																					}
+
 																					if ($todaydate == $sending_date) {
 																						echo $sending_time;
 																					} else {

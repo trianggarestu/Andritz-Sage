@@ -77,7 +77,6 @@
 																<th style="vertical-align: top;">ETA Port</th>
 																<th style="vertical-align: top;">PIB</th>
 																<th style="vertical-align: top;">Shipment Status</th>
-																<th style="vertical-align: top;">Remarks</th>
 
 
 															</tr>
@@ -140,7 +139,13 @@
 																				<li>
 																					<a href="<?= base_url("arrangeshipment/update/" . $log_list['POUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Arrange Shipment PO & Save</a>
 																				</li>
-
+																				<?php if ($log_list['LOGPOSTINGSTAT'] == 1 and $log_list['LOGOFFLINESTAT'] == 1) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("arrangeshipment/sendnotif/" . $log_list['LOGUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
+																					</li>
+																				<?php endif;
+																				?>
 
 																			</ul>
 																		</div>
@@ -165,7 +170,6 @@
 																	<td style="vertical-align: top;"><?= $etaport_date ?></td>
 																	<td style="vertical-align: top;"><?= $pib_date ?></td>
 																	<td nowrap style="vertical-align: top;"><?= $log_list['VENDSHISTATUS'] ?></td>
-																	<td nowrap style="vertical-align: top;"><?= $log_list['LOGREMARKS'] ?></td>
 
 																</tr>
 
