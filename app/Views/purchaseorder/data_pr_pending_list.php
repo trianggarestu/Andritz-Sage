@@ -69,6 +69,7 @@
 																<th style="vertical-align: top;">PR Date</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
+																<th style="vertical-align: top;">Status</th>
 																<th style="vertical-align: top;">PO Vendor</th>
 																<th style="vertical-align: top;">PO Date</th>
 																<th style="vertical-align: top;">ETD</th>
@@ -120,7 +121,7 @@
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-																				<?php if (is_null($po_list['PONUMBER'])) :
+																				<?php if (is_null($po_list['PONUMBER']) or (!empty($po_list['PONUMBER']) and $po_list['POPOSTINGSTAT'] == 0)) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("purchaseorder/update/" . $po_list['RQNUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Update Data PO & Posting</a>
@@ -130,13 +131,7 @@
 																					</li>
 																				<?php endif;
 																				?>
-																				<?php if (!empty($po_list['PONUMBER']) and $po_list['POPOSTINGSTAT'] == 0) :
-																				?>
-																					<li>
-																						<a href="<?= base_url("purchaseorder/update/" . $po_list['RQNUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Update Data PO & Posting</a>
-																					</li>
-																				<?php endif;
-																				?>
+
 																				<?php if (!empty($po_list['PONUMBER']) and $po_list['POPOSTINGSTAT'] == 1 and empty($po_list['CARGOREADINESSDATE'])) :
 																				?>
 																					<li>
@@ -154,6 +149,23 @@
 
 																			</ul>
 																		</div>
+
+																	</td>
+																	<td style="vertical-align: top;" nowrap>
+																		<?php $postingstat = $po_list['POPOSTINGSTAT'];
+																		switch ($postingstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Deleted";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
 
 																	</td>
 																	<td style="vertical-align: top;" nowrap><?= $po_list['PONUMBER'] ?></td>

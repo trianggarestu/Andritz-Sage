@@ -132,13 +132,20 @@
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-
-																				<li>
-																					<a href="<?= base_url("arrangeshipment/update/" . $log_list['POUNIQ'] .  '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Arrange Shipment PO & Posting</a>
-																				</li>
-																				<li>
-																					<a href="<?= base_url("arrangeshipment/update/" . $log_list['POUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Arrange Shipment PO & Save</a>
-																				</li>
+																				<?php if (($log_list['LOGPOSTINGSTAT'] == 0) or ($log_list['LOGPOSTINGSTAT'] == 1 and (empty($log_list['ATDORIGINDATE']) or empty($log_list['ETAPORTDATE']) or empty($log_list['PIBDATE'])))) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("arrangeshipment/update/" . $log_list['POUNIQ'] .  '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Arrange Shipment PO & Posting</a>
+																					</li>
+																				<?php endif;
+																				?>
+																				<?php if ($log_list['LOGPOSTINGSTAT'] == 0) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("arrangeshipment/update/" . $log_list['POUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Arrange Shipment PO & Save</a>
+																					</li>
+																				<?php endif;
+																				?>
 																				<?php if ($log_list['LOGPOSTINGSTAT'] == 1 and $log_list['LOGOFFLINESTAT'] == 1) :
 																				?>
 																					<li>

@@ -141,7 +141,7 @@ class Requisition extends BaseController
                 $podatecust = substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
                 $crmreqdate = substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
             }
-
+            $contract = $get_so['CONTRACT'];
             $data = array(
                 'id_so' => trim($get_so['CSRUNIQ']),
                 'ct_no' => trim($get_so['CONTRACT']),
@@ -160,7 +160,7 @@ class Requisition extends BaseController
                 'order_desc' => trim($get_so['ORDERDESC']),
                 'qty' => trim($get_so['QTY']),
                 'uom' => trim($get_so['STOCKUNIT']),
-                'requisition_list' => $this->RequisitionModel->get_requisition_sage(),
+                'requisition_list' => $this->RequisitionModel->get_requisition_sage($contract),
                 'form_action' => base_url($act),
                 'post_stat' => $postingstat,
                 'id_pr' => $id_pr,
@@ -432,15 +432,13 @@ class Requisition extends BaseController
                         //}
                         //}
 
-                        session()->set('success', '1');
-                        return redirect()->to(base_url('/requisition'));
-                        session()->remove('success');
+
                     }
-                    session()->set('success', '1');
-                    return redirect()->to(base_url('/requisition'));
-                    session()->remove('success');
                 }
             }
+            session()->set('success', '1');
+            return redirect()->to(base_url('/requisition'));
+            session()->remove('success');
         }
     }
 

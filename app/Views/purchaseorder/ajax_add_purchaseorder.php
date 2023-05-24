@@ -61,6 +61,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12" style="margin: 2px;">
+                                <div class="col-sm-3" style="text-align: right;">
+                                    <label for="cargoreadiness_date">Cargo Readiness : </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input class="datepicker form-control input-sm pull-right" id="cargoreadiness_date" name="cargoreadiness_date" type="text" value="<?= $cargoreadiness_date; ?>" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div class="col-sm-12" style="margin: 2px;">
                                 <div class="col-sm-3" style="text-align: right;">

@@ -128,6 +128,7 @@ class ArrangeShipment extends BaseController
                 }
                 $act = 'arrangeshipment/update_action';
                 $button = $button_text;
+                $posting_stat_data = $get_log['POSTINGSTAT'];
 
                 $id_log = $get_log['LOGUNIQ'];
                 $vendorshistatus = trim($get_log['VENDSHISTATUS']);
@@ -163,6 +164,7 @@ class ArrangeShipment extends BaseController
                 $atdorigindate = '';
                 $etaportdate = '';
                 $pibdate = '';
+                $posting_stat_data = 0;
             }
             $po_date = substr($get_po['PODATE'], 4, 2) . "/" . substr($get_po['PODATE'], 6, 2) . "/" . substr($get_po['PODATE'], 0, 4);
             $etd_date = substr($get_po['ETDDATE'], 4, 2) . "/" . substr($get_po['ETDDATE'], 6, 2) . "/" . substr($get_po['ETDDATE'], 0, 4);
@@ -184,7 +186,7 @@ class ArrangeShipment extends BaseController
                 'form_action' => base_url($act),
                 'button' => $button,
                 'post_stat' => $posting_status,
-                'post_stat_data' => $posting_status,
+                'post_stat_data' => $posting_stat_data,
             );
         }
         echo view('logistics/ajax_add_shipmentpo', $data);

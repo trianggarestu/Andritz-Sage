@@ -67,6 +67,7 @@
 																<th>Req Date</th>
 																<th style="background-color: white;"></th>
 																<th>Action</th>
+																<th>Status</th>
 																<th>PR Number</th>
 																<th>PR Date</th>
 																<th style="background-color: white;"></th>
@@ -101,7 +102,7 @@
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-																				<?php if (is_null($ot_list['RQNNUMBER'])) :
+																				<?php if ($ot_list['POSTINGSTAT'] == 0) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Select Requisition & Post</a>
@@ -112,13 +113,7 @@
 																					</li>
 																				<?php endif;
 																				?>
-																				<?php if (!empty($ot_list['RQNNUMBER']) and $ot_list['POSTINGSTAT'] == 0) :
-																				?>
-																					<li>
-																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Check & Posting Requisition</a>
-																					</li>
-																				<?php endif;
-																				?>
+
 																				<?php if ($ot_list['POSTINGSTAT'] == 1 and $ot_list['OFFLINESTAT'] == 1) :
 																				?>
 																					<li>
@@ -130,6 +125,22 @@
 																			</ul>
 																		</div>
 
+																	</td>
+																	<td nowrap>
+																		<?php $postingstat = $ot_list['POSTINGSTAT'];
+																		switch ($postingstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Deleted";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
 																	</td>
 																	<td nowrap><?= $ot_list['RQNNUMBER']; ?></td>
 																	<td nowrap><?= $pr_date; ?></td>

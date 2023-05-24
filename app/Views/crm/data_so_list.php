@@ -74,6 +74,7 @@
 															<tr>
 																<th>No.</th>
 																<th>Action</th>
+																<th>Status</th>
 																<th>Customer Name</th>
 																<th>Customer Email</th>
 																<th>Contract No.</th>
@@ -89,7 +90,7 @@
 																<th>Service Type</th>
 																<th>Qty</th>
 																<th>UoM</th>
-																<th>Status</th>
+
 
 															</tr>
 														</thead>
@@ -126,21 +127,6 @@
 
 
 																	</td>
-																	<td><?= $ot_list['NAMECUST']; ?></td>
-																	<td><?= $ot_list['EMAIL1CUST']; ?></td>
-																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
-																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
-																	<td><?= $ot_list['CRMNO']; ?></td>
-																	<td><?= $ot_list['PONUMBERCUST']; ?></td>
-																	<td><?= $crmpodate; ?></td>
-																	<td><?= $ot_list['ITEMNO']; ?></td>
-																	<td><?= $ot_list['MATERIALNO']; ?></td>
-																	<td><?= $crmreqdate; ?></td>
-																	<td><?= $ot_list['SALESNAME']; ?></td>
-																	<td><?= $ot_list['ORDERDESC']; ?></td>
-																	<td><?= $ot_list['SERVICETYPE']; ?></td>
-																	<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
-																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td>
 																		<?php $postingstat = $ot_list['POSTINGSTAT'];
 																		switch ($postingstat) {
@@ -157,6 +143,22 @@
 																				echo "Open";
 																		} ?>
 																	</td>
+																	<td><?= $ot_list['NAMECUST']; ?></td>
+																	<td><?= $ot_list['EMAIL1CUST']; ?></td>
+																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
+																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
+																	<td><?= $ot_list['CRMNO']; ?></td>
+																	<td><?= $ot_list['PONUMBERCUST']; ?></td>
+																	<td><?= $crmpodate; ?></td>
+																	<td><?= $ot_list['ITEMNO']; ?></td>
+																	<td><?= $ot_list['MATERIALNO']; ?></td>
+																	<td><?= $crmreqdate; ?></td>
+																	<td><?= $ot_list['SALESNAME']; ?></td>
+																	<td><?= $ot_list['ORDERDESC']; ?></td>
+																	<td><?= $ot_list['SERVICETYPE']; ?></td>
+																	<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
+																	<td><?= $ot_list['STOCKUNIT']; ?></td>
+
 																</tr>
 
 															<?php } ?>

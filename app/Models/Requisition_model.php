@@ -42,11 +42,20 @@ class Requisition_model extends Model
         return $query->getResultArray();
     }
 
-    function get_requisition_sage()
+    function get_requisition_sage($contract)
     {
-        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  
-        from ENRQNH where RQNNUMBER in (select RQNNUMBER from POPORH1 where RQNNUMBER<>'') and
-        RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");
+        // Yang Sebelumnya
+        /*$query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  
+        from ENRQNH where RQNNUMBER in (select a.RQNNUMBER from POPORH1 a
+        left join POPORL b on b.PORHSEQ=a.PORHSEQ
+        where a.RQNNUMBER<>'' and b.CONTRACT='$contract') and
+        RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");*/
+        // untuk simulasi 
+        $query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER,a." . '"DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS
+        from ENRQNH a
+        inner join (select r.PONUMBER,r." . '"DATE"' . ",s.PORHSEQ,s.PORLSEQ,s.CONTRACT,s.PROJECT,s.ITEMDESC from POPORH1 r inner join POPORL s on s.PORHSEQ=r.PORHSEQ) c on c.PONUMBER=a.PONUMBERS
+        inner join (select x.PONUMBER,x.RCPNUMBER,x." . '"DATE"' . ",y.PORHSEQ,y.PORLSEQ,y.CONTRACT,y.PROJECT,y.ITEMDESC from PORCPH1 x inner join PORCPL y on y.RCPHSEQ=x.RCPHSEQ) d on d.PORHSEQ=c.PORHSEQ and d.PORLSEQ=c.PORLSEQ
+        where c.CONTRACT='$contract'");
         return $query->getResultArray();
     }
 
