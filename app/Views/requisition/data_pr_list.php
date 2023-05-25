@@ -142,7 +142,7 @@
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">
 
-												<?= $pager->links();
+												<?= $pager->links('rqn_posting_list', 'bootstrap_pagination');
 												?>
 											</div>
 										</div>

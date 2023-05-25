@@ -81,7 +81,7 @@
 															<tr>
 																<td nowrap style="vertical-align: top;">Item</td>
 																<td style="vertical-align: top;">: </td>
-																<td nowrap><?= $csr_item_no . '-' . $csr_item_desc ?><br>
+																<td nowrap><?= $csr_item_no . '/' . $csr_material_no . '-' . $csr_item_desc ?><br>
 																	<?= 'Type : ' . $csr_srvtype . '/ Qty : ' . number_format($csr_qty, 0, ",", ".") . ' (' . trim($csr_uom) . ')' ?>
 																</td>
 															</tr>
@@ -174,13 +174,16 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class='col-sm-4'>
+										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="item_no">Item No. <code> (choose)</code></label>
-												<div class="input-group">
-													<span class="input-group-addon input-sm"><a href="<?= base_url(); ?>goodreceipt/form_select_goodreceiptline/<?= $po_uniq . '/' . $rcphseq ?>" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-search"></i></a></span>
-													<input type="text" maxlength="10" size="10" class="form-control input-sm required" name="item_no" id="item_no" placeholder="Item No." value="<?= $item_no ?>" readonly>
-												</div></input>
+												<label for="rcp_item_no">Item No.</label>
+												<input type="text" maxlength="10" size="10" class="form-control input-sm required" name="rcp_item_no" id="rcp_item_no" placeholder="Item No." value="<?= $item_no ?>" readonly>
+											</div>
+										</div>
+										<div class='col-sm-2'>
+											<div class='form-group'>
+												<label for="rcp_material_no">Material No.</label>
+												<input type="text" maxlength="10" size="10" class="form-control input-sm required" name="rcp_material_no" id="rcp_material_no" placeholder="Material No." value="<?= $material_no ?>" readonly>
 											</div>
 										</div>
 										<div class='col-sm-4'>
@@ -233,7 +236,6 @@
 					<input type="hidden" id="rcp_uniq" name="rcp_uniq" value="<?= $rcpuniq ?>">
 					<input type="hidden" id="po_number" name="po_number" value="<?= $po_number ?>">
 					<input type="hidden" id="rcph_seq" name="rcph_seq" value="<?= $rcphseq ?>">
-					<input type="hidden" id="rcpl_seq" name="rcpl_seq" value="<?= $rcplseq ?>">
 					<input type="hidden" id="qty" name="qty" value="<?= $qty_rcp ?>">
 					<input type="hidden" id="csr_qty" name="csr_qty" value="<?= $csr_qty ?>">
 					<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>

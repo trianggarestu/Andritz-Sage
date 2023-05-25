@@ -96,19 +96,22 @@ class RequisitionList extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
-        $paginateData = $this->RequisitionModel->select('webot_REQUISITION.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
+        $requisition_data = $this->RequisitionModel->select('webot_REQUISITION.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
         c.PONUMBER,c.PODATE')
             ->join('webot_CSR b', 'b.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
             ->join('webot_PO c', 'c.RQNUNIQ = webot_REQUISITION.RQNUNIQ', 'left')
             ->where('webot_REQUISITION.POSTINGSTAT', 1)
-            ->orderBy('webot_REQUISITION.RQNUNIQ', 'ASC')
-            ->paginate(10);
+            ->orderBy('webot_REQUISITION.RQNUNIQ', 'ASC');
 
-
+        $perpage = 20;
         $data = array(
-            'requisition_data' => $paginateData,
-            'pager' => $this->RequisitionModel->pager,
+            'requisition_data' => $requisition_data->paginate($perpage, 'rqn_posting_list'),
+            'pager' => $requisition_data->pager,
+            'ct_po_posting' => $this->RequisitionModel->count_rqn_posting(),
+            'perpage' => $perpage,
+            'currentpage' => $requisition_data->pager->getCurrentPage('rqn_posting_list'),
+            'totalpages'  => $requisition_data->pager->getPageCount('rqn_posting_list'),
         );
 
         /*$requisitiondata = $this->RequisitionModel->get_requisition_close();

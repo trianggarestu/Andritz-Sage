@@ -19,21 +19,20 @@
                 <div class="box box-success">
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="rcp_number">Select Receipt Number</label>
-                            <select class="form-control input-sm select2 required" id="rcp_number" name="rcp_number" style="width:100%;">
+                            <label for="rcph_seq">Select Receipt Number</label>
+                            <select class="form-control input-sm select2 required" id="rcph_seq" name="rcph_seq" style="width:100%;">
                                 <option option value="">-- Select Receipt Number --</option>
                                 <?php foreach ($gr_by_po as $data) :
                                     $rcp_date = substr($data['RCPDATE'], 4, 2) . '/' . substr($data['RCPDATE'], 6, 2) . '/' . substr($data['RCPDATE'], 0, 4);
                                 ?>
-                                    <option value="<?= trim($data['RCPNUMBER'])
-                                                    ?>"><?= trim($data['RCPNUMBER']) . '-' . $rcp_date
+                                    <option value="<?= trim($data['RCPHSEQ'])
+                                                    ?>"><?= trim($data['RCPNUMBER']) . ' - ' . $rcp_date
                                                         ?>
                                     </option>
                                 <?php endforeach;
                                 ?>
                             </select>
                         </div>
-                        <input type="hidden" id="sage_rcphseq" name="sage_rcphseq" value="<?= $data['RCPHSEQ'] ?>">
                         <input type="hidden" id="po_uniq" name="po_uniq" value="<?= $po_uniq ?>">
                         <input type="hidden" id="csr_uniq" name="csr_uniq" value="<?= $csr_uniq ?>">
                         <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">

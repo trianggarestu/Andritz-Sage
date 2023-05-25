@@ -116,6 +116,7 @@ class GoodReceipt extends BaseController
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($pouniq);
         $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
         $podate = substr($getpodata['PODATE'], 4, 2) . '/' . substr($getpodata['PODATE'], 6, 2) . '/' . substr($getpodata['PODATE'], 0, 4);
+        $etaportdate = substr($getpodata['ETAPORTDATE'], 4, 2) . '/' . substr($getpodata['ETAPORTDATE'], 6, 2) . '/' . substr($getpodata['ETAPORTDATE'], 0, 4);
         if ($getpodata['RCPUNIQ'] == NULL) {
             $button_text = 'Save';
             $act = 'goodreceipt/insert_action';
@@ -130,6 +131,7 @@ class GoodReceipt extends BaseController
                 'crm_no' => $getpodata['CRMNO'],
                 'req_date' => $reqdate,
                 'csr_item_no' => $getpodata['ITEMNO'],
+                'csr_material_no' => $getpodata['MATERIALNO'],
                 'csr_item_desc' => $getpodata['ITEMDESC'],
                 'csr_srvtype' => $getpodata['SERVICETYPE'],
                 'csr_qty' => $getpodata['QTY'],
@@ -137,16 +139,16 @@ class GoodReceipt extends BaseController
                 'po_uniq' => $getpodata['POUNIQ'],
                 'po_number' => $getpodata['PONUMBER'],
                 'po_date' => $podate,
-                'etaport_date' => $getpodata['ETAPORTDATE'],
+                'etaport_date' => $etaportdate,
                 'vendorshi_status' => $getpodata['VENDSHISTATUS'],
                 'rcpuniq' => '',
                 'rcphseq' => '',
-                'rcplseq' => '',
                 'rcp_number' => '',
                 'rcp_date' => '',
                 'vd_name' => '',
                 'rcp_desc' => '',
                 'item_no' => '',
+                'material_no' => '',
                 'item_desc' => '',
                 'qty_rcp' => '',
                 'rcp_unit' => '',
@@ -157,6 +159,7 @@ class GoodReceipt extends BaseController
         } else {
 
             $rcpdate = substr($getpodata['RECPDATE'], 4, 2) . '/' . substr($getpodata['RECPDATE'], 6, 2) . '/' . substr($getpodata['RECPDATE'], 0, 4);
+            $etaportdate = substr($getpodata['ETAPORTDATE'], 4, 2) . '/' . substr($getpodata['ETAPORTDATE'], 6, 2) . '/' . substr($getpodata['ETAPORTDATE'], 0, 4);
             $button_text = 'Update';
             $act = 'goodreceipt/update_action';
 
@@ -170,6 +173,7 @@ class GoodReceipt extends BaseController
                 'crm_no' => $getpodata['CRMNO'],
                 'req_date' => $reqdate,
                 'csr_item_no' => $getpodata['ITEMNO'],
+                'csr_material_no' => $getpodata['MATERIALNO'],
                 'csr_item_desc' => $getpodata['ITEMDESC'],
                 'csr_srvtype' => $getpodata['SERVICETYPE'],
                 'csr_qty' => $getpodata['QTY'],
@@ -177,17 +181,17 @@ class GoodReceipt extends BaseController
                 'po_uniq' => $getpodata['POUNIQ'],
                 'po_number' => $getpodata['PONUMBER'],
                 'po_date' => $podate,
-                'etaport_date' => $getpodata['ETAPORTDATE'],
+                'etaport_date' => $etaportdate,
                 'vendorshi_status' => $getpodata['VENDSHISTATUS'],
                 'rcpuniq' => $getpodata['RCPUNIQ'],
                 'rcphseq' => $getpodata['RCPHSEQ'],
-                'rcplseq' => $getpodata['RCPLSEQ'],
                 'rcp_number' => $getpodata['RECPNUMBER'],
                 'rcp_date' => $rcpdate,
                 'vd_name' => $getpodata['VDNAME'],
                 'rcp_desc' => $getpodata['DESCRIPTIO'],
-                'item_no' => $getpodata['ITEMNO'],
-                'item_desc' => $getpodata['ITEMDESC'],
+                'item_no' => $getpodata['RECPITEMNO'],
+                'material_no' => $getpodata['MATERIALNO'],
+                'item_desc' => $getpodata['RECPITEMDESC'],
                 'qty_rcp' => $getpodata['RECPQTY'],
                 'rcp_unit' => $getpodata['RECPUNIT'],
                 'button_text' => $button_text,
@@ -211,6 +215,7 @@ class GoodReceipt extends BaseController
             'po_uniq' => $po_uniq,
             'csr_uniq' => $getpodata['CSRUNIQ'],
             'po_number' => $getpodata['PONUMBER'],
+            //'rcphseq' => $getpodata['RCPHSEQ'],
         );
 
         //$data['gr_by_po'] = $this->GoodreceiptModel->list_gr_by_po($ponumber);
@@ -220,7 +225,7 @@ class GoodReceipt extends BaseController
         echo view('goodreceipt/ajax_add_goodreceipt', $data);
     }
 
-    public function form_select_goodreceiptline($po_uniq, $rcphseq)
+    /*public function form_select_goodreceiptline($po_uniq, $rcphseq)
     {
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($po_uniq);
         $getrcpdata = $this->GoodreceiptModel->get_receipt_sage_by_id($rcphseq);
@@ -241,24 +246,23 @@ class GoodReceipt extends BaseController
         //$data['form_action'] = base_url("salesorder/choosegr");
         //echo view('crm/ajax_add_contract', $data);
         echo view('goodreceipt/ajax_add_goodreceiptline', $data);
-    }
+    }*/
 
 
     public function choosegoodreceipt()
     {
-        if (null == ($this->request->getPost('rcp_number'))) {
-            $rcp_number = "receipt number not found";
+        if (null == ($this->request->getPost('rcph_seq'))) {
+            $sage_rcphseq = "receipt number not found";
         } else {
-            $rcp_number = $this->request->getPost('rcp_number');
+            $sage_rcphseq = $this->request->getPost('rcph_seq');
             $po_uniq = $this->request->getPost('po_uniq');
-            $sage_rcphseq = $this->request->getPost('sage_rcphseq');
         }
 
         return redirect()->to(base_url('goodreceipt/selectgoodreceipt/' . $po_uniq . '/' . $sage_rcphseq));
     }
 
 
-    public function choosegoodreceiptline()
+    /*public function choosegoodreceiptline()
     {
         if (null == ($this->request->getPost('sage_rcplseq'))) {
             $sage_rcplseq = "receipt number not found";
@@ -270,10 +274,10 @@ class GoodReceipt extends BaseController
         }
 
         return redirect()->to(base_url('goodreceipt/selectgoodreceiptline/' . $po_uniq . '/' . $sage_rcphseq . '/' . $sage_rcplseq));
-    }
+    }*/
 
 
-    public function selectgoodreceipt($pouniq, $sage_rcphseq = '', $postingstat = 0)
+    public function selectgoodreceipt($pouniq, $sage_rcphseq = 0, $postingstat = 0)
     {
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($pouniq);
         $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
@@ -296,6 +300,7 @@ class GoodReceipt extends BaseController
                 'crm_no' => $getpodata['CRMNO'],
                 'req_date' => $reqdate,
                 'csr_item_no' => $getpodata['ITEMNO'],
+                'csr_material_no' => $getpodata['MATERIALNO'],
                 'csr_item_desc' => $getpodata['ITEMDESC'],
                 'csr_srvtype' => $getpodata['SERVICETYPE'],
                 'csr_qty' => $getpodata['QTY'],
@@ -307,12 +312,12 @@ class GoodReceipt extends BaseController
                 'vendorshi_status' => $getpodata['VENDSHISTATUS'],
                 'rcpuniq' => $getpodata['RCPUNIQ'],
                 'rcphseq' => '',
-                'rcplseq' => '',
                 'rcp_number' => '',
                 'rcp_date' => '',
                 'vd_name' => '',
                 'rcp_desc' => '',
                 'item_no' => '',
+                'material_no' => '',
                 'item_desc' => '',
                 'qty_rcp' => '',
                 'rcp_unit' => '',
@@ -333,6 +338,7 @@ class GoodReceipt extends BaseController
                 'crm_no' => $getpodata['CRMNO'],
                 'req_date' => $reqdate,
                 'csr_item_no' => $getpodata['ITEMNO'],
+                'csr_material_no' => $getpodata['MATERIALNO'],
                 'csr_item_desc' => $getpodata['ITEMDESC'],
                 'csr_srvtype' => $getpodata['SERVICETYPE'],
                 'csr_qty' => $getpodata['QTY'],
@@ -344,15 +350,15 @@ class GoodReceipt extends BaseController
                 'vendorshi_status' => $getpodata['VENDSHISTATUS'],
                 'rcpuniq' => $getpodata['RCPUNIQ'],
                 'rcphseq' => $sage_rcphseq,
-                'rcplseq' => '',
                 'rcp_number' => trim($getrcpdata['RCPNUMBER']),
                 'rcp_date' => $rcpdate,
                 'vd_name' => $getrcpdata['VDNAME'],
                 'rcp_desc' => $getrcpdata['DESCRIPTIO'],
-                'item_no' => '',
-                'item_desc' => '',
-                'qty_rcp' => '',
-                'rcp_unit' => '',
+                'item_no' => $getpodata['ITEMNO'],
+                'material_no' => $getpodata['MATERIALNO'],
+                'item_desc' => $getpodata['ITEMDESC'],
+                'qty_rcp' => 0,
+                'rcp_unit' => $getpodata['STOCKUNIT'],
                 'button_text' => $button_text,
                 'form_action' => base_url($act),
             );
@@ -365,7 +371,7 @@ class GoodReceipt extends BaseController
     }
 
 
-    public function selectgoodreceiptline($pouniq, $sage_rcphseq = '', $sage_rcplseq = '', $postingstat = 0)
+    /*public function selectgoodreceiptline($pouniq, $sage_rcphseq = '', $sage_rcplseq = '', $postingstat = 0)
     {
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($pouniq);
         $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
@@ -453,6 +459,7 @@ class GoodReceipt extends BaseController
         echo view('goodreceipt/goodreceipt_form', $data);
         echo view('view_footer', $this->footer_data);
     }
+*/
 
 
     public function insert_action()
@@ -462,7 +469,7 @@ class GoodReceipt extends BaseController
             'rcp_date' => 'required',
             'vd_name' => 'required',
             'rcp_desc' => 'required',
-            'item_no' => 'required',
+            'rcp_item_no' => 'required',
             'item_desc' => 'required',
             'qty_rcp' => 'required|numeric|greater_than[0]',
             'rcp_unit' => 'required',
@@ -472,7 +479,7 @@ class GoodReceipt extends BaseController
             $rcph_seq = $this->request->getPost('rcph_seq');
             $rcpl_seq = $this->request->getPost('rcpl_seq');
             $rcp_number = $this->request->getPost('rcp_number');
-            $item_no = $this->request->getPost('item_no');
+            $item_no = $this->request->getPost('rcp_item_no');
             if (($rcp_number == "") and ($item_no == "")) {
                 session()->set('success', '-1');
                 return redirect()->to(base_url('/goodreceipt/update/' . $po_uniq))->withInput();
@@ -495,7 +502,7 @@ class GoodReceipt extends BaseController
             $rcpl_seq = $this->request->getPost('rcpl_seq');
             $rcp_date = $this->request->getPost('rcp_date');
             $rcp_date = substr($rcp_date, 6, 4)  . "" . substr($rcp_date, 0, 2) . "" . substr($rcp_date, 3, 2);
-            if ($this->request->getPost('csr_qty') == $this->request->getPost('qty')) {
+            if ($this->request->getPost('csr_qty') == $this->request->getPost('qty_rcp')) {
                 $gr_status = 1;
             } else {
                 $gr_status = 0;
@@ -516,8 +523,7 @@ class GoodReceipt extends BaseController
                 'RECPDATE' => $rcp_date,
                 'VDNAME' => $this->request->getPost('vd_name'),
                 'DESCRIPTIO' => $this->request->getPost('rcp_desc'),
-                'RCPLSEQ' => $this->request->getPost('rcpl_seq'),
-                'ITEMNO' => $this->request->getPost('item_no'),
+                'RECPITEMNO' => $this->request->getPost('rcp_item_no'),
                 'ITEMDESC' => $this->request->getPost('item_desc'),
                 'RECPQTY' => $this->request->getPost('qty_rcp'),
                 'RECPUNIT' => $this->request->getPost('rcp_unit'),
@@ -549,7 +555,7 @@ class GoodReceipt extends BaseController
             'rcp_date' => 'required',
             'vd_name' => 'required',
             'rcp_desc' => 'required',
-            'item_no' => 'required',
+            'rcp_item_no' => 'required',
             'item_desc' => 'required',
             'qty_rcp' => 'required|numeric|greater_than[0]',
             'rcp_unit' => 'required',
@@ -559,7 +565,7 @@ class GoodReceipt extends BaseController
             $rcph_seq = $this->request->getPost('rcph_seq');
             $rcpl_seq = $this->request->getPost('rcpl_seq');
             $rcp_number = $this->request->getPost('rcp_number');
-            $item_no = $this->request->getPost('item_no');
+            $item_no = $this->request->getPost('rcp_item_no');
             if (($rcp_number == "") and ($item_no == "")) {
                 session()->set('success', '-1');
                 return redirect()->to(base_url('/goodreceipt/update/' . $po_uniq))->withInput();
@@ -580,7 +586,6 @@ class GoodReceipt extends BaseController
             $csruniq = $this->request->getPost('csr_uniq');
             $rcpuniq = $this->request->getPost('rcp_uniq');
             $rcph_seq = $this->request->getPost('rcph_seq');
-            $rcpl_seq = $this->request->getPost('rcpl_seq');
             $rcp_date = $this->request->getPost('rcp_date');
             $rcp_date = substr($rcp_date, 6, 4)  . "" . substr($rcp_date, 0, 2) . "" . substr($rcp_date, 3, 2);
             if ($this->request->getPost('csr_qty') == $this->request->getPost('qty_rcp')) {
@@ -604,8 +609,7 @@ class GoodReceipt extends BaseController
                 'RECPDATE' => $rcp_date,
                 'VDNAME' => $this->request->getPost('vd_name'),
                 'DESCRIPTIO' => $this->request->getPost('rcp_desc'),
-                'RCPLSEQ' => $this->request->getPost('rcpl_seq'),
-                'ITEMNO' => $this->request->getPost('item_no'),
+                'RECPITEMNO' => $this->request->getPost('rcp_item_no'),
                 'ITEMDESC' => $this->request->getPost('item_desc'),
                 'RECPQTY' => $this->request->getPost('qty_rcp'),
                 'RECPUNIT' => $this->request->getPost('rcp_unit'),

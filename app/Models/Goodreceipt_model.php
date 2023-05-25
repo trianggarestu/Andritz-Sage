@@ -41,7 +41,7 @@ class Goodreceipt_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.RCPUNIQ,c.RCPHSEQ,c.RECPNUMBER,c.RECPDATE,c.VDNAME,c.DESCRIPTIO,c.RCPLSEQ,c.ITEMNO,c.ITEMDESC,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        c.RCPUNIQ,c.RCPHSEQ,c.RECPNUMBER,c.RECPDATE,c.VDNAME,c.DESCRIPTIO,c.RECPITEMNO,c.ITEMDESC as RECPITEMDESC,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
         from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
         left join ICITEM it on it.ITEMNO=b.ITEMNO
@@ -54,16 +54,14 @@ class Goodreceipt_model extends Model
     function get_receipt_sage_by_id($rcphseq)
     {
         $query = $this->db->query("select DISTINCT b.PONUMBER,b.RCPNUMBER," . 'b."DATE"' . " as RCPDATE,b.VDNAME,b.DESCRIPTIO from PORCPH1 b
-        left join PORCPL a on a.RCPHSEQ=b.RCPHSEQ
-        where " . 'a."CONTRACT"' . "<>'' and " . 'b."DATE"' . ">=20220101 and b.RCPHSEQ='$rcphseq'");
+        where b.RCPHSEQ='$rcphseq'");
         return $query->getRowArray();
     }
 
     function list_gr_by_po($ponumber)
     {
-        $query = $this->db->query("select DISTINCT a.RCPHSEQ,b.PONUMBER,b.RCPNUMBER," . 'b."DATE"' . " as RCPDATE,b.VDNAME from PORCPH1 b
-        left join PORCPL a on a.RCPHSEQ=b.RCPHSEQ
-        where " . 'a."CONTRACT"' . "<>'' and " . 'b."DATE"' . ">=20220101 and b.PONUMBER='$ponumber' ");
+        $query = $this->db->query("select DISTINCT b.RCPHSEQ,b.PONUMBER,b.RCPNUMBER," . 'b."DATE"' . " as RCPDATE,b.VDNAME from PORCPH1 b
+        where b.PONUMBER='$ponumber' ");
         return $query->getResultArray();
     }
 
@@ -86,9 +84,9 @@ class Goodreceipt_model extends Model
         return $query->getRowArray();
     }
 
-    function get_rcpuniq_open($csruniq, $pouniq, $rcph_seq, $rcpl_seq)
+    function get_rcpuniq_open($csruniq, $pouniq, $rcph_seq)
     {
-        $query = $this->db->query("select RCPUNIQ from webot_RECEIPTS where POSTINGSTAT =0 and CSRUNIQ='$csruniq' and POUNIQ='$pouniq' and RCPHSEQ='$rcph_seq' and RCPLSEQ='$rcpl_seq'");
+        $query = $this->db->query("select RCPUNIQ from webot_RECEIPTS where POSTINGSTAT =0 and CSRUNIQ='$csruniq' and POUNIQ='$pouniq' and RCPHSEQ='$rcph_seq'");
         return $query->getRowArray();
     }
 

@@ -27,11 +27,11 @@ class Salesorder_model extends Model
             . "left join ARCUS b on b.IDCUST=a.CUSTOMER "
             . "left join PMSTAFF c on c.STAFFCODE=a.MANAGER "
             . "where a.STATUS=30 and a.CUSTOMER<>'' and "
-            . "a.CONTRACT IN (select c.CONTRACT
-			from ENRQNH a
-			inner join (select r.PONUMBER,r." . '"DATE"' . ",s.PORHSEQ,s.PORLSEQ,s.CONTRACT,s.PROJECT,s.ITEMDESC from POPORH1 r inner join POPORL s on s.PORHSEQ=r.PORHSEQ) c on c.PONUMBER=a.PONUMBERS
-			inner join (select x.PONUMBER,x.RCPNUMBER,x." . '"DATE"' . ",y.PORHSEQ,y.PORLSEQ,y.CONTRACT,y.PROJECT,y.ITEMDESC from PORCPH1 x inner join PORCPL y on y.RCPHSEQ=x.RCPHSEQ) d on d.PORHSEQ=c.PORHSEQ and d.PORLSEQ=c.PORLSEQ
-			where c.CONTRACT<>'') and "
+            //. "a.CONTRACT IN (select c.CONTRACT
+            //from ENRQNH a
+            //inner join (select r.PONUMBER,r." . '"DATE"' . ",s.PORHSEQ,s.PORLSEQ,s.CONTRACT,s.PROJECT,s.ITEMDESC from POPORH1 r inner join POPORL s on s.PORHSEQ=r.PORHSEQ) c on c.PONUMBER=a.PONUMBERS
+            //inner join (select x.PONUMBER,x.RCPNUMBER,x." . '"DATE"' . ",y.PORHSEQ,y.PORLSEQ,y.CONTRACT,y.PROJECT,y.ITEMDESC from PORCPH1 x inner join PORCPL y on y.RCPHSEQ=x.RCPHSEQ) d on d.PORHSEQ=c.PORHSEQ and d.PORLSEQ=c.PORLSEQ
+            //where c.CONTRACT<>'') and "
             . "a.CONTRACT NOT IN (select CONTRACT from webot_CSR where POSTINGSTAT<>2) ");
 
         if ($query->getResult() > 0) {

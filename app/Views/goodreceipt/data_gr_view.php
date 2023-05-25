@@ -91,7 +91,7 @@
 														<tr>
 															<td width="300">ITEM </td>
 															<td width="1">:</td>
-															<td><strong><?= $rcpopen_data['ITEMNO'] . ' - ' . $rcpopen_data['ITEMDESC']; ?></strong></td>
+															<td><strong><?= $rcpopen_data['RECPITEMNO'] . ' - ' . $rcpopen_data['ITEMDESC']; ?></strong></td>
 														</tr>
 														<tr>
 															<td width="300">QTY </td>
