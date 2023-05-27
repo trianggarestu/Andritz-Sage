@@ -372,6 +372,9 @@ class Mailbox extends BaseController
                 'sending_time' => $sending_time,
                 'subject' => $row['SUBJECT'],
                 'message' => $row['MESSAGE'],
+                'is_attached' => $row['IS_ATTACHED'],
+                'attachment_filename' => $row['ATTACHMENT_FILENAME'],
+                'attachment_filepath' => $row['ATTACHMENT_FILEPATH'],
             );
             echo view('mailbox/ajax_view_messages', $data);
         }

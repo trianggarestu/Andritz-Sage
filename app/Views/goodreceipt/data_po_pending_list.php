@@ -118,7 +118,7 @@
 																				<?php if ($rcp_list['RCPPOSTINGSTAT'] == 1 and $rcp_list['RCPOFFLINESTAT'] == 1) :
 																				?>
 																					<li>
-																						<a href="<?= base_url("goodreceipt/sendnotif/" . $rcp_list['CSRUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
+																						<a href="<?= base_url("goodreceipt/sendnotif/" . $rcp_list['RCPUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
 																					</li>
 																				<?php endif;
 																				?>

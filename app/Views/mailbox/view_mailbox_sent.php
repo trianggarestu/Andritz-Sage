@@ -124,7 +124,7 @@
 																					echo 'unread-b';
 																				}; ?>">
 														<a href="<?= base_url(); ?>mailbox/view_messages/<?= $data['MAILSEQ'] ?>" data-remote="false" data-toggle="modal" data-tittle="View Messages" data-target="#modalBox">
-															<?= $data['SUBJECT'] ?> ...
+															<?= substr(trim($data['SUBJECT']), 0, 70) . '...'; ?>
 														</a>
 													</td>
 													<td class="mailbox-attachment"><?php if ($data['IS_ATTACHED'] == 1) { ?><i class="fa fa-paperclip"></i><?php } ?></td>

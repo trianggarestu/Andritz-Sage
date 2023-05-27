@@ -58,32 +58,25 @@
         <!-- /.mailbox-read-message -->
 
         <div class="modal-footer">
-            <!-- untuk Attachment
-                    <ul class="mailbox-attachments clearfix">
-                    <li>
-                        <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+            <!-- untuk Attachment-->
+            <?php if ($is_attached == 1) { ?>
+                <ul class="mailbox-attachments clearfix">
+                    <li class="pull-left">
+                        <span class="mailbox-attachment-icon btn-xs"><i class="fa fa-file-pdf-o"></i></span>
 
-                        <div class="mailbox-attachment-info">
-                            <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> Sep2014-report.pdf</a>
-                            <span class="mailbox-attachment-size">
-                                1,245 KB
-                                <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                            </span>
+                        <div class="mailbox-attachment-info"><small>
+                                <a href="<?= base_url($attachment_filepath); ?>" download class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> <?= $attachment_filename; ?></a>
+                                <span class="mailbox-attachment-size">
+                                    <?= number_format((filesize($attachment_filepath) / 1000), 0, ",", ".") . ' KB'; ?>
+                                    <a href="<?= base_url($attachment_filepath); ?>" download class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+                                </span>
+                            </small>
                         </div>
                     </li>
-                    <li>
-                        <span class="mailbox-attachment-icon"><i class="fa fa-file-word-o"></i></span>
+                </ul>
+            <?php } ?>
 
-                        <div class="mailbox-attachment-info">
-                            <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> App Description.docx</a>
-                            <span class="mailbox-attachment-size">
-                                1,245 KB
-                                <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                            </span>
-                        </div>
-                    </li>
-                </ul> 
-                -->
+
             <a href="<?= header("Refresh:0"); ?>"><button type="button" class="btn bg-olive margin"><i class='fa fa-check'></i> Close</button></a>
         </div>
     </div>

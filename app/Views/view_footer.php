@@ -87,6 +87,14 @@
 					notification(notify, notify_msg);
 					$('#success-code').val('');
 				});
+
+				//Auto fill Outstanding Shipment
+				$("#shi_qty").keyup(function() {
+					var csrqty = $('#csr_qty').val();
+					var shiqty = $('#shi_qty').val();
+					$('#shi_qty_outs').val(shiqty - csrqty);
+					//$("#shi_qty_outs").val(this.value);
+				});
 			</script>
 			<?= session()->GET('success') == 0; ?>
 

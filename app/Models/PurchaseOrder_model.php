@@ -90,7 +90,7 @@ class Purchaseorder_model extends Model
             ) x 
             left join webot_REQUISITION y on y.RQNUNIQ=x.RQNUNIQ
             left join webot_CSR z on z.CSRUNIQ=x.CSRUNIQ
-            where x.POSTINGSTAT=1 and x.CARGOREADINESSDATE>=1 and x.diff>=-15
+            where x.POSTINGSTAT=1 and x.CARGOREADINESSDATE>=1 and (x.diff BETWEEN -15 and 0) 
             order by x.ETDDATE asc");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();

@@ -110,6 +110,17 @@ class Notif_model extends Model
 	}
 
 
+	function get_edn_sendto_user($groupuser, $id_so)
+	{
+		$query = $this->db->query("select * from (select a.USERNAME,a.NAME,a.EMAIL,a.GROUPID from webot_USERAUTH a where GROUPID='$groupuser' 
+		union all
+		select 'CUSTOMER' as USERNAME,NAMECUST,EMAIL1CUST,'7' as GROUPID from webot_CSR where CSRUNIQ='$id_so') x
+
+		order by x.USERNAME asc");
+		return $query->getResultArray();
+	}
+
+
 	function get_mailbox_trash($user)
 	{
 		$query = $this->db->query("select * from webot_MAILBOX where IS_TRASHED=1 and IS_DELETED=0 and TO_USER='$user' order by SENDING_DATE desc, MAILSEQ desc");
