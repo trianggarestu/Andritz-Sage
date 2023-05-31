@@ -58,19 +58,13 @@
 														<thead class="bg-gray disabled">
 															<tr>
 																<th>No.</th>
-																<th>Customer Name</th>
-																<th>Contract No.</th>
-																<th>Contract Name</th>
-																<th>Project No.</th>
-
-																<th>CRM Number</th>
-																<th>Req Date</th>
+																<th nowrap>Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
+																<th style="vertical-align: top;">Req Date</th>
 																<th style="background-color: white;"></th>
-																<th>Action</th>
-																<th>Status</th>
-																<th>PR Number</th>
-																<th>PR Date</th>
-																<th style="background-color: white;"></th>
+																<th style="vertical-align: top;">Action</th>
+																<th style="vertical-align: top;">Status</th>
+																<th style="vertical-align: top;">PR Number</th>
+																<th style="vertical-align: top;">PR Date</th>
 
 
 															</tr>
@@ -90,15 +84,45 @@
 
 																<tr>
 																	<td><?= $no++; ?></td>
-																	<td><?= $ot_list['NAMECUST']; ?></td>
-																	<td nowrap><?= $ot_list['CONTRACT']; ?></td>
-																	<td nowrap><?= $ot_list['CTDESC']; ?></td>
-																	<td nowrap><?= $ot_list['PROJECT']; ?></td>
-																	<td nowrap><?= $ot_list['CRMNO']; ?></td>
-																	<td nowrap><?= $crmreq_date; ?></td>
+																	<td nowrap><strong><a href="#"><?= $ot_list['CONTRACT'] ?></a></strong>
+																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
+																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
+																		<small>(<?= $ot_list['NAMECUST']; ?>)</small><br>
+																		<table class="table table-bordered table-striped dataTable">
+																			<thead class="bg-gray disabled">
+																				<tr>
+																					<th colspan="3"><small>Inventory Info</small>
+																					</th>
+																				</tr>
+																			</thead>
+																			<tr>
+																				<td style="width: 15%;"><small>Item No./Material No.</small></td>
+																				<td style="width: 1%;"><small>:</small></td>
+																				<td><small><?= $ot_list['ITEMNO'] . " / " .  $ot_list['MATERIALNO'];
+																							?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Item Description</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= "<strong>" .  $ot_list['ITEMDESC'] . "</strong><br>"; ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Type</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= $ot_list['SERVICETYPE']; ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Qty</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= number_format($ot_list['QTY'], 0, ",", ".") . ' (' . trim($ot_list['STOCKUNIT']) . ')' ?></small></td>
+																			</tr>
+																		</table>
+
+																	</td>
+																	<td style="vertical-align: top;" nowrap><?= $crmreq_date; ?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td nowrap>
+																	<td style="vertical-align: top;" nowrap>
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
@@ -126,7 +150,7 @@
 																		</div>
 
 																	</td>
-																	<td nowrap>
+																	<td style="vertical-align: top;" nowrap>
 																		<?php $postingstat = $ot_list['POSTINGSTAT'];
 																		switch ($postingstat) {
 																			case "0":
@@ -142,9 +166,8 @@
 																				echo "";
 																		} ?>
 																	</td>
-																	<td nowrap><?= $ot_list['RQNNUMBER']; ?></td>
-																	<td nowrap><?= $pr_date; ?></td>
-																	<td style="background-color: white;"></td>
+																	<td style="vertical-align: top;" nowrap><?= $ot_list['RQNNUMBER']; ?></td>
+																	<td style="vertical-align: top;" nowrap><?= $pr_date; ?></td>
 
 																</tr>
 

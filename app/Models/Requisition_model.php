@@ -24,7 +24,8 @@ class Requisition_model extends Model
 
     function get_requisition_open()
     {
-        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT,b.OFFLINESTAT from webot_CSR a
+        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT,b.OFFLINESTAT," . 'it."DESC"' . " as ITEMDESC from webot_CSR a
+        left join ICITEM it on it.ITEMNO=a.ITEMNO 
         left join webot_REQUISITION b on b.CSRUNIQ=a.CSRUNIQ
         where (a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1)");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)

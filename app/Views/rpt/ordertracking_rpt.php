@@ -181,7 +181,7 @@
 																	<td><?= $ot_list['QTYDELIVERED']; ?></td>
 																	<td><?= $ot_list['QTYOUTSTANDING']; ?></td>
 																	<td><?= $ot_list['POCUSTSTATUS']; ?></td>
-																	<td><?= $ot_list['DELIVERYSTATUS']; ?></td>
+																	<td><?= $ot_list['DNSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['INVOICEDATE']; ?></td>
 																	<td><?= $ot_list['FINSTATUS']; ?></td>

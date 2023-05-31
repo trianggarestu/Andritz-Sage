@@ -97,7 +97,8 @@ class PurchaseOrderList extends BaseController
         session()->set('success', '0');
         $purchaseorder_data = $this->PurchaseorderModel->select('webot_PO.*,a.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT')
             ->join('webot_REQUISITION a', 'a.RQNUNIQ = webot_PO.RQNUNIQ', 'left')
-            ->join('webot_CSR b', 'b.CSRUNIQ = webot_PO.CSRUNIQ', 'left')
+            ->join('webot_CSR b', 'b.CSRUNIQ = webot_PO.CSRUNIQ and webot_PO.CSRUNIQ = b.CSRUNIQ', 'left')
+
             ->where('webot_PO.POSTINGSTAT=', 1)
             ->where('webot_PO.CARGOREADINESSDATE>=', 1)
 

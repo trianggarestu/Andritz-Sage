@@ -419,7 +419,6 @@ class DeliveryOrders extends BaseController
                 'SHIQTYOUTSTANDING' => $shi_qtyoutstanding,
                 'SHIUNIT' => $this->request->getPost('shi_unit'),
                 'POCUSTSTATUS' => $pocust_status,
-                'DNSTATUS' => 0,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => 0,
                 'OFFLINESTAT' => 1,
@@ -496,7 +495,6 @@ class DeliveryOrders extends BaseController
                 'SHIQTYOUTSTANDING' => $shi_qtyoutstanding,
                 'SHIUNIT' => $this->request->getPost('shi_unit'),
                 'POCUSTSTATUS' => $pocust_status,
-                'DNSTATUS' => 0,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => 0,
                 'OFFLINESTAT' => 1,
@@ -522,7 +520,13 @@ class DeliveryOrders extends BaseController
         session()->remove('success');
         session()->set('success', '0');
         $getshiopen = $this->DeliveryordersModel->get_shipment_open($shiuniq);
-        if ($getshiopen['POSTINGSTAT'] == 0) {
+
+        /*if (empty($getshiopen['POSTINGSTAT']) and empty($getshiopen['EDNFILENAME'])) {
+            return redirect()->to(base_url('/deliveryorders/'));
+            session()->remove('success');
+        } else 
+        */
+        if ($getshiopen['POSTINGSTAT'] == 0 and empty($getshiopen['EDNFILENAME'])) {
             $data = array(
                 'shiopen_data' =>  $getshiopen,
                 'link_action' => 'deliveryorders/posting/',
@@ -538,6 +542,8 @@ class DeliveryOrders extends BaseController
                 'button' => 'Send Notification Manually',
             );
         }
+
+
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);

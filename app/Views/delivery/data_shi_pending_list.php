@@ -6,10 +6,10 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Delivery Orders</h1>
+		<h1>Confirm D/N Origin</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-			<li class="active">Delivery Orders</li>
+			<li class="active">Confirm DN Origin</li>
 		</ol>
 	</section>
 	<!-- Untuk menampilkan modal bootstrap action success, failed  -->
@@ -38,7 +38,7 @@
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
 											<div class="col-sm-9">
-												<p><i class="fa fa-info-circle"></i><code> { only viewed <strong>Good Receipts</strong> data that waiting to be processed by the Delivery Team }</code></p>
+												<p><i class="fa fa-info-circle"></i><code> { only viewed <strong>Delivery Note</strong> data that waiting to be processed by the Sales Admin }</code></p>
 
 											</div>
 											<div class="col-sm-3" style="vertical-align: text-bottom;">
@@ -62,18 +62,14 @@
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
-																<th style="vertical-align: top;">GR Number<br>GR Description</th>
-																<th style="vertical-align: top;">GR Date</th>
+																<th style="vertical-align: top;">Doc. Number<br>DN Number</th>
+																<th style="vertical-align: top;">Shipment Date</th>
+																<th style="vertical-align: top;">Status</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
-																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;" nowrap>Doc. Number</th>
-																<th style="vertical-align: top;" nowrap>Delivery Number</th>
-																<th style="vertical-align: top;" nowrap>Delivery <br>Date</th>
-																<th style="vertical-align: top;" nowrap>Cust. Received <br>Date</th>
-																<th style="vertical-align: top;" nowrap>Qty Delivered</th>
-																<th style="vertical-align: top;" nowrap>Qty Outstanding</th>
-																<th style="vertical-align: top;" nowrap>PO Status</th>
+																<th style="vertical-align: top;" nowrap>Posting<br> Status </th>
+																<th style="vertical-align: top;" nowrap>D/N Origin<br> Status</th>
+
 															</tr>
 														</thead>
 														<tbody>
@@ -82,7 +78,6 @@
 															$no = 1;
 															foreach ($delivery_data as $shi_list) {
 																$crmreq_date = substr($shi_list['CRMREQDATE'], 4, 2) . "/" . substr($shi_list['CRMREQDATE'], 6, 2) . "/" . substr($shi_list['CRMREQDATE'], 0, 4);
-																$rcp_date = substr($shi_list['RECPDATE'], 4, 2) . "/" . substr($shi_list['RECPDATE'], 6, 2) . "/" . substr($shi_list['RECPDATE'], 0, 4);
 																if (null == $shi_list['SHIDATE']) {
 																	$shi_date = '';
 																} else {
@@ -139,74 +134,63 @@
 
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
-																		<strong><a href="#"><?= $shi_list['RECPNUMBER']; ?></a></strong><br>
-																		<?= $shi_list['DESCRIPTIO']; ?><br>
+																		<strong><a href="#"><?= $shi_list['DOCNUMBER'] ?></a></strong><br>
+																		<?= $shi_list['SHINUMBER'] ?><br>
 																		<table class="table table-bordered table-striped dataTable">
 																			<thead class="bg-gray disabled">
 																				<tr>
-																					<th colspan="3"><small>Good Receipt Info</small>
+																					<th colspan="3"><small>Delivery Note Info</small>
 																					</th>
 																				</tr>
 																			</thead>
 
 																			<tr>
-																				<td><small>Qty</small></td>
+																				<td><small>Received Date</small></td>
 																				<td><small>:</small></td>
-																				<td><small><?= number_format($shi_list['RECPQTY'], 0, ",", ".") . ' (' . trim($shi_list['RECPUNIT']) . ')' ?></small></td>
+																				<td><small><?= $custrcp_date ?></small></td>
 																			</tr>
 																			<tr>
-																				<td><small>GR Status</small></td>
+																				<td><small>Delivered (Qty)</small></td>
 																				<td><small>:</small></td>
-																				<td><small><strong><?php $grstatus = $shi_list['GRSTATUS'];
-																									switch ($grstatus) {
-																										case "0":
-																											echo "Partial";
-																											break;
-																										case "1":
-																											echo "Completed";
-																											break;
-																										default:
-																											echo "";
-																									} ?></strong></small></td>
+																				<td><small><?php if (!empty($shi_list['SHIQTY'])) {
+																								echo number_format($shi_list['SHIQTY'], 0, ",", ".") . ' (' . trim($shi_list['SHIUNIT']) . ')';
+																							} ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Outstanding (Qty)</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?php if (!empty($shi_list['SHIQTYOUTSTANDING'])) {
+																								echo number_format($shi_list['SHIQTYOUTSTANDING'], 0, ",", ".") . ' (' . trim($shi_list['SHIUNIT']) . ')';
+																							} ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>P/O Status</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?php
+																							$pocuststatus = $shi_list['POCUSTSTATUS'];
+																							switch ($pocuststatus) {
+																								case "0":
+																									echo "Outstanding";
+																									break;
+																								case "1":
+																									echo "Completed";
+																									break;
+																								default:
+																									echo "";
+																							}
+
+																							?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>e-Delivery Note</small></td>
+																				<td><small>:</small></td>
+																				<td><a href="<?= base_url($shi_list['EDNFILEPATH']) ?>" download>
+																						<small><?php echo $shi_list['EDNFILENAME'] ?></small>
+																					</a></td>
 																			</tr>
 																		</table>
 																	</td>
-																	<td style="vertical-align: top;"><?= $rcp_date ?></td>
-
-																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;" nowrap>
-																		<div class="btn-group">
-																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
-																			<ul class="dropdown-menu" role="menu">
-																				<?php if (($shi_list['POSTINGSTAT'] == 0) or (empty($shi_list['OFFLINESTAT']))) :
-																				?>
-																					<li>
-																						<a href="<?= base_url("deliveryorders/update/" . $shi_list['RCPRCPUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Input Delivery Orders & Save</a>
-																					</li>
-																				<?php endif;
-																				?>
-																				<?php if ($shi_list['POSTINGSTAT'] == 1 and $shi_list['OFFLINESTAT'] == 1 and empty($shi_list['EDNFILENAME'])) :
-																				?>
-																					<li>
-																						<a href="<?= base_url("deliveryorders/shipmentopenview/" . $shi_list['SHIUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-upload"></i> Upload e-DN & Send Notif</a>
-																					</li>
-																				<?php endif;
-																				?>
-																				<?php if ($shi_list['POSTINGSTAT'] == 1 and $shi_list['OFFLINESTAT'] == 1 and !empty($shi_list['EDNFILENAME'])) :
-																				?>
-																					<li>
-																						<a href="<?= base_url("deliveryorders/shipmentopenview/" . $shi_list['SHIUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-upload"></i> Check e-DN & Send Notif</a>
-																					</li>
-																					<li>
-																						<a href="<?= base_url("deliveryorders/sendnotif/" . $shi_list['SHIUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
-																					</li>
-																				<?php endif;
-																				?>
-
-																			</ul>
-																		</div>
-
-																	</td>
+																	<td style="vertical-align: top;"><?= $shi_date ?></td>
 																	<td style="vertical-align: top;"><?php $postingstat = $shi_list['POSTINGSTAT'];
 																										switch ($postingstat) {
 																											case "0":
@@ -221,30 +205,64 @@
 																											default:
 																												echo "";
 																										} ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $shi_list['DOCNUMBER'] ?></td>
-																	<td style="vertical-align: top;"><?= $shi_list['SHINUMBER'] ?></td>
-																	<td style="vertical-align: top;"><?= $shi_date ?></td>
-																	<td style="vertical-align: top;"><?= $custrcp_date ?></td>
-																	<td style="vertical-align: top;"><?php if (!empty($shi_list['SHIQTY'])) {
-																											echo number_format($shi_list['SHIQTY'], 0, ",", ".");
-																										} ?></td>
-																	<td style="vertical-align: top;"><?php if (!empty($shi_list['SHIQTYOUTSTANDING'])) {
-																											echo number_format($shi_list['SHIQTYOUTSTANDING'], 0, ",", ".");
-																										} ?></td>
-																	<td style="vertical-align: top;"><?php
-																										$pocuststatus = $shi_list['POCUSTSTATUS'];
-																										switch ($pocuststatus) {
-																											case "0":
-																												echo "Outstanding";
-																												break;
-																											case "1":
-																												echo "Completed";
-																												break;
-																											default:
-																												echo "";
-																										}
+																	<td style="background-color: white;"></td>
+																	<td style="vertical-align: top;" nowrap>
+																		<div class="btn-group">
+																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
+																			<ul class="dropdown-menu" role="menu">
+																				<?php if (($shi_list['POSTINGSTAT'] == 1) and !empty($shi_list['EDNFILENAME']) and $shi_list['DNPOSTINGSTAT'] == 0) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("confirmdnorigin/update/" . $shi_list['SHIUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Confirm D/N Origin & Post</a>
+																					</li>
 
-																										?></td>
+																					<li>
+																						<a href="<?= base_url("confirmdnorigin/update/" . $shi_list['SHIUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Confirm D/N Origin & Save</a>
+																					</li>
+																				<?php endif;
+																				?>
+
+																				<?php if ($shi_list['DNPOSTINGSTAT'] == 1 and $shi_list['DNOFFLINESTAT'] == 1 and $shi_list['DNSTATUS'] == 1) :
+																				?>
+																					<li>
+																						<a href="<?= base_url("confirmdnorigin/sendnotif/" . $shi_list['SHIUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
+																					</li>
+																				<?php endif;
+																				?>
+
+																			</ul>
+																		</div>
+
+																	</td>
+
+																	<td style="vertical-align: top;" nowrap><?php
+																											$dnpostingstatus = $shi_list['DNPOSTINGSTAT'];
+																											switch ($dnpostingstatus) {
+																												case "0":
+																													echo "Open";
+																													break;
+																												case "1":
+																													echo "Posted";
+																													break;
+																												default:
+																													echo "";
+																											}
+
+																											?></td>
+																	<td style="vertical-align: top;" nowrap>
+																		<?php
+																		$dnstatus = $shi_list['DNSTATUS'];
+																		switch ($dnstatus) {
+																			case "1":
+																				echo "RECEIVED";
+																				break;
+
+																			default:
+																				echo "";
+																		}
+
+																		?></td>
+
 																</tr>
 
 															<?php } ?>

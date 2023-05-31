@@ -25,7 +25,7 @@ class Deliveryorders_model extends Model
     // Receipt
     function get_gr_pending_to_dn()
     {
-        $query = $this->db->query("select a.RCPUNIQ as RCPRCPUNIQ,a.RECPNUMBER,a.RECPDATE,a.RECPQTY,a.RECPUNIT,a.GRSTATUS,
+        $query = $this->db->query("select a.RCPUNIQ as RCPRCPUNIQ,a.RECPNUMBER,a.RECPDATE,a.DESCRIPTIO,a.RECPQTY,a.RECPUNIT,a.GRSTATUS,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
         b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
         c.*
@@ -34,6 +34,19 @@ class Deliveryorders_model extends Model
         left join ICITEM it on it.ITEMNO=b.ITEMNO
 		left join webot_SHIPMENTS c on c.RCPUNIQ=a.RCPUNIQ
         where (a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
+
+        return $query->getResultArray();
+    }
+
+    function get_shi_pending_to_dnorigin()
+    {
+        $query = $this->db->query("select a.*,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        from webot_SHIPMENTS a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and (a.DNPOSTINGSTAT is NULL or a.DNPOSTINGSTAT=0 or a.DNOFFLINESTAT=1))");
 
         return $query->getResultArray();
     }
@@ -112,6 +125,14 @@ class Deliveryorders_model extends Model
     }
 
 
+    function get_dn_by_id($shiuniq)
+    {
+        $query = $this->db->query("select a.*,b.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC from webot_SHIPMENTS a
+        left join ARCUS b on b.IDCUST=a.CUSTOMER
+        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
+        where a.POSTINGSTAT=1 and a.SHIUNIQ='$shiuniq' ");
+        return $query->getRowArray();
+    }
 
 
 

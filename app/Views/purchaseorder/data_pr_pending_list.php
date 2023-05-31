@@ -59,10 +59,10 @@
 															<tr>
 																<th style="vertical-align: top;">No.</th>
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
-																<th style="vertical-align: top;">Inventory No./Material No.<br>
+																<!--<th style="vertical-align: top;">Inventory No./Material No./Service Type<br>
 																	Inventory Desc.<br>
-																	Service Type</th>
-																<th style="vertical-align: top;">Qty</th>
+																	Qty
+																</th>-->
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">PR Number</th>
@@ -70,12 +70,8 @@
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;">PO Vendor</th>
-																<th style="vertical-align: top;">PO Date</th>
-																<th style="vertical-align: top;">ETD</th>
-																<th style="vertical-align: top;">Cargo<br>Readiness</th>
-																<th style="vertical-align: top;">Origin Country</th>
-																<th style="vertical-align: top;">Remarks</th>
+																<th style="vertical-align: top;" nowrap>PO Vendor<br>Remarks</th>
+
 
 
 															</tr>
@@ -106,10 +102,38 @@
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
 																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $po_list['CONTRACT'] ?></a></strong> <?php echo "/" . $po_list['PROJECT'] . "/" . $po_list['CRMNO'] . "<br><strong>" .
 																																												$po_list['CTDESC'] . "</strong><br><small>( " .
-																																												trim($po_list['NAMECUST']) . " )</small>"; ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $po_list['ITEMNO'] . "/" . $po_list['MATERIALNO'] . "<br><strong>" . $po_list['ITEMDESC'] . "</strong><br>" .
-																												"Type : " . $po_list['SERVICETYPE'] ?></td>
-																	<td style="vertical-align: top;" nowrap><?= number_format($po_list['QTY'], 0, ",", ".") . ' (' . trim($po_list['STOCKUNIT']) . ')'; ?></td>
+																																												trim($po_list['NAMECUST']) . " )</small><br>"; ?>
+																		<table class="table table-bordered table-striped dataTable">
+																			<thead class="bg-gray disabled">
+																				<tr>
+																					<th colspan="3"><small>Inventory Info</small>
+																					</th>
+																				</tr>
+																			</thead>
+																			<tr>
+																				<td><small>Item No./Material No.</small></td>
+																				<td>:</td>
+																				<td><small><?= $po_list['ITEMNO'] . " / " . $po_list['MATERIALNO'];
+																							?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Item Description</small></td>
+																				<td>:</td>
+																				<td><?= "<strong><small>" . $po_list['ITEMDESC'] . "</small></strong><br>"; ?></td>
+																			</tr>
+																			<tr>
+																				<td><small>Type</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= $po_list['SERVICETYPE']; ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Qty</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= number_format($po_list['QTY'], 0, ",", ".") . ' (' . trim($po_list['STOCKUNIT']) . ')' ?></small></td>
+																			</tr>
+																		</table>
+																	</td>
+
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
 
@@ -168,12 +192,40 @@
 																		} ?>
 
 																	</td>
-																	<td style="vertical-align: top;" nowrap><?= $po_list['PONUMBER'] ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $po_date ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $etd_date ?></td>
-																	<th style="vertical-align: top;" nowrap><?= $cargo_readiness_date ?></th>
-																	<td style="vertical-align: top;" nowrap><?= $po_list['ORIGINCOUNTRY'] ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $po_list['POREMARKS'] ?></td>
+																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $po_list['PONUMBER']; ?></a></strong>
+																		<br><?= $po_list['POREMARKS']; ?><br>
+																		<?php if (!empty($po_list['PONUMBER'])) : ?>
+																			<table class="table table-bordered table-striped dataTable">
+																				<thead class="bg-gray disabled">
+																					<tr>
+																						<th colspan="3"><small>P/O Date Info</small>
+																						</th>
+																					</tr>
+																				</thead>
+																				<tr>
+																					<td><small>P/O Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $po_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>ETD Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $etd_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Cargo Readiness</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $cargo_readiness_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Origin Country</small></td>
+																					<td><small>:</small></td>
+																					<td><strong><small><?= $po_list['ORIGINCOUNTRY']; ?></small></strong></td>
+																				</tr>
+																			</table>
+																		<?php endif; ?>
+																	</td>
+
 
 																</tr>
 
@@ -187,60 +239,7 @@
 										</div>
 									</form>
 									<div class="row">
-										<!-- Pagination template
-											<div class="col-sm-6">
-											
-										</div>
-										<div class="col-sm-6">
-											<div class="dataTables_paginate paging_simple_numbers">
-												<ul class="pagination">
-													<?php //if ($paging->start_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->start_link) 
-																	?>" aria-label="First"><span aria-hidden="true">Awal</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->prev) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->prev) 
-																	?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //for ($i = $paging->start_link; $i <= $paging->end_link; $i++) : 
-													?>
 
-													<li class='active'>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $i) 
-																	?>"><? //= $i 
-																		?>
-															1</a>
-													</li>
-													<?php //endfor; 
-													?>
-													<?php //if ($paging->next) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->next) 
-																	?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->end_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->end_link) 
-																	?>" aria-label="Last"><span aria-hidden="true">Akhir</span></a>
-													</li>
-													<?php //endif; 
-													?>
-												</ul>
-											</div>
-										</div>
-													-->
 									</div>
 								</div>
 							</div>

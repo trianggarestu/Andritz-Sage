@@ -100,7 +100,7 @@ class RequisitionList extends BaseController
         b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
         c.PONUMBER,c.PODATE')
             ->join('webot_CSR b', 'b.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
-            ->join('webot_PO c', 'c.RQNUNIQ = webot_REQUISITION.RQNUNIQ', 'left')
+            ->join('webot_PO c', 'c.CSRUNIQ = b.CSRUNIQ', 'left')
             ->where('webot_REQUISITION.POSTINGSTAT', 1)
             ->orderBy('webot_REQUISITION.RQNUNIQ', 'ASC');
 

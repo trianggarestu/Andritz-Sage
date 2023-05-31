@@ -17,7 +17,7 @@ class Setup_model extends Model
     // Menu Setup
     function get_menuheader()
     {
-        $query = $this->db->query('select * from webot_NAVIGATIONH order by NAVL1SORTING asc');
+        $query = $this->db->query('select * from webot_NAVIGATIONH where INACTIVE=0 order by NAVL1SORTING asc');
         return $query->getResultArray();
     }
 
