@@ -70,10 +70,7 @@
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;">GR Number</th>
-																<th style="vertical-align: top;">GR Date</th>
-																<th style="vertical-align: top;">GR Status</th>
-																<th style="vertical-align: top;">GR Qty</th>
+																<th style="vertical-align: top;">Good Receipt<br>Vendor<br>Description</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -89,19 +86,106 @@
 																	$rcp_date = substr($rcp_list['RECPDATE'], 4, 2) . "/" . substr($rcp_list['RECPDATE'], 6, 2) . "/" . substr($rcp_list['RECPDATE'], 0, 4);
 																}
 
+																if (null == $rcp_list['ETDORIGINDATE']) {
+																	$etdorigin_date = '';
+																} else {
+																	$etdorigin_date = substr($rcp_list['ETDORIGINDATE'], 4, 2) . "/" . substr($rcp_list['ETDORIGINDATE'], 6, 2) . "/" . substr($rcp_list['ETDORIGINDATE'], 0, 4);
+																}
+																if (null == $rcp_list['ATDORIGINDATE']) {
+																	$atdorigin_date = '';
+																} else {
+																	$atdorigin_date = substr($rcp_list['ATDORIGINDATE'], 4, 2) . "/" . substr($rcp_list['ATDORIGINDATE'], 6, 2) . "/" . substr($rcp_list['ATDORIGINDATE'], 0, 4);
+																}
+																if (null == $rcp_list['ETAPORTDATE']) {
+																	$etaport_date = '';
+																} else {
+																	$etaport_date = substr($rcp_list['ETAPORTDATE'], 4, 2) . "/" . substr($rcp_list['ETAPORTDATE'], 6, 2) . "/" . substr($rcp_list['ETAPORTDATE'], 0, 4);
+																}
+																if (null == $rcp_list['PIBDATE']) {
+																	$pib_date = '';
+																} else {
+																	$pib_date = substr($rcp_list['PIBDATE'], 4, 2) . "/" . substr($rcp_list['PIBDATE'], 6, 2) . "/" . substr($rcp_list['PIBDATE'], 0, 4);
+																}
+
 															?>
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
 																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $rcp_list['CONTRACT'] ?></a></strong> <?php echo "/" . $rcp_list['PROJECT'] . "/" . $rcp_list['CRMNO'] . "<br><strong>" .
 																																												$rcp_list['CTDESC'] . "</strong><br><small>( " .
-																																												trim($rcp_list['NAMECUST']) . " )</small>"; ?></td>
+																																												trim($rcp_list['NAMECUST']) . " )</small>"; ?><br>
+																		<table class="table table-bordered table-striped dataTable">
+																			<thead class="bg-gray disabled">
+																				<tr>
+																					<th colspan="3"><small>Inventory Info</small>
+																					</th>
+																				</tr>
+																			</thead>
+																			<tr>
+																				<td><small>Item No./Material No.</small></td>
+																				<td>:</td>
+																				<td><small><?= $rcp_list['ITEMNO'] . " / " . $rcp_list['MATERIALNO'];
+																							?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Item Description</small></td>
+																				<td>:</td>
+																				<td><?= "<strong><small>" . $rcp_list['ITEMDESC'] . "</small></strong><br>"; ?></td>
+																			</tr>
+																			<tr>
+																				<td><small>Type</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= $rcp_list['SERVICETYPE']; ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Qty</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= number_format($rcp_list['QTY'], 0, ",", ".") . ' (' . trim($rcp_list['STOCKUNIT']) . ')' ?></small></td>
+																			</tr>
+																		</table>
+																	</td>
 
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;"><strong><a href="#"><?= $rcp_list['PONUMBER']; ?></a></strong></td>
+																	<td style="vertical-align: top;"><strong><a href="#"><?= $rcp_list['PONUMBER']; ?></a></strong><br>
+																		<?php if (!empty($rcp_list['LOGUNIQ'])) : ?>
+																			<table class="table table-bordered table-striped dataTable">
+																				<thead class="bg-gray disabled">
+																					<tr>
+																						<th colspan="3"><small>Logistics-Date Info</small>
+																						</th>
+																					</tr>
+																				</thead>
+																				<tr>
+																					<td><small>ETD Origin</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $etdorigin_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>ATD Origin</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $atdorigin_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>ETA Port</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $etaport_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>PIB</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $pib_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>shipment Status</small></td>
+																					<td><small>:</small></td>
+																					<td><strong><small><?= $rcp_list['VENDSHISTATUS'] ?></small></strong></td>
+																				</tr>
+																			</table>
+																		<?php endif; ?>
+																	</td>
 																	<td style="vertical-align: top;"><?= $po_date ?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
@@ -141,20 +225,47 @@
 																											default:
 																												echo "";
 																										} ?></td>
-																	<td style="vertical-align: top;"><?= $rcp_list['RECPNUMBER']; ?></td>
-																	<td style="vertical-align: top;"><?= $rcp_date; ?></td>
-																	<td style="vertical-align: top;"><?php $grstatus = $rcp_list['GRSTATUS'];
-																										switch ($grstatus) {
-																											case "0":
-																												echo "Partial";
-																												break;
-																											case "1":
-																												echo "Completed";
-																												break;
-																											default:
-																												echo "";
-																										} ?></td>
-																	<td style="vertical-align: top;"><?= number_format($rcp_list['RECPQTY'], 0, ",", "."); ?></td>
+																	<td style="vertical-align: top;"><strong><a href=""><?= $rcp_list['RECPNUMBER']; ?></a></strong><br>
+																		<?= $rcp_list['DESCRIPTIO']; ?><br>
+																		<small>(<?= $rcp_list['VDNAME']; ?>)</small>
+
+																		<?php if (!empty($rcp_list['RCPUNIQ'])) : ?>
+																			<table class="table table-bordered table-striped dataTable">
+																				<thead class="bg-gray disabled">
+																					<tr>
+																						<th colspan="3"><small>Good Receipts Info</small>
+																						</th>
+																					</tr>
+																				</thead>
+																				<tr>
+																					<td><small>GR Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $rcp_date; ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>QTY GR.</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= number_format($rcp_list['RECPQTY'], 0, ",", "."); ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Status</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?php $grstatus = $rcp_list['GRSTATUS'];
+																								switch ($grstatus) {
+																									case "0":
+																										echo "Partial";
+																										break;
+																									case "1":
+																										echo "Completed";
+																										break;
+																									default:
+																										echo "";
+																								} ?></small></td>
+																				</tr>
+
+																			</table>
+																		<?php endif; ?>
+																	</td>
 																</tr>
 
 															<?php } ?>

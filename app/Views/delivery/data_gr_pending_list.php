@@ -67,13 +67,8 @@
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;" nowrap>Doc. Number</th>
-																<th style="vertical-align: top;" nowrap>Delivery Number</th>
-																<th style="vertical-align: top;" nowrap>Delivery <br>Date</th>
-																<th style="vertical-align: top;" nowrap>Cust. Received <br>Date</th>
-																<th style="vertical-align: top;" nowrap>Qty Delivered</th>
-																<th style="vertical-align: top;" nowrap>Qty Outstanding</th>
-																<th style="vertical-align: top;" nowrap>PO Status</th>
+																<th style="vertical-align: top;" nowrap>Doc. Number<br>Shipment Number<br> Delivery Info</th>
+
 															</tr>
 														</thead>
 														<tbody>
@@ -221,30 +216,67 @@
 																											default:
 																												echo "";
 																										} ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $shi_list['DOCNUMBER'] ?></td>
-																	<td style="vertical-align: top;"><?= $shi_list['SHINUMBER'] ?></td>
-																	<td style="vertical-align: top;"><?= $shi_date ?></td>
-																	<td style="vertical-align: top;"><?= $custrcp_date ?></td>
-																	<td style="vertical-align: top;"><?php if (!empty($shi_list['SHIQTY'])) {
-																											echo number_format($shi_list['SHIQTY'], 0, ",", ".");
-																										} ?></td>
-																	<td style="vertical-align: top;"><?php if (!empty($shi_list['SHIQTYOUTSTANDING'])) {
-																											echo number_format($shi_list['SHIQTYOUTSTANDING'], 0, ",", ".");
-																										} ?></td>
-																	<td style="vertical-align: top;"><?php
-																										$pocuststatus = $shi_list['POCUSTSTATUS'];
-																										switch ($pocuststatus) {
-																											case "0":
-																												echo "Outstanding";
-																												break;
-																											case "1":
-																												echo "Completed";
-																												break;
-																											default:
-																												echo "";
-																										}
+																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $shi_list['DOCNUMBER'] ?></a></strong><br>
+																		<?= $shi_list['SHINUMBER'] ?><br>
+																		<?php if (!empty($shi_list['SHIUNIQ'])) : ?>
+																			<table class="table table-bordered table-striped dataTable">
+																				<thead class="bg-gray disabled">
+																					<tr>
+																						<th colspan="3"><small>Delivery Info</small>
+																						</th>
+																					</tr>
+																				</thead>
+																				<tr>
+																					<td><small>Delivery Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small></small><?= $shi_date ?></td>
+																				</tr>
+																				<tr>
+																					<td><small>Receipt Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $custrcp_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Qty Shipment</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?php if (!empty($shi_list['SHIQTY'])) {
+																									echo number_format($shi_list['SHIQTY'], 0, ",", ".");
+																								} ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Qty Outstanding</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?php if (!empty($shi_list['SHIQTYOUTSTANDING'])) {
+																									echo number_format($shi_list['SHIQTYOUTSTANDING'], 0, ",", ".");
+																								} ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>P/O Status</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?php
+																								$pocuststatus = $shi_list['POCUSTSTATUS'];
+																								switch ($pocuststatus) {
+																									case "0":
+																										echo "Outstanding";
+																										break;
+																									case "1":
+																										echo "Completed";
+																										break;
+																									default:
+																										echo "";
+																								}
 
-																										?></td>
+																								?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>e-DN Attachment</small></td>
+																					<td><small>:</small></td>
+																					<td><small><a href="<?= $shi_list['EDNFILEPATH'] ?>" download><?= $shi_list['EDNFILENAME'] ?></a></small></td>
+																				</tr>
+
+																			</table>
+																		<?php endif; ?>
+																	</td>
 																</tr>
 
 															<?php } ?>

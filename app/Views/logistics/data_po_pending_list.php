@@ -65,18 +65,13 @@
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
-																<th style="vertical-align: top;">PO Vendor</th>
-																<th style="vertical-align: top;">PO Date</th>
-																<th style="vertical-align: top;">ETD Date</th>
-																<th style="vertical-align: top;">Cargo Readiness</th>
+																<th style="vertical-align: top;">PO Vendor<br>
+																	Remarks</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;">ETD Origin</th>
-																<th style="vertical-align: top;">ATD Origin</th>
-																<th style="vertical-align: top;">ETA Port</th>
-																<th style="vertical-align: top;">PIB</th>
-																<th style="vertical-align: top;">Shipment Status</th>
+																<th style="vertical-align: top;">Data Logistics</th>
+
 
 
 															</tr>
@@ -117,16 +112,75 @@
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
 																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $log_list['CONTRACT'] ?></a></strong> <?php echo "/" . $log_list['PROJECT'] . "/" . $log_list['CRMNO'] . "<br><strong>" .
 																																												$log_list['CTDESC'] . "</strong><br><small>( " .
-																																												trim($log_list['NAMECUST']) . " )</small>"; ?></td>
+																																												trim($log_list['NAMECUST']) . " )</small>"; ?>
+																		<table class="table table-bordered table-striped dataTable">
+																			<thead class="bg-gray disabled">
+																				<tr>
+																					<th colspan="3"><small>Inventory Info</small>
+																					</th>
+																				</tr>
+																			</thead>
+																			<tr>
+																				<td><small>Item No./Material No.</small></td>
+																				<td>:</td>
+																				<td><small><?= $log_list['ITEMNO'] . " / " . $log_list['MATERIALNO'];
+																							?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Item Description</small></td>
+																				<td>:</td>
+																				<td><?= "<strong><small>" . $log_list['ITEMDESC'] . "</small></strong><br>"; ?></td>
+																			</tr>
+																			<tr>
+																				<td><small>Type</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= $log_list['SERVICETYPE']; ?></small></td>
+																			</tr>
+																			<tr>
+																				<td><small>Qty</small></td>
+																				<td><small>:</small></td>
+																				<td><small><?= number_format($log_list['QTY'], 0, ",", ".") . ' (' . trim($log_list['STOCKUNIT']) . ')' ?></small></td>
+																			</tr>
+																		</table>
+																	</td>
 
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;"><strong><a href="#"><?= $log_list['PONUMBER']; ?></a></strong></td>
-																	<td style="vertical-align: top;"><?= $po_date ?></td>
-																	<td style="vertical-align: top;"><?= $etd_date ?></td>
-																	<td style="vertical-align: top;"><?= $cargo_readiness_date ?></td>
+																	<td style="vertical-align: top;"><strong><a href="#"><?= $log_list['PONUMBER']; ?></a></strong><br>
+																		<?= $log_list['POREMARKS']; ?>
+																		<?php if (!empty($log_list['PONUMBER'])) : ?>
+																			<table class="table table-bordered table-striped dataTable">
+																				<thead class="bg-gray disabled">
+																					<tr>
+																						<th colspan="3"><small>P/O Date Info</small>
+																						</th>
+																					</tr>
+																				</thead>
+																				<tr>
+																					<td><small>P/O Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $po_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>ETD Date</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $etd_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Cargo Readiness</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $cargo_readiness_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>Origin Country</small></td>
+																					<td><small>:</small></td>
+																					<td><strong><small><?= $log_list['ORIGINCOUNTRY']; ?></small></strong></td>
+																				</tr>
+																			</table>
+																		<?php endif; ?>
+																	</td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
 																		<div class="btn-group">
@@ -172,11 +226,43 @@
 																											default:
 																												echo "";
 																										} ?></td>
-																	<td style="vertical-align: top;"><?= $etdorigin_date ?></td>
-																	<td style="vertical-align: top;"><?= $atdorigin_date ?></td>
-																	<td style="vertical-align: top;"><?= $etaport_date ?></td>
-																	<td style="vertical-align: top;"><?= $pib_date ?></td>
-																	<td nowrap style="vertical-align: top;"><?= $log_list['VENDSHISTATUS'] ?></td>
+																	<td style="vertical-align: top;">
+																		<?php if (!empty($log_list['LOGUNIQ'])) : ?>
+																			<table class="table table-bordered table-striped dataTable">
+																				<thead class="bg-gray disabled">
+																					<tr>
+																						<th colspan="3"><small>Logistics-Date Info</small>
+																						</th>
+																					</tr>
+																				</thead>
+																				<tr>
+																					<td><small>ETD Origin</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $etdorigin_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>ATD Origin</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $atdorigin_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>ETA Port</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $etaport_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>PIB</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $pib_date ?></small></td>
+																				</tr>
+																				<tr>
+																					<td><small>shipment Status</small></td>
+																					<td><small>:</small></td>
+																					<td><strong><small><?= $log_list['VENDSHISTATUS'] ?></small></strong></td>
+																				</tr>
+																			</table>
+																		<?php endif; ?>
+																	</td>
 
 																</tr>
 
