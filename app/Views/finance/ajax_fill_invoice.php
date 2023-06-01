@@ -8,7 +8,7 @@
 </script>
 <div class='modal-header'>
     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-    <h4 class='modal-title' id='myModalLabel'> Fill A/R Invoice</h4>
+    <h4 class='modal-title' id='myModalLabel'> Fill A/R Invoice by Finance </h4>
 </div>
 
 <form action="<?= $form_action;
@@ -83,65 +83,6 @@
                             </div>
 
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="shiitemno">Item :</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">
-                                            Inventory No. :
-                                        </div>
-                                        <input type="text" class="form-control input-sm required" id="shiitemno" name="shiitemno" placeholder="" value="<?= $shiitemno ?>" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="inventory_desc"></label>
-                                </div>
-                                <div class="col-sm-9">
-
-                                    <input type="text" class="form-control input-sm required" id="inventory_desc" name="inventory_desc" placeholder="" value="<?= $inventory_desc ?>" readonly />
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="shiqty"></label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">
-                                            Qty. :
-                                        </div>
-                                        <input type="text" class="form-control input-sm required" id="shiqty" name="shiqty" placeholder="" value="<?= number_format($shiqty, 0, ",", ".") ?> ( <?= $uom ?> )" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="shiqtyouts"></label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">
-                                            Qty. Outstanding :
-                                        </div>
-                                        <input type="text" class="form-control input-sm required" id="shiqtyouts" name="shiqtyouts" placeholder="" value="<?= number_format($shiqtyouts, 0, ",", ".") ?> ( <?= $uom ?> )" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <div class="col-sm-12" style="margin: 2px;">
                                 <div class="col-sm-3" style="text-align: right;">
@@ -152,7 +93,7 @@
 
                                                                                                                                                                                 switch ($pocuststatus) {
                                                                                                                                                                                     case "0":
-                                                                                                                                                                                        echo "Outstanding";
+                                                                                                                                                                                        echo "Partial";
                                                                                                                                                                                         break;
                                                                                                                                                                                     case "1":
                                                                                                                                                                                         echo "Completed";
@@ -166,23 +107,56 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <div class="col-sm-12" style="margin: 2px;">
                                 <div class="col-sm-3" style="text-align: right;">
-                                    <label for="dnstatus">Confirm D/N Origin :</label>
+                                    <label for="idinvc">Fill A/R Invoice :</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-control input-sm select2 required" id="dnstatus" name="dnstatus" style="width:100%;">
-                                        <option option value="">-- Select Status --</option>
+                                    <select class="form-control input-sm select2 required" id="idinvc" name="idinvc" style="width:100%;">
+                                        <option option value="">___ Invoice Number - Inv. Date - Description ___</option>
+                                        <?php foreach ($arinvoice_list as $data) :
+                                            $inv_date = substr($data['DATEINVC'], 6, 2) . "/" . substr($data['DATEINVC'], 4, 2) . "/" . substr($data['DATEINVC'], 0, 4);
+                                        ?>
+                                            <option value="<?= trim($data['IDINVC'])
+                                                            ?>" <?php if ($inv_number == $data['IDINVC']) {
+                                                                    echo "selected";
+                                                                } ?>><?= trim($data['IDINVC'])
+                                                                        ?> - <?= $inv_date . " - " . $data['INVCDESC']
+                                                                                ?>
+                                            </option>
+                                        <?php endforeach;
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12" style="margin: 2px;">
+                                <div class="col-sm-3" style="text-align: right;">
+                                    <label for="finstatus">Status :</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="form-control input-sm select2 required" id="finstatus" name="finstatus" style="width:100%;">
+                                        <option option value="" <?php if (empty($finstatus)) {
+                                                                    echo "selected";
+                                                                } ?>>-- Select Status --
+                                        </option>
 
-                                        <option value="1" <?php if ($dnstatus == 1) {
+                                        <option value="1" <?php if ($finstatus == 1) {
                                                                 echo "selected";
-                                                            } ?>>Received
+                                                            } ?>>Completed
+                                        </option>
+                                        <option value="0" <?php if ($finstatus == 0) {
+                                                                echo "selected";
+                                                            } ?>>Partial
                                         </option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+
 
                     </div>
                 </div>
@@ -191,7 +165,9 @@
         <div class="modal-footer">
 
             <input type="hidden" id="shiuniq" name="shiuniq" value="<?= $shiuniq ?>">
+            <input type="hidden" id="docnumber" name="docnumber" value="<?= $docnumber ?>">
             <input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
+            <input type="hidden" id="finuniq" name="finuniq" value="<?= $finuniq ?>">
             <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
             <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
             <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>

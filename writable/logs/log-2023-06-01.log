@@ -1,0 +1,353 @@
+ERROR - 2023-06-01 00:13:53 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+CRITICAL - 2023-06-01 00:13:53 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(57): CodeIgniter\Database\BaseConnection->query('select a.IDCUST,a.IDINVC,a.DATEINVC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        left join ARIBC b on b.CNTBTCH=a.CNTBTCH
+        inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
+        where b.BTCHSTTS=3 and
+        c.CONTRACT=\'WS1633IGPB\'')
+ 2 APPPATH\Controllers\FillInvoice.php(148): App\Models\Finance_model->list_sage_ar_by_contract('WS1633IGPB      ')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(2, '0')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-06-01 00:14:07 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+CRITICAL - 2023-06-01 00:14:07 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(57): CodeIgniter\Database\BaseConnection->query('select a.IDCUST,a.IDINVC,a.DATEINVC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        left join ARIBC b on b.CNTBTCH=a.CNTBTCH
+        inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
+        where b.BTCHSTTS=3 and
+        c.CONTRACT=\'WS1633IGPB\'')
+ 2 APPPATH\Controllers\FillInvoice.php(148): App\Models\Finance_model->list_sage_ar_by_contract('WS1633IGPB      ')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(2, '0')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-06-01 00:14:40 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+CRITICAL - 2023-06-01 00:14:40 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(57): CodeIgniter\Database\BaseConnection->query('select a.IDCUST,a.IDINVC,a.DATEINVC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        left join ARIBC b on b.CNTBTCH=a.CNTBTCH
+        inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
+        where b.BTCHSTTS=3 and
+        c.CONTRACT=\'WS1633IGPB\'')
+ 2 APPPATH\Controllers\FillInvoice.php(148): App\Models\Finance_model->list_sage_ar_by_contract('SP1614TELC      ')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-06-01 00:15:59 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+CRITICAL - 2023-06-01 00:15:59 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(57): CodeIgniter\Database\BaseConnection->query('select a.IDCUST,a.IDINVC,a.DATEINVC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        left join ARIBC b on b.CNTBTCH=a.CNTBTCH
+        inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
+        where b.BTCHSTTS=3 and
+        c.CONTRACT=\'WS1633IGPB\'')
+ 2 APPPATH\Controllers\FillInvoice.php(148): App\Models\Finance_model->list_sage_ar_by_contract('WS1633IGPB      ')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(2, '0')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-06-01 00:17:56 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+CRITICAL - 2023-06-01 00:17:56 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(57): CodeIgniter\Database\BaseConnection->query('select a.IDCUST,a.IDINVC,a.DATEINVC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        left join ARIBC b on b.CNTBTCH=a.CNTBTCH
+        inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
+        where b.BTCHSTTS=3 and
+        c.CONTRACT=\'WS1633IGPB\'')
+ 2 APPPATH\Controllers\FillInvoice.php(148): App\Models\Finance_model->list_sage_ar_by_contract('SP1614TELC      ')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-06-01 00:18:03 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+CRITICAL - 2023-06-01 00:18:03 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid object name 'ARIBH'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(57): CodeIgniter\Database\BaseConnection->query('select a.IDCUST,a.IDINVC,a.DATEINVC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        left join ARIBC b on b.CNTBTCH=a.CNTBTCH
+        inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
+        where b.BTCHSTTS=3 and
+        c.CONTRACT=\'WS1633IGPB\'')
+ 2 APPPATH\Controllers\FillInvoice.php(148): App\Models\Finance_model->list_sage_ar_by_contract('SP1614TELC      ')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 00:48:47 --> Undefined variable: inv_number
+in APPPATH\Views\finance\ajax_fill_invoice.php on line 123.
+ 1 APPPATH\Views\finance\ajax_fill_invoice.php(123): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: inv_number', 'APPPATH\\Views\\finance\\ajax_fill_invoice.php', 123, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\finance\\ajax_fill_invoice.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('finance/ajax_fill_invoice', [], true)
+ 5 APPPATH\Controllers\FillInvoice.php(154): view('finance/ajax_fill_invoice', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 00:51:13 --> Undefined index: IDINVC
+in APPPATH\Controllers\FillInvoice.php on line 148.
+ 1 APPPATH\Controllers\FillInvoice.php(148): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: IDINVC', 'APPPATH\\Controllers\\FillInvoice.php', 148, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 00:51:36 --> Undefined index: IDINVC
+in APPPATH\Controllers\FillInvoice.php on line 148.
+ 1 APPPATH\Controllers\FillInvoice.php(148): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: IDINVC', 'APPPATH\\Controllers\\FillInvoice.php', 148, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 00:53:14 --> Undefined index: IDINVC
+in APPPATH\Controllers\FillInvoice.php on line 148.
+ 1 APPPATH\Controllers\FillInvoice.php(148): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: IDINVC', 'APPPATH\\Controllers\\FillInvoice.php', 148, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 00:53:21 --> Undefined index: IDINVC
+in APPPATH\Controllers\FillInvoice.php on line 148.
+ 1 APPPATH\Controllers\FillInvoice.php(148): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: IDINVC', 'APPPATH\\Controllers\\FillInvoice.php', 148, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 00:53:24 --> Undefined index: IDINVC
+in APPPATH\Controllers\FillInvoice.php on line 148.
+ 1 APPPATH\Controllers\FillInvoice.php(148): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: IDINVC', 'APPPATH\\Controllers\\FillInvoice.php', 148, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 01:20:00 --> Undefined index: FINSTATUS
+in APPPATH\Controllers\FillInvoice.php on line 149.
+ 1 APPPATH\Controllers\FillInvoice.php(149): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINSTATUS', 'APPPATH\\Controllers\\FillInvoice.php', 149, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 01:20:05 --> Undefined index: FINSTATUS
+in APPPATH\Controllers\FillInvoice.php on line 149.
+ 1 APPPATH\Controllers\FillInvoice.php(149): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINSTATUS', 'APPPATH\\Controllers\\FillInvoice.php', 149, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 05:53:32 --> Undefined index: FINUNIQ
+in APPPATH\Controllers\FillInvoice.php on line 131.
+ 1 APPPATH\Controllers\FillInvoice.php(131): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINUNIQ', 'APPPATH\\Controllers\\FillInvoice.php', 131, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 05:53:38 --> Undefined index: FINUNIQ
+in APPPATH\Controllers\FillInvoice.php on line 131.
+ 1 APPPATH\Controllers\FillInvoice.php(131): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINUNIQ', 'APPPATH\\Controllers\\FillInvoice.php', 131, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 05:53:57 --> Undefined index: FINUNIQ
+in APPPATH\Controllers\FillInvoice.php on line 131.
+ 1 APPPATH\Controllers\FillInvoice.php(131): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINUNIQ', 'APPPATH\\Controllers\\FillInvoice.php', 131, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 05:54:01 --> Undefined index: FINUNIQ
+in APPPATH\Controllers\FillInvoice.php on line 131.
+ 1 APPPATH\Controllers\FillInvoice.php(131): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINUNIQ', 'APPPATH\\Controllers\\FillInvoice.php', 131, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 05:54:08 --> Undefined index: FINUNIQ
+in APPPATH\Controllers\FillInvoice.php on line 131.
+ 1 APPPATH\Controllers\FillInvoice.php(131): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINUNIQ', 'APPPATH\\Controllers\\FillInvoice.php', 131, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(2, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 06:29:22 --> Undefined index: FINPOSTINGSTAT
+in APPPATH\Controllers\FillInvoice.php on line 155.
+ 1 APPPATH\Controllers\FillInvoice.php(155): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: FINPOSTINGSTAT', 'APPPATH\\Controllers\\FillInvoice.php', 155, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(2, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-06-01 06:31:15 --> Undefined variable: postingstatus
+in APPPATH\Views\finance\ajax_fill_invoice.php on line 138.
+ 1 APPPATH\Views\finance\ajax_fill_invoice.php(138): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: postingstatus', 'APPPATH\\Views\\finance\\ajax_fill_invoice.php', 138, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\finance\\ajax_fill_invoice.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('finance/ajax_fill_invoice', [], true)
+ 5 APPPATH\Controllers\FillInvoice.php(162): view('finance/ajax_fill_invoice', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update(1, '0')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-06-01 06:40:56 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Incorrect syntax near the keyword 'from'.
+CRITICAL - 2023-06-01 06:40:56 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Incorrect syntax near the keyword 'from'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(58): CodeIgniter\Database\BaseConnection->query('select a.*, from webot_FINANCE a
+        where a.POSTINGSTAT=1 and a.FINUNIQ=\'1\' ')
+ 2 APPPATH\Controllers\FillInvoice.php(236): App\Models\Finance_model->get_fin_post_by_id('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillInvoice->update_action()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillInvoice))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-06-01 00:00:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:00:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:00:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:00:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:01:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:01:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:01:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:01:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:02:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:02:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:02:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:02:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:02:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-06-01 07:03:05 --> Call to undefined method App\Models\Finance_model::count_fin_posting
+in SYSTEMPATH\Model.php on line 842.
+ 1 APPPATH\Controllers\FillinvoiceList.php(110): CodeIgniter\Model->__call('count_fin_posting', [])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillinvoiceList->index()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillinvoiceList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-06-01 00:03:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:03:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:04:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:04:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:05:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-06-01 07:05:30 --> Call to undefined method App\Models\Finance_model::count_fin_posting
+in SYSTEMPATH\Model.php on line 842.
+ 1 APPPATH\Controllers\FillinvoiceList.php(110): CodeIgniter\Model->__call('count_fin_posting', [])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillinvoiceList->index()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillinvoiceList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-06-01 00:05:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2023-06-01 07:05:32 --> Call to undefined method App\Models\Finance_model::count_fin_posting
+in SYSTEMPATH\Model.php on line 842.
+ 1 APPPATH\Controllers\FillinvoiceList.php(110): CodeIgniter\Model->__call('count_fin_posting', [])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillinvoiceList->index()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillinvoiceList))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2023-06-01 00:05:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:05:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:06:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:06:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:07:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:07:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:08:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:09:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:10:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:10:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:10:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:10:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:10:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:10:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:11:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:11:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:11:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:11:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:12:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:13:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:14:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:15:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:15:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:15:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:15:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:16:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:16:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:16:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:16:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:17:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:17:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:17:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-06-01 00:17:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

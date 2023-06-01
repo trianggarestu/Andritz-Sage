@@ -178,8 +178,8 @@
 																	<td><?= $ot_list['SHIDATE']; ?></td>
 																	<td><?= $ot_list['SHINUMBER']; ?></td>
 																	<td><?= $ot_list['CUSTRCPDATE']; ?></td>
-																	<td><?= $ot_list['QTYDELIVERED']; ?></td>
-																	<td><?= $ot_list['QTYOUTSTANDING']; ?></td>
+																	<td><?= $ot_list['SHIQTY']; ?></td>
+																	<td><?= $ot_list['SHIQTYOUTSTANDING']; ?></td>
 																	<td><?= $ot_list['POCUSTSTATUS']; ?></td>
 																	<td><?= $ot_list['DNSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
