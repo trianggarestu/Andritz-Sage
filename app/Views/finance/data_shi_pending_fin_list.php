@@ -302,12 +302,12 @@
 																					<td><small>Status</small></td>
 																					<td><small>:</small></td>
 																					<td><strong><small><?php
-																										$pocuststatus = $shi_list['FINSTATUS'];
-																										switch ($pocuststatus) {
-																											case "0":
+																										$finstatus = $shi_list['FINSTATUS'];
+																										switch ($finstatus) {
+																											case "1":
 																												echo "Partial";
 																												break;
-																											case "1":
+																											case "2":
 																												echo "Completed";
 																												break;
 																											default:

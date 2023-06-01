@@ -35,11 +35,25 @@ class Finance_model extends Model
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
         left join ICITEM it on it.ITEMNO=b.ITEMNO
         left join webot_FINANCE c on c.SHIUNIQ=a.SHIUNIQ
-        where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and a.DNPOSTINGSTAT=1) and c.POSTINGSTAT=0");
+        where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and a.DNPOSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL)");
 
         return $query->getResultArray();
     }
 
+
+    //RRSTATUS
+    function get_fin_pending_to_rrstatus()
+    {
+        $query = $this->db->query("select a.*,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        from webot_FINANCE a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        where a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0");
+
+        return $query->getResultArray();
+    }
 
     function get_shi_by_id($shiuniq)
     {

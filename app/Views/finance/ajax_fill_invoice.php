@@ -139,18 +139,16 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-control input-sm select2 required" id="finstatus" name="finstatus" style="width:100%;">
-                                        <option option value="" <?php if (empty($finstatus)) {
-                                                                    echo "selected";
-                                                                } ?>>-- Select Status --
+                                        <option option value="">-- Select Status --
                                         </option>
 
-                                        <option value="1" <?php if ($finstatus == 1) {
-                                                                echo "selected";
-                                                            } ?>>Completed
-                                        </option>
-                                        <option value="0" <?php if ($finstatus == 0) {
+                                        <option value="1" <?php if ($finstatus == 1 and !empty($finstatus)) {
                                                                 echo "selected";
                                                             } ?>>Partial
+                                        </option>
+                                        <option value="2" <?php if ($finstatus == 2 and !empty($finstatus)) {
+                                                                echo "selected";
+                                                            } ?>>Completed
                                         </option>
                                     </select>
                                 </div>

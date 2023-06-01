@@ -18,7 +18,7 @@ use App\Models\Ordertracking_model;
 
 //use App\Controllers\AdminController;
 
-class FillInvoice extends BaseController
+class FillrrStatus extends BaseController
 {
 
     private $nav_data;
@@ -63,7 +63,7 @@ class FillInvoice extends BaseController
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'fillinvoice';
+                $activenavd = 'fillrrstatus';
                 $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
                 $this->nav_data = [
                     'active_navd' => $activenavd,
@@ -97,197 +97,91 @@ class FillInvoice extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
-        $deliverydata = $this->FinanceModel->get_shi_pending_to_finance();
+        $fin_data = $this->FinanceModel->get_fin_pending_to_rrstatus();
 
         $data = array(
-            'delivery_data' => $deliverydata,
+            'finance_data' => $fin_data,
         );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('finance/data_shi_pending_fin_list', $data);
+        echo view('finance/data_fin_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
 
-    public function update($shiuniq, $postingstat)
+    public function update($finuniq, $postingstat)
     {
 
-        $get_arinv = $this->FinanceModel->get_shi_by_id($shiuniq);
-        if ($get_arinv) {
-            if ($get_arinv['FINPOSTINGSTAT'] == 1) {
-                session()->set('success', '-1');
-                return redirect()->to(base_url('fillinvoice'));
-            } else {
-                if (!empty($get_arinv['FINUNIQ'])) {
-                    $act = 'fillinvoice/update_action';
-                } else {
-                    $act = 'fillinvoice/insert_action';
-                }
-                if ($postingstat == 0) {
-                    $button = 'Save';
-                } else {
-                    $button = 'Save & Posting';
-                }
-
-                $shiuniq = $get_arinv['SHIUNIQ'];
-                $ct_no = $get_arinv['CONTRACT'];
-                $data = array(
-                    'finuniq' => $get_arinv['FINUNIQ'],
-                    'csruniq' => trim($get_arinv['CSRUNIQ']),
-                    'shiuniq' => $shiuniq,
-                    'docnumber' => trim($get_arinv['DOCNUMBER']),
-                    'shinumber' => trim($get_arinv['SHINUMBER']),
-                    'shidate' => trim($get_arinv['SHIDATE']),
-                    'custrcpdate' => trim($get_arinv['CUSTRCPDATE']),
-                    'customer' => trim($get_arinv['CUSTOMER']),
-                    'cust_name' => trim($get_arinv['NAMECUST']),
-                    'shiitemno' => trim($get_arinv['SHIITEMNO']),
-                    'inventory_desc' => trim($get_arinv['SHIITEMDESC']),
-                    'shiqty' => $get_arinv['SHIQTY'],
-                    'shiqtyouts' => $get_arinv['SHIQTYOUTSTANDING'],
-                    'uom' => trim($get_arinv['SHIUNIT']),
-                    'pocuststatus' => $get_arinv['POCUSTSTATUS'],
-                    'ednfilename' => $get_arinv['EDNFILENAME'],
-                    'ednfilepath' => $get_arinv['EDNFILEPATH'],
-                    'dnstatus' => $get_arinv['DNSTATUS'],
-                    'inv_number' => $get_arinv['IDINVC'],
-                    'finstatus' => $get_arinv['FINSTATUS'],
-                    //'postingstatus' => $get_arinv['FINPOSTINGSTAT'],
-                    'arinvoice_list' => $this->FinanceModel->list_sage_ar_by_contract($ct_no),
-                    'form_action' => base_url($act),
-                    'post_stat' => $postingstat,
-                    'button' => $button,
-                );
-                //}
-                echo view('finance/ajax_fill_invoice', $data);
-            }
-        }
-    }
-
-
-    public function insert_action()
-    {
-
-        $shiuniq = $this->request->getPost('shiuniq');
-        $finuniq = $this->request->getPost('finuniq');
-        $get_arinv = $this->FinanceModel->get_fin_by_id($finuniq);
-        if (null == ($this->request->getPost('shiuniq'))) {
+        $get_fin = $this->FinanceModel->get_fin_by_id($finuniq);
+        if ($get_fin['RRPOSTINGSTAT'] == 1) {
             session()->set('success', '-1');
-            return redirect()->to(base_url('fillinvoice'));
+            return redirect()->to(base_url('fillrrstatus'));
         } else {
-
-            //$sender = $this->AdministrationModel->get_mailsender();
-            $id_so = $this->request->getPost('csruniq');
-            $shiuniq = $this->request->getPost('shiuniq');
-            $docnumber = $this->request->getPost('docnumber');
-            $idinvc = $this->request->getPost('idinvc');
-            $post_stat = $this->request->getPost('post_stat');
-            $choose_arinv = $this->FinanceModel->get_arinvoice_by_id($idinvc);
-
-            $groupuser = 9;
-            if ($choose_arinv) {
-                $data1 = array(
-                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                    'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'CSRUNIQ' => $id_so,
-                    'SHIUNIQ' => $shiuniq,
-                    'DOCNUMBER' => $docnumber,
-                    'IDINVC' => $this->request->getPost('idinvc'),
-                    'INVOICEDATE' => $choose_arinv["DATEINVC"],
-                    'FINSTATUS' => $this->request->getPost('finstatus'),
-                    'RRSTATUS' => 0,
-                    'OTPROCESS' => $groupuser,
-                    'POSTINGSTAT' => $post_stat,
-                    'RRPOSTINGSTAT' => 0,
-                    'OFFLINESTAT' => 1,
-                );
-                $this->FinanceModel->finance_insert($data1);
-
-                if ($post_stat == 1) {
-
-                    $data2 = array(
-                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                        'AUDTORG' => $this->audtuser['AUDTORG'],
-                        'IDINVC' => $choose_arinv["IDINVC"],
-                        'INVOICEDATE' => $choose_arinv["DATEINVC"],
-                        'FINSTATUS' => $this->request->getPost('finstatus'),
-                    );
-
-                    $this->FinanceModel->ot_finance_update($id_so, $data2);
-                }
+            //if (!empty($get_shi['EDNFILENAME']) and empty($get_shi['DNSTATUS'])) {
+            $act = 'fillrrstatus/update_action';
+            if ($postingstat == 0) {
+                $button = 'Save';
+            } else {
+                $button = 'Posting';
             }
+
+            $finuniq = $get_fin['FINUNIQ'];
+            $data = array(
+                'csruniq' => trim($get_fin['CSRUNIQ']),
+                'finuniq' => trim($get_fin['FINUNIQ']),
+                'idinvc' => trim($get_fin['IDINVC']),
+                'invdate' => trim($get_fin['INVOICEDATE']),
+                'finstatus' => trim($get_fin['FINSTATUS']),
+                'rrstatus' => trim($get_fin['RRSTATUS']),
+                'form_action' => base_url($act),
+                'post_stat' => $postingstat,
+                'button' => $button,
+            );
+            //}
+            echo view('finance/ajax_fill_rrstatus', $data);
         }
-        session()->set('success', '1');
-        return redirect()->to(base_url('/fillinvoice'));
-        session()->remove('success');
     }
 
 
     public function update_action()
     {
 
-        $shiuniq = $this->request->getPost('shiuniq');
-        $finuniq = $this->request->getPost('finuniq');
-        $get_arinv = $this->FinanceModel->get_fin_by_id($finuniq);
-        if (null == ($this->request->getPost('shiuniq'))) {
+        if (null == ($this->request->getPost('finuniq'))) {
             session()->set('success', '-1');
-            return redirect()->to(base_url('fillinvoice'));
-        } else if ($get_arinv['POSTINGSTAT'] == 1) {
-            session()->set('success', '-1');
-            return redirect()->to(base_url('fillinvoice'));
+            return redirect()->to(base_url('fillrrstatus'));
         } else {
-
             //$sender = $this->AdministrationModel->get_mailsender();
-            $id_so = $this->request->getPost('csruniq');
-            $shiuniq = $this->request->getPost('shiuniq');
-            $docnumber = $this->request->getPost('docnumber');
-            $idinvc = $this->request->getPost('idinvc');
+            $finuniq = $this->request->getPost('finuniq');
+            $csruniq = $this->request->getPost('csruniq');
             $post_stat = $this->request->getPost('post_stat');
-            $choose_arinv = $this->FinanceModel->get_arinvoice_by_id($idinvc);
-
             $groupuser = 9;
-            if ($choose_arinv) {
-                $data1 = array(
+            $data1 = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'RRSTATUS' => $this->request->getPost('rrstatus'),
+                'RRPOSTINGSTAT' => $post_stat,
+            );
+            $this->FinanceModel->finance_update($finuniq, $data1);
+
+            if ($post_stat == 1) {
+
+                $data2 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'IDINVC' => $this->request->getPost('idinvc'),
-                    'INVOICEDATE' => $choose_arinv["DATEINVC"],
-                    'FINSTATUS' => $this->request->getPost('finstatus'),
-                    'RRSTATUS' => 0,
-                    'OTPROCESS' => $groupuser,
-                    'POSTINGSTAT' => $post_stat,
-                    'RRPOSTINGSTAT' => 0,
-                    'OFFLINESTAT' => 1,
+                    'RRSTATUS' => $this->request->getPost('rrstatus'),
                 );
-                $this->FinanceModel->finance_update($finuniq, $data1);
 
-                if ($post_stat == 1) {
-
-                    $data2 = array(
-                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                        'AUDTORG' => $this->audtuser['AUDTORG'],
-                        'IDINVC' => $choose_arinv["IDINVC"],
-                        'INVOICEDATE' => $choose_arinv["DATEINVC"],
-                        'FINSTATUS' => $this->request->getPost('finstatus'),
-                    );
-
-                    $this->FinanceModel->ot_finance_update($id_so, $data2);
-                }
+                $this->FinanceModel->ot_finance_update($csruniq, $data2);
             }
+            session()->set('success', '1');
+            return redirect()->to(base_url('/fillrrstatus'));
+            session()->remove('success');
         }
-        session()->set('success', '1');
-        return redirect()->to(base_url('/fillinvoice'));
-        session()->remove('success');
     }
-
 
 
     public function sendnotif($shiuniq)
@@ -296,7 +190,7 @@ class FillInvoice extends BaseController
         $sender = $this->AdministrationModel->get_mailsender();
         $choose_shi = $this->DeliveryordersModel->get_dn_by_id($shiuniq);
         $shidate = substr($choose_shi["SHIDATE"], 6, 2) . "/" . substr($choose_shi["SHIDATE"], 4, 2) . "/" . substr($choose_shi["SHIDATE"], 0, 4);
-        $groupuser = 9;
+        $groupuser = 8;
 
         //inisiasi proses kirim ke group
         $data2 = array(
