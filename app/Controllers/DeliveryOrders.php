@@ -575,6 +575,13 @@ class DeliveryOrders extends BaseController
         $shi_update = $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data);
 
         if ($shi_update) {
+            $pocust_date = date_create(substr($getshiopen['PODATECUST'], 4, 2) . "/" . substr($getshiopen['PODATECUST'], 6, 2) . "/" .  substr($getshiopen['PODATECUST'], 0, 4));
+            $crmreqdate = date_create(substr($getshiopen['CRMREQDATE'], 4, 2) . "/" . substr($getshiopen['CRMREQDATE'], 6, 2) . "/" . substr($getshiopen['CRMREQDATE'], 0, 4));
+            $shi_date = date_create(substr($getshiopen['SHIDATE'], 4, 2) . "/" . substr($getshiopen['SHIDATE'], 6, 2) . "/" .  substr($getshiopen['SHIDATE'], 0, 4));
+            $ontimedeldiff = date_diff($shi_date, $crmreqdate);
+            $ontimedeldiff = $ontimedeldiff->format("%a");
+            $potodndiff = date_diff($shi_date, $pocust_date);
+            $potodndiff = $potodndiff->format("%a");
             $data2 = array(
                 'AUDTDATE' => $this->audtuser['AUDTDATE'],
                 'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -588,6 +595,8 @@ class DeliveryOrders extends BaseController
                 'SHIQTYOUTSTANDING' => $getshiopen['SHIQTYOUTSTANDING'],
                 'SHIUNIT' => $getshiopen['SHIUNIT'],
                 'POCUSTSTATUS' => $getshiopen['POCUSTSTATUS'],
+                'ONTIMEDELDAYS' => $ontimedeldiff,
+                'POTODNDAYS' => $potodndiff,
 
             );
             $this->DeliveryordersModel->ot_deliveryorders_update($id_so, $data2);

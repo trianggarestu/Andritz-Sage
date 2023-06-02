@@ -37,7 +37,8 @@ class Purchaseorder_model extends Model
 
     function get_requisition_by_id($rqnuniq)
     {
-        $query = $this->db->query("select * from webot_REQUISITION where POSTINGSTAT=1 and RQNUNIQ='$rqnuniq' ");
+        $query = $this->db->query("select a.*,b.PODATECUST from webot_REQUISITION a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ where a.POSTINGSTAT=1 and a.RQNUNIQ='$rqnuniq' ");
         return $query->getRowArray();
     }
 

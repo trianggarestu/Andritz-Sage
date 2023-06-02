@@ -89,7 +89,8 @@ class Deliveryorders_model extends Model
 
     function get_shipment_open($shiuniq)
     {
-        $query = $this->db->query("select a.* from webot_SHIPMENTS a where a.POSTINGSTAT <>2 and a.SHIUNIQ='$shiuniq'");
+        $query = $this->db->query("select a.*,b.CRMREQDATE,b.PODATECUST from webot_SHIPMENTS a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ where a.POSTINGSTAT <>2 and a.SHIUNIQ='$shiuniq'");
         return $query->getRowArray();
     }
 

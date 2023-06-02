@@ -233,7 +233,7 @@ class PurchaseOrder extends BaseController
 
             $groupuser = 4;
             if ($choose_po) {
-                $podate = substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 0, 4);
+
                 $data1 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -255,7 +255,10 @@ class PurchaseOrder extends BaseController
                 $this->PurchaseorderModel->purchaseorder_insert($data1);
 
                 if ($post_stat == 1) {
-
+                    $podate = date_create(substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 0, 4));
+                    $pocust_date = date_create(substr($get_pr['PODATECUST'], 4, 2) . "/" . substr($get_pr['PODATECUST'], 6, 2) . "/" .  substr($get_pr['PODATECUST'], 0, 4));
+                    $pocusttopodiff = date_diff($podate, $pocust_date);
+                    $pocusttopodiff = $pocusttopodiff->format("%a");
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -267,6 +270,7 @@ class PurchaseOrder extends BaseController
                         'CARGOREADINESSDATE' => $n_cargoreadiness_date,
                         'ORIGINCOUNTRY' => $this->request->getPost('origin_country'),
                         'POREMARKS' => $this->request->getPost('po_remarks'),
+                        'POTOPODAYS' => $pocusttopodiff,
                     );
 
                     $this->PurchaseorderModel->ot_purchaseorder_update($id_so, $data2);
@@ -391,7 +395,7 @@ class PurchaseOrder extends BaseController
             $get_pr = $this->PurchaseorderModel->get_requisition_by_id($id_pr);
             $choose_po = $this->PurchaseorderModel->get_posage_by_id($ponumber);
             $n_etd_date = substr($etd_date, 6, 4) . substr($etd_date, 0, 2) . substr($etd_date, 3, 2);
-            $podate = substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 0, 4);
+
             $cargoreadiness_date = $this->request->getPost('cargoreadiness_date');
             if (null == $cargoreadiness_date) {
                 $n_cargoreadiness_date = '';
@@ -422,7 +426,10 @@ class PurchaseOrder extends BaseController
                 $this->PurchaseorderModel->purchaseorder_update($id_po, $data1);
 
                 if ($post_stat == 1) {
-
+                    $podate = date_create(substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 0, 4));
+                    $pocust_date = date_create(substr($get_pr['PODATECUST'], 4, 2) . "/" . substr($get_pr['PODATECUST'], 6, 2) . "/" .  substr($get_pr['PODATECUST'], 0, 4));
+                    $pocusttopodiff = date_diff($podate, $pocust_date);
+                    $pocusttopodiff = $pocusttopodiff->format("%a");
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -434,6 +441,7 @@ class PurchaseOrder extends BaseController
                         'CARGOREADINESSDATE' => $n_cargoreadiness_date,
                         'ORIGINCOUNTRY' => $this->request->getPost('origin_country'),
                         'POREMARKS' => $this->request->getPost('po_remarks'),
+                        'POTOPODAYS' => $pocusttopodiff,
                     );
 
                     $this->PurchaseorderModel->ot_purchaseorder_update($id_so, $data2);

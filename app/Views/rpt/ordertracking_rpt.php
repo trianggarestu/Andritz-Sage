@@ -188,10 +188,10 @@
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['RRSTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td></td>
-																	<td></td>
-																	<td></td>
-																	<td></td>
+																	<td><?= $ot_list['POCUSTTOPRDAYS']; ?></td>
+																	<td><?= $ot_list['POTOPODAYS']; ?></td>
+																	<td><?= $ot_list['ONTIMEDELDAYS']; ?></td>
+																	<td><?= $ot_list['POTODNDAYS']; ?></td>
 																</tr>
 
 															<?php } ?>

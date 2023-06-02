@@ -32,6 +32,20 @@ class Requisition_model extends Model
         return $query->getResultArray();
     }
 
+    function get_requisition_open_search($keyword)
+    {
+        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT,b.OFFLINESTAT," . 'it."DESC"' . " as ITEMDESC 
+        from webot_CSR a
+        left join ICITEM it on it.ITEMNO=a.ITEMNO 
+        left join webot_REQUISITION b on b.CSRUNIQ=a.CSRUNIQ
+        where ((a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1))
+        and (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.CRMNO like '%$keyword%' or a.NAMECUST like '%$keyword%'
+        or a.ITEMNO like '%$keyword%' or a.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or b.RQNNUMBER like '%$keyword%')");
+
+        return $query->getResultArray();
+    }
+
+
     function get_requisition_close()
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,

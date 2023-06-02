@@ -111,7 +111,12 @@ class Requisition extends BaseController
         */
         session()->remove('success');
         session()->set('success', '0');
-        $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        } else {
+            $requisitiondata = $this->RequisitionModel->get_requisition_open_search($keyword);
+        }
         $data = array(
             'requisition_data' => $requisitiondata,
         );
@@ -121,6 +126,12 @@ class Requisition extends BaseController
         echo view('view_nav', $this->nav_data);
         echo view('requisition/data_so_pending_list', $data);
         echo view('view_footer', $this->footer_data);
+    }
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('requisition'));
     }
 
     public function update($id_so, $postingstat)
@@ -185,7 +196,6 @@ class Requisition extends BaseController
             $post_stat = $this->request->getPost('post_stat');
             $get_so = $this->RequisitionModel->get_so_by_id($id_so);
             $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
-
             $groupuser = 3;
             if ($choose_rqn) {
                 $data1 = array(
@@ -207,7 +217,10 @@ class Requisition extends BaseController
                 $this->RequisitionModel->requisition_insert($data1);
 
                 if ($post_stat == 1) {
-
+                    $pocust_date = date_create(substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" .  substr($get_so['PODATECUST'], 0, 4));
+                    $requisitiondate = date_create(substr($choose_rqn["DATE"], 4, 2) . "/" . substr($choose_rqn["DATE"], 6, 2) . "/" .  substr($choose_rqn["DATE"], 0, 4));
+                    $pocusttoprdiff = date_diff($requisitiondate, $pocust_date);
+                    $pocusttoprdiff = $pocusttoprdiff->format("%a");
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -215,6 +228,7 @@ class Requisition extends BaseController
                         'AUDTORG' => $this->audtuser['AUDTORG'],
                         'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
                         'RQNDATE' => $choose_rqn["DATE"],
+                        'POCUSTTOPRDAYS' => $pocusttoprdiff,
                     );
 
                     $this->RequisitionModel->ot_requisition_update($id_so, $data2);
@@ -340,7 +354,10 @@ class Requisition extends BaseController
                 $this->RequisitionModel->requisition_update($rqnuniq, $data1);
 
                 if ($post_stat == 1) {
-
+                    $pocust_date = date_create(substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" .  substr($get_so['PODATECUST'], 0, 4));
+                    $requisitiondate = date_create(substr($choose_rqn["DATE"], 4, 2) . "/" . substr($choose_rqn["DATE"], 6, 2) . "/" .  substr($choose_rqn["DATE"], 0, 4));
+                    $pocusttoprdiff = date_diff($requisitiondate, $pocust_date);
+                    $pocusttoprdiff = $pocusttoprdiff->format("%a");
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -348,6 +365,7 @@ class Requisition extends BaseController
                         'AUDTORG' => $this->audtuser['AUDTORG'],
                         'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
                         'RQNDATE' => $choose_rqn["DATE"],
+                        'POCUSTTOPRDAYS' => $pocusttoprdiff,
                     );
 
                     $this->RequisitionModel->ot_requisition_update($id_so, $data2);
@@ -440,6 +458,17 @@ class Requisition extends BaseController
             return redirect()->to(base_url('/requisition'));
             session()->remove('success');
         }
+    }
+
+    public function search()
+    {
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('/requisition'));
     }
 
 
