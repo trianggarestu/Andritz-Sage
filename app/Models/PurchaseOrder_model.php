@@ -35,6 +35,24 @@ class Purchaseorder_model extends Model
         return $query->getResultArray();
     }
 
+    function get_requisition_pending_search($keyword)
+    {
+        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
+        b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        c.POUNIQ,c.PODATE,c.PONUMBER,c.ETDDATE,c.CARGOREADINESSDATE,c.ORIGINCOUNTRY,c.POREMARKS,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        from webot_REQUISITION a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        left join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
+        where ((a.POSTINGSTAT=1 and c.RQNNUMBER IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or 
+        (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.RQNNUMBER like '%$keyword%'
+        or c.PONUMBER like '%$keyword%' or c.ORIGINCOUNTRY like '%$keyword%' or c.POREMARKS like '%$keyword%')");
+        return $query->getResultArray();
+    }
+
+
     function get_requisition_by_id($rqnuniq)
     {
         $query = $this->db->query("select a.*,b.PODATECUST from webot_REQUISITION a 

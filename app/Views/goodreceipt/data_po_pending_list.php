@@ -28,7 +28,7 @@
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<a href="<?= base_url() ?>arrangeshipment/" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
+						<a href="<?= base_url() ?>goodreceipt/refresh" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
 
 					</div>
 					<div class="box-body">
@@ -39,17 +39,14 @@
 										<div class="row">
 											<div class="col-sm-9">
 												<p><i class="fa fa-info-circle"></i><code> { only viewed <strong>Purchase Orders</strong> data that waiting to be processed by the Good Receipt }</code></p>
-												<p><code> Choose Button info :</code><br>
-													<code>- Choose Good Receipt P/O & Save, data is only saved without updated to Order Tracking</code><br>
-													<code>- Choose Good Receipt P/O & Posting, data will be saved and updated to Order Tracking</code>
-												</p>
+
 											</div>
 											<div class="col-sm-3" style="vertical-align: text-bottom;">
 												<div class="box-tools">
 													<div class="input-group input-group-sm pull-right">
-														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();}">
+														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="<?= $keyword ?>" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', '<?= base_url('goodreceipt/search') ?>');$('#'+'mainform').submit();}">
 														<div class="input-group-btn">
-															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
+															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', '<?= base_url('goodreceipt/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
 														</div>
 													</div>
 												</div>
@@ -278,60 +275,15 @@
 										</div>
 									</form>
 									<div class="row">
-										<!-- Pagination template
-											<div class="col-sm-6">
-											
+										<div class="col-sm-12">&nbsp;
 										</div>
-										<div class="col-sm-6">
-											<div class="dataTables_paginate paging_simple_numbers">
-												<ul class="pagination">
-													<?php //if ($paging->start_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->start_link) 
-																	?>" aria-label="First"><span aria-hidden="true">Awal</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->prev) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->prev) 
-																	?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //for ($i = $paging->start_link; $i <= $paging->end_link; $i++) : 
-													?>
+										<div class="col-sm-12">
 
-													<li class='active'>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $i) 
-																	?>"><? //= $i 
-																		?>
-															1</a>
-													</li>
-													<?php //endfor; 
-													?>
-													<?php //if ($paging->next) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->next) 
-																	?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->end_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->end_link) 
-																	?>" aria-label="Last"><span aria-hidden="true">Akhir</span></a>
-													</li>
-													<?php //endif; 
-													?>
-												</ul>
-											</div>
+											<p><i class="fa fa-info-circle"></i><code> Choose Button info :</code><br>
+												<code>- Choose Good Receipt P/O & Save, data is only saved without updated to Order Tracking</code><br>
+												<code>- Choose Good Receipt P/O & Posting, data will be saved and updated to Order Tracking</code>
+											</p>
 										</div>
-													-->
 									</div>
 								</div>
 							</div>

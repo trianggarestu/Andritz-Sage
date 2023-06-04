@@ -43,7 +43,7 @@
 											<div class="col-sm-6">
 												<div class="box-tools">
 													<div class="input-group input-group-sm pull-right">
-														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', '<?= base_url('requisition/search') ?>');$('#'+'mainform').submit();}">
+														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="<?= $keyword ?>" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', '<?= base_url('requisition/search') ?>');$('#'+'mainform').submit();}">
 														<div class="input-group-btn">
 															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', '<?= base_url('requisition/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
 														</div>
@@ -180,62 +180,7 @@
 											</div>
 										</div>
 									</form>
-									<div class="row">
-										<!-- Pagination template
-											<div class="col-sm-6">
-											
-										</div>
-										<div class="col-sm-6">
-											<div class="dataTables_paginate paging_simple_numbers">
-												<ul class="pagination">
-													<?php //if ($paging->start_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->start_link) 
-																	?>" aria-label="First"><span aria-hidden="true">Awal</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->prev) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->prev) 
-																	?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //for ($i = $paging->start_link; $i <= $paging->end_link; $i++) : 
-													?>
 
-													<li class='active'>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $i) 
-																	?>"><? //= $i 
-																		?>
-															1</a>
-													</li>
-													<?php //endfor; 
-													?>
-													<?php //if ($paging->next) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->next) 
-																	?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->end_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->end_link) 
-																	?>" aria-label="Last"><span aria-hidden="true">Akhir</span></a>
-													</li>
-													<?php //endif; 
-													?>
-												</ul>
-											</div>
-										</div>
-													-->
-									</div>
 								</div>
 							</div>
 						</div>

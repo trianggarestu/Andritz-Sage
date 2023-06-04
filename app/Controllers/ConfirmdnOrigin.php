@@ -101,6 +101,7 @@ class ConfirmdnOrigin extends BaseController
 
         $data = array(
             'delivery_data' => $deliverydata,
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
@@ -108,6 +109,49 @@ class ConfirmdnOrigin extends BaseController
         echo view('delivery/data_shi_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('confirmdnorigin'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('confirmdnorigin/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $deliverydata = $this->DeliveryordersModel->get_shi_pending_to_dnorigin();
+        } else {
+            $deliverydata = $this->DeliveryordersModel->get_shi_pending_to_dnorigin_search($keyword);
+        }
+        $data = array(
+            'delivery_data' => $deliverydata,
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('delivery/data_shi_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function update($shiuniq, $postingstat)
     {

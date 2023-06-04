@@ -101,6 +101,48 @@ class DeliveryOrders extends BaseController
 
         $data = array(
             'delivery_data' => $deliverydata,
+            'keyword' => '',
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('delivery/data_gr_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('deliveryorders'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('deliveryorders/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $deliverydata = $this->DeliveryordersModel->get_gr_pending_to_dn();
+        } else {
+            $deliverydata = $this->DeliveryordersModel->get_gr_pending_to_dn_search($keyword);
+        }
+        $data = array(
+            'delivery_data' => $deliverydata,
+            'keyword' => $keyword,
         );
 
         echo view('view_header', $this->header_data);

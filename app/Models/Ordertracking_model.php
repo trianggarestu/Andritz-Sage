@@ -27,6 +27,19 @@ class Ordertracking_model extends Model
         return $query->getResultArray();
     }
 
+
+    function get_ordertracking_search($keyword)
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING where CONTRACT like '%$keyword%' or CTDESC like '%$keyword%'
+        or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%' or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%'
+        or CUSTOMER like '%$keyword%' or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
+        or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
+        or STOCKUNIT like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' or ORIGINCOUNTRY like '%$keyword%' or POREMARKS like '%$keyword%'
+        or VENDSHISTATUS like '%$keyword%' or LOGREMARKS like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'
+        or SHINUMBER like '%$keyword%' or IDINVC like '%$keyword%'");
+        return $query->getResultArray();
+    }
+
     function get_ot_by_id($id_so)
     {
         $query = $this->db->query("select * from webot_ORDERTRACKING "

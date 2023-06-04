@@ -101,6 +101,7 @@ class FillrrStatus extends BaseController
 
         $data = array(
             'finance_data' => $fin_data,
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
@@ -108,6 +109,49 @@ class FillrrStatus extends BaseController
         echo view('finance/data_fin_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('fillrrstatus'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('fillrrstatus/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $fin_data = $this->FinanceModel->get_fin_pending_to_rrstatus();
+        } else {
+            $fin_data = $this->FinanceModel->get_fin_pending_to_rrstatus_search($keyword);
+        }
+        $data = array(
+            'finance_data' => $fin_data,
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('finance/data_fin_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function update($finuniq, $postingstat)
     {

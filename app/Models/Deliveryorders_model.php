@@ -38,6 +38,27 @@ class Deliveryorders_model extends Model
         return $query->getResultArray();
     }
 
+
+    function get_gr_pending_to_dn_search($keyword)
+    {
+        $query = $this->db->query("select a.RCPUNIQ as RCPRCPUNIQ,a.RECPNUMBER,a.RECPDATE,a.DESCRIPTIO,a.RECPQTY,a.RECPUNIT,a.GRSTATUS,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        c.*
+        from webot_RECEIPTS a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+		left join webot_SHIPMENTS c on c.RCPUNIQ=a.RCPUNIQ
+        where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.RECPNUMBER like '%$keyword%'
+        or a.DESCRIPTIO like '%$keyword%' or c.DOCNUMBER like '%$keyword%' or c.SHINUMBER like '%$keyword%' or c.EDNFILENAME like '%$keyword%')");
+
+        return $query->getResultArray();
+    }
+
+
+
     function get_shi_pending_to_dnorigin()
     {
         $query = $this->db->query("select a.*,
@@ -50,6 +71,24 @@ class Deliveryorders_model extends Model
 
         return $query->getResultArray();
     }
+
+
+    function get_shi_pending_to_dnorigin_search($keyword)
+    {
+        $query = $this->db->query("select a.*,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        from webot_SHIPMENTS a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and (a.DNPOSTINGSTAT is NULL or a.DNPOSTINGSTAT=0 or a.DNOFFLINESTAT=1))
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.DOCNUMBER like '%$keyword%' 
+        or a.SHINUMBER like '%$keyword%' or a.EDNFILENAME like '%$keyword%')");
+
+        return $query->getResultArray();
+    }
+
 
     function get_rcp_pending_by_rcpuniq($rcpuniq)
     {

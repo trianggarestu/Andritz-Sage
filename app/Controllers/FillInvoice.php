@@ -101,6 +101,7 @@ class FillInvoice extends BaseController
 
         $data = array(
             'delivery_data' => $deliverydata,
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
@@ -108,6 +109,49 @@ class FillInvoice extends BaseController
         echo view('finance/data_shi_pending_fin_list', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('fillinvoice'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('fillinvoice/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $deliverydata = $this->FinanceModel->get_shi_pending_to_finance();
+        } else {
+            $deliverydata = $this->FinanceModel->get_shi_pending_to_finance_search($keyword);
+        }
+        $data = array(
+            'delivery_data' => $deliverydata,
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('finance/data_shi_pending_fin_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function update($shiuniq, $postingstat)
     {

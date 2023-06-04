@@ -97,10 +97,12 @@ class ArrangeShipment extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
+        session()->remove('cari');
         $logisticsdata = $this->LogisticsModel->get_po_pending_to_arrangeshipment();
 
         $data = array(
             'logistics_data' => $logisticsdata,
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
@@ -108,6 +110,49 @@ class ArrangeShipment extends BaseController
         echo view('logistics/data_po_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('arrangeshipment'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('arrangeshipment/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $logisticsdata = $this->LogisticsModel->get_po_pending_to_arrangeshipment();
+        } else {
+            $logisticsdata = $this->LogisticsModel->get_po_pending_to_arrangeshipment_search($keyword);
+        }
+        $data = array(
+            'logistics_data' => $logisticsdata,
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('logistics/data_po_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function update($pouniq, $postingstat)
     {

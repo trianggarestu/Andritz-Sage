@@ -101,6 +101,7 @@ class GoodReceipt extends BaseController
 
         $data = array(
             'receipt_data' => $receiptdata,
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
@@ -108,6 +109,48 @@ class GoodReceipt extends BaseController
         echo view('goodreceipt/data_po_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('goodreceipt'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('goodreceipt/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $receiptdata = $this->GoodreceiptModel->get_po_pending_to_gr();
+        } else {
+            $receiptdata = $this->GoodreceiptModel->get_po_pending_to_gr_search($keyword);
+        }
+        $data = array(
+            'receipt_data' => $receiptdata,
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('goodreceipt/data_po_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function update($pouniq)
     {

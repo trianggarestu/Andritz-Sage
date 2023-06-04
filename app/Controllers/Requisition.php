@@ -33,6 +33,7 @@ class Requisition extends BaseController
         helper('form', 'url');
         $this->db_name = \Config\Database::connect();
 
+
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
@@ -96,29 +97,15 @@ class Requisition extends BaseController
 
     public function index()
     {
-        /*$paginateData = $this->RequisitionModel->select('webot_CSR.*,b.RQNDATE,b.RQNNUMBER')
-            ->join('webot_REQUISITION b', 'b.CSRUNIQ = webot_CSR.CSRUNIQ', 'left')
-            ->where('webot_CSR.POSTINGSTAT', 1)
-            ->where('b.RQNNUMBER is NULL')
-            ->orderBy('webot_CSR.CSRUNIQ', 'DESC')
-            ->paginate(2);
-
-
-        $data = array(
-            'requisition_data' => $paginateData,
-            'pager' => $this->RequisitionModel->pager,
-        );
-        */
         session()->remove('success');
         session()->set('success', '0');
-        $keyword = session()->get('cari');
-        if (empty($keyword)) {
-            $requisitiondata = $this->RequisitionModel->get_requisition_open();
-        } else {
-            $requisitiondata = $this->RequisitionModel->get_requisition_open_search($keyword);
-        }
+        session()->remove('cari');
+
+        $requisitiondata = $this->RequisitionModel->get_requisition_open();
+
         $data = array(
             'requisition_data' => $requisitiondata,
+            'keyword' => '',
         );
 
 
@@ -132,6 +119,42 @@ class Requisition extends BaseController
     {
         session()->remove('cari');
         return redirect()->to(base_url('requisition'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('requisition/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        } else {
+            $requisitiondata = $this->RequisitionModel->get_requisition_open_search($keyword);
+        }
+        $data = array(
+            'requisition_data' => $requisitiondata,
+            'keyword' => $keyword,
+        );
+
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('requisition/data_so_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
     }
 
     public function update($id_so, $postingstat)
@@ -458,17 +481,6 @@ class Requisition extends BaseController
             return redirect()->to(base_url('/requisition'));
             session()->remove('success');
         }
-    }
-
-    public function search()
-    {
-        $cari = $this->request->getPost('cari');
-        if ($cari != '') {
-            session()->set('cari', $cari);
-        } else {
-            session()->remove('cari');
-        }
-        return redirect()->to(base_url('/requisition'));
     }
 
 

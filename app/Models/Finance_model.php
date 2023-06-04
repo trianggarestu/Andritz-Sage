@@ -41,6 +41,26 @@ class Finance_model extends Model
     }
 
 
+    function get_shi_pending_to_finance_search($keyword)
+    {
+        $query = $this->db->query("select a.SHIUNIQ,a.DOCNUMBER,a.SHINUMBER,a.SHIDATE,a.CUSTRCPDATE,a.SHIITEMNO,a.SHIQTY,a.SHIQTYOUTSTANDING,a.SHIUNIT,a.POCUSTSTATUS,
+        a.EDNFILENAME,a.EDNFILEPATH,a.POSTINGSTAT as SHIPOSTINGSTAT,a.DNSTATUS,a.DNPOSTINGSTAT,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        c.FINUNIQ,c.IDINVC,c.INVOICEDATE,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
+        from webot_SHIPMENTS a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        left join webot_FINANCE c on c.SHIUNIQ=a.SHIUNIQ
+        where ((a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and a.DNPOSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL))
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.DOCNUMBER like '%$keyword%' 
+        or a.SHINUMBER like '%$keyword%' or a.EDNFILENAME like '%$keyword%' or c.IDINVC like '%$keyword%')");
+
+        return $query->getResultArray();
+    }
+
+
     //RRSTATUS
     function get_fin_pending_to_rrstatus()
     {
@@ -54,6 +74,24 @@ class Finance_model extends Model
 
         return $query->getResultArray();
     }
+
+
+    function get_fin_pending_to_rrstatus_search($keyword)
+    {
+        $query = $this->db->query("select a.*,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        from webot_FINANCE a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        where (a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0)
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' 
+        or a.IDINVC like '%$keyword%')");
+
+        return $query->getResultArray();
+    }
+
 
     function get_shi_by_id($shiuniq)
     {

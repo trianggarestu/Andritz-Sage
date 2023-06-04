@@ -98,11 +98,13 @@ class PurchaseOrder extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
+        session()->remove('cari');
         $purchaseorderdata = $this->PurchaseorderModel->get_requisition_pending();
 
 
         $data = array(
             'purchaseOrder_data' => $purchaseorderdata,
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
@@ -110,6 +112,49 @@ class PurchaseOrder extends BaseController
         echo view('purchaseorder/data_pr_pending_list', $data);
         echo view('view_footer', $this->footer_data);
     }
+
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('purchaseorder'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('purchaseorder/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $purchaseorderdata = $this->PurchaseorderModel->get_requisition_pending();
+        } else {
+            $purchaseorderdata = $this->PurchaseorderModel->get_requisition_pending_search($keyword);
+        }
+        $data = array(
+            'purchaseOrder_data' => $purchaseorderdata,
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('purchaseorder/data_pr_pending_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function update($rqnuniq, $postingstat)
     {

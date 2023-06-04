@@ -37,6 +37,23 @@ class Goodreceipt_model extends Model
         return $query->getResultArray();
     }
 
+    function get_po_pending_to_gr_search($keyword)
+    {
+        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
+        " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
+        where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.PONUMBER like '%$keyword%'
+        or a.VENDSHISTATUS like '%$keyword%' or c.RECPNUMBER like '%$keyword%' or c.DESCRIPTIO like '%$keyword%' or c.VDNAME like '%$keyword%')");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
+
     function get_po_pending_by_pouniq($pouniq)
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
