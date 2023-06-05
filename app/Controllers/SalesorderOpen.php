@@ -11,7 +11,7 @@ use App\Models\Administration_model;
 use App\Models\Notif_model;
 use App\Models\Salesorder_model;
 
-class SalesorderList extends BaseController
+class SalesorderOpen extends BaseController
 {
 
     private $nav_data;
@@ -56,7 +56,7 @@ class SalesorderList extends BaseController
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'salesorderlist';
+                $activenavd = 'salesorderopen';
                 $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
                 $this->nav_data = [
                     'active_navd' => $activenavd,
@@ -88,25 +88,66 @@ class SalesorderList extends BaseController
 
     public function index()
     {
-        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
-        //session()->remove('success');
-        $so_data = $this->SalesorderModel->select('*')
-            ->where('POSTINGSTAT =', 1);
-        $perpage = 20;
+        session()->remove('success');
+        session()->set('success', '0');
+        session()->remove('cari');
+
+        $so_open_data = $this->SalesorderModel->get_csr_list_open();
+
         $data = array(
-            'so_data' => $so_data->paginate($perpage, 'so_data'),
-            'success_code' => session()->get('success'),
-            'pager' => $so_data->pager,
-            'currentpage' => $currentpage
+            'so_data' => $so_open_data,
+            'keyword' => '',
         );
 
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('crm/data_so_list', $data);
+        echo view('crm/data_so_list_open', $data);
         echo view('view_footer', $this->footer_data);
-        session()->remove('success');
     }
+
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('salesorderopen'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('salesorderopen/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $so_open_data = $this->SalesorderModel->get_csr_list_open();
+        } else {
+            $so_open_data = $this->SalesorderModel->get_csr_list_open_search($keyword);
+        }
+        $data = array(
+            'so_data' => $so_open_data,
+            'keyword' => '',
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('crm/data_so_list_open', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function deletedata($csruniq = '')
     {

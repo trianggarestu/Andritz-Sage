@@ -35,15 +35,35 @@ class Salesorder_model extends Model
             . "a.CONTRACT NOT IN (select CONTRACT from webot_CSR where POSTINGSTAT<>2) ");
 
         if ($query->getResult() > 0) {
-            /*foreach ($query->getResultArray() as $row) {
-                $data[0] = '--SELECT CONTRACT--';
-                $data[trim($row['CONTRACT'])] = '(' . trim($row['CONTRACT']) . ') ' . $row['DESC'] . ' - ' . $row['NAMECUST'];
-            }
-        }
-        return $data;*/
             return $query->getResultArray();
         }
     }
+
+    function get_csr_list_open()
+    {
+        $query = $this->db->query("select a.*," . 'it."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
+        where a.POSTINGSTAT=0");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+
+    function get_csr_list_open_search($keyword)
+    {
+        $query = $this->db->query("select a.*," . 'it."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
+        where (a.POSTINGSTAT=0) and
+        (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.MANAGER like '%$keyword%' or a.SALESNAME like '%$keyword%'
+        or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
+        or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
+        or a.SERVICETYPE like '%$keyword%' or a.CRMREMARKS like '%$keyword%' or a.ITEMNO like '%$keyword%' or a.MATERIALNO like '%$keyword%'
+        or a.STOCKUNIT like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%')");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+
 
     function list_project_by_contract($contract)
     {
