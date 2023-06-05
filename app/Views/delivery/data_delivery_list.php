@@ -6,10 +6,10 @@
 
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Good Receipt List</h1>
+		<h1>Delivery Order List</h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-			<li class="active">Good Receipt List</li>
+			<li class="active">Delivery Order List</li>
 		</ol>
 	</section>
 
@@ -18,10 +18,10 @@
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<a href="<?= base_url() ?>goodreceiptlist/" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh</a>
-						<a href="<?= base_url("goodreceiptlist/preview") ?>" target="_blank" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview"><i class="fa fa-print"></i> Preview
+						<a href="<?= base_url() ?>deliveryorderslist/" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh</a>
+						<a href="<?= base_url("deliveryorderslist/preview") ?>" target="_blank" class="btn btn-social btn-flat bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Preview"><i class="fa fa-print"></i> Preview
 						</a>
-						<a href="<?= base_url("goodreceiptlist/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
+						<a href="<?= base_url("deliveryorderslist/export_excel") ?>" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Unduh" target="_blank"><i class="fa fa-download"></i> Download
 						</a>
 					</div>
 					<div class="box-body">
@@ -51,17 +51,21 @@
 														<thead class="bg-gray disabled color-palette">
 															<tr>
 																<th>No.</th>
-																<th>Status</th>
-																<th>Receipt Number</th>
-																<th>GR. Date</th>
-																<th>Vendor Name</th>
-																<th>Description</th>
+																<th>Shipment No</th>
+																<th>Shipment Date</th>
+																<th>Document No</th>
+																<th>Customer Name</th>
+																<th>Receipts Customer(Date)</th>
 																<th>Item</th>
-																<th>QTY Receipt</th>
-																<th>GR Status</th>
+																<th>Item Desc</th>
+																<th>Qty Delivery</th>
+																<th>QTY Outstanding</th>
 																<th style="background-color: white;"></th>
-																<th>PO Number</th>
-																<th>PO Date</th>
+																<th>Contract</th>
+																<th>Project</th>
+																<th>D/N Status</th>
+																<th>D/N Posting Status</th>
+
 
 															</tr>
 														</thead>
@@ -69,10 +73,10 @@
 															<?php
 															$no = 0;
 															?>
-															<?php foreach ($goodreceipt_data as $data_list) {
-																/*$povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);
-																$rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['ETDDATE'], 6, 2) . "/" .  substr($data_list['ETDDATE'], 0, 4);
-																$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
+															<?php foreach ($delivery_data as $data_list) {
+																$shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);
+																$cusdate = substr($data_list['CUSTRCPDATE'], 4, 2) . "/" . substr($data_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($data_list['CUSTRCPDATE'], 0, 4);
+																/*$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
 																$etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
 																$atdorigindate = substr($data_list['ATDORIGINDATE'], 4, 2) . "/" . substr($data_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ATDORIGINDATE'], 0, 4);
 																$etaportdate = substr($data_list['ETAPORTDATE'], 4, 2) . "/" . substr($data_list['ETAPORTDATE'], 6, 2) . "/" .  substr($data_list['ETAPORTDATE'], 0, 4);
@@ -82,8 +86,31 @@
 
 																<tr>
 																	<td><?= ++$no ?></td>
-																	<td><?php $rcppostingstat = $data_list['POSTINGSTAT'];
-																		switch ($rcppostingstat) {
+																	<td><?= $data_list['SHINUMBER'] ?></td>
+																	<td><?= $shidate; ?></td>
+																	<td><?= $data_list['DOCNUMBER']; ?></td>
+																	<td><?= $data_list['NAMECUST']; ?></td>
+																	<td><?= $cusdate; ?></td>
+																	<td><?= $data_list['SHIITEMNO']; ?></td>
+																	<td><?= $data_list['SHIITEMDESC']; ?></td>
+																	<td><?= $data_list['SHIQTY']; ?></td>
+																	<td><?= $data_list['SHIQTYOUTSTANDING']; ?></td>
+																	<td style="background-color: white;"></td>
+																	<td><?= $data_list['CONTRACT']; ?></td>
+																	<td><?= $data_list['PROJECT']; ?></td>
+																	<td><?php $postatus = $data_list['POCUSTSTATUS'];
+																		switch ($postatus) {
+																			case "0":
+																				echo "Outstanding";
+																				break;
+																			case "1":
+																				echo "Completed";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
+																	<td><?php $dnpostingstat = $data_list['DNPOSTINGSTAT'];
+																		switch ($dnpostingstat) {
 																			case "0":
 																				echo "Open";
 																				break;
@@ -97,16 +124,9 @@
 																				echo "Posted";
 																		} ?>
 																	</td>
-																	<td><?= $data_list['RECPNUMBER'] ?></td>
-																	<td>Rcp Date</td>
-																	<td><?= $data_list['VDNAME'] ?></td>
-																	<td><?= $data_list['DESCRIPTIO'] ?></td>
-																	<td><?= $data_list['ITEMDESC'] ?></td>
-																	<td><?= $data_list['RECPQTY'] ?></td>
-																	<td><?= $data_list['GRSTATUS'] ?></td>
-																	<td style="background-color: white;"></td>
-																	<td><strong><a href="#"><?= $data_list['PONUMBER'] ?></a></strong></td>
-																	<td>PO Date</td>
+
+
+
 																</tr>
 
 															<?php } ?>

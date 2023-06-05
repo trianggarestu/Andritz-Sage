@@ -13,12 +13,12 @@ use PHPMailer\PHPMailer\Exception;
 use App\Models\Login_model;
 use App\Models\Administration_model;
 use App\Models\Notif_model;
-use App\Models\Goodreceipt_model;
+use App\Models\Deliveryorders_model;
 use App\Models\Ordertracking_model;
 
 //use App\Controllers\AdminController;
 
-class GoodreceiptList extends BaseController
+class DeliveryOrdersList extends BaseController
 {
 
     private $nav_data;
@@ -35,7 +35,7 @@ class GoodreceiptList extends BaseController
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
-        $this->GoodreceiptModel = new Goodreceipt_model();
+        $this->DeliveryordersModel = new Deliveryorders_model();
         $this->OrdertrackingModel = new Ordertracking_model();
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -62,7 +62,7 @@ class GoodreceiptList extends BaseController
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'goodreceiptlist';
+                $activenavd = 'deliveryorderslist';
                 $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
                 $this->nav_data = [
                     'active_navd' => $activenavd,
@@ -96,24 +96,27 @@ class GoodreceiptList extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
-        $goodreceipt_data = $this->GoodreceiptModel->select('webot_RECEIPTS.*')
-            ->where('webot_RECEIPTS.POSTINGSTAT=', 1)
-            ->orderBy('RCPUNIQ', 'DESC');
+
+        $delivery_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,a.NAMECUST,it.DESC as SHIITEMDESC')
+            ->join('ARCUS a', 'a.IDCUST = webot_SHIPMENTS.CUSTOMER', 'left')
+            ->join('ICITEM it', 'it.ITEMNO = webot_SHIPMENTS.SHIITEMNO')
+            ->where('webot_SHIPMENTS.POSTINGSTAT=', 1)
+            ->orderBy('DOCUNIQ', 'DESC');
         //$Purchaseorderdata = $this->PurchaseOrderModel->get_PurchaseOrder_Close();
         $perpage = 20;
 
         $data = array(
-            'goodreceipt_data' =>  $goodreceipt_data->paginate($perpage, 'gr_posting_list'),
-            'pager' => $goodreceipt_data->pager,
-            'ct_po_posting' => $this->GoodreceiptModel->count_gr_posting(),
+            'delivery_data' =>  $delivery_data->paginate($perpage, 'gr_posting_list'),
+            'pager' => $delivery_data->pager,
+            'ct_po_posting' => $this->DeliveryordersModel->count_delivery_posting(),
             'perpage' => $perpage,
-            'currentpage' => $goodreceipt_data->pager->getCurrentPage('gr_posting_list'),
-            'totalpages'  => $goodreceipt_data->pager->getPageCount('gr_posting_list'),
+            'currentpage' => $delivery_data->pager->getCurrentPage('gr_posting_list'),
+            'totalpages'  => $delivery_data->pager->getPageCount('gr_posting_list'),
         );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('goodreceipt/data_goodreceipt_list.php', $data);
+        echo view('delivery/data_delivery_list.php', $data);
         echo view('view_footer', $this->footer_data);
     }
 
@@ -121,44 +124,55 @@ class GoodreceiptList extends BaseController
     public function export_excel()
     {
         //$peoples = $this->builder->get()->getResultArray();
-        $grdata = $this->GoodreceiptModel->get_gr_preview();
+        $deliverydata = $this->DeliveryordersModel->get_delivery_preview();
         $spreadsheet = new Spreadsheet();
         // tulis header/nama kolom 
         $spreadsheet->setActiveSheetIndex(0)
             ->setCellValue('A1', 'NO')
-            ->setCellValue('B1', 'PONUMBER')
-            ->setCellValue('C1', 'PODATE')
-            ->setCellValue('D1', 'RECEIPTNUMBER')
-            ->setCellValue('E1', 'RECEIPTDATE')
-            ->setCellValue('F1', 'VEMDORNAME')
+            ->setCellValue('B1', 'SHIPMENTNO')
+            ->setCellValue('C1', 'SHIPMENTDATE')
+            ->setCellValue('D1', 'DOCUMENTNO')
+            ->setCellValue('E1', 'CUSTOMERNAME')
+            ->setCellValue('F1', 'RECEIPT CUSTOMER(DATE)')
             ->setCellValue('G1', 'ITEMNO')
             ->setCellValue('H1', 'ITEMDESC')
-            ->setCellValue('I1', 'RECEIPTQTY')
-            ->setCellValue('J1', 'RECEIPTSTATUS');
+            ->setCellValue('I1', 'QTY DELIVERY')
+            ->setCellValue('J1', 'QTT OUTSTANDING')
+            ->setCellValue('K1', 'CONTRACT')
+            ->setCellValue('L1', 'PROJECT')
+            ->setCellValue('M1', 'D/N STATUS')
+            ->setCellValue('N1', 'POSTING STATUS');
+
+
 
 
         $rows = 2;
         // tulis data mobil ke cell
         $no = 1;
-        foreach ($grdata as $data) {
+        foreach ($deliverydata as $data) {
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['PONUMBER'])
-                ->setCellValue('C' . $rows, $data['PODATE'])
-                ->setCellValue('D' . $rows, $data['RECPNUMBER'])
-                ->setCellValue('E' . $rows, $data['RECPDATE'])
-                ->setCellValue('F' . $rows, $data['VDNAME'])
-                ->setCellValue('G' . $rows, $data['RECPITEMNO'])
-                ->setCellValue('H' . $rows, $data['ITEMDESC'])
-                ->setCellValue('I' . $rows, $data['RECPQTY'])
-                ->setCellValue('J' . $rows, $data['POSTINGSTAT'])
+                ->setCellValue('B' . $rows, $data['SHINUMBER'])
+                ->setCellValue('C' . $rows, $data['SHIDATE'])
+                ->setCellValue('D' . $rows, $data['DOCNUMBER'])
+                ->setCellValue('E' . $rows, $data['NAMECUST'])
+                ->setCellValue('F' . $rows, $data['CUSTRCPDATE'])
+                ->setCellValue('G' . $rows, $data['SHIITEMNO'])
+                ->setCellValue('H' . $rows, $data['SHIITEMDESC'])
+                ->setCellValue('I' . $rows, $data['SHIQTY'])
+                ->setCellValue('J' . $rows, $data['SHIQTYOUTSTANDING'])
+                ->setCellValue('K' . $rows, $data['CONTRACT'])
+                ->setCellValue('L' . $rows, $data['PROJECT'])
+                ->setCellValue('M' . $rows, $data['POCUSTSTATUS'])
+                ->setCellValue('N' . $rows, $data['DNPOSTINGSTAT'])
+
 
                 ->setCellValue('Q' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'Goodreceipt';
+        $fileName = 'DeliveryOrder';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -170,12 +184,12 @@ class GoodreceiptList extends BaseController
     }
     public function preview()
     {
-        $gr_data = $this->GoodreceiptModel->get_gr_preview();
+        $delivery_data = $this->DeliveryordersModel->get_delivery_preview();
         $data = array(
-            'gr_data' => $gr_data,
+            'delivery_data' => $delivery_data,
             'success_code' => session()->get('success'),
         );
 
-        echo view('goodreceipt/data_gr_list_preview', $data);
+        echo view('delivery/data_delivery_list_preview', $data);
     }
 }

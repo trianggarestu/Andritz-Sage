@@ -149,4 +149,12 @@ class Goodreceipt_model extends Model
         $builder->where('webot_RECEIPTS.POSTINGSTAT=', 1);
         return $builder->countAllResults();
     }
+    function get_gr_preview()
+    {
+        $query = $this->db->query("select a.*,b.*
+        from webot_RECEIPTS a 
+        left join webot_PO b on b.POUNIQ = a.POUNIQ and b.PONUMBER = a.PONUMBER
+		where (a.POSTINGSTAT=1)");
+        return $query->getResultArray();
+    }
 }

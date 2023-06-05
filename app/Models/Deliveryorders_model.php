@@ -258,4 +258,21 @@ class Deliveryorders_model extends Model
         $builder->where('webot_RECEIPTS.POSTINGSTAT=', 1);
         return $builder->countAllResults();
     }
+    function count_delivery_posting()
+    {
+        $query = $this->db->query("select a.*,b.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC from webot_SHIPMENTS a
+        left join ARCUS b on b.IDCUST=a.CUSTOMER
+        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
+        where a.POSTINGSTAT=1");
+        return $query->getRowArray();
+    }
+
+    function get_delivery_preview()
+    {
+        $query = $this->db->query("select a.*,b.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC from webot_SHIPMENTS a
+        left join ARCUS b on b.IDCUST=a.CUSTOMER
+        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
+        where a.POSTINGSTAT=1");
+        return $query->getResultArray();
+    }
 }
