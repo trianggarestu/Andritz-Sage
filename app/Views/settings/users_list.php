@@ -26,7 +26,8 @@
 				<div class="col-md-12">
 					<div class="box box-info">
 						<div class="box-header with-border">
-							<a href="#" class="btn btn-social btn-flat btn-success btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Add New User">
+
+							<a href="<?= base_url() ?>usersetup/add" title="add new user" class="btn btn-social btn-flat btn-success btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block">
 								<i class="fa fa-plus"></i>Add New User
 							</a>
 						</div>
@@ -55,8 +56,8 @@
 													<tr>
 														<td class="text-center"><?= ++$no; ?></td>
 														<td nowrap>
-															<a href="#" class=" btn bg-orange btn-flat btn-sm" title="Update Data"><i class="fa fa-edit"></i></a>
-															<a href="#" data-href="#" class="btn bg-maroon btn-flat btn-sm" title="Delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+															<a href="<?= base_url() . 'usersetup/formupdate/' . $data['USERUNIQ']; ?>" class=" btn bg-orange btn-flat btn-sm" title="Update Data"><i class="fa fa-edit"></i></a>
+															<a href="<?= base_url() . 'usersetup/delete/' . $data['USERUNIQ']; ?>" data-href="#" class="btn bg-maroon btn-flat btn-sm" title="Delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
 														</td>
 														<td><?= $data['USERNAME'] ?></td>
 														<td><?= $data['NAME'] ?></td>
