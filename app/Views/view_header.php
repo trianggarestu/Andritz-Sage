@@ -214,3 +214,21 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<script>
+		function previewimg() {
+			const photo = document.querySelector('#photo');
+			const photolabel = document.querySelector('.custom-file-label');
+			const imgpreview = document.querySelector('.img-preview');
+
+			photolabel.textContent = photo.files[0].name;
+
+			const filephoto = new FileReader();
+			filephoto.readAsDataURL(photo.files[0]);
+
+			filephoto.onload = function(e) {
+				imgpreview.src = e.target.result;
+			}
+		}
+	</script>
+</body>

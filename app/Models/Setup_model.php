@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use CodeIgniter\Database\Query;
 use CodeIgniter\Model;
 
 class Setup_model extends Model
 {
 
+    protected $table = 'webot_USERAUTH';
+    protected $allowedFields = ['USERNAME', 'NAME', 'EMAIL', 'PASSWORD', 'PATH_PHOTO', 'ISSUPERUSER', 'INACTIVE', 'GROUPID'];
     private $urut_model;
     function __construct()
     {
@@ -160,5 +163,18 @@ from webot_NAVIGATIONDL1";
     {
         //$subset = !empty($menuh) ? array("tipe" => 3, "menuh" => $menuh) : array("tipe" => $tipe);
         $this->urut_model->urut($menuh, $id, $arah);
+    }
+
+    public function get_data_user($useruniq)
+    {
+        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID where USERUNIQ='$useruniq' order by USERNAME asc ");
+        return $query->getRowArray();
+    }
+
+    public function updateuser($useruniq, $data)
+    {
+        $query = $this->db->table('webot_USERAUTH')->update($data, array('USERUNIQ' => $useruniq));
+        //Tanpa return juga bisa jalan
+        return $query;
     }
 }

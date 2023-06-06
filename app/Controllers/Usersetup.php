@@ -7,6 +7,9 @@ use App\Models\Login_model;
 use App\Models\Administration_model;
 use App\Models\Notif_model;
 use App\Models\Setup_model;
+
+use function PHPUnit\Framework\matches;
+
 //use App\Models\Settingnavheader_model;
 
 
@@ -96,6 +99,248 @@ class Usersetup extends BaseController
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
         echo view('settings/users_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
+    public function add()
+    {
+        $data = array(
+            'button' => 'Add New User',
+            'form_action' => base_url('/usersetup/create_action'),
+            'useruniq' => set_value('USERUNIQ'),
+            'groupid' => set_value('GROUPID'),
+            'username' => set_value('USERNAME'),
+            'name' => set_value('NAME'),
+            'email' => set_value('EMAIL'),
+            'password' => set_value('PASSWORD'),
+            'groupdesc' => set_value('GROUPNAME'),
+            'photo' => set_value('PATH_PHOTO')
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('settings/view_adduser', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+    public function create_action()
+    {
+        if (!$this->validate([
+            'username' => [
+                'rules' => 'required|max_length[50]',
+                //    |is_unique[webot_USERAUTH.USERNAME]',
+                // 'errors' => [
+                //     'is_unique' => 'Username already exist'
+
+                // ]
+            ],
+            'name' => 'required|max_length[50]',
+            // 'email' => 'required|max_length[50]',
+            "email" => [
+                'rules' => 'required|valid_email|min_length[6]|max_length[50]',
+                "required" => "Email required",
+                "valid_email" => "Email address is not in format",
+
+            ],
+            'password' => [
+                'rules' => 'required|min_length[4]|max_length[50]',
+                'errors' => [
+                    'required' => '{field} password is required',
+                    'min_length' => '{field} Min 4 character',
+                    'max_length' => '{field} Maks 50 charater',
+                ]
+            ],
+            'password_conf' => [
+                'rules' => 'matches[password]',
+                'errors' => [
+                    'matches' => 'passwords are not the same',
+                ]
+            ],
+            'photo' => [
+                'rules' => 'max_size[photo,3072]|is_image[photo]',
+                // |mime_in[photo,image/jpg,image/jpeg/image/png]',
+                'errors' => [
+                    'uploaded' => 'Please select the image',
+                    'max_size' => 'Your image file is too large',
+                    'is_image' => 'The file you uploaded is not an image',
+                    'mime_in' => 'The file you uploaded is not an image'
+                ]
+
+            ]
+
+
+        ])) {
+            session()->setFlashdata('messagefailed', 'Input Failed, Complete data before save!..');
+            return redirect()->to(base_url('/usersetup/add/'))->withInput();
+        } else {
+            $filephoto = $this->request->getFile('photo');
+
+            if ($filephoto == '') {
+                $photo = 'kuser.png';
+            } else {
+                $photo = $filephoto->getRandomName();
+                $filephoto->move(' /img/', $photo);
+
+                $this->SetupModel->save([
+                    'USERNAME' => strtoupper($this->request->getVar('username')),
+                    'NAME' => strtoupper($this->request->getVar('name')),
+                    'EMAIL' => $this->request->getVar('email'),
+                    'PASSWORD' => md5(strtoupper($this->request->getVar('password'))),
+                    'GROUPID' => $this->request->getPost('groupid'),
+                    'ISSUPERUSER' => '0',
+                    'INACTIVE' => '0',
+                    'PATH_PHOTO' => 'img/' . $photo
+                ]);
+
+
+                session()->setFlashdata('messagesuccess', 'Create Record Success');
+                return redirect()->to(base_url('/usersetup'));
+            }
+        }
+    }
+    public function update()
+    {
+        $data = array(
+            'button' => 'Add New User',
+            'form_action' => base_url('/usersetup/create_action'),
+            'useruniq' => set_value('USERUNIQ'),
+            'groupid' => set_value('GROUPID'),
+            'username' => set_value('USERNAME'),
+            'name' => set_value('NAME'),
+            'email' => set_value('EMAIL'),
+            'password' => set_value('PASSWORD'),
+            'groupdesc' => set_value('GROUPNAME'),
+            'photo' => set_value('PATH_PHOTO')
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('settings/view_updateuser', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+    public function form($useruniq = '')
+    {
+        if ($useruniq) {
+            $user = $this->SetupModel->get_data_user($useruniq);
+            $data = array(
+                'button' => 'Save',
+                'form_action' => base_url('/usersetup/update_action'),
+                'useruniq' => $user['USERUNIQ'],
+                'username' => $user['USERNAME'],
+                'name' => $user['NAME'],
+                'email' => $user['EMAIL'],
+                'password' => $user['PASSWORD'],
+                'groupid' => $user['GROUPID'],
+                'groupdesc' => $user['GROUPNAME'],
+                'photo' => $user['PATH_PHOTO']
+
+
+            );
+        }
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('settings/view_updateuser', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+    public function update_action()
+    {
+        if (!$this->validate([
+
+            "email" => [
+                'rules' => 'valid_email|min_length[6]|max_length[50]',
+                "valid_email" => "Email address is not in format",
+
+            ],
+            'password' => [
+                'rules' => 'required|min_length[4]|max_length[50]',
+                'errors' => [
+                    'required' => '{field} password is required',
+                    'min_length' => '{field} Min 4 character',
+                    'max_length' => '{field} Maks 50 charater',
+                ]
+            ],
+            'password_conf' => [
+                'rules' => 'matches[password]',
+                'errors' => [
+                    'matches' => 'passwords are not the same',
+                ]
+            ],
+            'photo' => [
+                'rules' => 'max_size[photo,3072]|is_image[photo]',
+                // |mime_in[photo,image/jpg,image/jpeg/image/png]',
+                'errors' => [
+                    'uploaded' => 'Please select the image',
+                    'max_size' => 'Your image file is too large',
+                    'is_image' => 'The file you uploaded is not an image',
+                    'mime_in' => 'The file you uploaded is not an image'
+                ]
+
+            ]
+
+
+        ])) {
+            session()->setFlashdata('messagefailed', 'Input Failed, Complete data before save!..');
+            return redirect()->to(base_url('/usersetup/update/'))->withInput();
+        } else {
+            $filephoto = $this->request->getFile('photo');
+
+            if ($filephoto->getError() == UPLOAD_ERR_NO_FILE) {
+                $photo = 'kuser.png';
+            } else {
+                $photo = $filephoto->getRandomName();
+                $filephoto->move('img', $photo);
+                $data = array(
+                    'USERNAME' => strtoupper($this->request->getVar('username')),
+                    'NAME' => strtoupper($this->request->getVar('name')),
+                    'EMAIL' => $this->request->getVar('email'),
+                    'PASSWORD' => md5(strtoupper($this->request->getVar('password'))),
+                    'GROUPID' => $this->request->getPost('groupid'),
+                    'ISSUPERUSER' => '0',
+                    'INACTIVE' => '0',
+                    'PATH_PHOTO' => 'img' . $photo
+                );
+
+                $this->SetupModel->updateuser($data);
+                session()->setFlashdata('messagesuccess', 'Create Record Success');
+                return redirect()->to(base_url('/usersetup'));
+            }
+        }
+    }
+    public function formupdate($useruniq = '')
+    {
+        if ($useruniq) {
+            $user = $this->SetupModel->get_data_user($useruniq);
+            $data = array(
+                'button' => 'Save',
+                'form_action' => base_url('/usersetup/update_action'),
+                'useruniq' => $user['USERUNIQ'],
+                'username' => $user['USERNAME'],
+                'name' => $user['NAME'],
+                'email' => $user['EMAIL'],
+                'password' => $user['PASSWORD'],
+                'groupid' => $user['GROUPID'],
+                'groupdesc' => $user['GROUPNAME'],
+                'photo' => $user['PATH_PHOTO']
+
+
+            );
+        }
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('settings/view_updateUser', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+    public function delete($useruniq = '')
+    {
+        $data = $this->SetupModel->DELETE('webot_USERAUTH')
+            ->WHERE("USERUNIQ = '$useruniq'");
+        echo view('settings/user_list', $data);
+
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+
         echo view('view_footer', $this->footer_data);
     }
 }
