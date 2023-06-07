@@ -88,16 +88,34 @@ class SalesorderList extends BaseController
 
     public function index()
     {
+        $today = $this->audtuser['AUDTDATE'];
+        $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+        $def_fr_date = date("m/01/Y", strtotime($def_date));
+        $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+        $def_to_date = date("m/t/Y", strtotime($def_date));
+        $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
         $so_data = $this->SalesorderModel->select('*')
-            ->where('POSTINGSTAT =', 1);
+            ->groupStart()
+            ->where('POSTINGSTAT =', 1)
+            ->groupEnd()
+            ->groupStart()
+            ->where('PODATECUST >=', $fr_date)
+            ->where('PODATECUST <=', $to_date)
+            ->groupEnd()
+            ->orderBy('PODATECUST', 'ASC');
         $perpage = 20;
         $data = array(
-            'so_data' => $so_data->paginate($perpage, 'so_data'),
-            'success_code' => session()->get('success'),
+            'keyword' => '',
+            'so_data' => $so_data->paginate($perpage, 'csr_data'),
             'pager' => $so_data->pager,
-            'currentpage' => $currentpage
+            'success_code' => session()->get('success'),
+            'currentpage' => $currentpage,
+            'def_fr_date' => $def_fr_date,
+            'def_to_date' => $def_to_date,
+            //'fr_date' => $fr_date,
+            //'to_date' => $to_date,
         );
 
 
@@ -106,34 +124,137 @@ class SalesorderList extends BaseController
         echo view('crm/data_so_list', $data);
         echo view('view_footer', $this->footer_data);
         session()->remove('success');
+        session()->remove('cari');
+        session()->remove('from_date');
+        session()->remove('to_date');
     }
 
-    public function deletedata($csruniq = '')
+
+    public function search()
     {
-        $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
-        if ($getcsropen['POSTINGSTAT'] == 0) {
-            $data = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'POSTINGSTAT' => 2,
-            );
-            $this->SalesorderModel->set_csr_delete($csruniq, $data);
-            session()->set('success', '1');
-            return redirect()->to(base_url('/salesorderlist'));
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        $from_date = $this->request->getPost('from_date');
+        $to_date = $this->request->getPost('to_date');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+            session()->set('from_date', $from_date);
+            session()->set('to_date', $to_date);
         } else {
-            session()->set('success', '-1');
-            return redirect()->to(base_url('/salesorderlist'));
+            session()->remove('cari');
+            session()->set('from_date', $from_date);
+            session()->set('to_date', $to_date);
         }
+        return redirect()->to(base_url('salesorderlist/filter'));
     }
+
+
+    public function filter()
+    {
+        $today = $this->audtuser['AUDTDATE'];
+        $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+        $def_fr_date = date("m/01/Y", strtotime($def_date));
+        $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+        $def_to_date = date("m/t/Y", strtotime($def_date));
+        $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        $perpage = 20;
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+        $todate = session()->get('to_date');
+        $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+        if (empty($keyword)) {
+            $so_data = $this->SalesorderModel->select('*')
+                ->groupStart()
+                ->where('POSTINGSTAT =', 1)
+                ->groupEnd()
+                ->groupStart()
+                ->where('PODATECUST >=', $nfromdate)
+                ->where('PODATECUST <=', $ntodate)
+                ->groupEnd()
+                ->orderBy('PODATECUST', 'ASC');
+        } else {
+            $so_data = $this->SalesorderModel->select('webot_CSR.*')
+                ->join('ICITEM it', 'it.ITEMNO = webot_CSR.ITEMNO', 'left')
+                ->groupStart()
+                ->where('POSTINGSTAT =', 1)
+                ->groupEnd()
+                ->groupStart()
+                ->where('PODATECUST >=', $nfromdate)
+                ->where('PODATECUST <=', $ntodate)
+                ->groupEnd()
+                ->groupStart()
+                ->like('CONTRACT', $keyword)
+                ->orlike('CTDESC', $keyword)
+                ->orlike('MANAGER', $keyword)
+                ->orlike('SALESNAME', $keyword)
+                ->orlike('PROJECT', $keyword)
+                ->orlike('PRJDESC', $keyword)
+                ->orlike('PONUMBERCUST', $keyword)
+                ->orlike('CUSTOMER', $keyword)
+                ->orlike('NAMECUST', $keyword)
+                ->orlike('EMAIL1CUST', $keyword)
+                ->orlike('CRMNO', $keyword)
+                ->orlike('ORDERDESC', $keyword)
+                ->orlike('SERVICETYPE', $keyword)
+                ->orlike('CRMREMARKS', $keyword)
+                ->orlike('webot_CSR.ITEMNO', $keyword)
+                ->orlike('MATERIALNO', $keyword)
+                ->orlike('webot_CSR.STOCKUNIT', $keyword)
+                ->groupEnd()
+                ->orderBy('PODATECUST', 'ASC');
+            //$so_data = $this->SalesorderModel->get_csr_list_post_search($keyword);
+        }
+        $data = array(
+            'keyword' => $keyword,
+            'so_data' => $so_data->paginate($perpage, 'csr_data'),
+            'pager' => $so_data->pager,
+            'success_code' => session()->get('success'),
+            'currentpage' => $currentpage,
+            'def_fr_date' => session()->get('from_date'),
+            'def_to_date' => session()->get('to_date'),
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('crm/data_so_list', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
 
     public function preview()
     {
-        $so_data = $this->SalesorderModel->get_so_open();
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $todate = session()->get('to_date');
+
+        if (empty($fromdate) and empty($todate)) {
+            $today = $this->audtuser['AUDTDATE'];
+            $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+            $def_fr_date = date("m/01/Y", strtotime($def_date));
+            $nfromdate = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+            $def_to_date = date("m/t/Y", strtotime($def_date));
+            $ntodate = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+            $keyword = '';
+            $so_data = $this->SalesorderModel->get_so_open($nfromdate, $ntodate);
+        } else {
+            $keyword = session()->get('cari');
+            $fromdate = session()->get('from_date');
+            $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+            $todate = session()->get('to_date');
+            $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+            $so_data = $this->SalesorderModel->get_so_open_filter($keyword, $nfromdate, $ntodate);
+        }
+        //
         $data = array(
             'so_data' => $so_data,
-            'success_code' => session()->get('success'),
+            'keyword' => $keyword,
+            'fromdate' => $nfromdate,
+            'todate' => $ntodate,
+
         );
 
         echo view('crm/data_so_list_preview', $data);
@@ -141,8 +262,28 @@ class SalesorderList extends BaseController
 
     public function export_excel()
     {
-        //$peoples = $this->builder->get()->getResultArray();
-        $so_data = $this->SalesorderModel->get_so_open();
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $todate = session()->get('to_date');
+
+        if (empty($fromdate) and empty($todate)) {
+            $today = $this->audtuser['AUDTDATE'];
+            $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+            $def_fr_date = date("m/01/Y", strtotime($def_date));
+            $nfromdate = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+            $def_to_date = date("m/t/Y", strtotime($def_date));
+            $ntodate = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+            $keyword = '';
+            $so_data = $this->SalesorderModel->get_so_open($nfromdate, $ntodate);
+        } else {
+            $keyword = session()->get('cari');
+            $fromdate = session()->get('from_date');
+            $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+            $todate = session()->get('to_date');
+            $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+            $so_data = $this->SalesorderModel->get_so_open_filter($keyword, $nfromdate, $ntodate);
+        }
+        //$so_data = $this->SalesorderModel->get_so_open();
         $spreadsheet = new Spreadsheet();
 
         // tulis header/nama kolom 

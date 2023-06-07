@@ -32,6 +32,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::andritzadmin', ['namespace' => 'App\Controllers']);
 
+//$route['salesorderlist/(:any)'] = 'salesorderlist/index/$1';
+
 //$routes->get('/', 'Home::sbmandadmin', ['namespace' => 'App\Controllers\Admin']);
 //$routes->get('/salesorder', 'SalesOrder');
 //$routes->get('/customer', 'Customer');

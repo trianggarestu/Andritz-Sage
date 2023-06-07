@@ -42,7 +42,7 @@ class Salesorder_model extends Model
     function get_csr_list_open()
     {
         $query = $this->db->query("select a.*," . 'it."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
-        where a.POSTINGSTAT=0");
+        where a.POSTINGSTAT=0 or (a.POSTINGSTAT=1 and a.OFFLINESTAT=1) order by PODATECUST desc");
         if ($query->getResult() > 0) {
             return $query->getResultArray();
         }
@@ -53,6 +53,21 @@ class Salesorder_model extends Model
     {
         $query = $this->db->query("select a.*," . 'it."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
         where (a.POSTINGSTAT=0) and
+        (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.MANAGER like '%$keyword%' or a.SALESNAME like '%$keyword%'
+        or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
+        or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
+        or a.SERVICETYPE like '%$keyword%' or a.CRMREMARKS like '%$keyword%' or a.ITEMNO like '%$keyword%' or a.MATERIALNO like '%$keyword%'
+        or a.STOCKUNIT like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%')");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+    // model ini tidak di pakai, karena langsung dari controller
+    function get_csr_list_post_search($keyword)
+    {
+        $query = $this->db->query("select a.*," . 'it."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
+        where (a.POSTINGSTAT=1) and
         (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.MANAGER like '%$keyword%' or a.SALESNAME like '%$keyword%'
         or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
         or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
@@ -94,9 +109,26 @@ class Salesorder_model extends Model
         return $query->getRowArray();
     }
 
-    function get_so_open()
+
+    function get_so_open($nfromdate, $ntodate)
     {
-        $query = $this->db->query("select * from webot_CSR where POSTINGSTAT <>2 order by CSRUNIQ desc");
+        $query = $this->db->query("select a.* from webot_CSR a where (a.POSTINGSTAT =1) and
+        (a.PODATECUST>=$nfromdate and a.PODATECUST<=$ntodate)
+        order by a.PODATECUST asc");
+        return $query->getResultArray();
+    }
+
+
+    function get_so_open_filter($keyword, $nfromdate, $ntodate)
+    {
+        $query = $this->db->query("select a.* from webot_CSR a where (a.POSTINGSTAT =1) and 
+        (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.MANAGER like '%$keyword%' or a.SALESNAME like '%$keyword%'
+        or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
+        or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
+        or a.SERVICETYPE like '%$keyword%' or a.CRMREMARKS like '%$keyword%' or a.ITEMNO like '%$keyword%' or a.MATERIALNO like '%$keyword%'
+        or a.STOCKUNIT like '%$keyword%') and
+        (a.PODATECUST>=$nfromdate and a.PODATECUST<=$ntodate)
+        order by a.PODATECUST asc");
         return $query->getResultArray();
     }
 

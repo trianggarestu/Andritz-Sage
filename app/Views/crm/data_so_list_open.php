@@ -83,7 +83,7 @@
 														<tbody>
 
 															<?php
-															$no = 1;
+															$no = 0;
 															foreach ($so_data as $ot_list) {
 
 																$crmpodate = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" .  substr($ot_list['PODATECUST'], 0, 4);

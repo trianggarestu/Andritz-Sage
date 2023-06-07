@@ -178,7 +178,7 @@ class Usersetup extends BaseController
                 $photo = 'kuser.png';
             } else {
                 $photo = $filephoto->getRandomName();
-                $filephoto->move(' /img/', $photo);
+                $filephoto->move('/', $photo);
 
                 $this->SetupModel->save([
                     'USERNAME' => strtoupper($this->request->getVar('username')),

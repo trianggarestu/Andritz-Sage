@@ -139,7 +139,7 @@ class SalesorderOpen extends BaseController
         }
         $data = array(
             'so_data' => $so_open_data,
-            'keyword' => '',
+            'keyword' => $keyword,
         );
 
         echo view('view_header', $this->header_data);

@@ -26,7 +26,12 @@
 				</tr>
 				<tr>
 					<td style="padding: 5px 20px;">
-						<strong>Filter by : </strong><br>
+						<?php
+						$fromdate = date_format(date_create(substr($fromdate, 4, 2) . "/" . substr($fromdate, 6, 2) . "/" .  substr($fromdate, 0, 4)), "m/d/Y");
+						$todate = date_format(date_create(substr($todate, 4, 2) . '/' . substr($todate, 6, 2) . '/' . substr($todate, 0, 4)), "m/d/Y");
+						?>
+						<strong>Filter P/O Date From : <?= $fromdate; ?> to : <?= $todate; ?></strong> <br>
+						Keyword : <?= $keyword; ?>
 					</td>
 				</tr>
 				<tr>
