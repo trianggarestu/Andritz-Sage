@@ -44,6 +44,7 @@ class Administration extends BaseController
                     'namalgn' => $infouser['namalgn'],
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'photolgn' => $infouser['photolgn'],
                     'notif_messages' => $mailbox_unread,
                     'success_code' => session()->get('success'),
                 ];

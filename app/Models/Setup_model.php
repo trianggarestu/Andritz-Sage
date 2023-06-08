@@ -118,8 +118,8 @@ class Setup_model extends Model
     function insert_usergrouprole()
     {
         $insertsql = "INSERT INTO webot_USERGROUPROLE (GROUPID,IDNAVL1,IDNAVDL1)
-SELECT IDNAVL1,IDNAVDL1,0 
-from webot_NAVIGATIONDL1";
+        SELECT IDNAVL1,IDNAVDL1,0 
+        from webot_NAVIGATIONDL1";
         $this->db->query($insertsql);
     }
 
@@ -153,9 +153,63 @@ from webot_NAVIGATIONDL1";
     //Users Setup
     public function get_users()
     {
-        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID order by USERNAME asc");
+        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID
+        order by USERNAME asc");
         return $query->getResultArray();
     }
+
+    public function checkusername($username)
+    {
+        $query = $this->db->query("select USERNAME from webot_USERAUTH where USERNAME='$username'");
+        return $query->getNumRows();
+    }
+
+
+    public function get_users_by_hash($hashuser)
+    {
+        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID where a.USERHASH='$hashuser'");
+        return $query->getRowArray();
+    }
+
+    public function user_insert($data)
+    {
+        $query = $this->db->table('webot_USERAUTH')->insert($data);
+        return $query;
+    }
+
+    public function user_update($username, $data)
+    {
+        $query = $this->db->table('webot_USERAUTH')->update($data, array('USERNAME' => $username));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
+    public function password_update($userhash, $data)
+    {
+        $query = $this->db->table('webot_USERAUTH')->update($data, array('USERHASH' => $userhash));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
+    public function set_active($hashuser = '', $val = 0)
+    {
+        $sql = "UPDATE webot_USERAUTH SET INACTIVE = ? WHERE USERHASH = ?";
+        $outp = $this->db->query($sql, array($val, $hashuser));
+        //Tanpa return juga bisa jalan
+        return $outp;
+    }
+
+
+    function user_delete($hashuser)
+    {
+        //$sql = 'DELETE FROM webot_USERGROUPROLE WHERE GROUPID=' . "'$idgrusergroup'" . '';
+        //$this->db->query($sql);
+        return $this->db->table('webot_USERAUTH')->delete(['USERHASH' => $hashuser]);
+    }
+
+
+
+
     // $arah:
     //		1 - turun
     // 		2 - naik
@@ -163,18 +217,5 @@ from webot_NAVIGATIONDL1";
     {
         //$subset = !empty($menuh) ? array("tipe" => 3, "menuh" => $menuh) : array("tipe" => $tipe);
         $this->urut_model->urut($menuh, $id, $arah);
-    }
-
-    public function get_data_user($useruniq)
-    {
-        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID where USERUNIQ='$useruniq' order by USERNAME asc ");
-        return $query->getRowArray();
-    }
-
-    public function updateuser($useruniq, $data)
-    {
-        $query = $this->db->table('webot_USERAUTH')->update($data, array('USERUNIQ' => $useruniq));
-        //Tanpa return juga bisa jalan
-        return $query;
     }
 }

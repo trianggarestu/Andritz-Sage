@@ -167,20 +167,29 @@
 						?>
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<?php //if ($foto): 
+								<?php //if (!empty($photolgn)) :
 								?>
-								<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="user-image" alt="User Image" />
+								<!--<img src="<?php //= base_url($photolgn) 
+												?>" class="user-image" alt="User Image" />-->
 								<?php //else :
 								?>
-
+								<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="user-image" alt="User Image" />
+								<?php //endif 
+								?>
 								<span class="hidden-xs"><?php echo $namalgn;
 														?> </span>
 							</a>
 							<ul class="dropdown-menu">
 								<li class="user-header">
-
+									<?php //if (!empty($photolgn)) :
+									?>
+									<!--<img src="<?php //= base_url($photolgn) 
+													?>" class="img-circle" alt="User Image" />-->
+									<?php //else :
+									?>
 									<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="img-circle" alt="User Image" />
-
+									<?php //endif 
+									?>
 									<p>You are logged in as</p>
 									<p><strong><?php echo $namalgn;
 												?></strong></p>
@@ -217,7 +226,7 @@
 	</div>
 	<script>
 		function previewimg() {
-			const photo = document.querySelector('#photo');
+			const photo = document.querySelector('#file');
 			const photolabel = document.querySelector('.custom-file-label');
 			const imgpreview = document.querySelector('.img-preview');
 

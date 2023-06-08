@@ -20,7 +20,7 @@ class Login_model extends Model
                 ->where (array('USERNAME'=>$username,'INACTIVE'=>0))
                 ->get()->getRowArray();*/
 
-        $query = $this->db->query('select USERNAME as usernamelgn,PASSWORD as passlgn,EMAIL as emaillgn,NAME as namalgn,ISSUPERUSER as issuperuserlgn from webot_USERAUTH where username=' . "'$user'" . ' and inactive=0');
+        $query = $this->db->query('select USERNAME as usernamelgn,PASSWORD as passlgn,EMAIL as emaillgn,NAME as namalgn,ISSUPERUSER as issuperuserlgn,PATH_PHOTO as photolgn from webot_USERAUTH where username=' . "'$user'" . ' and inactive=0');
         return $query->getRowArray();
     }
 

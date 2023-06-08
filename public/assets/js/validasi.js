@@ -225,6 +225,20 @@ $(document).ready(function() {
 			});
 	});
 
+
+	jQuery.validator.addMethod("pwdAndritz", function(value, element) {
+		valid = /^.{6,20}$/.test(value);
+		return this.optional(element) || valid;
+	}, "Minimum 6 Character");
+
+	$('.pwdAndritz').each(function() {
+		$(this).rules("add",
+			{
+				pwdLengthNist: true,
+			});
+	});
+
+
 	// Untuk donjo-app/views/man_user/manajemen_user_form.php di mana 'radiisi' berarti password tidak diubah
 	// Ketentuan kata sandi sesuai US National Institute of Standards and Technology (NIST)
 	jQuery.validator.addMethod("pwdLengthNist_atau_kosong", function(value, element) {

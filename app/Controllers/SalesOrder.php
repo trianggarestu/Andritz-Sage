@@ -88,8 +88,13 @@ class SalesOrder extends BaseController
 
     public function index()
     {
+        // Remove All Session filter
         session()->remove('success');
         session()->set('success', '0');
+        session()->remove('cari');
+        session()->remove('from_date');
+        session()->remove('to_date');
+
         $data = array(
             'csr_uniq' => '',
             'ct_no' => '',

@@ -80,6 +80,12 @@
 					} else if ($('#success-code').val() == -1) {
 						notify = 'error';
 						notify_msg = 'data failed to save';
+					} else if ($('#success-code').val() == -2) {
+						notify = 'error';
+						notify_msg = 'data failed to save, Username already exists!.';
+					} else if ($('#success-code').val() == -3) {
+						notify = 'error';
+						notify_msg = 'data failed to save, Password & Retype Password Mismatch!.';
 					} else {
 						notify = '';
 						notify_msg = '';

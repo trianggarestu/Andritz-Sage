@@ -20,6 +20,16 @@
 			</ol>
 		</section>
 
+		<input id="success-code" type="hidden" value="<?= $success_code ?>">
+		<!-- Untuk menampilkan modal bootstrap umum  -->
+		<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class='modal-dialog'>
+				<div class='modal-content'>
+
+					<div class="fetched-data"></div>
+				</div>
+			</div>
+		</div>
 
 		<section class="content" id="maincontent">
 			<div class="row">
@@ -43,6 +53,7 @@
 												<tr>
 													<th width="1%">No</th>
 													<th width="5%">Action</th>
+													<th>Photo</th>
 													<th>UserName</th>
 													<th>Name</th>
 													<th>Email</th>
@@ -56,8 +67,20 @@
 													<tr>
 														<td class="text-center"><?= ++$no; ?></td>
 														<td nowrap>
-															<a href="<?= base_url() . 'usersetup/formupdate/' . $data['USERUNIQ']; ?>" class=" btn bg-orange btn-flat btn-sm" title="Update Data"><i class="fa fa-edit"></i></a>
-															<a href="<?= base_url() . 'usersetup/delete/' . $data['USERUNIQ']; ?>" data-href="#" class="btn bg-maroon btn-flat btn-sm" title="Delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+															<a href="<?= base_url() . 'usersetup/update/' . md5(trim($data['USERNAME'])); ?>" class=" btn bg-orange btn-flat btn-sm" title="Update Data"><i class="fa fa-edit"></i></a>
+															<?php if ($data['INACTIVE'] == '0') : ?>
+																<a href="<?= base_url("usersetup/setinactive/" . md5(trim($data['USERNAME']))) ?>" class="btn bg-navy btn-flat btn-sm" title="Set InActive"><i class="fa fa-unlock"></i></a>
+															<?php elseif ($data['INACTIVE'] == '1') : ?>
+																<a href="<?= base_url("usersetup/setactive/" . md5(trim($data['USERNAME']))) ?>" class="btn bg-navy btn-flat btn-sm" title="Set Active"><i class="fa fa-lock">&nbsp;</i></a>
+
+															<?php endif ?>
+															<a href="#" data-href="<?= base_url() . 'usersetup/delete/' . md5(trim($data['USERNAME'])); ?>" class="btn bg-maroon btn-flat btn-sm" title="Delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+														</td>
+														<td>
+															<div class="user-panel">
+																<div class="image2">
+																	<img src="<?= !empty($data['PATH_PHOTO']) ? $data['PATH_PHOTO'] : base_url('assets/files/user_pict/kuser.png') ?>" class="img-circle" alt="Photo User" />
+																</div>
 														</td>
 														<td><?= $data['USERNAME'] ?></td>
 														<td><?= $data['NAME'] ?></td>
@@ -75,3 +98,5 @@
 					</div>
 		</section>
 	</div>
+
+	<?php echo view('settings/confirm_delete') ?>

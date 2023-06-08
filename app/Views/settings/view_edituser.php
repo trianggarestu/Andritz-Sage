@@ -1,13 +1,13 @@
 <div class="content-wrapper">
 	<section class="content-header">
 
-		<h1>Add New User</h1>
+		<h1>Update User Profile</h1>
 
 		<ol class="breadcrumb">
 			<li><a href="<?= base_url('administration') ?>"><i class="fa fa-home"></i> Home</a></li>
 			<li><a href="<?= base_url('usersetup') ?>">User</a></li>
 
-			<li class="active">Add User</li>
+			<li class="active">Update User</li>
 		</ol>
 	</section>
 	<input id="success-code" type="hidden" value="<?= $success_code ?>">
@@ -24,58 +24,50 @@
 		<div class="row">
 			<form id="validasi" action="<?= $form_action ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
 
-				<div class="col-md-9">
+				<div class="col-sm-9">
 					<div class="box box-primary">
 						<div class="box-header with-border">
 							<a href="<?= base_url('usersetup') ?>" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-o-left"></i>Back to Users Settings</a>
 
 						</div>
 
-
 						<div class="box-body">
 							<div class="form-group">
 								<label style="text-align: right;" class="col-sm-4 control-label" for="Username">Username : </label>
 								<div class="col-sm-6">
-									<input id="username" name="username" class="form-control input-sm required" type="text" placeholder="Username" value="<?= old('username'); ?>" maxlength="50" autofocus style="text-transform: uppercase;"></input>
+									<input id="username" name="username" class="form-control input-sm required" type="text" placeholder="Username" value="<?= $username; ?>" maxlength="50" autofocus style="text-transform: uppercase;" readonly></input>
 								</div>
 							</div>
 							<div class="form-group">
 								<label style="text-align: right;" class="col-sm-4 control-label" for="Name">Name : </label>
 								<div class="col-sm-6">
-									<input id="Name" name="name" class="form-control input-sm required" type="text" placeholder="Name" value="<?= old('name'); ?>" maxlength="50" style="text-transform: uppercase;"></input>
+									<input id="Name" name="name" class="form-control input-sm required" type="text" placeholder="Name" value="<?= $name; ?>" maxlength="50" style="text-transform: uppercase;"></input>
 								</div>
 							</div>
 							<div class="form-group">
 								<label style="text-align: right;" class="col-sm-4 control-label" for="email">E-mail : </label>
 								<div class="col-sm-6">
-									<input id="email" name="email" class="form-control input-sm required email" type="text" placeholder="E-mail" value="<?= old('email'); ?>" maxlength="50"></input>
-								</div>
-							</div>
-							<div class="form-group">
-								<label style="text-align: right;" class="col-sm-4 control-label" for="Password">Password : </label>
-								<div class="col-sm-6">
-									<input id="password" name="password" class="form-control input-sm required" type="password" placeholder="Password" minlength="6" maxlength="20"></input>
-								</div>
-							</div>
-							<div class="form-group">
-								<label style="text-align: right;" class="col-sm-4 control-label" for="Password">Re-type Password : </label>
-								<div class="col-sm-6">
-									<input id="password_conf" name="password_conf" class="form-control input-sm required" type="password" placeholder="Re-type Password" minlength="6" maxlength="20"></input>
+									<input id="email" name="email" class="form-control input-sm required email" type="text" placeholder="E-mail" value="<?= $email; ?>" maxlength="50"></input>
 								</div>
 							</div>
 
-							<!--<div class="form-group">
-										<label for="photo" style="text-align: right;" class="col-sm-4 control-label">Upload Photo </label>
-										<div class="col-sm-6">
-											<div class="col-sm-4">
-												<img class="img-thumbnail img-preview" src="/assets/files/user_pict/kuser.png">
-											</div>
-											<div class="custom-file">
-												<input type="file" class="custom-file-input" id="photo" name="photo" onchange="previewimg()">
-												<label class="custom-file-label" for="photo"></label>
-											</div>
-										</div>
-									</div>-->
+
+							<div class="form-group">
+								<label style="text-align: right;" class="col-sm-4 control-label" for="Password">Change Password : </label>
+								<div class="col-sm-6">
+									<div class="input-group input-group-sm">
+										<input id="password" name="password" class="form-control input-sm required" type="password" value="<?= $password ?>" placeholder="Password" maxlength="50" readonly></input>
+										<span class="input-group-btn">
+											<a href="<?= base_url(); ?>usersetup/changepassword/<?= $userhash ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block">
+												Change Password!
+											</a>
+
+										</span>
+									</div>
+								</div>
+							</div>
+
+
 							<div class='form-group'>
 								<label style="text-align: right;" class="col-sm-4 control-label" for="groupid">Group Role <code> (choose) </code> : </label>
 								<div class="col-sm-6">
@@ -96,19 +88,17 @@
 									</select>
 								</div>
 							</div>
-
 							<div class="form-group">
-								<label for="isactive" style="text-align: right;" class="col-sm-4 control-label">Activate<code> (choose) </code> : </label>
+								<label for="activate" style="text-align: right;" class="col-sm-4 control-label">Activate<code> (choose) </code> : </label>
 								<div class="btn-group col-sm-6" data-toggle="buttons">
-									<label id="sx3" class="btn btn-info btn-flat btn-sm col-xs-6 col-sm-4 col-lg-2 form-check-label">
-										<input id="g1" type="radio" name="isactive" class="form-check-input" type="radio" value="0" autocomplete="off"> Active
+									<label id="sx3" class="btn btn-info btn-flat btn-sm col-xs-6 col-sm-4 col-lg-2 form-check-label <?php ($inactive == '0') and print('active'); ?>">
+										<input id="g1" type="radio" name="isactive" class="form-check-input" type="radio" value="0" <?php ($inactive == '0')  and print('checked'); ?> autocomplete="off"> Active
 									</label>
-									<label id="sx4" class="btn btn-info btn-flat btn-sm col-xs-6 col-sm-4 col-lg-2 form-check-label">
-										<input id="g2" type="radio" name="isactive" class="form-check-input" type="radio" value="1" autocomplete="off"> Inactive
+									<label id="sx4" class="btn btn-info btn-flat btn-sm col-xs-6 col-sm-4 col-lg-2 form-check-label <?php ($inactive == '1') and print('active'); ?>">
+										<input id="g2" type="radio" name="isactive" class="form-check-input" type="radio" value="1" <?php ($inactive == '1') and print('checked'); ?> autocomplete="off"> Inactive
 									</label>
 								</div>
 							</div>
-
 							<div class="form-group">
 								<label class="col-sm-4 control-label" for="Menu Name"></label>
 								<div class="col-sm-6">
@@ -121,11 +111,14 @@
 								<div class='col-sm-4'>
 								</div>
 								<div class="col-sm-6">
-									<!--<input type="hidden" id="useruniq" name="useruniq" value="">-->
+									<input type="hidden" id="userhash" name="userhash" value="<?= $userhash ?>">
+									<input type="hidden" id="old_photo" name="old_photo" value="<?= $photo ?>">
+									<input type="hidden" id="df_inactive" name="df_inactive" value="<?= $inactive ?>">
 									<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm' onclick="reset_form($(this).val());"><i class='fa fa-times'></i> Cancel</button>
 									<button type='submit' class='btn btn-social btn-flat btn-info btn-sm confirm'><i class='fa fa-check'></i> <?= $button ?></button>
 								</div>
 							</div>
+
 						</div>
 					</div>
 				</div>
@@ -158,20 +151,11 @@
 				</div>
 
 		</div>
-		</form>
 
-	</section>
+
+
 </div>
-
-
-<script>
-	$('document').ready(function() {
-		setTimeout(function() {
-			$('#password_conf').rules('add', {
-				equalTo: '#password'
-			})
-		}, 500);
-
-
-	});
-</script>
+</form>
+</div>
+</section>
+</div>

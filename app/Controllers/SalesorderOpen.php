@@ -91,6 +91,8 @@ class SalesorderOpen extends BaseController
         session()->remove('success');
         session()->set('success', '0');
         session()->remove('cari');
+        session()->remove('from_date');
+        session()->remove('to_date');
 
         $so_open_data = $this->SalesorderModel->get_csr_list_open();
 
