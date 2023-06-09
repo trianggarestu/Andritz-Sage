@@ -301,13 +301,14 @@ class SalesorderList extends BaseController
             ->setCellValue('H1', 'PoDate')
             ->setCellValue('I1', 'Inventroy No')
             ->setCellValue('J1', 'Material No')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'Order Description')
-            ->setCellValue('M1', 'Service Type')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', 'Status');
+            ->setCellValue('K1', 'Item Desc.')
+            ->setCellValue('L1', 'ReqDate')
+            ->setCellValue('M1', 'SalesPerson')
+            ->setCellValue('N1', 'Order Description')
+            ->setCellValue('O1', 'Service Type')
+            ->setCellValue('P1', 'Qty')
+            ->setCellValue('Q1', 'Uom')
+            ->setCellValue('R1', 'Status');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -344,18 +345,18 @@ class SalesorderList extends BaseController
                 ->setCellValue('D' . $rows, $data['CONTRACT'])
                 ->setCellValue('E' . $rows, $data['PROJECT'])
                 ->setCellValue('F' . $rows, $data['CRMNO'])
-
                 ->setCellValue('G' . $rows, $data['PONUMBERCUST'])
-                ->setCellValue('J' . $rows, trim($pocustdate))
-                ->setCellValue('H' . $rows, $data['ITEMNO'])
-                ->setCellValue('I' . $rows, $data['MATERIALNO'])
-                ->setCellValue('K' . $rows, trim($reqdate))
-                ->setCellValue('L' . $rows, $data['SALESNAME'])
-                ->setCellValue('M' . $rows, $data['ORDERDESC'])
-                ->setCellValue('M' . $rows, $data['SERVICETYPE'])
-                ->setCellValue('N' . $rows, $data['QTY'])
-                ->setCellValue('O' . $rows, $data['STOCKUNIT'])
-                ->setCellValue('P' . $rows, $postingstatus);
+                ->setCellValue('H' . $rows, trim($pocustdate))
+                ->setCellValue('I' . $rows, $data['ITEMNO'])
+                ->setCellValue('J' . $rows, $data['MATERIALNO'])
+                ->setCellValue('K' . $rows, $data['ITEMDESC'])
+                ->setCellValue('L' . $rows, trim($reqdate))
+                ->setCellValue('M' . $rows, $data['SALESNAME'])
+                ->setCellValue('N' . $rows, $data['ORDERDESC'])
+                ->setCellValue('O' . $rows, $data['SERVICETYPE'])
+                ->setCellValue('P' . $rows, $data['QTY'])
+                ->setCellValue('Q' . $rows, $data['STOCKUNIT'])
+                ->setCellValue('R' . $rows, $postingstatus);
             $rows++;
         }
         // tulis dalam format .xlsx

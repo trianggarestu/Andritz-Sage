@@ -112,7 +112,8 @@ class Salesorder_model extends Model
 
     function get_so_open($nfromdate, $ntodate)
     {
-        $query = $this->db->query("select a.* from webot_CSR a where (a.POSTINGSTAT =1) and
+        $query = $this->db->query("select a.*,it. " . '"DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO
+        where (a.POSTINGSTAT =1) and
         (a.PODATECUST>=$nfromdate and a.PODATECUST<=$ntodate)
         order by a.PODATECUST asc");
         return $query->getResultArray();
@@ -121,7 +122,8 @@ class Salesorder_model extends Model
 
     function get_so_open_filter($keyword, $nfromdate, $ntodate)
     {
-        $query = $this->db->query("select a.* from webot_CSR a where (a.POSTINGSTAT =1) and 
+        $query = $this->db->query("select a.*,it. " . '"DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
+        where (a.POSTINGSTAT =1) and 
         (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.MANAGER like '%$keyword%' or a.SALESNAME like '%$keyword%'
         or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
         or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
