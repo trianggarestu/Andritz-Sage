@@ -153,7 +153,7 @@ class Setup_model extends Model
     //Users Setup
     public function get_users()
     {
-        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID
+        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a inner join webot_USERGROUP b on b.GROUPID=a.GROUPID
         WHERE a.ISDELETED=0
         order by a.GROUPID,a.USERNAME asc");
         return $query->getResultArray();
@@ -168,9 +168,16 @@ class Setup_model extends Model
 
     public function get_users_by_hash($hashuser)
     {
-        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID where a.USERHASH='$hashuser'");
+        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a left join webot_USERGROUP b on b.GROUPID=a.GROUPID where a.USERHASH='$hashuser'");
         return $query->getRowArray();
     }
+
+    public function get_user_by_username($username)
+    {
+        $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID where a.USERNAME='$username'");
+        return $query->getRowArray();
+    }
+
 
     public function user_insert($data)
     {

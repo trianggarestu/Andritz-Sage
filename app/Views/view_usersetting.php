@@ -36,22 +36,22 @@
 				<div class="box box-danger">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="tgl_peristiwa">Username : </label>
+							<label for="username">Username : </label>
 							<input class="form-control input-sm" type="text" name="username" value="<?= trim($main['USERNAME'])
 																									?>" readonly></input>
 						</div>
 						<div class="form-group">
-							<label for="catatan">Group User : </label>
+							<label for="groupname">Group User : </label>
 							<input class="form-control input-sm" type="text" name="group" value="<?= trim($main['GROUPNAME'])
 																									?>" readonly></input>
 						</div>
 						<div class="form-group">
-							<label for="catatan">Email : </label>
+							<label for="email">Email : </label>
 							<input class="form-control input-sm" type="text" name="group" value="<?= trim($main['EMAIL'])
 																									?>" readonly></input>
 						</div>
 						<div class="form-group">
-							<label for="catatan">Name : </label>
+							<label for="name">Name : </label>
 							<input class="form-control input-sm" type="text" name="name" value="<?= trim($main['NAME'])
 																								?>"></input>
 						</div>
@@ -59,15 +59,15 @@
 
 
 						<div class="form-group">
-							<label for="catatan">Old Password</label>
+							<label for="old_password">Old Password</label>
 							<input class="form-control input-sm" type="password" maxlength="20" name="old_pass" autofocus style="text-transform: uppercase;"></input>
 						</div>
 						<div class="form-group">
-							<label for="catatan">New Password</label>
+							<label for="new_password">New Password</label>
 							<input class="form-control input-sm" minlength="6" maxlength="20" type="password" id="new_pass" name="new_pass" autofocus style="text-transform: uppercase;"></input>
 						</div>
 						<div class="form-group">
-							<label for="catatan">Repeat New Password</label>
+							<label for="new_password">Repeat New Password</label>
 							<input class="form-control input-sm" minlength="6" maxlength="20" type="password" id="re_new_pass" name="re_new_pass" autofocus style="text-transform: uppercase;"></input>
 						</div>
 

@@ -35,49 +35,51 @@ class Usersetting extends BaseController
 			exit();
 		} else {
 			$user = session()->get('username');
-			/*$chksu = $this->LoginModel->datalevel($user);
-            if ($chksu == 0) {
-                redirect('administration');
-            } else {
-                */
-			$infouser = $this->LoginModel->datapengguna($user);
-			$this->header_data = [
-				'usernamelgn'   => $infouser['usernamelgn'],
-				'namalgn' => $infouser['namalgn'],
-				'emaillgn' => $infouser['emaillgn'],
-				'photolgn' => $infouser['photolgn'],
-				'userhashlgn' => $infouser['userhashlgn'],
-				'issuperuserlgn' => $infouser['issuperuserlgn'],
-			];
-			$this->footer_data = [
-				'usernamelgn'   => $infouser['usernamelgn'],
-			];
-			// Assign the model result to the badly named Class Property
-			$activenavd = 'User_setting';
-			$this->nav_data = [
-				'active_navd' => $activenavd,
-				'menu_nav' => $this->AdministrationModel->get_navigation($user),
-				//'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
-				//'chkusernav' => $this->AdministrationModel->count_navigation($user), 
-				//'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
-			];
+			$chkuser = $this->LoginModel->datapengguna($user);
+			if (session()->get('keylog') == $chkuser['passlgn']) {
 
-			date_default_timezone_set('Asia/Jakarta');
-			$today = date("d/m/Y H:i:s");
+				$infouser = $this->LoginModel->datapengguna($user);
+				$this->header_data = [
+					'usernamelgn'   => $infouser['usernamelgn'],
+					'namalgn' => $infouser['namalgn'],
+					'emaillgn' => $infouser['emaillgn'],
+					'photolgn' => $infouser['photolgn'],
+					'userhashlgn' => $infouser['userhashlgn'],
+					'issuperuserlgn' => $infouser['issuperuserlgn'],
+				];
+				$this->footer_data = [
+					'usernamelgn'   => $infouser['usernamelgn'],
+				];
+				// Assign the model result to the badly named Class Property
+				$activenavd = 'User_setting';
+				$this->nav_data = [
+					'active_navd' => $activenavd,
+					'menu_nav' => $this->AdministrationModel->get_navigation($user),
+					//'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
+					//'chkusernav' => $this->AdministrationModel->count_navigation($user), 
+					//'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+				];
 
-			$this->audtuser = [
-				'TODAY' => $today,
-				'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
-				'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
-				'AUDTUSER' => $infouser['usernamelgn'],
-				'AUDTORG' => $this->db_name->database,
+				date_default_timezone_set('Asia/Jakarta');
+				$today = date("d/m/Y H:i:s");
 
-			];
+				$this->audtuser = [
+					'TODAY' => $today,
+					'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+					'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+					'AUDTUSER' => $infouser['usernamelgn'],
+					'AUDTORG' => $this->db_name->database,
+
+				];
+			}
 		}
 	}
 
 	public function index()
 	{
+		session()->remove('success');
+		session()->set('success', '0');
+
 		$user = session()->get('username');
 		$keylog = session()->GET('keylog');
 		$data['main'] = $this->SetupModel->get_users_by_hash($this->header_data['userhashlgn']);
@@ -104,7 +106,7 @@ class Usersetting extends BaseController
 		])) {
 
 			session()->set('success', '-1');
-			return redirect()->to(base_url('/'))->withInput();
+			return redirect()->back();
 		} else {
 			$user_data = $this->SetupModel->get_users_by_hash($hashuser);
 			$username = $this->request->getVar('username');
@@ -142,11 +144,11 @@ class Usersetting extends BaseController
 						'NAME' => trim($this->request->getVar('name')),
 						'PATH_PHOTO' => $path_photo,
 					);
-					$this->SetupModel->user_update($username, $data);
-					session()->set('success', '1');
-					return redirect()->back();
 				} else {
-					if (md5(strtoupper($this->request->getVar('old_pass'))) == $user_data['PASSWORD']) {
+					if (md5(strtoupper($this->request->getVar('old_pass'))) != $user_data['PASSWORD']) {
+						session()->set('success', '-3');
+						return redirect()->back();
+					} else {
 						$data = array(
 							'AUDTDATE' => $this->audtuser['AUDTDATE'],
 							'AUDTTIME' => $this->audtuser['AUDTTIME'],
@@ -156,14 +158,11 @@ class Usersetting extends BaseController
 							'PASSWORD' => md5(strtoupper($this->request->getVar('new_pass'))),
 							'PATH_PHOTO' => $path_photo,
 						);
-						$this->SetupModel->user_update($username, $data);
-						session()->set('success', '1');
-						return redirect()->back();
-					} else {
-						session()->set('success', '-3');
-						return redirect()->back();
 					}
 				}
+				$this->SetupModel->user_update($username, $data);
+				session()->set('success', '1');
+				return redirect()->back();
 			}
 		}
 	}

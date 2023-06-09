@@ -21,7 +21,7 @@ class Login_model extends Model
                 ->get()->getRowArray();*/
 
         $query = $this->db->query('select USERNAME as usernamelgn,PASSWORD as passlgn,EMAIL as emaillgn,NAME as namalgn,ISSUPERUSER as issuperuserlgn,
-        PATH_PHOTO as photolgn,USERHASH as userhashlgn from webot_USERAUTH where username=' . "'$user'" . ' and inactive=0');
+        PATH_PHOTO as photolgn,USERHASH as userhashlgn from webot_USERAUTH where username=' . "'$user'" . ' and INACTIVE=0');
         return $query->getRowArray();
     }
 

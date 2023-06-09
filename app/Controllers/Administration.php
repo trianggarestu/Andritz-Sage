@@ -45,6 +45,7 @@ class Administration extends BaseController
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
                     'photolgn' => $infouser['photolgn'],
+                    'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
                     'success_code' => session()->get('success'),
                 ];
@@ -84,6 +85,9 @@ class Administration extends BaseController
         echo view('view_nav', $this->nav_data);
         echo view('home/view_homepage', $data);
         echo view('view_footer', $this->footer_data);
+
+        session()->remove('success');
+        session()->set('success', '0');
     }
 
     /*public function testdata()
