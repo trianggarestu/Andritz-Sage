@@ -190,4 +190,18 @@ class Purchaseorder_model extends Model
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
+    function get_po_preview_filter($keyword, $nfromdate, $ntodate)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_PO a left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ 
+        left join webot_REQUISITION c on b.CSRUNIQ = c.CSRUNIQ and a.RQNUNIQ=c.RQNUNIQ
+        where (a.POSTINGSTAT = '1') and 
+        (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
+        or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
+        or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
+        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
+        or b.STOCKUNIT like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%') and
+        (c.RQNDATE>=$nfromdate and c.RQNDATE<=$ntodate)
+        order by a.PODATE asc");
+        return $query->getResultArray();
+    }
 }

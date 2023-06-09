@@ -112,11 +112,26 @@ class Logistics_model extends Model
     }
     function get_log_preview()
     {
-        $query = $this->db->query("select a.*,b.*
+        $query = $this->db->query("select a.*,b.*,c.*
         from webot_LOGISTICS a 
-        left join webot_PO b on b.POUNIQ = a.POUNIQ
-		where (a.POSTINGSTAT=1)");
+        left join webot_CSR b ON a.CSRUNIQ = b.CSRUNIQ
+        left join webot_PO c on c.POUNIQ = a.POUNIQ and b.CSRUNIQ = c.CSRUNIQ 
+        where (a.POSTINGSTAT=1)");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
+    function get_log_preview_filter($keyword, $nfromdate, $ntodate)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_LOGISTICS a left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ 
+        left join webot_PO c on b.CSRUNIQ = c.CSRUNIQ and a.POUNIQ=c.POUNIQ
+        where (a.POSTINGSTAT = '1') and 
+        (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
+        or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
+        or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
+        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
+        or b.STOCKUNIT like '%$keyword%' or c.PONUMBER like '%$keyword%') and
+        (c.PODATE>=$nfromdate and c.PODATE<=$ntodate)
+        order by c.PODATE asc");
         return $query->getResultArray();
     }
 }

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Purchase Order Before ETD List - Preview</title>
+    <title>Logistics - Preview</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="<?= base_url() ?>assets/images/logo/favicon.ico" />
     <link href="<?= base_url() ?>assets/css/report.css" rel="stylesheet" type="text/css">
@@ -21,12 +21,17 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <h3><u>Purchase Order Before ETD List</u></h3>
+                        <h3><u>Logistics - Preview</u></h3>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding: 5px 20px;">
-                        <strong>Filter by : </strong><br>
+                        <?php
+                        $fromdate = date_format(date_create(substr($fromdate, 4, 2) . "/" . substr($fromdate, 6, 2) . "/" .  substr($fromdate, 0, 4)), "m/d/Y");
+                        $todate = date_format(date_create(substr($todate, 4, 2) . '/' . substr($todate, 6, 2) . '/' . substr($todate, 0, 4)), "m/d/Y");
+                        ?>
+                        <strong>Filter P/O Date From : <?= $fromdate; ?> to : <?= $todate; ?></strong> <br>
+                        Keyword : <?= $keyword; ?>
                     </td>
                 </tr>
                 <tr>

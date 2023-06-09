@@ -26,7 +26,12 @@
                 </tr>
                 <tr>
                     <td style="padding: 5px 20px;">
-                        <strong>Filter by : </strong><br>
+                        <?php
+                        $fromdate = date_format(date_create(substr($fromdate, 4, 2) . "/" . substr($fromdate, 6, 2) . "/" .  substr($fromdate, 0, 4)), "m/d/Y");
+                        $todate = date_format(date_create(substr($todate, 4, 2) . '/' . substr($todate, 6, 2) . '/' . substr($todate, 0, 4)), "m/d/Y");
+                        ?>
+                        <strong>Filter Shipment Date From : <?= $fromdate; ?> to : <?= $todate; ?></strong> <br>
+                        Keyword : <?= $keyword; ?>
                     </td>
                 </tr>
                 <tr>
@@ -61,7 +66,7 @@
                                 ?>
 
 
-                                <?php foreach ($delivery_data as $data_list) {
+                                <?php foreach ($deli_data as $data_list) {
                                     $shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);
                                     $cusdate = substr($data_list['CUSTRCPDATE'], 4, 2) . "/" . substr($data_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($data_list['CUSTRCPDATE'], 0, 4);
                                     // $creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
@@ -89,7 +94,7 @@
                                         <td><?php $postatus = $data_list['POCUSTSTATUS'];
                                             switch ($postatus) {
                                                 case "0":
-                                                    echo "Outstanding";
+                                                    echo "Partial";
                                                     break;
                                                 case "1":
                                                     echo "Completed";

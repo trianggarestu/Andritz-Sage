@@ -30,111 +30,132 @@
 								<div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
-											<div class="col-sm-8">
+											<div class="col-sm-9">
+												< <label for="daterange">Filter by P/O Date : </label>
+													<div class="input-group input-group-sm date">
+														<div class="input-group-addon">From Date :
+															<i class="fa fa-calendar"></i>
+														</div>
+														<input class="datepicker form-control input-sm required" id="from_date" name="from_date" type="text" value="<?= $def_fr_date ?>" readonly>
+													</div>
+													<div class="input-group input-group-sm date">
+														<div class="input-group-addon">To Date :
+															<i class="fa fa-calendar"></i>
+														</div>
+														<input class="datepicker form-control input-sm required" id="to_date" name="to_date" type="text" value="<?= $def_to_date ?>" readonly>
 
+														<div class="input-group-btn">
+															<button type="submit" class="btn btn-default bg-maroon" onclick="$('#'+'mainform').attr('action', '<?= base_url('deliveryorderslist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-filter"></i>Go!</button>
+
+														</div>
+													</div>
 											</div>
-											<div class="col-sm-4">
+
+											<div class="col-sm-3">
 												<div class="box-tools">
 													<div class="input-group input-group-sm pull-right">
 														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();}">
 														<div class="input-group-btn">
-															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
+															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', '<?= base_url('deliveryorderslist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="table-responsive">
-													<table class="table table-bordered table-striped dataTable table-hover nowrap">
-														<thead class="bg-gray disabled color-palette">
-															<tr>
-																<th>No.</th>
-																<th>Shipment No</th>
-																<th>Shipment Date</th>
-																<th>Document No</th>
-																<th>Customer Name</th>
-																<th>Receipts Customer(Date)</th>
-																<th>Item</th>
-																<th>Item Desc</th>
-																<th>Qty Delivery</th>
-																<th>QTY Outstanding</th>
-																<th style="background-color: white;"></th>
-																<th>Contract</th>
-																<th>Project</th>
-																<th>D/N Status</th>
-																<th>D/N Posting Status</th>
+									</form>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped dataTable table-hover nowrap">
+													<thead class="bg-gray disabled color-palette">
+														<tr>
+															<th>No.</th>
+															<th>Shipment No</th>
+															<th>Shipment Date</th>
+															<th>Document No</th>
+															<th>Customer Name</th>
+															<th>Receipts Customer(Date)</th>
+															<th>Item</th>
+															<th>Item Desc</th>
+															<th>Qty Delivery</th>
+															<th>QTY Outstanding</th>
+															<th style="background-color: white;"></th>
+															<th>Contract</th>
+															<th>Project</th>
+															<th>D/N Status</th>
+															<th>D/N Posting Status</th>
 
 
-															</tr>
-														</thead>
-														<tbody>
-															<?php
-															$no = 0;
-															?>
-															<?php foreach ($delivery_data as $data_list) {
-																$shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);
-																$cusdate = substr($data_list['CUSTRCPDATE'], 4, 2) . "/" . substr($data_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($data_list['CUSTRCPDATE'], 0, 4);
-																/*$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														$no = 0;
+														?>
+														<?php foreach ($deli_data as $data_list) {
+															$shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);
+															$cusdate = substr($data_list['CUSTRCPDATE'], 4, 2) . "/" . substr($data_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($data_list['CUSTRCPDATE'], 0, 4);
+
+															/*$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
 																$etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
 																$atdorigindate = substr($data_list['ATDORIGINDATE'], 4, 2) . "/" . substr($data_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ATDORIGINDATE'], 0, 4);
 																$etaportdate = substr($data_list['ETAPORTDATE'], 4, 2) . "/" . substr($data_list['ETAPORTDATE'], 6, 2) . "/" .  substr($data_list['ETAPORTDATE'], 0, 4);
 																$pibdate = substr($data_list['PIBDATE'], 4, 2) . "/" . substr($data_list['PIBDATE'], 6, 2) . "/" .  substr($data_list['PIBDATE'], 0, 4);
 */
-															?>
-
-																<tr>
-																	<td><?= ++$no ?></td>
-																	<td><?= $data_list['SHINUMBER'] ?></td>
-																	<td><?= $shidate; ?></td>
-																	<td><?= $data_list['DOCNUMBER']; ?></td>
-																	<td><?= $data_list['NAMECUST']; ?></td>
-																	<td><?= $cusdate; ?></td>
-																	<td><?= $data_list['SHIITEMNO']; ?></td>
-																	<td><?= $data_list['SHIITEMDESC']; ?></td>
-																	<td><?= $data_list['SHIQTY']; ?></td>
-																	<td><?= $data_list['SHIQTYOUTSTANDING']; ?></td>
-																	<td style="background-color: white;"></td>
-																	<td><?= $data_list['CONTRACT']; ?></td>
-																	<td><?= $data_list['PROJECT']; ?></td>
-																	<td><?php $postatus = $data_list['POCUSTSTATUS'];
-																		switch ($postatus) {
-																			case "0":
-																				echo "Outstanding";
-																				break;
-																			case "1":
-																				echo "Completed";
-																				break;
-																			default:
-																				echo "";
-																		} ?>
-																	<td><?php $dnpostingstat = $data_list['DNPOSTINGSTAT'];
-																		switch ($dnpostingstat) {
-																			case "0":
-																				echo "Open";
-																				break;
-																			case "1":
-																				echo "Posted";
-																				break;
-																			case "2":
-																				echo "Deleted";
-																				break;
-																			default:
-																				echo "Posted";
-																		} ?>
-																	</td>
+														?>
 
 
+															<tr>
+																<td><?= ++$no ?></td>
+																<td><?= $data_list['SHINUMBER'] ?></td>
+																<td><?= $shidate; ?></td>
+																<td><?= $data_list['DOCNUMBER']; ?></td>
+																<td><?= $data_list['NAMECUST']; ?></td>
+																<td><?= $cusdate; ?></td>
+																<td><?= $data_list['SHIITEMNO']; ?></td>
+																<td><?= $data_list['ITEMDESC']; ?></td>
+																<td><?= $data_list['SHIQTY']; ?></td>
+																<td><?= $data_list['SHIQTYOUTSTANDING']; ?></td>
+																<td style="background-color: white;"></td>
+																<td><?= $data_list['CONTRACT']; ?></td>
+																<td><?= $data_list['PROJECT']; ?></td>
+																<td><?php $postatus = $data_list['POCUSTSTATUS'];
+																	switch ($postatus) {
+																		case "0":
+																			echo "Partial";
+																			break;
+																		case "1":
+																			echo "Completed";
+																			break;
+																		default:
+																			echo "";
+																	} ?>
+																<td><?php $dnpostingstat = $data_list['DNPOSTINGSTAT'];
+																	switch ($dnpostingstat) {
+																		case "0":
+																			echo "Open";
+																			break;
+																		case "1":
+																			echo "Posted";
+																			break;
+																		case "2":
+																			echo "Deleted";
+																			break;
+																		default:
+																			echo "Posted";
+																	} ?>
+																</td>
 
-																</tr>
 
-															<?php } ?>
-														</tbody>
-													</table>
-												</div>
+
+															</tr>
+
+														<?php } ?>
+													</tbody>
+												</table>
 											</div>
 										</div>
+									</div>
 									</form>
 									<div class="row">
 										<!-- Pagination template-->

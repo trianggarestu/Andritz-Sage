@@ -30,103 +30,124 @@
 								<div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
-											<div class="col-sm-8">
+											<div class="col-sm-9">
+												<label for="daterange">Filter by P/O Date : </label>
+												<div class="input-group input-group-sm date">
+													<div class="input-group-addon">From Date :
+														<i class="fa fa-calendar"></i>
+													</div>
+													<input class="datepicker form-control input-sm required" id="from_date" name="from_date" type="text" value="<?= $def_fr_date ?>" readonly>
+												</div>
+												<div class="input-group input-group-sm date">
+													<div class="input-group-addon">To Date :
+														<i class="fa fa-calendar"></i>
+													</div>
+													<input class="datepicker form-control input-sm required" id="to_date" name="to_date" type="text" value="<?= $def_to_date ?>" readonly>
 
+													<div class="input-group-btn">
+														<button type="submit" class="btn btn-default bg-maroon" onclick="$('#'+'mainform').attr('action', '<?= base_url('goodreceiptlist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-filter"></i>Go!</button>
+
+													</div>
+												</div>
 											</div>
-											<div class="col-sm-4">
+
+											<div class="col-sm-3">
 												<div class="box-tools">
 													<div class="input-group input-group-sm pull-right">
 														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();}">
 														<div class="input-group-btn">
-															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
+															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', '<?= base_url('goodreceiptlist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="table-responsive">
-													<table class="table table-bordered table-striped dataTable table-hover nowrap">
-														<thead class="bg-gray disabled color-palette">
-															<tr>
-																<th>No.</th>
-																<th>Status</th>
-																<th>Receipt Number</th>
-																<th>GR. Date</th>
-																<th>Vendor Name</th>
-																<th>Description</th>
-																<th>Item</th>
-																<th>QTY Receipt</th>
-																<th>GR Status</th>
-																<th style="background-color: white;"></th>
-																<th>PO Number</th>
-																<th>PO Date</th>
+									</form>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="table-responsive">
+											<table class="table table-bordered table-striped dataTable table-hover nowrap">
+												<thead class="bg-gray disabled color-palette">
+													<tr>
+														<th>No.</th>
+														<th>Status</th>
+														<th>Receipt Number</th>
+														<th>GR. Date</th>
+														<th>Vendor Name</th>
+														<th>Description</th>
+														<th>Item</th>
+														<th>QTY Receipt</th>
+														<th>GR Status</th>
+														<th style="background-color: white;"></th>
+														<th>PO Number</th>
+														<th>PO Date</th>
 
-															</tr>
-														</thead>
-														<tbody>
-															<?php
-															$no = 0;
-															?>
-															<?php foreach ($goodreceipt_data as $data_list) {
-																/*$povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);
-																$rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['ETDDATE'], 6, 2) . "/" .  substr($data_list['ETDDATE'], 0, 4);
+													</tr>
+												</thead>
+												<tbody>
+													<?php
+													$no = 0;
+													?>
+													<?php foreach ($gr_data as $data_list) {
+														$rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['RECPDATE'], 6, 2) . "/" .  substr($data_list['RECPDATE'], 0, 4);
+														$povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);
+														/*
+																
 																$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
 																$etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
 																$atdorigindate = substr($data_list['ATDORIGINDATE'], 4, 2) . "/" . substr($data_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ATDORIGINDATE'], 0, 4);
 																$etaportdate = substr($data_list['ETAPORTDATE'], 4, 2) . "/" . substr($data_list['ETAPORTDATE'], 6, 2) . "/" .  substr($data_list['ETAPORTDATE'], 0, 4);
 																$pibdate = substr($data_list['PIBDATE'], 4, 2) . "/" . substr($data_list['PIBDATE'], 6, 2) . "/" .  substr($data_list['PIBDATE'], 0, 4);
 */
-															?>
+													?>
 
-																<tr>
-																	<td><?= ++$no ?></td>
-																	<td><?php $rcppostingstat = $data_list['POSTINGSTAT'];
-																		switch ($rcppostingstat) {
-																			case "0":
-																				echo "Open";
-																				break;
-																			case "1":
-																				echo "Posted";
-																				break;
-																			case "2":
-																				echo "Deleted";
-																				break;
-																			default:
-																				echo "Posted";
-																		} ?>
-																	</td>
-																	<td><?= $data_list['RECPNUMBER'] ?></td>
-																	<td>Rcp Date</td>
-																	<td><?= $data_list['VDNAME'] ?></td>
-																	<td><?= $data_list['DESCRIPTIO'] ?></td>
-																	<td><?= $data_list['ITEMDESC'] ?></td>
-																	<td><?= $data_list['RECPQTY'] ?></td>
-																	<td><?= $data_list['GRSTATUS'] ?></td>
-																	<td style="background-color: white;"></td>
-																	<td><strong><a href="#"><?= $data_list['PONUMBER'] ?></a></strong></td>
-																	<td>PO Date</td>
-																</tr>
+														<tr>
+															<td><?= ++$no ?></td>
+															<td><?php $rcppostingstat = $data_list['POSTINGSTAT'];
+																switch ($rcppostingstat) {
+																	case "0":
+																		echo "Open";
+																		break;
+																	case "1":
+																		echo "Posted";
+																		break;
+																	case "2":
+																		echo "Deleted";
+																		break;
+																	default:
+																		echo "Posted";
+																} ?>
+															</td>
+															<td><?= $data_list['RECPNUMBER'] ?></td>
+															<td><?= $rcpdate; ?></td>
+															<td><?= $data_list['VDNAME'] ?></td>
+															<td><?= $data_list['DESCRIPTIO'] ?></td>
+															<td><?= $data_list['ITEMDESC'] ?></td>
+															<td><?= $data_list['RECPQTY'] ?></td>
+															<td><?= $data_list['GRSTATUS'] ?></td>
+															<td style="background-color: white;"></td>
+															<td><strong><a href="#"><?= $data_list['PONUMBER'] ?></a></strong></td>
+															<td><?= $povendate; ?></td>
+														</tr>
 
-															<?php } ?>
-														</tbody>
-													</table>
-												</div>
-											</div>
+													<?php } ?>
+												</tbody>
+											</table>
 										</div>
-									</form>
-									<div class="row">
-										<!-- Pagination template-->
-										<div class="col-sm-6">
+									</div>
+								</div>
+								</form>
+								<div class="row">
+									<!-- Pagination template-->
+									<div class="col-sm-6">
 
-										</div>
-										<div class="col-sm-6">
-											<div class="dataTables_paginate paging_simple_numbers">
-												<?= $pager->links('gr_posting_list', 'bootstrap_pagination');
-												//$pager = \Config\Services::pager();
-												?>
-											</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="dataTables_paginate paging_simple_numbers">
+											<?= $pager->links('gr_posting_list', 'bootstrap_pagination');
+											//$pager = \Config\Services::pager();
+											?>
 										</div>
 									</div>
 								</div>
@@ -136,7 +157,8 @@
 				</div>
 			</div>
 		</div>
-	</section>
+</div>
+</section>
 </div>
 
 <?php //$this->load->view('global/confirm_delete'); 

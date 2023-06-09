@@ -94,32 +94,140 @@ class RequisitionList extends BaseController
 
     public function index()
     {
-        session()->remove('success');
-        session()->set('success', '0');
-        $requisition_data = $this->RequisitionModel->select('webot_REQUISITION.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.PONUMBER,c.PODATE')
-            ->join('webot_CSR b', 'b.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
-            ->join('webot_PO c', 'c.CSRUNIQ = b.CSRUNIQ', 'left')
-            ->where('webot_REQUISITION.POSTINGSTAT', 1)
-            ->orderBy('webot_REQUISITION.RQNUNIQ', 'ASC');
-
+        $today = $this->audtuser['AUDTDATE'];
+        $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+        $def_fr_date = date("m/01/Y", strtotime($def_date));
+        $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+        $def_to_date = date("m/t/Y", strtotime($def_date));
+        $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        //session()->remove('success');
+        $pr_data = $this->RequisitionModel->select('*')
+            ->groupStart()
+            ->where('POSTINGSTAT =', 1)
+            ->groupEnd()
+            ->groupStart()
+            ->where('RQNDATE >=', $fr_date)
+            ->where('RQNDATE <=', $to_date)
+            ->groupEnd()
+            ->orderBy('RQNDATE', 'ASC');
         $perpage = 20;
         $data = array(
-            'requisition_data' => $requisition_data->paginate($perpage, 'rqn_posting_list'),
-            'pager' => $requisition_data->pager,
-            'ct_po_posting' => $this->RequisitionModel->count_rqn_posting(),
-            'perpage' => $perpage,
-            'currentpage' => $requisition_data->pager->getCurrentPage('rqn_posting_list'),
-            'totalpages'  => $requisition_data->pager->getPageCount('rqn_posting_list'),
+            'keyword' => '',
+            'pr_data' => $pr_data->paginate($perpage, 'csr_data'),
+            'pager' => $pr_data->pager,
+            'success_code' => session()->get('success'),
+            'currentpage' => $currentpage,
+            'def_fr_date' => $def_fr_date,
+            'def_to_date' => $def_to_date,
+            //'fr_date' => $fr_date,
+            //'to_date' => $to_date,
         );
 
-        /*$requisitiondata = $this->RequisitionModel->get_requisition_close();
 
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('requisition/data_pr_list', $data);
+        echo view('view_footer', $this->footer_data);
+        session()->remove('success');
+        session()->remove('cari');
+        session()->remove('from_date');
+        session()->remove('to_date');
+        session()->remove('success');
+        session()->set('success', '0');
+    }
 
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        $from_date = $this->request->getPost('from_date');
+        $to_date = $this->request->getPost('to_date');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+            session()->set('from_date', $from_date);
+            session()->set('to_date', $to_date);
+        } else {
+            session()->remove('cari');
+            session()->set('from_date', $from_date);
+            session()->set('to_date', $to_date);
+        }
+        return redirect()->to(base_url('requisitionlist/filter'));
+    }
+
+    public function filter()
+    {
+        $today = $this->audtuser['AUDTDATE'];
+        $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+        $def_fr_date = date("m/01/Y", strtotime($def_date));
+        $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+        $def_to_date = date("m/t/Y", strtotime($def_date));
+        $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        $perpage = 20;
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+        $todate = session()->get('to_date');
+        $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+        if (empty($keyword)) {
+            $pr_data = $this->RequisitionModel->select('webot_REQUISITION.*,csr.*')
+                ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
+                ->groupStart()
+                ->where('webot_REQUISITION.POSTINGSTAT =', 1)
+                ->groupEnd()
+                ->groupStart()
+                ->where('webot_REQUISITION.RQNDATE >=', $nfromdate)
+                ->where('webot_REQUISITION.RQNDATE <=', $ntodate)
+                ->groupEnd()
+                ->orderBy('webot_REQUISITION.RQNDATE', 'ASC');
+        } else {
+            $pr_data = $this->RequisitionModel->select('webot_REQUISITION.*,csr.*')
+                ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
+                ->groupStart()
+                ->where('webot_REQUISITION.POSTINGSTAT =', 1)
+                ->groupEnd()
+                ->groupStart()
+                ->where('webot_REQUISITION.RQNDATE >=', $nfromdate)
+                ->where('webot_REQUISITION.RQNDATE <=', $ntodate)
+                ->groupEnd()
+                ->groupStart()
+
+                ->like('csr.CONTRACT', $keyword)
+                ->orlike('csr.PROJECT', $keyword)
+                ->orlike('webot_REQUISITION.RQNNUMBER', $keyword)
+                ->orlike('csr.MANAGER', $keyword)
+                ->orlike('csr.SALESNAME', $keyword)
+                ->orlike('csr.PROJECT', $keyword)
+                ->orlike('csr.PRJDESC', $keyword)
+                ->orlike('csr.PONUMBERCUST', $keyword)
+                ->orlike('csr.CUSTOMER', $keyword)
+                ->orlike('csr.NAMECUST', $keyword)
+                ->orlike('csr.EMAIL1CUST', $keyword)
+                ->orlike('csr.CRMNO', $keyword)
+                ->orlike('csr.ORDERDESC', $keyword)
+                ->orlike('csr.SERVICETYPE', $keyword)
+                ->orlike('csr.CRMREMARKS', $keyword)
+                ->orlike('csr.ITEMNO', $keyword)
+                ->orlike('csr.MATERIALNO', $keyword)
+                ->orlike('csr.STOCKUNIT', $keyword)
+                ->orlike('csr.STOCKUNIT', $keyword)
+
+                ->groupEnd()
+                ->orderBy('webot_REQUISITION.RQNDATE', 'ASC');
+            //$so_data = $this->RequisitionModel->get_csr_list_post_search($keyword);
+        }
         $data = array(
-            'requisition_data' => $requisitiondata,
-        );*/
+            'keyword' => $keyword,
+            'pr_data' => $pr_data->paginate($perpage, 'req_data'),
+            'pager' => $pr_data->pager,
+            'success_code' => session()->get('success'),
+            'currentpage' => $currentpage,
+            'def_fr_date' => session()->get('from_date'),
+            'def_to_date' => session()->get('to_date'),
+        );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
@@ -127,166 +235,91 @@ class RequisitionList extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
-    public function update($id_so)
+    public function preview()
     {
-        $get_so = $this->RequisitionModel->get_so_by_id($id_so);
-        if ($get_so) {
-            $data = array(
-                'id_so' => trim($get_so['ID_SO']),
-                'ct_no' => trim($get_so['ContractNo']),
-                'prj_no' => trim($get_so['ProjectNo']),
-                'crm_no' => trim($get_so['CrmNo']),
-                'cust_no' => trim($get_so['CustomerNo']),
-                'cust_name' => trim($get_so['CustomerName']),
-                'cust_email' => trim($get_so['CustomerEmail']),
-                'cust_po' => trim($get_so['PoCustomer']),
-                'po_date' => trim($get_so['PoDate']),
-                'req_date' => trim($get_so['ReqDate']),
-                'salesperson' => trim($get_so['SalesPerson']),
-                'inventory_no' => trim($get_so['InventoryNo']),
-                'material_no' => trim($get_so['MaterialNo']),
-                'inventory_desc' => trim($get_so['InventoryDesc']),
-                'order_desc' => trim($get_so['OrderDesc']),
-                'qty' => trim($get_so['Qty']),
-                'uom' => trim($get_so['Uom']),
-                'requisition_list' => $this->RequisitionModel->get_requisition_sage(),
-                'form_action' => base_url("requisition/update_action"),
-            );
-        }
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $todate = session()->get('to_date');
 
-
-        echo view('requisition/ajax_add_requisition', $data);
-    }
-
-    public function update_action()
-    {
-        if (null == ($this->request->getPost('id_so'))) {
-            session()->setFlashdata('messagefailed', 'Data not found.');
-            return redirect()->to(base_url('requisition'));
+        if (empty($fromdate) and empty($todate)) {
+            $today = $this->audtuser['AUDTDATE'];
+            $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+            $def_fr_date = date("m/01/Y", strtotime($def_date));
+            $nfromdate = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+            $def_to_date = date("m/t/Y", strtotime($def_date));
+            $ntodate = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+            $keyword = '';
+            $pr_data = $this->RequisitionModel->get_pr_preview($nfromdate, $ntodate);
         } else {
-            $id = $this->request->getPost('id_so');
-            $rqnnumber = $this->request->getPost('rqnnumber');
-            $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
-            if ($choose_rqn) {
-                $data = array(
-                    'PrNumber' => $choose_rqn["RQNNUMBER"],
-                    'PrDate' => $choose_rqn["DATE"],
-                );
-
-                $this->RequisitionModel->requisition_update($id, $data);
-                session()->setFlashdata('messagesuccess', 'Update Record Success');
-                return redirect()->to(base_url('requisition'));
-            }
-        }
-    }
-
-    public function sending_notif($id_so)
-    {
-        //inisiasi proses kirim ke group
-        $groupuser = 3;
-        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-        $get_so = $this->RequisitionModel->get_so_by_id($id_so);
-        $today = date("d/m/Y");
-        $audtdate = substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2);
-        foreach ($notiftouser_data as $sendto_user) {
-
-            $data_email = array(
-                'hostname' => $sendto_user['HOSTNAME'],
-                'sendername' => $sendto_user['SENDERNAME'],
-                'senderemail' => $sendto_user['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                'passwordemail' => $sendto_user['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                'ssl' => $sendto_user['SSL'],
-                'smtpport' => $sendto_user['SMTPPORT'],
-                'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_so['PrNumber'],
-                'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-
-Please to follow up Requisition Number :' . $get_so['PrNumber'] . ' / Contract : ' . $get_so['ContractNo'] . ' is pending for you to process Purchase Order Vendor.
-<br><br>
-You can access Order Tracking System Portal via the URL below:
-<br>
-Http://jktsms025:...
-<br>
-Thanks for your cooperation. 
-<br><br>
-Order Tracking Administrator',
-            );
-
-            $sending_mail = $this->send($data_email);
-            if ($sending_mail) {
-                $data_notif = array(
-                    'contract' =>  $get_so['ContractNo'],
-                    'from_user' => $this->header_data['usernamelgn'],
-                    'from_email' => $this->header_data['emaillgn'],
-                    'from_name' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'subject' => 'Pending Requisition Allert. Requisition No : ' . $get_so['PrNumber'],
-                    'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                    Please to follow up Requisition Number :' . $get_so['PrNumber'] . ' / Contract : ' . $get_so['ContractNo'] . ' is pending for you to process Purchase Order Vendor.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-
-                    'sending_date' => $audtdate,
-                    'is_read' => 0,
-                    'updated_at' => $audtdate,
-                    'is_archived' => 0,
-                    'to_user' => $sendto_user['USERNAME'],
-                    'to_email' => $sendto_user['EMAIL'],
-                    'to_name' => ucwords(strtolower($sendto_user['NAME'])),
-                    'is_trashed' => 0,
-                    'is_deleted' => 0,
-                    'is_attached' => 0,
-                    'is_star' => 0,
-                    'sending_status' => 1,
-                );
-                $this->NotifModel->mailbox_insert($data_notif);
-            } else {
-                return redirect()->to(base_url('/requisition'));
-            }
+            $keyword = session()->get('cari');
+            $fromdate = session()->get('from_date');
+            $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+            $todate = session()->get('to_date');
+            $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+            $pr_data = $this->RequisitionModel->get_pr_preview_filter($keyword, $nfromdate, $ntodate);
         }
 
-        session()->setFlashdata('messagesuccess', 'Create Record Success');
-        return redirect()->to(base_url('/requisition'));
-    }
+        $data = array(
+            'pr_data' => $pr_data,
+            'keyword' => $keyword,
+            'fromdate' => $nfromdate,
+            'todate' => $ntodate,
 
+        );
+
+        echo view('requisition/data_pr_list_preview', $data);
+    }
 
     public function export_excel()
     {
-        //$peoples = $this->builder->get()->getResultArray();
-        $requisitiondata = $this->RequisitionModel->get_requisition_close();
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $todate = session()->get('to_date');
+
+        if (empty($fromdate) and empty($todate)) {
+            $today = $this->audtuser['AUDTDATE'];
+            $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+            $def_fr_date = date("m/01/Y", strtotime($def_date));
+            $nfromdate = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+            $def_to_date = date("m/t/Y", strtotime($def_date));
+            $ntodate = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+            $keyword = '';
+            $pr_data = $this->RequisitionModel->get_pr_preview($nfromdate, $ntodate);
+        } else {
+            $keyword = session()->get('cari');
+            $fromdate = session()->get('from_date');
+            $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+            $todate = session()->get('to_date');
+            $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+            $pr_data = $this->RequisitionModel->get_pr_preview_filter($keyword, $nfromdate, $ntodate);
+        }
+        //$so_data = $this->RequisitionModel->get_so_open();
         $spreadsheet = new Spreadsheet();
 
         // tulis header/nama kolom 
         $spreadsheet->setActiveSheetIndex(0)
+
             ->setCellValue('A1', 'No')
             ->setCellValue('B1', 'RQNNUMBER')
             ->setCellValue('C1', 'RQNDATE')
-            ->setCellValue('D1', 'CUSTOMER NAME')
-            ->setCellValue('E1', 'CONRACT NO')
-            ->setCellValue('F1', 'CONTRACT DESC')
-            ->setCellValue('G1', 'PROJECT NO')
-            ->setCellValue('H1', 'CRM NO')
-            ->setCellValue('I1', 'CRM DESC')
-            ->setCellValue('J1', 'CRM DATE')
-            ->setCellValue('K1', 'ITEM NO')
-            ->setCellValue('L1', 'QTY')
-            ->setCellValue('M1', 'UOM')
-            ->setCellValue('N1', 'STATUS')
-
-
-
-            ->setCellValue('S1', '');
+            ->setCellValue('D1', 'POVENDOR')
+            ->setCellValue('E1', 'POCUSTOMERDATE')
+            ->setCellValue('F1', 'CUSTOMER NAME')
+            ->setCellValue('G1', 'CONRACT NO')
+            ->setCellValue('H1', 'CONTRACT DESC')
+            ->setCellValue('I1', 'PROJECT NO')
+            ->setCellValue('J1', 'CRM NO')
+            ->setCellValue('K1', 'CRM DESC')
+            ->setCellValue('L1', 'CRM DATE')
+            ->setCellValue('M1', 'ITEM NO')
+            ->setCellValue('N1', 'QTY')
+            ->setCellValue('O1', 'UOM')
+            ->setCellValue('P1', 'STATUS');
 
         $rows = 2;
         // tulis data mobil ke cell
         $no = 1;
-        foreach ($requisitiondata as $data) {
+        foreach ($pr_data as $data) {
             $postingstat =  $data['POSTINGSTAT'];
             switch ($postingstat) {
                 case "0":
@@ -301,39 +334,46 @@ Order Tracking Administrator',
                 default:
                     $postingstatus = "Open";
             }
-        }
-        $dd = substr($data['RQNDATE'], 6, 2);
-        $mm = substr($data['RQNDATE'], 4, 2);
-        $yyyy = substr($data['RQNDATE'], 0, 4);
-        $rqndate = $mm . '/' . $dd . '/' . $yyyy;
+            $dd = substr($data['RQNDATE'], 6, 2);
+            $mm = substr($data['RQNDATE'], 4, 2);
+            $yyyy = substr($data['RQNDATE'], 0, 4);
+            $rqndate = $mm . '/' . $dd . '/' . $yyyy;
 
-        $dd = substr($data['CRMREQDATE'], 6, 2);
-        $mm = substr($data['CRMREQDATE'], 4, 2);
-        $yyyy = substr($data['CRMREQDATE'], 0, 4);
-        $reqdate = $mm . '/' . $dd . '/' . $yyyy;
-        foreach ($requisitiondata as $data) {
+            $dd = substr($data['CRMREQDATE'], 6, 2);
+            $mm = substr($data['CRMREQDATE'], 4, 2);
+            $yyyy = substr($data['CRMREQDATE'], 0, 4);
+            $reqdate = $mm . '/' . $dd . '/' . $yyyy;
+
+            $dd = substr($data['PODATECUST'], 6, 2);
+            $mm = substr($data['PODATECUST'], 4, 2);
+            $yyyy = substr($data['PODATECUST'], 0, 4);
+            $pocustdate = $mm . '/' . $dd . '/' . $yyyy;
+
+
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
                 ->setCellValue('B' . $rows, $data['RQNNUMBER'])
                 ->setCellValue('C' . $rows, trim($rqndate))
-                ->setCellValue('D' . $rows, $data['NAMECUST'])
-                ->setCellValue('E' . $rows, $data['CONTRACT'])
-                ->setCellValue('F' . $rows, $data['CTDESC'])
-                ->setCellValue('G' . $rows, $data['PROJECT'])
-                ->setCellValue('H' . $rows, $data['CRMNO'])
-                ->setCellValue('I' . $rows, trim($reqdate))
-                ->setCellValue('J' . $rows, $data['ORDERDESC'])
-                ->setCellValue('K' . $rows, $data['MATERIALNO'])
-                ->setCellValue('L' . $rows, $data['QTY'])
-                ->setCellValue('M' . $rows, $data['STOCKUNIT'])
-                ->setCellValue('N' . $rows, $postingstatus)
+                ->setCellValue('D' . $rows, $data['PONUMBERCUST'])
+                ->setCellValue('E' . $rows, trim($pocustdate))
 
-                ->setCellValue('S' . $rows, '');
+                ->setCellValue('F' . $rows, $data['NAMECUST'])
+                ->setCellValue('G' . $rows, $data['CONTRACT'])
+                ->setCellValue('H' . $rows, $data['CTDESC'])
+                ->setCellValue('I' . $rows, $data['PROJECT'])
+                ->setCellValue('J' . $rows, $data['CRMNO'])
+                ->setCellValue('K' . $rows, trim($reqdate))
+                ->setCellValue('L' . $rows, $data['ORDERDESC'])
+                ->setCellValue('M' . $rows, $data['MATERIALNO'])
+                ->setCellValue('N' . $rows, $data['QTY'])
+                ->setCellValue('O' . $rows, $data['STOCKUNIT'])
+                ->setCellValue('P' . $rows, $postingstatus);
+
             $rows++;
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'PR_data';
+        $fileName = 'Requisition_data';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -342,56 +382,5 @@ Order Tracking Administrator',
 
         $writer->save('php://output');
         exit();
-    }
-    public function preview()
-    {
-        $pr_data = $this->RequisitionModel->get_requisition_close();
-        $data = array(
-            'pr_data' => $pr_data,
-            'success_code' => session()->get('success'),
-        );
-
-        echo view('requisition/data_pr_list_preview', $data);
-    }
-
-    private function send($data_email)
-    {
-        $hostname           = $data_email['hostname'];
-        $sendername         = $data_email['sendername'];
-        $senderemail        = $data_email['senderemail'];
-        $passwordemail      = $data_email['passwordemail'];
-        $ssl                = $data_email['ssl'];
-        $smtpport           = $data_email['smtpport'];
-        $to                 = $data_email['to_email'];
-        $subject             = $data_email['subject'];
-        $message             = $data_email['message'];
-
-        $mail = new PHPMailer(true);
-
-        try {
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->isSMTP();
-            $mail->Host       = $hostname;
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
-            $mail->SMTPSecure = $ssl;
-            $mail->Port       = $smtpport;
-
-            $mail->setFrom($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
-            $mail->addAddress($to);
-            $mail->addReplyTo($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body    = $message;
-
-            $mail->send();
-            session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/requisition'));
-        } catch (Exception $e) {
-            session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/requisition'));
-        }
     }
 }
