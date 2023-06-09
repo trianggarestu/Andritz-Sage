@@ -139,7 +139,7 @@ class Usersetup extends BaseController
     {
         if (!$this->validate([
             'username' => [
-                'rules' => 'required|max_length[50]',
+                'rules' => 'required|min_length[2]|max_length[10]',
             ],
             'name' => 'required|max_length[50]',
             // 'email' => 'required|max_length[50]',
@@ -150,11 +150,11 @@ class Usersetup extends BaseController
 
             ],
             'password' => [
-                'rules' => 'required|min_length[4]|max_length[50]',
+                'rules' => 'required|min_length[6]|max_length[20]',
                 'errors' => [
                     'required' => '{field} password is required',
-                    'min_length' => '{field} Min 4 character',
-                    'max_length' => '{field} Maks 50 charater',
+                    'min_length' => '{field} Min 6 character',
+                    'max_length' => '{field} Maks 20 charater',
                 ]
             ],
             'password_conf' => [
@@ -205,15 +205,20 @@ class Usersetup extends BaseController
                 }
 
                 $data = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
                     'USERNAME' => strtoupper($this->request->getVar('username')),
                     'PASSWORD' => md5(strtoupper($this->request->getVar('password'))),
                     'USERHASH' => md5(strtoupper($this->request->getVar('username'))),
                     'NAME' => strtoupper($this->request->getVar('name')),
                     'EMAIL' => $this->request->getVar('email'),
                     'GROUPID' => $this->request->getPost('groupid'),
+                    'PATH_PHOTO' => $path_photo,
                     'ISSUPERUSER' => '0',
                     'INACTIVE' => $this->request->getPost('isactive'),
-                    'PATH_PHOTO' => $path_photo,
+                    'ISDELETED' => '0',
                 );
 
                 $this->SetupModel->user_insert($data);
@@ -302,24 +307,33 @@ class Usersetup extends BaseController
                 $filephoto->move('assets/files/user_pict/', $photo);
                 $path_photo = 'assets/files/user_pict/' . $photo;
             }
-            if (!empty($this->request->getPost('isactive'))) {
-                $inactive = $this->request->getPost('isactive');
+
+            $inactive = $this->request->getPost('isactive');
+
+            if (
+                trim($this->request->getVar('name')) == trim($user_data['NAME']) and trim($this->request->getVar('email')) == trim($user_data['EMAIL'])
+                and $this->request->getPost('groupid') == $user_data['GROUPID'] and $inactive == $user_data['INACTIVE']
+                and trim($path_photo) == trim($user_data['PATH_PHOTO'])
+            ) {
+                return redirect()->to(base_url('/usersetup'));
             } else {
-                //$inactive = $user_data['INACTIVE'];
-                $inactive = $this->request->getPost('isactive');
+
+                $data = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'NAME' => trim($this->request->getVar('name')),
+                    'EMAIL' => trim($this->request->getVar('email')),
+                    'GROUPID' => $this->request->getPost('groupid'),
+                    'INACTIVE' => $inactive,
+                    'PATH_PHOTO' => $path_photo,
+                );
+
+                $this->SetupModel->user_update($username, $data);
+                session()->set('success', '1');
+                return redirect()->to(base_url('/usersetup'));
             }
-
-            $data = array(
-                'NAME' => strtoupper($this->request->getVar('name')),
-                'EMAIL' => $this->request->getVar('email'),
-                'GROUPID' => $this->request->getPost('groupid'),
-                'INACTIVE' => $inactive,
-                'PATH_PHOTO' => $path_photo,
-            );
-
-            $this->SetupModel->user_update($username, $data);
-            session()->set('success', '1');
-            return redirect()->to(base_url('/usersetup'));
         }
     }
 
@@ -385,7 +399,11 @@ class Usersetup extends BaseController
     {
         $user_data = $this->SetupModel->get_users_by_hash($hashuser);
         if ($user_data['INACTIVE'] == 1) {
-            $this->SetupModel->user_delete($hashuser);
+            if (is_file($user_data['PATH_PHOTO'])) {
+                unlink(trim($user_data['PATH_PHOTO']));
+            }
+
+            $this->SetupModel->user_delete($hashuser, 1);
 
 
             session()->set('success', '1');

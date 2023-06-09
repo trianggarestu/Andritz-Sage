@@ -17,6 +17,16 @@
 			<li class='active'>Order Tracking</li>
 		</ol>
 	</section>
+	<input id="success-code" type="hidden" value="<?= $success_code ?>">
+	<!-- Untuk menampilkan modal bootstrap umum  -->
+	<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+
+				<div class="fetched-data"></div>
+			</div>
+		</div>
+	</div>
 	<section class='content' id="maincontent">
 		<div class='row'>
 			<div class='col-md-12'>

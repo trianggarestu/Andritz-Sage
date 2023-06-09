@@ -35,19 +35,19 @@
 							<div class="form-group">
 								<label style="text-align: right;" class="col-sm-4 control-label" for="Username">Username : </label>
 								<div class="col-sm-6">
-									<input id="username" name="username" class="form-control input-sm required" type="text" placeholder="Username" value="<?= $username; ?>" maxlength="50" autofocus style="text-transform: uppercase;" readonly></input>
+									<input id="username" name="username" class="form-control input-sm required" type="text" placeholder="Username" value="<?= $username; ?>" minlength="2" maxlength="20" autofocus style="text-transform: uppercase;" readonly></input>
 								</div>
 							</div>
 							<div class="form-group">
 								<label style="text-align: right;" class="col-sm-4 control-label" for="Name">Name : </label>
 								<div class="col-sm-6">
-									<input id="Name" name="name" class="form-control input-sm required" type="text" placeholder="Name" value="<?= $name; ?>" maxlength="50" style="text-transform: uppercase;"></input>
+									<input id="Name" name="name" class="form-control input-sm required" type="text" placeholder="Name" value="<?= $name; ?>" maxlength="50"></input>
 								</div>
 							</div>
 							<div class="form-group">
 								<label style="text-align: right;" class="col-sm-4 control-label" for="email">E-mail : </label>
 								<div class="col-sm-6">
-									<input id="email" name="email" class="form-control input-sm required email" type="text" placeholder="E-mail" value="<?= $email; ?>" maxlength="50"></input>
+									<input id="email" name="email" class="form-control input-sm required email" type="text" placeholder="E-mail" value="<?= $email; ?>" minlength="6" maxlength="50"></input>
 								</div>
 							</div>
 

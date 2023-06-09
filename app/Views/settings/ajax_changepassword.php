@@ -15,11 +15,11 @@
 
 						<div class="form-group">
 							<label for="catatan">New Password</label>
-							<input class="form-control input-sm required" minlength="6" maxlength="20" type="password" id="new_pass" name="new_pass"></input>
+							<input class="form-control input-sm required" minlength="6" maxlength="20" type="password" id="new_pass" name="new_pass" autofocus style="text-transform: uppercase;"></input>
 						</div>
 						<div class="form-group">
 							<label for="catatan">Retype New Password</label>
-							<input class="form-control input-sm required" minlength="6" maxlength="20" type="password" id="re_new_pass" name="re_new_pass"></input>
+							<input class="form-control input-sm required" minlength="6" maxlength="20" type="password" id="re_new_pass" name="re_new_pass" autofocus style="text-transform: uppercase;"></input>
 						</div>
 
 					</div>

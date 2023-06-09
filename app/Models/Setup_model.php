@@ -154,7 +154,8 @@ class Setup_model extends Model
     public function get_users()
     {
         $query = $this->db->query("SELECT a.*,b.GROUPNAME FROM webot_USERAUTH a join webot_USERGROUP b on b.GROUPID=a.GROUPID
-        order by USERNAME asc");
+        WHERE a.ISDELETED=0
+        order by a.GROUPID,a.USERNAME asc");
         return $query->getResultArray();
     }
 
@@ -200,11 +201,12 @@ class Setup_model extends Model
     }
 
 
-    function user_delete($hashuser)
+    function user_delete($hashuser, $val = 0)
     {
-        //$sql = 'DELETE FROM webot_USERGROUPROLE WHERE GROUPID=' . "'$idgrusergroup'" . '';
-        //$this->db->query($sql);
-        return $this->db->table('webot_USERAUTH')->delete(['USERHASH' => $hashuser]);
+        $sql = "UPDATE webot_USERAUTH SET ISDELETED = ? WHERE USERHASH = ?";
+        $outp = $this->db->query($sql, array($val, $hashuser));
+        //Tanpa return juga bisa jalan
+        return $outp;
     }
 
 

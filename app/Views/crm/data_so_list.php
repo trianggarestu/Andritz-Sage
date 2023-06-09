@@ -103,6 +103,7 @@
 															<th>PO Date</th>
 															<th>Inventory No</th>
 															<th>Material No</th>
+															<th>Item Desc.</th>
 															<th>Req Date</th>
 															<th>Sales Person</th>
 															<th>Order Description</th>
@@ -171,6 +172,7 @@
 																<td><?= $crmpodate; ?></td>
 																<td><?= $ot_list['ITEMNO']; ?></td>
 																<td><?= $ot_list['MATERIALNO']; ?></td>
+																<td><?= $ot_list['ITEMDESC']; ?></td>
 																<td><?= $crmreqdate; ?></td>
 																<td><?= $ot_list['SALESNAME']; ?></td>
 																<td><?= $ot_list['ORDERDESC']; ?></td>

@@ -47,8 +47,9 @@
 
 							<div class="row">
 								<div class="col-sm-12">
+
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable table-hover">
+										<table class="table table-bordered table-striped dataTable table-hover nowrap" style="display:block; max-height:500px;">
 											<thead class="bg-gray disabled color-palette">
 												<tr>
 													<th width="1%">No</th>
@@ -63,7 +64,19 @@
 											<tbody>
 												<?php
 												$no = 0;
-												foreach ($users_data as $data) : ?>
+												$grouph = '';
+												foreach ($users_data as $data) :
+													if ($grouph != $data['GROUPID']) {
+												?>
+														<thead class="bg-black disabled color-palette">
+															<tr>
+																<td></td>
+																<td colspan="6">Group : <strong><?= $data['GROUPNAME'] ?></strong></td>
+															</tr>
+														</thead>
+													<?php
+														$grouph = $data['GROUPID'];
+													} ?>
 													<tr>
 														<td class="text-center"><?= ++$no; ?></td>
 														<td nowrap>
@@ -74,7 +87,7 @@
 																<a href="<?= base_url("usersetup/setactive/" . md5(trim($data['USERNAME']))) ?>" class="btn bg-navy btn-flat btn-sm" title="Set Active"><i class="fa fa-lock">&nbsp;</i></a>
 
 															<?php endif ?>
-															<a href="#" data-href="<?= base_url() . 'usersetup/delete/' . md5(trim($data['USERNAME'])); ?>" class="btn bg-maroon btn-flat btn-sm" title="Delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+															<a href="#" data-href="<?= base_url() . 'usersetup/delete/' . md5(trim($data['USERNAME'])) . '/1'; ?>" class="btn bg-maroon btn-flat btn-sm" title="Delete" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
 														</td>
 														<td>
 															<div class="user-panel">
@@ -91,6 +104,10 @@
 											</tbody>
 										</table>
 									</div>
+
+								</div>
+								<div class="col-sm-12" style="text-align: left;">
+									<code>Only deleted user with status inactive.</code>
 								</div>
 							</div>
 						</div>

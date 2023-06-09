@@ -96,7 +96,8 @@ class SalesorderList extends BaseController
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
-        $so_data = $this->SalesorderModel->select('*')
+        $so_data = $this->SalesorderModel->select('webot_CSR.*,' . 'it."DESC"' . ' as ITEMDESC')
+            ->join('ICITEM it', 'it.ITEMNO = webot_CSR.ITEMNO', 'left')
             ->groupStart()
             ->where('POSTINGSTAT =', 1)
             ->groupEnd()
@@ -167,7 +168,8 @@ class SalesorderList extends BaseController
         $todate = session()->get('to_date');
         $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
         if (empty($keyword)) {
-            $so_data = $this->SalesorderModel->select('*')
+            $so_data = $this->SalesorderModel->select('webot_CSR.*,' . 'it."DESC"' . ' as ITEMDESC')
+                ->join('ICITEM it', 'it.ITEMNO = webot_CSR.ITEMNO', 'left')
                 ->groupStart()
                 ->where('POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -177,7 +179,7 @@ class SalesorderList extends BaseController
                 ->groupEnd()
                 ->orderBy('PODATECUST', 'ASC');
         } else {
-            $so_data = $this->SalesorderModel->select('webot_CSR.*')
+            $so_data = $this->SalesorderModel->select('webot_CSR.*,' . 'it."DESC"' . ' as ITEMDESC')
                 ->join('ICITEM it', 'it.ITEMNO = webot_CSR.ITEMNO', 'left')
                 ->groupStart()
                 ->where('POSTINGSTAT =', 1)
@@ -202,6 +204,7 @@ class SalesorderList extends BaseController
                 ->orlike('SERVICETYPE', $keyword)
                 ->orlike('CRMREMARKS', $keyword)
                 ->orlike('webot_CSR.ITEMNO', $keyword)
+                ->orlike('it."DESC"', $keyword)
                 ->orlike('MATERIALNO', $keyword)
                 ->orlike('webot_CSR.STOCKUNIT', $keyword)
                 ->groupEnd()

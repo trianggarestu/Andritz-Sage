@@ -196,7 +196,7 @@
 								</li>
 								<li class="user-footer">
 									<div class="pull-left">
-										<a href="<?= base_url() ?>user_setting/" data-remote="false" data-toggle="modal" data-tittle="Pengaturan Pengguna" data-target="#modalBox">
+										<a href="<?= base_url() ?>usersetting/" data-remote="false" data-toggle="modal" data-tittle="Pengaturan Pengguna" data-target="#modalBox">
 											<button data-toggle="modal" class="btn bg-maroon btn-flat btn-sm">Profile</button>
 										</a>
 									</div>
