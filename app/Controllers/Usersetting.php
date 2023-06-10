@@ -94,7 +94,7 @@ class Usersetting extends BaseController
 		if (!$this->validate([
 			'name' => 'required|max_length[50]',
 			'photo' => [
-				'rules' => 'max_size[photo,3072]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
+				'rules' => 'max_size[photo,500]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
 				'errors' => [
 					'uploaded' => 'Please select the image',
 					'max_size' => 'Your image file is too large',

@@ -33,7 +33,10 @@ class Notif_model extends Model
 
 	function get_mailbox_unread($user)
 	{
-		$query = $this->db->query("select * from webot_MAILBOX where IS_READ=0 and IS_ARCHIVED=0 and IS_TRASHED=0 and IS_DELETED=0 and TO_USER='$user' order by SENDING_DATE desc, MAILSEQ desc");
+		$query = $this->db->query("select a.*,usr.PATH_PHOTO from webot_MAILBOX a 
+		left join webot_USERAUTH usr on usr.USERNAME=a.FROM_USER
+		where a.IS_READ=0 and a.IS_ARCHIVED=0 and a.IS_TRASHED=0 and a.IS_DELETED=0 and a.TO_USER='$user' 
+		order by a.SENDING_DATE desc, a.MAILSEQ desc");
 		return $query->getResultArray();
 	}
 

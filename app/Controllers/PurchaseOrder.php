@@ -48,7 +48,7 @@ class PurchaseOrder extends BaseController
         } else {
             $user = session()->get('username');
             $infouser = $this->LoginModel->datapengguna($user);
-            if (session()->get('keylog') == $infouser['passlgn']) {
+            if (session()->get('keylog') == $infouser['passlgn'] and session()->get('userhash') == $infouser['userhashlgn']) {
 
 
                 $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
@@ -57,6 +57,8 @@ class PurchaseOrder extends BaseController
                     'namalgn' => $infouser['namalgn'],
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'photolgn' => $infouser['photolgn'],
+                    'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
                     'success_code' => session()->get('success'),
                 ];

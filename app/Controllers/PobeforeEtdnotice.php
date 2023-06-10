@@ -45,8 +45,7 @@ class PobeforeEtdnotice extends BaseController
         } else {
             $user = session()->get('username');
             $infouser = $this->LoginModel->datapengguna($user);
-            if (session()->get('keylog') == $infouser['passlgn']) {
-
+            if (session()->get('keylog') == $infouser['passlgn'] and session()->get('userhash') == $infouser['userhashlgn']) {
 
                 $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
                 $this->header_data = [
@@ -54,6 +53,8 @@ class PobeforeEtdnotice extends BaseController
                     'namalgn' => $infouser['namalgn'],
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'photolgn' => $infouser['photolgn'],
+                    'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
                     'success_code' => session()->get('success'),
                 ];
@@ -95,18 +96,63 @@ class PobeforeEtdnotice extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
+        session()->remove('cari');
         //$today = substr($this->audtuser['AUDTDATE'], 5, 2) . "/" . substr($this->audtuser['AUDTDATE'], 7, 2) . "/" . substr($this->audtuser['AUDTDATE'], 0, 4);
         //$today = date('m/d/Y', strtotime($today));
         $pobeforeetd_data = $this->PurchaseorderModel->get_pobeforeetd();
 
         $data = array(
-            'pobeforeetdnotice_data' => $pobeforeetd_data,
+            'purchaseOrder_data' => $pobeforeetd_data,
             'ct_po_beforeetd' => $this->PurchaseorderModel->count_po_beforeetd(),
+            'keyword' => '',
         );
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
-        echo view('purchaseorder/data_po_beforeetd.php', $data);
+        //echo view('purchaseorder/data_po_beforeetd.php', $data);
+        echo view('purchaseorder/data_po_beforeetd', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
+    public function refresh()
+    {
+        session()->remove('cari');
+        return redirect()->to(base_url('pobeforeetdnotice'));
+    }
+
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('cari');
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('pobeforeetdnotice/filter'));
+    }
+
+
+    public function filter()
+    {
+        $keyword = session()->get('cari');
+        if (empty($keyword)) {
+            $pobeforeetd_data = $this->PurchaseorderModel->get_pobeforeetd();
+        } else {
+            $pobeforeetd_data = $this->PurchaseorderModel->get_pobeforeetd_search($keyword);
+        }
+        $data = array(
+            'purchaseOrder_data' => $pobeforeetd_data,
+            'ct_po_beforeetd' => $this->PurchaseorderModel->count_po_beforeetd(),
+            'keyword' => $keyword,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('purchaseorder/data_po_beforeetd', $data);
         echo view('view_footer', $this->footer_data);
     }
 

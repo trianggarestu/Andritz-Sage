@@ -49,6 +49,7 @@ class Usersetup extends BaseController
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
                     'photolgn' => $infouser['photolgn'],
+                    'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
                     'success_code' => session()->get('success'),
                 ];
@@ -157,7 +158,7 @@ class Usersetup extends BaseController
                 ]
             ],
             'photo' => [
-                'rules' => 'max_size[photo,3072]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
+                'rules' => 'max_size[photo,500]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
                 'errors' => [
                     'uploaded' => 'Please select the image',
                     'max_size' => 'Your image file is too large',
@@ -262,7 +263,7 @@ class Usersetup extends BaseController
 
             ],
             'photo' => [
-                'rules' => 'max_size[photo,3072]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
+                'rules' => 'max_size[photo,500]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
                 'errors' => [
                     'uploaded' => 'Please select the image',
                     'max_size' => 'Your image file is too large',

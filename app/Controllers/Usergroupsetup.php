@@ -52,6 +52,8 @@ class Usergroupsetup extends BaseController
                     'namalgn' => $infouser['namalgn'],
                     'emaillgn' => $infouser['emaillgn'],
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
+                    'photolgn' => $infouser['photolgn'],
+                    'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
                 ];
                 $this->footer_data = [

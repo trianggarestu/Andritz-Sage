@@ -34,7 +34,7 @@ class Administration extends BaseController
         } else {
             $user = session()->get('username');
             $chkuser = $this->LoginModel->datapengguna($user);
-            if (session()->get('keylog') == $chkuser['passlgn']) {
+            if (session()->get('keylog') == $chkuser['passlgn'] and session()->get('userhash') == $chkuser['userhashlgn']) {
 
 
                 $infouser = $this->LoginModel->datapengguna($user);
