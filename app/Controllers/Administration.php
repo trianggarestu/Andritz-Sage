@@ -46,6 +46,7 @@ class Administration extends BaseController
                     'issuperuserlgn' => $infouser['issuperuserlgn'],
                     'photolgn' => $infouser['photolgn'],
                     'userhashlgn' => $infouser['userhashlgn'],
+                    'usergrplgn' => $infouser['usergrplgn'],
                     'notif_messages' => $mailbox_unread,
                     'success_code' => session()->get('success'),
                 ];
@@ -76,9 +77,25 @@ class Administration extends BaseController
 
         $user = session()->get('username');
         $keylog = session()->GET('keylog');
-        //$activenavd='';
-        $data['chklgn'] = $keylog;
-        $data['pengguna'] = $this->header_data;
+        $latest_mailbox_in = $this->AdministrationModel->get_mailbox_in($user);
+        $latest_csr = $this->AdministrationModel->get_latest_csr();
+        $latest_requisition = $this->AdministrationModel->get_latest_requisition();
+        $latest_po = $this->AdministrationModel->get_latest_po();
+        $latest_logistics = $this->AdministrationModel->get_latest_logistics();
+        $latest_gr = $this->AdministrationModel->get_latest_gr();
+        $latest_shipments = $this->AdministrationModel->get_latest_shipments();
+        $latest_finance = $this->AdministrationModel->get_latest_finance();
+        $data = array(
+            'mailbox_in_data' => $latest_mailbox_in,
+            'csr_data' => $latest_csr,
+            'rqn_data' => $latest_requisition,
+            'po_data' => $latest_po,
+            'logistics_data' => $latest_logistics,
+            'gr_data' => $latest_gr,
+            'shi_data' => $latest_shipments,
+            'fin_data' => $latest_finance,
+            'keyword' => '',
+        );
 
         //return view('/admin/template',$data);
         echo view('view_header', $this->header_data);

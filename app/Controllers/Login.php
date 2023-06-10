@@ -23,6 +23,7 @@ class Login extends BaseController
     public function login()
     {
         $username = strtoupper($this->request->getPost('username'));
+        $userhash = md5(strtoupper($this->request->getPost('username')));
         $password = md5(strtoupper($this->request->getPost('password')));
 
         $cek = $this->LoginModel->ambilpengguna($username, $password);
@@ -33,7 +34,7 @@ class Login extends BaseController
             return redirect()->to(base_url());
         } else if (!empty($cek['USERNAME']) && !empty($cek['PASSWORD'])) {
             session()->set('keylog', $cek['PASSWORD']);
-            session()->set('userhash', $cek['USERHASH']);
+            session()->set('userhash', $userhash);
             session()->set('username', $cek['USERNAME']);
             return redirect()->to(base_url('administration'));
         }
