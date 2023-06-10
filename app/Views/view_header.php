@@ -97,7 +97,11 @@
 
 												<a href="<?= base_url(); ?>mailbox/view_messages/<?= $notifications['MAILSEQ'] ?>" data-remote="false" data-toggle="modal" data-tittle="View Messages" data-target="#modalBox">
 													<div class="pull-left">
-														<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="img-circle" alt="User Image">
+														<img src="<?php if (empty($notifications['PATH_PHOTO'])) {
+																		echo base_url('assets/files/user_pict/kuser.png');
+																	} else {
+																		echo base_url($notifications['PATH_PHOTO']);
+																	} ?>" class="img-circle" alt="User Image">
 													</div>
 													<h4>
 														<?= ucwords(strtolower($notifications['FROM_NAME'])); ?>
@@ -173,7 +177,11 @@
 												?>" class="user-image" alt="User Image" />-->
 								<?php //else :
 								?>
-								<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="user-image" alt="User Image" />
+								<img src="<?php if (empty($photolgn)) {
+												echo base_url('assets/files/user_pict/kuser.png');
+											} else {
+												echo base_url($photolgn);
+											} ?>" class="user-image" alt="User Image" />
 								<?php //endif 
 								?>
 								<span class="hidden-xs"><?php echo $namalgn;
@@ -187,7 +195,11 @@
 													?>" class="img-circle" alt="User Image" />-->
 									<?php //else :
 									?>
-									<img src="<?= base_url() ?>assets/files/user_pict/kuser.png" class="img-circle" alt="User Image" />
+									<img src="<?php if (empty($photolgn)) {
+													echo base_url('assets/files/user_pict/kuser.png');
+												} else {
+													echo base_url($photolgn);
+												} ?>" class="img-circle" alt="User Image" />
 									<?php //endif 
 									?>
 									<p>You are logged in as</p>

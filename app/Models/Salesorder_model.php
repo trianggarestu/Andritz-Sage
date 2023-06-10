@@ -128,7 +128,7 @@ class Salesorder_model extends Model
         or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
         or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
         or a.SERVICETYPE like '%$keyword%' or a.CRMREMARKS like '%$keyword%' or a.ITEMNO like '%$keyword%' or a.MATERIALNO like '%$keyword%'
-        or a.STOCKUNIT like '%$keyword%') and
+        or a.STOCKUNIT like '%$keyword%' or it." . '"DESC"' . " like '%$keyword%') and
         (a.PODATECUST>=$nfromdate and a.PODATECUST<=$ntodate)
         order by a.PODATECUST asc");
         return $query->getResultArray();
