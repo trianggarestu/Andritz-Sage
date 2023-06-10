@@ -188,10 +188,10 @@ class DeliveryOrdersList extends BaseController
                 ->where('webot_SHIPMENTS.POSTINGSTAT =', 1)
                 ->groupEnd()
                 ->groupStart()
-                ->where('po.PODATE >=', $nfromdate)
-                ->where('po.PODATE <=', $ntodate)
+                ->where('webot_SHIPMENTS.SHIDATE >=', $nfromdate)
+                ->where('webot_SHIPMENTS.SHIDATE <=', $ntodate)
                 ->groupEnd()
-                ->orderBy('po.PODATE', 'ASC');
+                ->orderBy('webot_SHIPMENTS.SHIDATE', 'ASC');
         } else {
             $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,' . 'it."DESC"' . ' as ITEMDESC')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_SHIPMENTS.CSRUNIQ', 'left')
@@ -200,11 +200,11 @@ class DeliveryOrdersList extends BaseController
                 ->join('ICITEM it', 'it.ITEMNO=csr.ITEMNO', 'left')
 
                 ->groupStart()
-                ->where('webot_RECEIPTS.POSTINGSTAT =', 1)
+                ->where('webot_SHIPMENTS.POSTINGSTAT =', 1)
                 ->groupEnd()
                 ->groupStart()
-                ->where('po.PODATE >=', $nfromdate)
-                ->where('po.PODATE <=', $ntodate)
+                ->where('webot_SHIPMENTS.SHIDATE >=', $nfromdate)
+                ->where('webot_SHIPMENTS.SHIDATE <=', $ntodate)
                 ->groupEnd()
                 ->groupStart()
 
@@ -231,7 +231,7 @@ class DeliveryOrdersList extends BaseController
 
 
                 ->groupEnd()
-                ->orderBy('webot_PO.PODATE', 'ASC');
+                ->orderBy('webot_SHIPMENTS.SHIDATE', 'ASC');
             //$so_data = $this->DeliveryordersModel ->get_csr_list_post_search($keyword);
         }
         $data = array(

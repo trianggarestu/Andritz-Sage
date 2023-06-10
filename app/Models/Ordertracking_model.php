@@ -12,10 +12,12 @@ use CodeIgniter\Model;
  */
 class Ordertracking_model extends Model
 {
+    protected $table = 'webot_ORDERTRACKING';
 
     //protected $table = 'ARCUS';
     function __construct()
     {
+
         parent::__construct();
     }
 
@@ -45,5 +47,24 @@ class Ordertracking_model extends Model
         $query = $this->db->query("select * from webot_ORDERTRACKING "
             . "where CSRUNIQ='$id_so' ");
         return $query->getRowArray();
+    }
+    function get_inv_preview()
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING ");
+        return $query->getResultArray();
+    }
+    function get_inv_preview_filter($keyword, $nfromdate, $ntodate)
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING
+                where 
+        (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%' or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%'
+        or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%' or CUSTOMER like '%$keyword%'
+        or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
+        or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
+        or STOCKUNIT like '%$keyword%' or IDINVC like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' 
+        or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%') and
+        (PODATECUST>=$nfromdate and PODATECUST<=$ntodate)
+        order by PODATECUST asc");
+        return $query->getResultArray();
     }
 }

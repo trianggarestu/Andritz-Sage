@@ -133,7 +133,24 @@
 																} else {
 																	$cargoreadiness_date = substr($ot_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 0, 4);
 																}
+																if ($ot_list['ETDORIGINDATE'] == '') {
+																	$etdori_date = '';
+																} else {
+																	$etd_date = substr($ot_list['ETDORIGINDATE'], 4, 2) . "/" . substr($ot_list['ETDORIGINDATE'], 6, 2) . "/" . substr($ot_list['ETDORIGINDATE'], 0, 4);
+																}
 
+																$podate = substr($ot_list['PODATE'], 4, 2) . "/" . substr($ot_list['PODATE'], 6, 2) . "/" . substr($ot_list['PODATE'], 0, 4);
+																$rqndate = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
+																$etd = substr($ot_list['ETDDATE'], 4, 2) . "/" . substr($ot_list['ETDDATE'], 6, 2) . "/" . substr($ot_list['ETDDATE'], 0, 4);
+																$cargo = substr($ot_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($ot_list['CARGOREADINESSDATE'], 0, 4);
+																$etdorigindate = substr($ot_list['ETDORIGINDATE'], 4, 2) . "/" . substr($ot_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($ot_list['ETDORIGINDATE'], 0, 4);
+																$atdorigindate = substr($ot_list['ATDORIGINDATE'], 4, 2) . "/" . substr($ot_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($ot_list['ATDORIGINDATE'], 0, 4);
+																$etaportdate = substr($ot_list['ETAPORTDATE'], 4, 2) . "/" . substr($ot_list['ETAPORTDATE'], 6, 2) . "/" .  substr($ot_list['ETAPORTDATE'], 0, 4);
+																$pibdate = substr($ot_list['PIBDATE'], 4, 2) . "/" . substr($ot_list['PIBDATE'], 6, 2) . "/" .  substr($ot_list['PIBDATE'], 0, 4);
+																$shidate = substr($ot_list['SHIDATE'], 4, 2) . "/" . substr($ot_list['SHIDATE'], 6, 2) . "/" .  substr($ot_list['SHIDATE'], 0, 4);
+																$grdate = substr($ot_list['RECPDATE'], 4, 2) . "/" . substr($ot_list['RECPDATE'], 6, 2) . "/" .  substr($ot_list['RECPDATE'], 0, 4);
+																$cusdate = substr($ot_list['CUSTRCPDATE'], 4, 2) . "/" . substr($ot_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($ot_list['CUSTRCPDATE'], 0, 4);
+																$invdate = substr($ot_list['INVOICEDATE'], 4, 2) . "/" . substr($ot_list['INVOICEDATE'], 6, 2) . "/" .  substr($ot_list['INVOICEDATE'], 0, 4);
 
 															?>
 																<tr>
@@ -154,39 +171,103 @@
 																	<td><?= $ot_list['STOCKUNIT']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['RQNNUMBER']; ?></td>
-																	<td><?= $rqn_date; ?></td>
+																	<td><?= $rqndate; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['PONUMBER']; ?></td>
-																	<td><?= $po_date; ?></td>
-																	<td><?= $etd_date; ?></td>
-																	<td <?php if (empty($ot_list['CARGOREADINESSDATE'])) {
-																			echo 'style="background-color: red;"';
-																		} ?>><?= $cargoreadiness_date; ?></td>
+																	<td><?= $podate; ?></td>
+																	<td><?= $etd; ?></td>
+																	<td><?= $cargo; ?></td>
 																	<td><?= $ot_list['ORIGINCOUNTRY']; ?></td>
 																	<td><?= $ot_list['POREMARKS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['ETDORIGINDATE']; ?></td>
-																	<td><?= $ot_list['ATDORIGINDATE']; ?></td>
-																	<td><?= $ot_list['ETAPORTDATE']; ?></td>
-																	<td><?= $ot_list['PIBDATE']; ?></td>
+																	<td><?= $etdorigindate; ?></td>
+																	<td><?= $atdorigindate; ?></td>
+																	<td><?= $etaportdate; ?></td>
+																	<td><?= $pibdate; ?></td>
 																	<td><?= $ot_list['VENDSHISTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['RECPDATE']; ?></td>
+																	<td><?= $grdate ?></td>
 																	<td><?= $ot_list['RECPQTY']; ?></td>
-																	<td><?= $ot_list['GRSTATUS']; ?></td>
+																	<td><?php $dnpostingstat = $ot_list['GRSTATUS'];
+																		switch ($dnpostingstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Deleted";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
+																	</td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['SHIDATE']; ?></td>
+																	<td><?= $shidate ?></td>
 																	<td><?= $ot_list['SHINUMBER']; ?></td>
-																	<td><?= $ot_list['CUSTRCPDATE']; ?></td>
+																	<td><?= $cusdate; ?></td>
 																	<td><?= $ot_list['SHIQTY']; ?></td>
 																	<td><?= $ot_list['SHIQTYOUTSTANDING']; ?></td>
-																	<td><?= $ot_list['POCUSTSTATUS']; ?></td>
-																	<td><?= $ot_list['DNSTATUS']; ?></td>
+																	<td><?php $postatus = $ot_list['POCUSTSTATUS'];
+																		switch ($postatus) {
+																			case "0":
+																				echo "Partial";
+																				break;
+																			case "1":
+																				echo "Completed";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
+																	<td><?php $dnpostingstat = $ot_list['DNSTATUS'];
+																		switch ($dnpostingstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Deleted";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
+																	</td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['INVOICEDATE']; ?></td>
-																	<td><?= $ot_list['FINSTATUS']; ?></td>
+																	<td><?= $invdate ?></td>
+																	<td><?php $invstat = $ot_list['FINSTATUS'];
+																		switch ($invstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Done";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
+																	</td>
 																	<td style="background-color: white;"></td>
-																	<td><?= $ot_list['RRSTATUS']; ?></td>
+																	<td><?php $rrstat = $ot_list['RRSTATUS'];
+																		switch ($rrstat) {
+																			case "0":
+																				echo "Open";
+																				break;
+																			case "1":
+																				echo "Posted";
+																				break;
+																			case "2":
+																				echo "Done";
+																				break;
+																			default:
+																				echo "";
+																		} ?>
+																	</td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['POCUSTTOPRDAYS']; ?></td>
 																	<td><?= $ot_list['POTOPODAYS']; ?></td>

@@ -130,6 +130,7 @@
 																		default:
 																			echo "";
 																	} ?>
+																</td>
 																<td><?php $dnpostingstat = $data_list['DNPOSTINGSTAT'];
 																	switch ($dnpostingstat) {
 																		case "0":

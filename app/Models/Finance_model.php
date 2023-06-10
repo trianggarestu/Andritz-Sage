@@ -152,15 +152,36 @@ class Finance_model extends Model
         //Tanpa return juga bisa jalan
         return $query;
     }
-
-
-
-
     // Untuk Fill Invoice List
     function count_fin_posting()
     {
         $builder = $this->db->table('webot_FINANCE');
         $builder->where('webot_FINANCE.POSTINGSTAT=', 1);
         return $builder->countAllResults();
+    }
+
+    function get_inv_preview()
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_FINANCE a
+        left join webot_SHIPMENTS c on c.SHIUNIQ=a.SHIUNIQ
+        left join webot_CSR b on a.CSRUNIQ =b.CSRUNIQ
+
+        where a.POSTINGSTAT=1");
+        return $query->getResultArray();
+    }
+    function get_inv_preview_filter($keyword, $nfromdate, $ntodate)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_FINANCE a
+        left join webot_SHIPMENTS c on c.SHIUNIQ=a.SHIUNIQ
+        left join webot_CSR b on a.CSRUNIQ =b.CSRUNIQ
+        where (a.POSTINGSTAT = '1') and 
+        (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
+        or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
+        or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
+        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
+        or b.STOCKUNIT like '%$keyword%' or a.IDINVC like '%$keyword%' or c.SHIDATE like '%$keyword%') and
+        (a.INVOICEDATE>=$nfromdate and a.INVOICEDATE<=$ntodate)
+        order by a.INVOICEDATE asc");
+        return $query->getResultArray();
     }
 }
