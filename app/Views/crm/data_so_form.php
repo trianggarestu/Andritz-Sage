@@ -86,7 +86,11 @@
 								<div class='col-sm-2'>
 									<div class="form-group">
 										<label for="ct_salesperson">Sales Person</label>
-										<input type="text" class="form-control input-sm required" id="ct_salesperson" name="ct_salesperson" placeholder="" value="<?= $ct_salesperson; ?>" readonly />
+										<input type="text" class="form-control input-sm required" id="ct_salesperson" name="ct_salesperson" placeholder="" value="<?= $ct_salesperson; ?>" <?php if ($ct_salesperson == '') {
+																																																echo '';
+																																															} else {
+																																																echo 'readonly';
+																																															} ?> />
 									</div>
 								</div>
 
