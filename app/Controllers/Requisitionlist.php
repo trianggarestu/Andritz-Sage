@@ -104,16 +104,15 @@ class RequisitionList extends BaseController
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
-        $pr_data = $this->RequisitionModel->select('webot_REQUISITION.*,csr.*')
-            ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_REQUISITION.CSRUNIQ', 'left')
+        $pr_data = $this->RequisitionModel->select('*')
             ->groupStart()
-            ->where('webot_REQUISITION.POSTINGSTAT =', 1)
+            ->where('POSTINGSTAT =', 1)
             ->groupEnd()
             ->groupStart()
-            ->where('webot_REQUISITION.RQNDATE >=', $fr_date)
-            ->where('webot_REQUISITION.RQNDATE <=', $to_date)
+            ->where('RQNDATE >=', $fr_date)
+            ->where('RQNDATE <=', $to_date)
             ->groupEnd()
-            ->orderBy('webot_REQUISITION.RQNDATE', 'ASC');
+            ->orderBy('RQNDATE', 'ASC');
         $perpage = 20;
         $data = array(
             'keyword' => '',
