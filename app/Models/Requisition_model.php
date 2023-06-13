@@ -69,12 +69,15 @@ class Requisition_model extends Model
     function get_requisition_sage($contract)
     {
         // Sementara Untuk simulasi, Cari Request yang ketemu sampai Received
+        // kalau sudah Go Live, Hapus Inner Join POPORH1 & inner join PORCPH1
         $query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
         from ENRQNH a 
         inner join POPORH1 b on b.PONUMBER=a.PONUMBERS
         inner join PORCPH1 c on c.PONUMBER=a.PONUMBERS
         where " . 'a."DATE"' . ">=20220101 and
         a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");
+
+
         // untuk simulasi 
         /*$query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER,a." . '"DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS
         from ENRQNH a
