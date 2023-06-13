@@ -229,7 +229,9 @@ class DeliveryOrdersList extends BaseController
                 ->orlike('csr.MATERIALNO', $keyword)
                 ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('csr.STOCKUNIT', $keyword)
-                ->orlike('webot_RECEIPTS.RECPNUMBER', $keyword)
+                ->orlike('webot_SHIPMENTS.SHINUMBER', $keyword)
+                ->orlike('webot_SHIPMENTS.DOCNUMBER', $keyword)
+                ->orlike('it.DESC', $keyword)
 
 
                 ->groupEnd()

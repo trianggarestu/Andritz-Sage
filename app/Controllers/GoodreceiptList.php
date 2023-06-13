@@ -203,7 +203,7 @@ class GoodreceiptList extends BaseController
 
                 ->like('csr.CONTRACT', $keyword)
                 ->orlike('csr.PROJECT', $keyword)
-                ->orlike('po.PONUMBER', $keyword)
+
                 ->orlike('csr.MANAGER', $keyword)
                 ->orlike('csr.SALESNAME', $keyword)
                 ->orlike('csr.PROJECT', $keyword)
@@ -221,10 +221,11 @@ class GoodreceiptList extends BaseController
                 ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('webot_RECEIPTS.RECPNUMBER', $keyword)
+                ->orlike('webot_RECEIPTS.ITEMDESC', $keyword)
 
 
                 ->groupEnd()
-                ->orderBy('webot_PO.PODATE', 'ASC');
+                ->orderBy('po.PODATE', 'ASC');
             //$so_data = $this->GoodreceiptModel->get_csr_list_post_search($keyword);
         }
         $data = array(
