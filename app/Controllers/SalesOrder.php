@@ -653,7 +653,7 @@ class SalesOrder extends BaseController
         <br><br>
         You can access Order Tracking System Portal via the URL below:
         <br>
-        Http://jktsms025:...
+        <a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
         <br>
         Thanks for your cooperation. 
         <br><br>
@@ -677,7 +677,7 @@ class SalesOrder extends BaseController
                 <br><br>
                 You can access Order Tracking System Portal via the URL below:
                 <br>
-                Http://jktsms025:...
+                <a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
                 <br>
                 Thanks for your cooperation. 
                 <br><br>
@@ -765,7 +765,7 @@ Please to follow up CRM No :' . $getcsropen['CRMNO'] . ' / Customer PO : ' . $ge
 <br><br>
 You can access Order Tracking System Portal via the URL below:
 <br>
-Http://jktsms025:...
+<a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
 <br>
 Thanks for your cooperation. 
 <br><br>
@@ -789,7 +789,7 @@ Order Tracking Administrator',
         <br><br>
         You can access Order Tracking System Portal via the URL below:
         <br>
-        Http://jktsms025:...
+        <a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
         <br>
         Thanks for your cooperation. 
         <br><br>

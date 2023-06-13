@@ -23,68 +23,30 @@
                             <select class="form-control input-sm select2 required" id="contract" name="contract" style="width:100%;">
                                 <option option value="">-- Select Contract--</option>
                                 <?php foreach ($contractopen as $data) :
+                                    $ct_startdate = substr($data['STARTDATE'], 4, 2) . "/" . substr($data['STARTDATE'], 6, 2) . "/" .  substr($data['STARTDATE'], 0, 4);
                                 ?>
                                     <option value="<?= trim($data['CONTRACT'])
                                                     ?>">(<?= trim($data['CONTRACT'])
-                                                            ?>) - <?= $data['DESC'] . " - " . $data['NAMECUST']
-                                                                    ?>
+                                                            ?> - <?= $ct_startdate ?>) - <?= $data['DESC'] . " - " . $data['CUSTOMER']
+                                                                                            ?>
                                     </option>
                                 <?php endforeach;
                                 ?>
                             </select>
 
-                            <?php //echo form_dropdown('contract', $contractopen, isset($contract) ? $contract : '', 'class="form-control input-sm select2 required"', 'style="width:100%;'); 
-                            ?>
 
+                            <input type="hidden" id="contractx" name="contractx" value="uuu">
+                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                only viewed contract with open status
+
+                            </p>
                         </div>
-                        <!--<div class="row">
-                            <div class="col-sm-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered dataTable table-striped table-hover">
-                                        <thead class="bg-gray disabled color-palette">
-                                            <tr>
-                                                <th>Contract</th>
-                                                <th>Description</th>
-                                                <th>Customer</th>
-                                                <th>Select</th>
-                                            </tr>
-                                            <?php //foreach ($contractopen as $data) :
-                                            ?>
-                                                <tr>
-                                                    <td><? //= $data['CONTRACT'] 
-                                                        ?></td>
-                                                    <td><? //= $data['DESC'] 
-                                                        ?></td>
-                                                    <td><? //= $data['NAMECUST'] 
-                                                        ?></td>
-                                                    <td>
-                                                        <form action="<? //= $form_action
-                                                                        ?>" method="post" id="validasi">
-                                                            <input type="hidden" id="contract" name="contract" value="<? //= $data['CONTRACT'] 
-                                                                                                                        ?>">
-                                                            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i>&nbsp;</button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            <?php //endforeach;
-                                            ?>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                                            -->
-                        <input type="hidden" id="contractx" name="contractx" value="uuu">
-                        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                            only viewed contract with open status
-                        </p>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
+                <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> Choose</button>
+            </div>
         </div>
-        <div class="modal-footer">
-            <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
-            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> Choose</button>
-        </div>
-    </div>
 </form>

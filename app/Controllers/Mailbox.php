@@ -358,12 +358,31 @@ class Mailbox extends BaseController
             $sending_date = substr($row['SENDING_DATE'], 4, 2) . "/" . substr($row['SENDING_DATE'], 6, 2) . "/" .  substr($row['SENDING_DATE'], 0, 4);
             $sending_date = date('M d Y', strtotime($sending_date));
             $time = strlen($row['SENDING_TIME']);
-            if ($time == 5) {
-                $n_time = '0' . $row['SENDING_TIME'];
-            } else if ($time == 6) {
-                $n_time = $row['SENDING_TIME'];
+            switch ($time) {
+                case "0":
+                    $sending_time = '00:00';
+                    break;
+                case "1":
+                    $sending_time = '00:00';
+                    break;
+                case "2":
+                    $sending_time = '00:00';
+                    break;
+                case "3":
+                    $sending_time = '00:0' . substr($row['SENDING_TIME'], 0, 1);
+                    break;
+                case "4":
+                    $sending_time = '00:' . substr($row['SENDING_TIME'], 0, 2);
+                    break;
+                case "5":
+                    $sending_time = '0' . substr($row['SENDING_TIME'], 0, 1) . ':' . substr($row['SENDING_TIME'], 1, 2);
+                    break;
+                case "6":
+                    $sending_time = substr($row['SENDING_TIME'], 0, 2) . ":" . substr($row['SENDING_TIME'], 2, 2);
+                    break;
+                default:
+                    $sending_time = '00:00';
             }
-            $sending_time = substr($n_time, 0, 2) . ":" . substr($n_time, 3, 2);
             $data = array(
                 'id' => $row['MAILSEQ'],
                 'from_email' => $row['FROM_EMAIL'],

@@ -23,16 +23,13 @@ class Salesorder_model extends Model
 
     function list_contract_open()
     {
-        $query = $this->db->query("select a.CTUNIQ,a.CONTRACT,a." . '"DESC"' . ",a.CUSTOMER,b.NAMECUST,a.MANAGER,c." . '"NAME"' . " from PMCONTS a "
+        $query = $this->db->query("select a.CTUNIQ,a.STARTDATE,a.CONTRACT,a." . '"DESC"' . ",a.CUSTOMER,b.NAMECUST,a.MANAGER,c." . '"NAME"' . " from PMCONTS a "
             . "left join ARCUS b on b.IDCUST=a.CUSTOMER "
             . "left join PMSTAFF c on c.STAFFCODE=a.MANAGER "
             . "where a.STATUS=30 and a.CUSTOMER<>'' and "
-            //. "a.CONTRACT IN (select c.CONTRACT
-            //from ENRQNH a
-            //inner join (select r.PONUMBER,r." . '"DATE"' . ",s.PORHSEQ,s.PORLSEQ,s.CONTRACT,s.PROJECT,s.ITEMDESC from POPORH1 r inner join POPORL s on s.PORHSEQ=r.PORHSEQ) c on c.PONUMBER=a.PONUMBERS
-            //inner join (select x.PONUMBER,x.RCPNUMBER,x." . '"DATE"' . ",y.PORHSEQ,y.PORLSEQ,y.CONTRACT,y.PROJECT,y.ITEMDESC from PORCPH1 x inner join PORCPL y on y.RCPHSEQ=x.RCPHSEQ) d on d.PORHSEQ=c.PORHSEQ and d.PORLSEQ=c.PORLSEQ
-            //where c.CONTRACT<>'') and "
-            . "a.CONTRACT NOT IN (select CONTRACT from webot_CSR where POSTINGSTAT<>2) ");
+            //. "a.STARTDATE>='20220101' "
+            . "a.CONTRACT NOT IN (select CONTRACT from webot_CSR where POSTINGSTAT<>2)"
+            . "order by a.STARTDATE desc,a.CONTRACT desc");
 
         if ($query->getResult() > 0) {
             return $query->getResultArray();
@@ -91,7 +88,7 @@ class Salesorder_model extends Model
 
     function get_contract_by_id($ct_no)
     {
-        $query = $this->db->query("select a.CTUNIQ,a.CONTRACT,a." . '"DESC"' . ",a.CUSTOMER,b.NAMECUST,b.EMAIL1,b.EMAIL2,a.MANAGER,c." . '"NAME"' . " from PMCONTS a "
+        $query = $this->db->query("select a.CTUNIQ,a.STARTDATE,a.CONTRACT,a." . '"DESC"' . ",a.CUSTOMER,b.NAMECUST,b.EMAIL1,b.EMAIL2,a.MANAGER,c." . '"NAME"' . " from PMCONTS a "
             . "left join ARCUS b on b.IDCUST=a.CUSTOMER "
             . "left join PMSTAFF c on c.STAFFCODE=a.MANAGER "
             . "where a.CONTRACT='$ct_no' ");

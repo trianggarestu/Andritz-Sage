@@ -105,7 +105,11 @@
 								<div class='col-sm-2'>
 									<div class="form-group">
 										<label for="ct_email">Customer Email </label>
-										<input type="text" class="form-control input-sm required" id="ct_email" name="ct_email" placeholder="" value="<?= $ct_email; ?>" readonly />
+										<input type="text" class="form-control input-sm required" id="ct_email" name="ct_email" placeholder="" value="<?= $ct_email; ?>" <?php if ($ct_email == '') {
+																																												echo '';
+																																											} else {
+																																												echo 'readonly';
+																																											} ?> />
 									</div>
 								</div>
 								<div class='col-sm-8'>
@@ -126,7 +130,9 @@
 									<div class='form-group'>
 										<label for="prj_no">Project </label>
 										<div class="input-group">
-											<span class="input-group-addon input-sm"><a href="<?= base_url() . 'salesorder/form_select_project_by_contract/' . $ct_no; ?>/" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class=" fa fa-search"></i></a></span>
+											<span class="input-group-addon input-sm">
+												<a href="<?= base_url() . 'salesorder/form_select_project_by_contract/' . $ct_no; ?>/" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class=" fa fa-search"></i></a>
+											</span>
 											<input type="text" maxlength="10" size="10" class="form-control input-sm required" id="prj_no" name="prj_no" placeholder="Project Number" value="<?= $prj_no; ?>" readonly>
 										</div></input>
 									</div>
