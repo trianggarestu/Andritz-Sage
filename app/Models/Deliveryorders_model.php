@@ -34,6 +34,7 @@ class Deliveryorders_model extends Model
         left join ICITEM it on it.ITEMNO=b.ITEMNO
 		left join webot_SHIPMENTS c on c.RCPUNIQ=a.RCPUNIQ
         where (a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0 and c.EDNFILENAME IS NULL) 
+        or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0 and c.EDNFILENAME IS NOT NULL) 
         or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=0 and c.EDNFILENAME IS NULL)");
 
         return $query->getResultArray();
