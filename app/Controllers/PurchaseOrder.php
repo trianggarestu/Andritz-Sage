@@ -475,9 +475,10 @@ class PurchaseOrder extends BaseController
                 $this->PurchaseorderModel->purchaseorder_update($id_po, $data1);
 
                 if ($post_stat == 1) {
-                    $podate = date_create(substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 0, 4));
+                    $podate = substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 0, 4);
+                    $podate2 = date_create(substr($choose_po['PODATE'], 4, 2) . "/" . substr($choose_po['PODATE'], 6, 2) . "/" . substr($choose_po['PODATE'], 0, 4));
                     $pocust_date = date_create(substr($get_pr['PODATECUST'], 4, 2) . "/" . substr($get_pr['PODATECUST'], 6, 2) . "/" .  substr($get_pr['PODATECUST'], 0, 4));
-                    $pocusttopodiff = date_diff($podate, $pocust_date);
+                    $pocusttopodiff = date_diff($podate2, $pocust_date);
                     $pocusttopodiff = $pocusttopodiff->format("%a");
                     $data2 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
