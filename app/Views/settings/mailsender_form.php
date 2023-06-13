@@ -54,7 +54,7 @@
 																			<td class="col-sm-6">
 																				<div class="input-group">
 																					<span class="input-group-addon input-sm "><i class="fa fa-expeditedssl"></i></span>
-																					<input id="sender_ssl" name="sender_ssl" class="form-control input-sm required" type="text" placeholder="Navigation Name" value="<?= ($mailsender_data['SSL']) ?>" maxlength="10" readonly></input>
+																					<input id="sender_ssl" name="sender_ssl" class="form-control input-sm" type="text" placeholder="Navigation Name" value="<?= ($mailsender_data['SSL']) ?>" maxlength="10"></input>
 																				</div>
 																			</td>
 																		</tr>

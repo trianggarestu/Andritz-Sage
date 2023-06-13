@@ -173,14 +173,14 @@
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-																				<?php if (($shi_list['POSTINGSTAT'] == 0) or (empty($shi_list['OFFLINESTAT']))) :
+																				<?php if (($shi_list['POSTINGSTAT'] == 0) or (empty($shi_list['POSTINGSTAT']))) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("deliveryorders/update/" . $shi_list['RCPRCPUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Input Delivery Orders & Save</a>
 																					</li>
 																				<?php endif;
 																				?>
-																				<?php if ($shi_list['POSTINGSTAT'] == 1 and $shi_list['OFFLINESTAT'] == 1 and empty($shi_list['EDNFILENAME'])) :
+																				<?php if ($shi_list['POSTINGSTAT'] == 1 and empty($shi_list['EDNFILENAME'])) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("deliveryorders/shipmentopenview/" . $shi_list['SHIUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-upload"></i> Upload e-DN & Send Notif</a>

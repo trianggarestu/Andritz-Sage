@@ -380,7 +380,7 @@ class ConfirmdnOrigin extends BaseController
                     'SUBJECT' => 'Pending Requisition Allert. DN Number : ' . $choose_shi["SHINUMBER"],
                     'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
     
-                                    Please to follow up DN Origin :' . $choose_rqn["SHINUMBER"] . '(' . $shidate . ') is pending for you to process Finance.
+                                    Please to follow up DN Origin :' . $choose_shi["SHINUMBER"] . '(' . $shidate . ') is pending for you to process Finance.
                         <br><br>
                         You can access Order Tracking System Portal via the URL below:
                         <br>
@@ -500,8 +500,8 @@ class ConfirmdnOrigin extends BaseController
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
-        $attachment_filepath = $data_email['attachment_filepath'];
-        $attachment_filename = $data_email['attachment_filename'];
+        $attachment_filepath = '';
+        $attachment_filename = '';
 
         $mail = new PHPMailer(true);
 

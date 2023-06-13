@@ -511,8 +511,8 @@ class FillInvoice extends BaseController
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
-        $attachment_filepath = $data_email['attachment_filepath'];
-        $attachment_filename = $data_email['attachment_filename'];
+        $attachment_filepath = '';
+        $attachment_filename = '';
 
         $mail = new PHPMailer(true);
 
