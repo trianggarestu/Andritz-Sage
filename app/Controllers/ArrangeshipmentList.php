@@ -179,25 +179,25 @@ class ArrangeshipmentList extends BaseController
         if (empty($keyword)) {
             $log_data = $this->LogisticsModel->select('webot_LOGISTICS.*,po.*,csr.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'left')
-                ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ and po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
+                ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
                 ->groupStart()
                 ->where('webot_LOGISTICS.POSTINGSTAT =', 1)
                 ->groupEnd()
                 ->groupStart()
-                ->where('po.PODATE >=', $nfromdate)
-                ->where('po.PODATE <=', $ntodate)
+                ->where('webot_LOGISTICS.ETDORIGINDATE >=', $nfromdate)
+                ->where('webot_LOGISTICS.ETDORIGINDATE <=', $ntodate)
                 ->groupEnd()
-                ->orderBy('po.PODATE', 'ASC');
+                ->orderBy('webot_LOGISTICS.ETDORIGINDATE', 'ASC');
         } else {
             $log_data = $this->LogisticsModel->select('webot_LOGISTICS.*,po.*,csr.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'left')
-                ->join('webot_PO po', 'po.CSRUNIQ = csr.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
+                ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
                 ->groupStart()
                 ->where('webot_LOGISTICS.POSTINGSTAT =', 1)
                 ->groupEnd()
                 ->groupStart()
-                ->where('po.PODATE >=', $nfromdate)
-                ->where('po.PODATE <=', $ntodate)
+                ->where('webot_LOGISTICS.ETDORIGINDATE >=', $nfromdate)
+                ->where('webot_LOGISTICS.ETDORIGINDATE <=', $ntodate)
                 ->groupEnd()
                 ->groupStart()
                 ->like('csr.CONTRACT', $keyword)
@@ -217,10 +217,13 @@ class ArrangeshipmentList extends BaseController
                 ->orlike('csr.ITEMNO', $keyword)
                 ->orlike('csr.MATERIALNO', $keyword)
                 ->orlike('csr.STOCKUNIT', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
+                ->orlike('po.ORIGINCOUNTRY', $keyword)
                 ->orlike('webot_LOGISTICS.PONUMBER', $keyword)
+                ->orlike('po.POREMARKS', $keyword)
+                ->orlike('webot_LOGISTICS.VENDSHISTATUS', $keyword)
+
                 ->groupEnd()
-                ->orderBy('po.PODATE', 'ASC');
+                ->orderBy('webot_LOGISTICS.ETDORIGINDATE', 'ASC');
             //$so_data = $this->LogisticsModel->get_csr_list_post_search($keyword);
         }
         $data = array(
@@ -316,6 +319,7 @@ class ArrangeshipmentList extends BaseController
             ->setCellValue('L1', 'PIBDATE')
             ->setCellValue('M1', 'SHIPMENTSTATUS');
 
+
         $rows = 2;
         // tulis data mobil ke cell
         $no = 1;
@@ -384,12 +388,14 @@ class ArrangeshipmentList extends BaseController
                 ->setCellValue('K' . $rows, $portdate)
                 ->setCellValue('L' . $rows, $pibdate)
                 ->setCellValue('M' . $rows, $data['VENDSHISTATUS'])
+
+
                 ->setCellValue('Q' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'L_data';
+        $fileName = 'Logistics_data';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

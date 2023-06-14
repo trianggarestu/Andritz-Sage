@@ -104,15 +104,17 @@ class PurchaseOrderList extends BaseController
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
-        $po_data = $this->PurchaseorderModel->select('*')
+        $po_data = $this->PurchaseorderModel->select('webot_PO.*,pr.*,csr.*')
+            ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_PO.CSRUNIQ', 'left')
+            ->join('webot_REQUISITION pr', 'pr.CSRUNIQ = webot_po.CSRUNIQ ', 'left')
             ->groupStart()
-            ->where('POSTINGSTAT =', 1)
+            ->where('webot_PO.POSTINGSTAT =', 1)
             ->groupEnd()
             ->groupStart()
-            ->where('PODATE >=', $fr_date)
-            ->where('PODATE<=', $to_date)
+            ->where('webot_PO.PODATE >=', $fr_date)
+            ->where('webot_PO.PODATE<=', $to_date)
             ->groupEnd()
-            ->orderBy('PODATE', 'ASC');
+            ->orderBy('webot_PO.PODATE', 'ASC');
         $perpage = 20;
         $data = array(
             'keyword' => '',
@@ -177,7 +179,7 @@ class PurchaseOrderList extends BaseController
         if (empty($keyword)) {
             $po_data = $this->PurchaseorderModel->select('webot_PO.*,pr.*,csr.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_PO.CSRUNIQ', 'left')
-                ->join('webot_REQUISITION pr', 'pr.CSRUNIQ = webot_po.CSRUNIQ', 'pr.RQNUNIQ = webot_PO.RQNUNIQ', 'left')
+                ->join('webot_REQUISITION pr', 'pr.CSRUNIQ = webot_po.CSRUNIQ', 'left')
                 ->groupStart()
                 ->where('webot_PO.POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -189,7 +191,7 @@ class PurchaseOrderList extends BaseController
         } else {
             $po_data = $this->PurchaseorderModel->select('webot_PO.*,pr.*,csr.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_PO.CSRUNIQ', 'left')
-                ->join('webot_REQUISITION pr', 'pr.CSRUNIQ = webot_po.CSRUNIQ', 'pr.RQNUNIQ = webot_PO.RQNUNIQ', 'left')
+                ->join('webot_REQUISITION pr', 'pr.CSRUNIQ = webot_po.CSRUNIQ', 'left')
                 ->groupStart()
                 ->where('webot_PO.POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -219,6 +221,11 @@ class PurchaseOrderList extends BaseController
                 ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('webot_PO.PONUMBER', $keyword)
+                ->orlike('webot_PO.ORIGINCOUNTRY ', $keyword)
+                ->orlike('webot_PO.POREMARKS', $keyword)
+                ->orlike('csr.CTDESC', $keyword)
+                ->orlike('csr.NAMECUST', $keyword)
+                ->orlike('csr.QTY', $keyword)
 
 
                 ->groupEnd()

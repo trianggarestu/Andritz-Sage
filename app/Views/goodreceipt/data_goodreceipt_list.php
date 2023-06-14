@@ -63,36 +63,36 @@
 											</div>
 										</div>
 									</form>
-								</div>
-								<div class="row">
-									<div class="col-sm-12">
-										<div class="table-responsive">
-											<table class="table table-bordered table-striped dataTable table-hover nowrap">
-												<thead class="bg-gray disabled color-palette">
-													<tr>
-														<th>No.</th>
-														<th>Status</th>
-														<th>Receipt Number</th>
-														<th>GR. Date</th>
-														<th>Vendor Name</th>
-														<th>Description</th>
-														<th>Item</th>
-														<th>QTY Receipt</th>
-														<th>GR Status</th>
-														<th style="background-color: white;"></th>
-														<th>PO Number</th>
-														<th>PO Date</th>
 
-													</tr>
-												</thead>
-												<tbody>
-													<?php
-													$no = 0;
-													?>
-													<?php foreach ($gr_data as $data_list) {
-														$rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['RECPDATE'], 6, 2) . "/" .  substr($data_list['RECPDATE'], 0, 4);
-														$povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);
-														/*
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped dataTable table-hover nowrap">
+													<thead class="bg-gray disabled color-palette">
+														<tr>
+															<th>No.</th>
+															<th>Status</th>
+															<th>Receipt Number</th>
+															<th>GR. Date</th>
+															<th>Vendor Name</th>
+															<th>Description</th>
+															<th>Item</th>
+															<th>QTY Receipt</th>
+															<th>GR Status</th>
+															<th style="background-color: white;"></th>
+															<th>PO Number</th>
+															<th>PO Date</th>
+
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														$no = 0;
+														?>
+														<?php foreach ($gr_data as $data_list) {
+															$rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['RECPDATE'], 6, 2) . "/" .  substr($data_list['RECPDATE'], 0, 4);
+															$povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);
+															/*
 																
 																$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
 																$etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
@@ -100,54 +100,69 @@
 																$etaportdate = substr($data_list['ETAPORTDATE'], 4, 2) . "/" . substr($data_list['ETAPORTDATE'], 6, 2) . "/" .  substr($data_list['ETAPORTDATE'], 0, 4);
 																$pibdate = substr($data_list['PIBDATE'], 4, 2) . "/" . substr($data_list['PIBDATE'], 6, 2) . "/" .  substr($data_list['PIBDATE'], 0, 4);
 */
-													?>
+														?>
 
-														<tr>
-															<td><?= ++$no ?></td>
-															<td><?php $rcppostingstat = $data_list['POSTINGSTAT'];
-																switch ($rcppostingstat) {
-																	case "0":
-																		echo "Open";
-																		break;
-																	case "1":
-																		echo "Posted";
-																		break;
-																	case "2":
-																		echo "Deleted";
-																		break;
-																	default:
-																		echo "Posted";
-																} ?>
-															</td>
-															<td><?= $data_list['RECPNUMBER'] ?></td>
-															<td><?= $rcpdate; ?></td>
-															<td><?= $data_list['VDNAME'] ?></td>
-															<td><?= $data_list['DESCRIPTIO'] ?></td>
-															<td><?= $data_list['ITEMDESC'] ?></td>
-															<td><?= $data_list['RECPQTY'] ?></td>
-															<td><?= $data_list['GRSTATUS'] ?></td>
-															<td style="background-color: white;"></td>
-															<td><strong><a href="#"><?= $data_list['PONUMBER'] ?></a></strong></td>
-															<td><?= $povendate; ?></td>
-														</tr>
+															<tr>
+																<td><?= ++$no ?></td>
+																<td><?php $rcppostingstat = $data_list['POSTINGSTAT'];
+																	switch ($rcppostingstat) {
+																		case "0":
+																			echo "Open";
+																			break;
+																		case "1":
+																			echo "Posted";
+																			break;
+																		case "2":
+																			echo "Deleted";
+																			break;
+																		default:
+																			echo "";
+																	} ?>
+																</td>
+																<td><?= $data_list['RECPNUMBER'] ?></td>
+																<td><?= $rcpdate; ?></td>
+																<td><?= $data_list['VDNAME'] ?></td>
+																<td><?= $data_list['DESCRIPTIO'] ?></td>
+																<td><?= $data_list['ITEMDESC'] ?></td>
+																<td><?= $data_list['RECPQTY'] ?></td>
+																<td><?php $rcppostingstat = $data_list['GRSTATUS'];
+																	switch ($rcppostingstat) {
+																		case "0":
+																			echo "Open";
+																			break;
+																		case "1":
+																			echo "Posted";
+																			break;
+																		case "2":
+																			echo "Deleted";
+																			break;
+																		default:
+																			echo "";
+																	} ?>
+																</td>
+																<td style="background-color: white;"></td>
+																<td><strong><a href="#"><?= $data_list['PONUMBER'] ?></a></strong></td>
+																<td><?= $povendate; ?></td>
+															</tr>
 
-													<?php } ?>
-												</tbody>
-											</table>
+														<?php } ?>
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
-								</div>
-								</form>
-								<div class="row">
-									<!-- Pagination template-->
-									<div class="col-sm-6">
+									</form>
+									<div class="row">
+										<!-- Pagination template-->
+										<div class="col-sm-6">
 
-									</div>
-									<div class="col-sm-6">
-										<div class="dataTables_paginate paging_simple_numbers">
-											<?= $pager->links('gr_posting_list', 'bootstrap_pagination');
-											//$pager = \Config\Services::pager();
-											?>
+										</div>
+										<div class="col-sm-6">
+											<div class="dataTables_paginate paging_simple_numbers">
+												<?= $pager->links('gr_posting_list', 'bootstrap_pagination');
+												//$pager = \Config\Services::pager();
+												?>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -157,8 +172,7 @@
 				</div>
 			</div>
 		</div>
-</div>
-</section>
+	</section>
 </div>
 
 <?php //$this->load->view('global/confirm_delete'); 

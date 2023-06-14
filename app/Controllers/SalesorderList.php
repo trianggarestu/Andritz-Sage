@@ -210,6 +210,8 @@ class SalesorderList extends BaseController
                 ->orlike('it."DESC"', $keyword)
                 ->orlike('MATERIALNO', $keyword)
                 ->orlike('webot_CSR.STOCKUNIT', $keyword)
+                ->orlike('webot_CSR.POSTINGSTAT', $keyword)
+
                 ->groupEnd()
                 ->orderBy('PODATECUST', 'ASC');
             //$so_data = $this->SalesorderModel->get_csr_list_post_search($keyword);

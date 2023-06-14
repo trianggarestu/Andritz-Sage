@@ -227,14 +227,14 @@
 										</div>
 										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="shi_qty">Delivered</label>
+												<label for="shi_qty">Qty Delivered</label>
 												<input type="text" class="form-control input-sm required" id="shi_qty" name="shi_qty" placeholder="Qty Shipment" value="<?= number_format($shi_qty, 0, ",", ".") ?>" />
 											</div>
 										</div>
 
 										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="shi_qty_outs">Del. Outstanding</label>
+												<label for="shi_qty_outs">Qty Del. Outstanding</label>
 												<input type="text" maxlength="10" size="10" class="form-control input-sm" name="shi_qty_outs" id="shi_qty_outs" placeholder="Qty Oustanding" value="<?= number_format($shi_qty_outs, 0, ",", ".") ?>" readonly>
 											</div>
 										</div>

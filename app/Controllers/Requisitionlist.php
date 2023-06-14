@@ -203,7 +203,7 @@ class RequisitionList extends BaseController
                 ->orlike('webot_REQUISITION.RQNNUMBER', $keyword)
                 ->orlike('csr.MANAGER', $keyword)
                 ->orlike('csr.SALESNAME', $keyword)
-                ->orlike('csr.PROJECT', $keyword)
+
                 ->orlike('csr.PRJDESC', $keyword)
                 ->orlike('csr.PONUMBERCUST', $keyword)
                 ->orlike('csr.CUSTOMER', $keyword)
@@ -216,7 +216,10 @@ class RequisitionList extends BaseController
                 ->orlike('csr.ITEMNO', $keyword)
                 ->orlike('csr.MATERIALNO', $keyword)
                 ->orlike('csr.STOCKUNIT', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
+                ->orlike('csr.CTDESC', $keyword)
+                ->orlike('csr.QTY', $keyword)
+
+
 
                 ->groupEnd()
                 ->orderBy('webot_REQUISITION.RQNDATE', 'ASC');

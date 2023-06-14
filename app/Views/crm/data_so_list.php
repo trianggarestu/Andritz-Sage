@@ -107,6 +107,7 @@
 															<th>Req Date</th>
 															<th>Sales Person</th>
 															<th>Order Description</th>
+															<th>Remarks</th>
 															<th>Service Type</th>
 															<th>Qty</th>
 															<th>UoM</th>
@@ -176,6 +177,7 @@
 																<td><?= $crmreqdate; ?></td>
 																<td><?= $ot_list['SALESNAME']; ?></td>
 																<td><?= $ot_list['ORDERDESC']; ?></td>
+																<td><?= $ot_list['CRMREMARKS']; ?></td>
 																<td><?= $ot_list['SERVICETYPE']; ?></td>
 																<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
 																<td><?= $ot_list['STOCKUNIT']; ?></td>

@@ -97,7 +97,7 @@
 															<th>Project No.</th>
 															<th>CRM Number</th>
 															<th>CRM Req. Date</th>
-															<th>Order Description</th>
+															<th nowrap>Order Description</th>
 															<th>Sales Person</th>
 															<th>Inventory No</th>
 															<th>Qty</th>
@@ -151,7 +151,7 @@
 																<td><?= $ot_list['PROJECT']; ?></td>
 																<td><?= $ot_list['CRMNO']; ?></td>
 																<td><?= $crmreq_date; ?></td>
-																<td><?= $ot_list['ORDERDESC']; ?></td>
+																<td nowrap><?= $ot_list['ORDERDESC']; ?></td>
 																<td><?= $ot_list['SALESNAME']; ?></td>
 																<td><?= $ot_list['MATERIALNO']; ?></td>
 																<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>

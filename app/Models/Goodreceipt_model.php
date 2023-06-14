@@ -149,13 +149,13 @@ class Goodreceipt_model extends Model
         $builder->where('webot_RECEIPTS.POSTINGSTAT=', 1);
         return $builder->countAllResults();
     }
-    function get_gr_preview()
+    function get_gr_preview($nfromdate, $ntodate)
     {
         $query = $this->db->query("select a.*,b.*,c.*
         from webot_RECEIPTS a 
         left join webot_CSR b ON a.CSRUNIQ = b.CSRUNIQ
         left join webot_PO c on c.POUNIQ = a.POUNIQ and b.CSRUNIQ = c.CSRUNIQ 
-        where (a.POSTINGSTAT=1)");
+        where (a.POSTINGSTAT=1 and (a.RECPDATE BETWEEN $nfromdate and $ntodate))");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
@@ -169,9 +169,10 @@ class Goodreceipt_model extends Model
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
         or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or c.PONUMBER like '%$keyword%' ) and
-        (c.PODATE>=$nfromdate and c.PODATE<=$ntodate)
-        order by c.PODATE asc");
+        or b.STOCKUNIT like '%$keyword%' or c.PONUMBER like '%$keyword%' or a.RECPNUMBER like '%$keyword%' or a.VDNAME like '%$keyword%' 
+        or a.ITEMDESC like '%$keyword%' or a.DESCRIPTIO like '%$keyword%'   or a.RECPITEMNO like '%$keyword%') and
+        (a.RECPDATE>=$nfromdate and a.RECPDATE<=$ntodate)
+        order by a.RECPDATE asc");
         return $query->getResultArray();
     }
 }

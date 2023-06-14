@@ -209,13 +209,13 @@ class Purchaseorder_model extends Model
         //Tanpa return juga bisa jalan
         return $query;
     }
-    function get_purchaseorder_preview()
+    function get_purchaseorder_preview($nfromdate, $ntodate)
     {
         $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT,a.*
         from webot_PO a 
         left join webot_CSR b on b.CSRUNIQ= a.CSRUNIQ
 		left join webot_REQUISITION c on a.RQNUNIQ=c.RQNUNIQ and  b.CSRUNIQ = c.CSRUNIQ
-        where (a.POSTINGSTAT=1)");
+        where (a.POSTINGSTAT=1) and (a.PODATE BETWEEN $nfromdate and $ntodate)");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
@@ -228,8 +228,9 @@ class Purchaseorder_model extends Model
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
         or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%') and
-        (c.RQNDATE>=$nfromdate and c.RQNDATE<=$ntodate)
+        or b.STOCKUNIT like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%' or a.ORIGINCOUNTRY like '%$keyword%'
+        or a.POREMARKS like '%$keyword%') and
+        (a.PODATE>=$nfromdate and a.PODATE<=$ntodate)
         order by a.PODATE asc");
         return $query->getResultArray();
     }
