@@ -65,7 +65,7 @@
 									</div>
 								</div>
 
-								<div class='col-sm-4'>
+								<div class='col-sm-3'>
 									<div class='form-group'>
 										<label for="ct_no">Contract </label>
 										<div class="input-group">
@@ -83,39 +83,65 @@
 									</div>
 								</div>
 
-								<div class='col-sm-2'>
+								<div class='col-sm-3'>
 									<div class="form-group">
-										<label for="ct_salesperson">Sales Person</label>
-										<input type="text" class="form-control input-sm required" id="ct_salesperson" name="ct_salesperson" placeholder="" value="<?= $ct_salesperson; ?>" <?php if ($ct_salesperson == '') {
-																																																echo '';
-																																															} else {
-																																																echo 'readonly';
-																																															} ?> />
+										<label for="ct_salesperson">Sales Person </label>
+										<div class="input-group input-group-sm">
+											<input type="text" class="form-control input-sm required" id="ct_salesperson" name="ct_salesperson" placeholder="" value="<?php if (empty($ct_staffcode)) {
+																																											echo session()->get('salesman');
+																																										} else {
+																																											echo $ct_salesperson;
+																																										}  ?>" readonly />
+
+											<span class="input-group-btn">
+												<a href="<?= base_url('salesorder/form_select_salesman/' . $ct_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block <?php if (!empty($ct_staffcode) or empty($ct_no)) : echo 'disabled';
+																																																																																endif; ?>">
+													Choose !
+												</a>
+											</span>
+										</div>
+
+										<input type="hidden" id="ct_manager" name="ct_manager" value="<?php if (empty($ct_staffcode)) {
+																											echo session()->get('manager');
+																										} else {
+																											echo $ct_manager;
+																										}  ?>">
 									</div>
 								</div>
 
 							</div>
 							<div class="row">
-								<div class='col-sm-2'>
+								<div class='col-sm-3'>
 									<div class="form-group">
 										<label for="ct_custno">Customer No. </label>
 										<input type="text" class="form-control input-sm required" id="ct_custno" name="ct_custno" placeholder="" value="<?= $ct_custno; ?>" readonly />
 									</div>
 								</div>
-								<div class='col-sm-2'>
-									<div class="form-group">
-										<label for="ct_email">Customer Email </label>
-										<input type="text" class="form-control input-sm required" id="ct_email" name="ct_email" placeholder="" value="<?= $ct_email; ?>" <?php if ($ct_email == '') {
-																																												echo '';
-																																											} else {
-																																												echo 'readonly';
-																																											} ?> />
-									</div>
-								</div>
-								<div class='col-sm-8'>
+
+								<div class='col-sm-6'>
 									<div class="form-group">
 										<label for="ct_namecust">Customer Name </label>
 										<input type="text" class="form-control input-sm required" id="ct_namecust" name="ct_namecust" placeholder="" value="<?= $ct_custname; ?>" readonly />
+									</div>
+								</div>
+								<div class='col-sm-3'>
+									<div class="form-group">
+										<label for="ct_email">Customer Email</label>
+										<div class="input-group input-group-sm">
+											<input type="text" class="form-control input-sm required" id="ct_email" name="ct_email" placeholder="" value="<?php if (empty($ct_email)) {
+																																								echo session()->get('cust_email');
+																																							} else {
+																																								echo $ct_email;
+																																							}  ?>" readonly />
+											<span class="input-group-btn">
+												<a href="<?= base_url('salesorder/form_input_email/' . $ct_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block <?php if (!empty($ct_email) or empty($ct_no)) : echo 'disabled';
+																																																																															endif; ?>">
+													Input !
+												</a>
+											</span>
+										</div>
+
+										<input type="hidden" id="ct_manager" name="ct_manager" value="<?= $ct_manager ?>">
 									</div>
 								</div>
 
@@ -282,7 +308,6 @@
 				</div>
 				<div class='box-footer'>
 					<div class='col-xs-12'>
-						<input type="hidden" id="ct_manager" name="ct_manager" value="<?= $ct_manager ?>">
 						<input type="hidden" id="csr_uniq" name="csr_uniq" value="<?= $csr_uniq ?>">
 						<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
 						<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> Save</button>

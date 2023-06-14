@@ -96,11 +96,16 @@ class SalesOrder extends BaseController
         session()->remove('cari');
         session()->remove('from_date');
         session()->remove('to_date');
+        // Remove Session Select Salesman & Email Manually
+        session()->remove('manager');
+        session()->remove('salesman');
+        session()->remove('cust_email');
 
         $data = array(
             'csr_uniq' => '',
             'ct_no' => '',
             'ct_desc' => '',
+            'ct_staffcode' => '',
             'ct_manager' => '',
             'ct_salesperson' => '',
             'ct_custno' => '',
@@ -141,6 +146,7 @@ class SalesOrder extends BaseController
             'csr_uniq' => $getcsropen['CSRUNIQ'],
             'ct_no' => trim($getcsropen['CONTRACT']),
             'ct_desc' => trim($getcsropen['CTDESC']),
+            'ct_staffcode' => trim($getcsropen['MANAGER']),
             'ct_manager' => trim($getcsropen['MANAGER']),
             'ct_salesperson' => trim($getcsropen['SALESNAME']),
             'ct_custno' => trim($getcsropen['CUSTOMER']),
@@ -179,6 +185,7 @@ class SalesOrder extends BaseController
                 'csr_uniq' => '',
                 'ct_no' => '',
                 'ct_desc' => '',
+                'ct_staffcode' => '',
                 'ct_manager' => '',
                 'ct_salesperson' => '',
                 'ct_custno' => '',
@@ -209,6 +216,7 @@ class SalesOrder extends BaseController
                     'csr_uniq' => '',
                     'ct_no' => trim($row['CONTRACT']),
                     'ct_desc' => trim($row['DESC']),
+                    'ct_staffcode' => trim($row['MANAGER']),
                     'ct_manager' => trim($row['MANAGER']),
                     'ct_salesperson' => trim($row['NAME']),
                     'ct_custno' => trim($row['CUSTOMER']),
@@ -249,6 +257,7 @@ class SalesOrder extends BaseController
                 'csr_uniq' => '',
                 'ct_no' => '',
                 'ct_desc' => '',
+                'ct_staffcode' => '',
                 'ct_manager' => '',
                 'ct_salesperson' => '',
                 'ct_custno' => '',
@@ -284,6 +293,7 @@ class SalesOrder extends BaseController
                     'csr_uniq' => '',
                     'ct_no' => trim($row['CONTRACT']),
                     'ct_desc' => trim($row['DESC']),
+                    'ct_staffcode' => trim($row['MANAGER']),
                     'ct_manager' => trim($row['MANAGER']),
                     'ct_salesperson' => trim($row['NAME']),
                     'ct_custno' => trim($row['CUSTOMER']),
@@ -326,6 +336,26 @@ class SalesOrder extends BaseController
         echo view('crm/ajax_add_contract', $data);
     }
 
+    public function form_select_salesman($ct_no)
+    {
+
+        $data['contract'] = $ct_no;
+        $data['salesman'] = $this->SalesorderModel->list_salesman();
+        $data['form_action'] = base_url("salesorder/choosesalesman");
+        //echo view('crm/ajax_add_contract', $data);
+        echo view('crm/ajax_add_salesman', $data);
+    }
+
+    public function form_input_email($ct_no)
+    {
+
+        $data['contract'] = $ct_no;
+        $data['form_action'] = base_url("salesorder/getemail");
+        //echo view('crm/ajax_add_contract', $data);
+        echo view('crm/ajax_input_email', $data);
+    }
+
+
 
 
     public function form_select_project_by_contract($contract = '')
@@ -341,6 +371,9 @@ class SalesOrder extends BaseController
 
     public function choosecontract()
     {
+        session()->remove('manager');
+        session()->remove('salesman');
+        session()->remove('cust_email');
         if (null == ($this->request->getPost('contract'))) {
             $ct_no = "contract not found";
         } else {
@@ -349,6 +382,35 @@ class SalesOrder extends BaseController
 
         return redirect()->to(base_url('salesorder/selectcontract/' . $ct_no));
     }
+
+    public function choosesalesman()
+    {
+        if (null == ($this->request->getPost('contract'))) {
+            $ct_no = "contract not found";
+        } else {
+            $ct_no = $this->request->getPost('contract');
+            $staffcode = $this->request->getPost('manager');
+            $sales = $this->SalesorderModel->get_salesman_by_id($staffcode);
+            session()->set('manager', trim($sales['STAFFCODE']));
+            session()->set('salesman', trim($sales['SALESNAME']));
+        }
+
+        return redirect()->to(base_url('salesorder/selectcontract/' . $ct_no));
+    }
+
+    public function getemail()
+    {
+        if (null == ($this->request->getPost('contract'))) {
+            $ct_no = "contract not found";
+        } else {
+            $ct_no = $this->request->getPost('contract');
+            $email_manual = $this->request->getPost('email_manual');
+            session()->set('cust_email', $email_manual);
+        }
+
+        return redirect()->to(base_url('salesorder/selectcontract/' . $ct_no));
+    }
+
 
     public function chooseproject()
     {

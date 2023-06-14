@@ -36,6 +36,7 @@ class Salesorder_model extends Model
         }
     }
 
+
     function get_csr_list_open()
     {
         $query = $this->db->query("select a.*," . 'it."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM it on it.ITEMNO=a.ITEMNO 
@@ -75,7 +76,22 @@ class Salesorder_model extends Model
         }
     }
 
+    function list_salesman()
+    {
+        $query = $this->db->query("select STAFFCODE,NAME,COMMENT from PMSTAFF 
+        where INACTIVE=0 order by NAME asc");
 
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+    function get_salesman_by_id($staffcode)
+    {
+        $query = $this->db->query("select STAFFCODE," . '"NAME"' . " as SALESNAME,COMMENT from PMSTAFF 
+        where STAFFCODE='$staffcode' ");
+        return $query->getRowArray();
+    }
 
     function list_project_by_contract($contract)
     {
