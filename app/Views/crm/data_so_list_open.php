@@ -92,12 +92,13 @@
 																<tr>
 																	<td style="vertical-align: top;" nowrap><?= ++$no; ?></td>
 																	<td style="vertical-align: top;" nowrap>
-																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 0)) {
-																			$bysetting = 1; ?>
-																			<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="SO View">
-																				<i class="fa fa-file"></i>
-																			</a>
-																		<?php } ?>
+																		<?php //if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 0)) {
+																		$bysetting = 1; ?>
+																		<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="SO View">
+																			<i class="fa fa-file"></i>
+																		</a>
+																		<?php //} 
+																		?>
 																		<?php if ($ot_list['POSTINGSTAT'] == 0) { ?>
 																			<a href="<?= base_url("salesorder/update/" . $ot_list['CSRUNIQ']) ?>" title="Update" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
 																		<?php } ?>
@@ -107,7 +108,7 @@
 																			</a>
 																		<?php } ?>
 																		<?php if ($ot_list['POSTINGSTAT'] == 0) { ?>
-																			<a href="#" title="Delete" class="btn btn-default btn-sm" data-toggle="modal" data-target="#confirm-delete" data-href="<?= base_url("salesorderlist/deletedata/$ot_list[CSRUNIQ]") ?>"><i class="fa fa-trash"></i></a>
+																			<a href="#" title="Delete" class="btn btn-default btn-sm" data-toggle="modal" data-target="#confirm-delete" data-href="<?= base_url("salesorderopen/deletedata/$ot_list[CSRUNIQ]") ?>"><i class="fa fa-trash"></i></a>
 																		<?php } ?>
 
 
@@ -116,53 +117,22 @@
 																		<?php $postingstat = $ot_list['POSTINGSTAT'];
 																		switch ($postingstat) {
 																			case "0":
-																				echo "Open";
+																				echo "<span class='label label-warning'>Open</span>";
 																				break;
 																			case "1":
-																				echo "Posted";
+																				echo "<span class='label label-success'>Posted</span>";
 																				break;
 																			case "2":
-																				echo "Deleted";
+																				echo "<span class='label label-danger'>Deleted</span>";
 																				break;
 																			default:
-																				echo "Open";
+																				echo "<span class='label label-warning'>Open</span>";
 																		} ?>
 																	</td>
 																	<td nowrap><strong><a href="#"><?= $ot_list['CONTRACT'] ?></a></strong>
 																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
 																		CRM Remarks : <?= $ot_list['CRMREMARKS']; ?>
-																		<br>
-																		<table class="table table-bordered table-striped dataTable">
-																			<thead class="bg-gray disabled">
-																				<tr>
-																					<th colspan="3"><small>Inventory Info</small>
-																					</th>
-																				</tr>
-																			</thead>
-																			<tr>
-																				<td style="width: 15%;"><small>Item No./Material No.</small></td>
-																				<td style="width: 1%;"><small>:</small></td>
-																				<td><small><?= $ot_list['ITEMNO'] . " / " .  $ot_list['MATERIALNO'];
-																							?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Item Description</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= "<strong>" .  $ot_list['ITEMDESC'] . "</strong><br>"; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Type</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= $ot_list['SERVICETYPE']; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Qty</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= number_format($ot_list['QTY'], 0, ",", ".") . ' (' . trim($ot_list['STOCKUNIT']) . ')' ?></small></td>
-																			</tr>
-																		</table>
-
 																	</td>
 
 																	<td style="vertical-align: top;">
@@ -174,6 +144,61 @@
 																	<td style="vertical-align: top;"><?= $crmreqdate ?></td>
 																	<td style="vertical-align: top;"><?= $ot_list['SALESNAME']; ?></td>
 
+																</tr>
+																<tr>
+																	<td style="vertical-align: top;" nowrap></td>
+																	<td style="vertical-align: top;" nowrap></td>
+																	<td style="vertical-align: top;" nowrap></td>
+																	<td style="vertical-align: top;" colspan="5" nowrap>
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<thead class="bg-gray disabled color-palette">
+																					<tr>
+
+																						<th class="padat">No</th>
+
+																						<th>Type </th>
+																						<th>Inventory No.</th>
+																						<th>Material No.</th>
+																						<th>Item Desc.</th>
+																						<th>Qty.</th>
+																						<th>Uom</th>
+
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<?php
+																					$no = 0;
+																					foreach ($so_l_data as $items) :
+																						if ($ot_list['CSRUNIQ'] == $items['CSRUNIQ']) :
+																					?>
+																							<tr>
+
+																								<td class="text-center"><?= ++$no ?></td>
+																								<td><?= $items['SERVICETYPE']
+																									?></td>
+
+																								<td><?= $items['ITEMNO']
+																									?></td>
+																								<td><?= $items['MATERIALNO']
+																									?></td>
+																								<td nowrap><?= $items['ITEMDESC']
+																											?></td>
+																								<td><?= $items['QTY']
+																									?></td>
+																								<td nowrap><?= $items['STOCKUNIT']
+																											?></td>
+
+																							</tr>
+
+																					<?php
+																						endif;
+																					endforeach;
+																					?>
+																				</tbody>
+																			</table>
+																		</div>
+																	</td>
 																</tr>
 
 															<?php } ?>
@@ -210,4 +235,4 @@
 	</div>
 </div>
 
-<?php echo view('settings/confirm_delete') ?>
+<?php echo view('settings/modalbox/modal_confirm_delete') ?>
