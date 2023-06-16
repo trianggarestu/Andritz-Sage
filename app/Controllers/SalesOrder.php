@@ -21,11 +21,13 @@ class SalesOrder extends BaseController
     private $footer_data;
     private $audtuser;
     private $db_name;
+    private $cart;
     public function __construct()
     {
         //parent::__construct();
         helper(['form', 'url']);
         $this->db_name = \Config\Database::connect();
+        $this->cart = \Config\Services::cart();
 
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
@@ -96,12 +98,20 @@ class SalesOrder extends BaseController
         session()->remove('cari');
         session()->remove('from_date');
         session()->remove('to_date');
-        // Remove Session Select Salesman & Email Manually
+        // Remove Session Delete
         session()->remove('manager');
         session()->remove('salesman');
         session()->remove('cust_email');
+        session()->remove('po_cust');
+        session()->remove('crm_no');
+        session()->remove('req_date');
+        session()->remove('ord_desc');
+        session()->remove('so_remarks');
+        // Clear the shopping cart
+        $this->cart->destroy();
 
         $data = array(
+            'csruniq' => '',
             'csr_uniq' => '',
             'ct_no' => '',
             'ct_desc' => '',
@@ -119,14 +129,10 @@ class SalesOrder extends BaseController
             'req_date' => '',
             'order_desc' => '',
             'order_remarks' => '',
-            'service_type' => '',
-            'inventory_no' => '',
-            'material_no' => '',
-            'stock_unit' => '',
-            'qty' => '',
-            'item_data' => $this->SalesorderModel->get_icitem(),
+            'csropen_items' => '',
             'form_action' => base_url("salesorder/save_salesorder"),
             'validation' => \Config\Services::validation(),
+            'cart' => $this->cart,
         );
 
         echo view('view_header', $this->header_data);
@@ -139,10 +145,23 @@ class SalesOrder extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
+        session()->set('csruniq', $csruniq);
+        // Clear the shopping cart
+        $this->cart->destroy();
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
         $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
         $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
+        session()->set('crm_no', trim($getcsropen['CRMNO']));
+        session()->set('req_date', $crmreqdate);
+        session()->set('ord_desc', trim($getcsropen['ORDERDESC']));
+        session()->set('so_remarks', trim($getcsropen['CRMREMARKS']));
+        session()->set('manager', trim($getcsropen['MANAGER']));
+        session()->set('salesman', trim($getcsropen['SALESNAME']));
+        session()->set('cust_email', trim($getcsropen['EMAIL1CUST']));
+        session()->set('po_cust', trim($getcsropen['PONUMBERCUST']));
+        $getcsrl_by_id = $this->SalesorderModel->get_csrl_open($csruniq);
         $data = array(
+            'csruniq' => $csruniq,
             'csr_uniq' => $getcsropen['CSRUNIQ'],
             'ct_no' => trim($getcsropen['CONTRACT']),
             'ct_desc' => trim($getcsropen['CTDESC']),
@@ -160,14 +179,10 @@ class SalesOrder extends BaseController
             'req_date' => $crmreqdate,
             'order_desc' => trim($getcsropen['ORDERDESC']),
             'order_remarks' => trim($getcsropen['CRMREMARKS']),
-            'service_type' => trim($getcsropen['SERVICETYPE']),
-            'inventory_no' => trim($getcsropen['ITEMNO']),
-            'material_no' => trim($getcsropen['MATERIALNO']),
-            'stock_unit' => trim($getcsropen['STOCKUNIT']),
-            'qty' => number_format($getcsropen['QTY'], 0, ",", "."),
-            'item_data' => $this->SalesorderModel->get_icitem(),
+            'csropen_items' => $getcsrl_by_id,
             'form_action' => base_url("salesorder/update_salesorder"),
             'validation' => \Config\Services::validation(),
+            'cart' => $this->cart,
         );
 
         echo view('view_header', $this->header_data);
@@ -179,9 +194,17 @@ class SalesOrder extends BaseController
 
     public function selectcontract($ct_no = '')
     {
+        if (!empty(session()->get('csruniq'))) {
+            $action = base_url("salesorder/update_salesorder");
+            $csruniq = session()->get('csruniq');
+        } else {
+            $action = base_url("salesorder/save_salesorder");
+            $csruniq = '';
+        }
 
         if ($ct_no == '') {
             $data = array(
+                'csruniq' => $csruniq,
                 'csr_uniq' => '',
                 'ct_no' => '',
                 'ct_desc' => '',
@@ -199,20 +222,22 @@ class SalesOrder extends BaseController
                 'req_date' => '',
                 'order_desc' => '',
                 'order_remarks' => '',
-                'service_type' => '',
-                'inventory_no' => '',
-                'material_no' => '',
-                'stock_unit' => '',
-                'qty' => '',
-                'item_data' => $this->SalesorderModel->get_icitem(),
-                'form_action' => base_url("salesorder/save_salesorder"),
+                'csropen_items' => '',
+                'form_action' => $action,
                 'validation' => \Config\Services::validation(),
+                'cart' => $this->cart,
 
             );
         } else {
+            if (!empty(session()->get('salesman'))) {
+                $getcsrl_by_id = $this->SalesorderModel->get_csrl_open(session()->get('csruniq'));
+            } else {
+                $getcsrl_by_id = '';
+            }
             $row = $this->SalesorderModel->get_contract_by_id($ct_no);
             if ($row) {
                 $data = array(
+                    'csruniq' => $csruniq,
                     'csr_uniq' => '',
                     'ct_no' => trim($row['CONTRACT']),
                     'ct_desc' => trim($row['DESC']),
@@ -230,14 +255,10 @@ class SalesOrder extends BaseController
                     'req_date' => '',
                     'order_desc' => '',
                     'order_remarks' => '',
-                    'service_type' => '',
-                    'inventory_no' => '',
-                    'material_no' => '',
-                    'stock_unit' => '',
-                    'qty' => '',
-                    'item_data' => $this->SalesorderModel->get_icitem(),
-                    'form_action' => base_url("salesorder/save_salesorder"),
+                    'csropen_items' => $getcsrl_by_id,
+                    'form_action' => $action,
                     'validation' => \Config\Services::validation(),
+                    'cart' => $this->cart,
 
                 );
             }
@@ -251,9 +272,17 @@ class SalesOrder extends BaseController
 
     public function selectproject($ct_no = '', $prj_no = '')
     {
+        if (!empty(session()->get('csruniq'))) {
+            $action = base_url("salesorder/update_salesorder");
+            $csruniq = session()->get('csruniq');
+        } else {
+            $action = base_url("salesorder/save_salesorder");
+            $csruniq = '';
+        }
 
         if ($prj_no == '') {
             $data = array(
+                'csruniq' => $csruniq,
                 'csr_uniq' => '',
                 'ct_no' => '',
                 'ct_desc' => '',
@@ -271,17 +300,18 @@ class SalesOrder extends BaseController
                 'req_date' => '',
                 'order_desc' => '',
                 'order_remarks' => '',
-                'service_type' => '',
-                'inventory_no' => '',
-                'material_no' => '',
-                'stock_unit' => '',
-                'qty' => '',
-                'item_data' => $this->SalesorderModel->get_icitem(),
-                'form_action' => base_url("salesorder/save_salesorder"),
+                'csropen_items' => '',
+                'form_action' => $action,
                 'validation' => \Config\Services::validation(),
+                'cart' => $this->cart,
 
             );
         } else {
+            if (!empty($csruniq)) {
+                $getcsrl_by_id = $this->SalesorderModel->get_csrl_open($csruniq);
+            } else {
+                $getcsrl_by_id = '';
+            }
             $row = $this->SalesorderModel->get_project_by_contract($ct_no, $prj_no);
             if ($row) {
                 $podate = $row['PODATE'];
@@ -290,6 +320,7 @@ class SalesOrder extends BaseController
                 $yyyy = substr($podate, 0, 4);
                 $n_podate = $mm . '/' . $dd . '/' . $yyyy;
                 $data = array(
+                    'csruniq' => $csruniq,
                     'csr_uniq' => '',
                     'ct_no' => trim($row['CONTRACT']),
                     'ct_desc' => trim($row['DESC']),
@@ -307,14 +338,10 @@ class SalesOrder extends BaseController
                     'req_date' => '',
                     'order_desc' => '',
                     'order_remarks' => '',
-                    'service_type' => '',
-                    'inventory_no' => '',
-                    'material_no' => '',
-                    'stock_unit' => '',
-                    'qty' => '',
-                    'item_data' => $this->SalesorderModel->get_icitem(),
-                    'form_action' => base_url("salesorder/save_salesorder"),
+                    'csropen_items' => $getcsrl_by_id,
+                    'form_action' => $action,
                     'validation' => \Config\Services::validation(),
+                    'cart' => $this->cart,
 
                 );
             }
@@ -346,16 +373,69 @@ class SalesOrder extends BaseController
         echo view('crm/ajax_add_salesman', $data);
     }
 
-    public function form_input_email($ct_no)
+    public function form_input_email($ct_no, $prj_no = '')
     {
+        $csruniq = session()->get('csruniq');
+        if (!empty($csruniq)) {
+            $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
+            $cust_email = trim($getcsropen['EMAIL1CUST']);
+        } else {
+            $cust_email = '';
+        }
 
         $data['contract'] = $ct_no;
+        $data['project'] = $prj_no;
+        $data['cust_email'] = $cust_email;
         $data['form_action'] = base_url("salesorder/getemail");
         //echo view('crm/ajax_add_contract', $data);
         echo view('crm/ajax_input_email', $data);
     }
 
+    public function form_input_pocust($ct_no, $prj_no = '')
+    {
 
+        $data['contract'] = $ct_no;
+        $data['project'] = $prj_no;
+        $data['form_action'] = base_url("salesorder/getpocust");
+        //echo view('crm/ajax_add_contract', $data);
+        echo view('crm/ajax_input_pocust', $data);
+    }
+
+
+    public function form_input_item($ct_no, $prj_no, $csruniq = '')
+    {
+        $data = array(
+            'contract' => $ct_no,
+            'project' => $prj_no,
+            'rowid' => '',
+            'so_service' => '',
+            'inventory_no' => '',
+            'material_no' => '',
+            'so_qty' => '',
+            'so_uom' => '',
+            'item_data' => $this->SalesorderModel->get_icitem(),
+            'form_action' => base_url("salesorder/getitem"),
+        );
+        echo view('crm/ajax_input_item', $data);
+    }
+
+    //Update Item belum jalan sempurna
+    /*public function form_update_item($ct_no, $prj_no, $so_service = '', $inventory_no = '', $material_no = '', $so_qty = '', $so_uom = '')
+    {
+        $data = array(
+            'contract' => $ct_no,
+            'project' => $prj_no,
+            'rowid' => '',
+            'so_service' => $so_service,
+            'inventory_no' => $inventory_no,
+            'material_no' => $material_no,
+            'so_qty' => $so_qty,
+            'so_uom' => $so_uom,
+            'item_data' => $this->SalesorderModel->get_icitem(),
+            'form_action' => base_url("salesorder/getitem"),
+        );
+        echo view('crm/ajax_input_item', $data);
+    }*/
 
 
     public function form_select_project_by_contract($contract = '')
@@ -374,10 +454,15 @@ class SalesOrder extends BaseController
         session()->remove('manager');
         session()->remove('salesman');
         session()->remove('cust_email');
+        session()->remove('po_cust');
         if (null == ($this->request->getPost('contract'))) {
             $ct_no = "contract not found";
         } else {
             $ct_no = $this->request->getPost('contract');
+            $csruniq = $this->request->getPost('csruniq');
+            if (!empty($csruniq)) :
+                session()->set('csruniq', $csruniq);
+            endif;
         }
 
         return redirect()->to(base_url('salesorder/selectcontract/' . $ct_no));
@@ -385,6 +470,7 @@ class SalesOrder extends BaseController
 
     public function choosesalesman()
     {
+        session()->remove('success');
         if (null == ($this->request->getPost('contract'))) {
             $ct_no = "contract not found";
         } else {
@@ -400,16 +486,85 @@ class SalesOrder extends BaseController
 
     public function getemail()
     {
+        session()->remove('success');
         if (null == ($this->request->getPost('contract'))) {
             $ct_no = "contract not found";
         } else {
             $ct_no = $this->request->getPost('contract');
+            $prj_no = $this->request->getPost('project');
             $email_manual = $this->request->getPost('email_manual');
             session()->set('cust_email', $email_manual);
         }
-
-        return redirect()->to(base_url('salesorder/selectcontract/' . $ct_no));
+        if (empty($prj_no)) {
+            return redirect()->to(base_url('salesorder/selectcontract/' . $ct_no));
+        } else if (!empty($prj_no)) {
+            return redirect()->to(base_url('salesorder/selectproject/' . $ct_no . '/' . $prj_no . '/'));
+        }
     }
+
+    public function getpocust()
+    {
+        session()->remove('success');
+        if (null == ($this->request->getPost('contract'))) {
+            $ct_no = "contract not found";
+        } else {
+            $ct_no = $this->request->getPost('contract');
+            $prj_no = $this->request->getPost('project');
+            $po_cust = $this->request->getPost('po_cust');
+            session()->set('po_cust', $po_cust);
+        }
+
+        return redirect()->to(base_url('salesorder/selectproject/' . $ct_no . '/' . $prj_no . '/'));
+    }
+
+    public function getitem()
+    {
+        if (null == ($this->request->getPost('contract')) and null == ($this->request->getPost('project'))) {
+            $ct_no = "contract not found";
+        } else {
+            $ct_no = $this->request->getPost('contract');
+            $csruniq = $this->request->getPost('csruniq');
+            $prj_no = $this->request->getPost('project');
+            $so_service = $this->request->getPost('so_service');
+            $inventory_no = $this->request->getPost('inventory_no');
+            $material_no = $this->request->getPost('material_no');
+            $so_qty = $this->request->getPost('so_qty');
+            $so_uom = $this->request->getPost('so_uom');
+            $getitem = $this->SalesorderModel->get_icitem_by_id($inventory_no);
+            $this->cart->insert(array(
+                //'inventory_no' => $inventory_no,
+                //'so_service' => $so_service,
+                //'material_no' => $material_no,
+                //'so_qty' => $so_qty,
+                //'so_uom' => $so_uom
+                'id'      => $inventory_no,
+                'qty'     => $so_qty,
+                'price'   => '1',
+                'name'    => 'Item Description Sage',
+                'options' => array('so_service' => $so_service, 'material_no' => $material_no, 'itemdesc' => $getitem['ITEMDESC'], 'so_uom' => $so_uom)
+            ));
+        }
+
+        return redirect()->to(base_url('salesorder/selectproject/' . $ct_no . '/' . $prj_no . '/' . '/' . $csruniq));
+    }
+
+
+    // delete item Cart
+    public function delete_item_cart($ct_no = 0, $prj_no = 0, $rowid)
+    {
+        // Remove an item using its `rowid`
+        $this->cart->remove($rowid);
+        return redirect()->to(base_url('salesorder/selectproject/' . $ct_no . '/' . $prj_no . '/'));
+    }
+
+    // delete item open
+    public function delete_item_open($ct_no = 0, $prj_no = 0, $csrluniq = 0)
+    {
+        // Remove an item in table webot_CSRL when update
+        $this->SalesorderModel->delete_item_csrlopen($csrluniq);
+        return redirect()->to(base_url('salesorder/selectproject/' . $ct_no . '/' . $prj_no . '/'));
+    }
+
 
 
     public function chooseproject()
@@ -428,6 +583,7 @@ class SalesOrder extends BaseController
         return redirect()->to(base_url('salesorder/selectproject/' . $ct_no . '/' . $prj_no . '/'));
     }
 
+
     public function save_salesorder()
     {
         if (!$this->validate([
@@ -444,11 +600,6 @@ class SalesOrder extends BaseController
             'crm_no' => 'required|min_length[1]',
             'req_date' => 'required',
             'ord_desc' => 'required',
-            'so_service' => 'required',
-            'inventory_no' => 'required',
-            'material_no' => 'required',
-            'so_qty' => 'required|numeric|greater_than[0]',
-            'so_uom' => 'required',
             'so_remarks' => 'required|min_length[3]',
 
         ])) {
@@ -470,59 +621,136 @@ class SalesOrder extends BaseController
             //echo $this->validate;
 
         } else {
-            // Check Status Mail Notification
-            $sender = $this->AdministrationModel->get_mailsender();
-            $prj_startdate = $this->request->getPost('prj_startdate');
-            $req_date = $this->request->getPost('req_date');
-            $podatecust = substr($prj_startdate, 6, 4)  . "" . substr($prj_startdate, 0, 2) . "" . substr($prj_startdate, 3, 2);
-            $crmreqdate = substr($req_date, 6, 4) . "" . substr($req_date, 0, 2) . "" . substr($req_date, 3, 2);
-            $groupuser = 2;
-            $data = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'CONTRACT' => $this->request->getPost('ct_no'),
-                'CTDESC' => $this->request->getPost('ct_desc'),
-                'MANAGER' => $this->request->getPost('ct_manager'),
-                'SALESNAME' => $this->request->getPost('ct_salesperson'),
-                'PROJECT' => $this->request->getPost('prj_no'),
-                'PRJDESC' => $this->request->getPost('prj_desc'),
-                'PONUMBERCUST' => $this->request->getPost('po_cust'),
-                'PODATECUST' => $podatecust,
-                'CUSTOMER' => $this->request->getPost('ct_custno'),
-                'NAMECUST' => $this->request->getPost('ct_namecust'),
-                'EMAIL1CUST' => $this->request->getPost('ct_email'),
-                'CRMNO' => $this->request->getPost('crm_no'),
-                'CRMREQDATE' => $crmreqdate,
-                'ORDERDESC' => $this->request->getPost('ord_desc'),
-                'SERVICETYPE' => $this->request->getPost('so_service'),
-                'CRMREMARKS' => $this->request->getPost('so_remarks'),
-                'ITEMNO' => $this->request->getPost('inventory_no'),
-                'MATERIALNO' => $this->request->getPost('material_no'),
-                'STOCKUNIT' => $this->request->getPost('so_uom'),
-                'QTY' => $this->request->getPost('so_qty'),
-                'OTPROCESS' => $groupuser,
-                'POSTINGSTAT' => 0,
-                'OFFLINESTAT' => $sender['OFFLINESTAT'],
-            );
 
-            //print_r($data_notif);
-            $csr_insert = $this->SalesorderModel->csr_insert($data);
+            if ($_POST['form_save'] == 'crm_save') {
+                session()->remove('success');
+                $ct_no = $this->request->getPost('ct_no');
+                $prj_no = $this->request->getPost('prj_no');
+                $crm_no = $this->request->getPost('crm_no');
+                $req_date = $this->request->getPost('req_date');
+                $ord_desc = $this->request->getPost('ord_desc');
+                $so_remarks = $this->request->getPost('so_remarks');
+                session()->set('crm_no', $crm_no);
+                session()->set('req_date', $req_date);
+                session()->set('ord_desc', $ord_desc);
+                session()->set('so_remarks', $so_remarks);
+                return redirect()->to(base_url('/salesorder/selectproject/' . $ct_no . '/' . $prj_no));
+            } else if ($_POST['form_save'] == 'so_save') {
+                if (!$this->validate(['chk_item' => 'greater_than[0]'])) {
+                    $ct_no = $this->request->getPost('ct_no');
+                    $prj_no = $this->request->getPost('prj_no');
+                    session()->set('success', '-1');
+                    return redirect()->to(base_url('/salesorder/selectproject/' . $ct_no . '/' . $prj_no))->withInput();
+                } else {
+                    // Check Status Mail Notification
+                    $sender = $this->AdministrationModel->get_mailsender();
+                    $prj_startdate = $this->request->getPost('prj_startdate');
+                    $req_date = $this->request->getPost('req_date');
+                    $podatecust = substr($prj_startdate, 6, 4)  . "" . substr($prj_startdate, 0, 2) . "" . substr($prj_startdate, 3, 2);
+                    $crmreqdate = substr($req_date, 6, 4) . "" . substr($req_date, 0, 2) . "" . substr($req_date, 3, 2);
+                    $groupuser = 2;
+                    $data = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'CSRKEY' => '0-' . $this->request->getPost('ct_no') . $this->request->getPost('prj_no'),
+                        'CONTRACT' => $this->request->getPost('ct_no'),
+                        'CTDESC' => $this->request->getPost('ct_desc'),
+                        'MANAGER' => $this->request->getPost('ct_manager'),
+                        'SALESNAME' => $this->request->getPost('ct_salesperson'),
+                        'PROJECT' => $this->request->getPost('prj_no'),
+                        'PRJDESC' => $this->request->getPost('prj_desc'),
+                        'PONUMBERCUST' => $this->request->getPost('po_cust'),
+                        'PODATECUST' => $podatecust,
+                        'CUSTOMER' => $this->request->getPost('ct_custno'),
+                        'NAMECUST' => $this->request->getPost('ct_namecust'),
+                        'EMAIL1CUST' => $this->request->getPost('ct_email'),
+                        'CRMNO' => $this->request->getPost('crm_no'),
+                        'CRMREQDATE' => $crmreqdate,
+                        'ORDERDESC' => $this->request->getPost('ord_desc'),
+                        'CRMREMARKS' => $this->request->getPost('so_remarks'),
+                        'CSRREPLACE' => 0,
+                        'OTPROCESS' => $groupuser,
+                        'POSTINGSTAT' => 0,
+                        'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                    );
+                    $contract = $this->request->getPost('ct_no');
+                    $project = $this->request->getPost('prj_no');
+                    $custno = $this->request->getPost('ct_custno');
+                    $crmno = $this->request->getPost('crm_no');
+                    $getcsruniq = $this->SalesorderModel->get_csruniq_open($contract, $project, $custno);
+                    if (!empty($getcsruniq['CSRKEY']) and $getcsruniq['CHKCSRL'] > 0 and $getcsruniq['CSRKEY'] == '0-' . $contract . $project) {
+                        session()->set('success', '-1');
+                        return redirect()->to(base_url('/salesorder/selectproject/' . $contract . '/' . $project));
+                        session()->remove('success');
+                    } else if (!empty($getcsruniq['CSRKEY']) and $getcsruniq['CHKCSRL'] == 0 and $getcsruniq['CSRKEY'] == '0-' . $contract . $project) {
 
-            $contract = $this->request->getPost('ct_no');
-            $project = $this->request->getPost('prj_no');
-            $custno = $this->request->getPost('ct_custno');
-            $itemno = $this->request->getPost('inventory_no');
-            $crmno = $this->request->getPost('crm_no');
-            $bysetting = 1;
-            $getcsruniq = $this->SalesorderModel->get_csruniq_open($contract, $project, $custno, $itemno, $crmno);
-            //session()->setFlashdata('messageerror', 'Create Record Failed');
-            session()->set('success', '1');
-            return redirect()->to(base_url('/salesorder/csropenview/' . $getcsruniq['CSRUNIQ'] . '/' . $bysetting));
-            session()->remove('success');
+                        foreach ($this->cart->contents() as $items) :
+                            $datal = array(
+                                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                'AUDTUSER' => trim($this->audtuser['AUDTUSER']),
+                                'AUDTORG' => trim($this->audtuser['AUDTORG']),
+                                'CSRUNIQ' => $getcsruniq['CSRUNIQ'],
+                                'CONTRACT' => $getcsruniq['CONTRACT'],
+                                'PROJECT' => $getcsruniq['PROJECT'],
+                                'SERVICETYPE' => $items['options']['so_service'],
+                                'ITEMNO' => $items['id'],
+                                'MATERIALNO' => $items['options']['material_no'],
+                                'ITEMDESC' => trim($items['options']['itemdesc']),
+                                'STOCKUNIT' => $items['options']['so_uom'],
+                                'QTY' => $items['qty'],
+                            );
+                            $csrl_insert = $this->SalesorderModel->csrline_insert($datal);
+                        endforeach;
+                        if ($csrl_insert) {
+                            $this->cart->destroy();
+                            $bysetting = 1;
+                            session()->set('success', '1');
+                            return redirect()->to(base_url('/salesorder/csropenview/' . $getcsruniq['CSRUNIQ'] . '/' . $bysetting));
+                            session()->remove('success');
+                        }
+                    } else if (empty($getcsruniq['CSRKEY'])) {
+                        $csr_insert = $this->SalesorderModel->csr_insert($data);
+                        if ($csr_insert) {
+                            $getcsruniq = $this->SalesorderModel->get_csruniq_open($contract, $project, $custno);
+                            foreach ($this->cart->contents() as $items) :
+                                $datal = array(
+                                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                    'AUDTUSER' => trim($this->audtuser['AUDTUSER']),
+                                    'AUDTORG' => trim($this->audtuser['AUDTORG']),
+                                    'CSRUNIQ' => $getcsruniq['CSRUNIQ'],
+                                    'CONTRACT' => $getcsruniq['CONTRACT'],
+                                    'PROJECT' => $getcsruniq['PROJECT'],
+                                    'SERVICETYPE' => $items['options']['so_service'],
+                                    'ITEMNO' => $items['id'],
+                                    'MATERIALNO' => $items['options']['material_no'],
+                                    'ITEMDESC' => trim($items['options']['itemdesc']),
+                                    'STOCKUNIT' => $items['options']['so_uom'],
+                                    'QTY' => $items['qty'],
+                                );
+
+                                $csrl_insert = $this->SalesorderModel->csrline_insert($datal);
+                            endforeach;
+                        }
+                        $this->cart->destroy();
+                        $bysetting = 1;
+                        session()->set('success', '1');
+                        return redirect()->to(base_url('/salesorder/csropenview/' . $getcsruniq['CSRUNIQ'] . '/' . $bysetting));
+                        session()->remove('success');
+                    } else {
+                        session()->set('success', '-1');
+                        return redirect()->to(base_url('/salesorder/selectproject/' . $contract . '/' . $project));
+                        session()->remove('success');
+                    }
+                }
+            }
         }
     }
+
+
 
     public function update_salesorder()
     {
@@ -540,11 +768,6 @@ class SalesOrder extends BaseController
             'crm_no' => 'required|min_length[1]',
             'req_date' => 'required',
             'ord_desc' => 'required',
-            'so_service' => 'required',
-            'inventory_no' => 'required',
-            'material_no' => 'required',
-            'so_qty' => 'required|numeric|greater_than[0]',
-            'so_uom' => 'required',
             'so_remarks' => 'required|min_length[3]',
 
         ])) {
@@ -566,57 +789,99 @@ class SalesOrder extends BaseController
             //echo $this->validate;
 
         } else {
-            // Check Status Mail Notification
-            $csruniq = $this->request->getPost('csr_uniq');
-            $prj_startdate = $this->request->getPost('prj_startdate');
-            $req_date = $this->request->getPost('req_date');
-            $podatecust = substr($prj_startdate, 6, 4)  . "" . substr($prj_startdate, 0, 2) . "" . substr($prj_startdate, 3, 2);
-            $crmreqdate = substr($req_date, 6, 4) . "" . substr($req_date, 0, 2) . "" . substr($req_date, 3, 2);
-            $groupuser = 2;
+            if ($_POST['form_save'] == 'crm_save') {
+                session()->remove('success');
+                $ct_no = $this->request->getPost('ct_no');
+                $prj_no = $this->request->getPost('prj_no');
+                $crm_no = $this->request->getPost('crm_no');
+                $req_date = $this->request->getPost('req_date');
+                $ord_desc = $this->request->getPost('ord_desc');
+                $so_remarks = $this->request->getPost('so_remarks');
+                session()->set('crm_no', $crm_no);
+                session()->set('req_date', $req_date);
+                session()->set('ord_desc', $ord_desc);
+                session()->set('so_remarks', $so_remarks);
+                return redirect()->to(base_url('/salesorder/selectproject/' . $ct_no . '/' . $prj_no));
+            } else if ($_POST['form_save'] == 'so_save') {
+                $csruniq = $this->request->getPost('csruniq');
+                $cart_item = $this->request->getPost('chk_item');
+                $chk_csrl = $this->SalesorderModel->chk_csrl_open($csruniq);
+                if ($cart_item > 0 or $chk_csrl['CHKITEM'] > 0) {
 
-            $data = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'CONTRACT' => $this->request->getPost('ct_no'),
-                'CTDESC' => $this->request->getPost('ct_desc'),
-                'MANAGER' => $this->request->getPost('ct_manager'),
-                'SALESNAME' => $this->request->getPost('ct_salesperson'),
-                'PROJECT' => $this->request->getPost('prj_no'),
-                'PRJDESC' => $this->request->getPost('prj_desc'),
-                'PONUMBERCUST' => $this->request->getPost('po_cust'),
-                'PODATECUST' => $podatecust,
-                'CUSTOMER' => $this->request->getPost('ct_custno'),
-                'NAMECUST' => $this->request->getPost('ct_namecust'),
-                'EMAIL1CUST' => $this->request->getPost('ct_email'),
-                'CRMNO' => $this->request->getPost('crm_no'),
-                'CRMREQDATE' => $crmreqdate,
-                'ORDERDESC' => $this->request->getPost('ord_desc'),
-                'SERVICETYPE' => $this->request->getPost('so_service'),
-                'CRMREMARKS' => $this->request->getPost('so_remarks'),
-                'ITEMNO' => $this->request->getPost('inventory_no'),
-                'MATERIALNO' => $this->request->getPost('material_no'),
-                'STOCKUNIT' => $this->request->getPost('so_uom'),
-                'QTY' => $this->request->getPost('so_qty'),
-                'OTPROCESS' => $groupuser,
-                'POSTINGSTAT' => 0,
-                'OFFLINESTAT' => 1,
-            );
+                    // Check Status Mail Notification
+                    $prj_startdate = $this->request->getPost('prj_startdate');
+                    $req_date = $this->request->getPost('req_date');
+                    $podatecust = substr($prj_startdate, 6, 4)  . "" . substr($prj_startdate, 0, 2) . "" . substr($prj_startdate, 3, 2);
+                    $crmreqdate = substr($req_date, 6, 4) . "" . substr($req_date, 0, 2) . "" . substr($req_date, 3, 2);
+                    $contract = $this->request->getPost('ct_no');
+                    $project = $this->request->getPost('prj_no');
+                    $custno = $this->request->getPost('ct_custno');
+                    $getcsruniq = $this->SalesorderModel->get_csruniq_open($contract, $project, $custno);
+                    $groupuser = 2;
 
-            //print_r($data_notif);
-            $csr_update = $this->SalesorderModel->csr_update($csruniq, $data);
+                    $data = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'CSRKEY' => '0-' . $this->request->getPost('ct_no') . $this->request->getPost('prj_no'),
+                        'CONTRACT' => $this->request->getPost('ct_no'),
+                        'CTDESC' => $this->request->getPost('ct_desc'),
+                        'MANAGER' => $this->request->getPost('ct_manager'),
+                        'SALESNAME' => $this->request->getPost('ct_salesperson'),
+                        'PROJECT' => $this->request->getPost('prj_no'),
+                        'PRJDESC' => $this->request->getPost('prj_desc'),
+                        'PONUMBERCUST' => $this->request->getPost('po_cust'),
+                        'PODATECUST' => $podatecust,
+                        'CUSTOMER' => $this->request->getPost('ct_custno'),
+                        'NAMECUST' => $this->request->getPost('ct_namecust'),
+                        'EMAIL1CUST' => $this->request->getPost('ct_email'),
+                        'CRMNO' => $this->request->getPost('crm_no'),
+                        'CRMREQDATE' => $crmreqdate,
+                        'ORDERDESC' => $this->request->getPost('ord_desc'),
+                        'CRMREMARKS' => $this->request->getPost('so_remarks'),
+                        'CSRREPLACE' => 0,
+                        'OTPROCESS' => $groupuser,
+                        'POSTINGSTAT' => 0,
+                        'OFFLINESTAT' => 1,
+                    );
 
-            $contract = $this->request->getPost('ct_no');
-            $project = $this->request->getPost('prj_no');
-            $custno = $this->request->getPost('ct_custno');
-            $itemno = $this->request->getPost('inventory_no');
-            $crmno = $this->request->getPost('crm_no');
-            $getcsruniq = $this->SalesorderModel->get_csruniq_open($contract, $project, $custno, $itemno, $crmno);
-            //session()->setFlashdata('messageerror', 'Create Record Failed');
-            session()->set('success', '1');
-            return redirect()->to(base_url('/salesorder/csropenview/' . $getcsruniq['CSRUNIQ']));
-            session()->remove('success');
+                    //print_r($data_notif);
+                    $csr_update = $this->SalesorderModel->csr_update($csruniq, $data);
+                    if ($csr_update) {
+                        $getcsruniq = $this->SalesorderModel->get_csruniq_open($contract, $project, $custno);
+                        foreach ($this->cart->contents() as $items) :
+                            $datal = array(
+                                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                'AUDTUSER' => trim($this->audtuser['AUDTUSER']),
+                                'AUDTORG' => trim($this->audtuser['AUDTORG']),
+                                'CSRUNIQ' => $getcsruniq['CSRUNIQ'],
+                                'CONTRACT' => $getcsruniq['CONTRACT'],
+                                'PROJECT' => $getcsruniq['PROJECT'],
+                                'SERVICETYPE' => $items['options']['so_service'],
+                                'ITEMNO' => $items['id'],
+                                'MATERIALNO' => $items['options']['material_no'],
+                                'ITEMDESC' => trim($items['options']['itemdesc']),
+                                'STOCKUNIT' => $items['options']['so_uom'],
+                                'QTY' => $items['qty'],
+                            );
+
+                            $csrl_insert = $this->SalesorderModel->csrline_insert($datal);
+                        endforeach;
+                    }
+                    $this->cart->destroy();
+                    //session()->setFlashdata('messageerror', 'Create Record Failed');
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/salesorder/csropenview/' . $getcsruniq['CSRUNIQ']));
+                    session()->remove('success');
+                } else {
+                    $ct_no = $this->request->getPost('ct_no');
+                    $prj_no = $this->request->getPost('prj_no');
+                    session()->set('success', '-1');
+                    return redirect()->to(base_url('/salesorder/selectproject/' . $ct_no . '/' . $prj_no));
+                }
+            }
         }
     }
 
@@ -625,9 +890,11 @@ class SalesOrder extends BaseController
         session()->remove('success');
         session()->set('success', '0');
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
+        $getcsrlopen = $this->SalesorderModel->get_csrl_open($csruniq);
         if ($getcsropen['POSTINGSTAT'] == 0) {
             $data = array(
                 'csropen_data' =>  $getcsropen,
+                'csrlopen_data' =>  $getcsrlopen,
                 'link_action' => 'salesorder/posting/',
                 'btn_color' => 'bg-blue',
                 'button' => 'Posting & Send Notification',
@@ -636,6 +903,7 @@ class SalesOrder extends BaseController
 
             $data = array(
                 'csropen_data' =>  $getcsropen,
+                'csrlopen_data' =>  $getcsrlopen,
                 'link_action' => 'salesorder/sendnotif/',
                 'btn_color' => 'bg-orange',
                 'button' => 'Send Notification Manually',

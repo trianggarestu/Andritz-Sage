@@ -98,9 +98,11 @@ class SalesorderOpen extends BaseController
         session()->remove('to_date');
 
         $so_open_data = $this->SalesorderModel->get_csr_list_open();
+        $so_l_open_data = $this->SalesorderModel->get_csrl_list_open();
 
         $data = array(
             'so_data' => $so_open_data,
+            'so_l_data' => $so_l_open_data,
             'keyword' => '',
         );
 
@@ -142,8 +144,10 @@ class SalesorderOpen extends BaseController
         } else {
             $so_open_data = $this->SalesorderModel->get_csr_list_open_search($keyword);
         }
+        $so_l_open_data = $this->SalesorderModel->get_csrl_list_open();
         $data = array(
             'so_data' => $so_open_data,
+            'so_l_data' => $so_l_open_data,
             'keyword' => $keyword,
         );
 
@@ -156,23 +160,12 @@ class SalesorderOpen extends BaseController
 
     public function deletedata($csruniq = '')
     {
-        $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
-        if ($getcsropen['POSTINGSTAT'] == 0) {
-            $data = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'POSTINGSTAT' => 2,
-            );
-            $this->SalesorderModel->set_csr_delete($csruniq, $data);
-            session()->set('success', '1');
-            return redirect()->to(base_url('/salesorderlist'));
-        } else {
-            session()->set('success', '-1');
-            return redirect()->to(base_url('/salesorderlist'));
-        }
+        // Remove record table webot_CSR & webot_CSRL
+        $this->SalesorderModel->delete_csropen($csruniq);
+        $this->SalesorderModel->delete_csrlopen($csruniq);
+        return redirect()->to(base_url('/salesorderopen'));
     }
+
 
     public function preview()
     {
@@ -201,15 +194,10 @@ class SalesorderOpen extends BaseController
             ->setCellValue('F1', 'CrmNo')
             ->setCellValue('G1', 'PoCustomer')
             ->setCellValue('H1', 'PoDate')
-            ->setCellValue('I1', 'Inventroy No')
-            ->setCellValue('J1', 'Material No')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'Order Description')
-            ->setCellValue('M1', 'Service Type')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', 'Status');
+            ->setCellValue('I1', 'ReqDate')
+            ->setCellValue('J1', 'SalesPerson')
+            ->setCellValue('K1', 'Order Description')
+            ->setCellValue('L1', 'Status');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -246,18 +234,12 @@ class SalesorderOpen extends BaseController
                 ->setCellValue('D' . $rows, $data['CONTRACT'])
                 ->setCellValue('E' . $rows, $data['PROJECT'])
                 ->setCellValue('F' . $rows, $data['CRMNO'])
-
                 ->setCellValue('G' . $rows, $data['PONUMBERCUST'])
-                ->setCellValue('J' . $rows, trim($pocustdate))
-                ->setCellValue('H' . $rows, $data['ITEMNO'])
-                ->setCellValue('I' . $rows, $data['MATERIALNO'])
-                ->setCellValue('K' . $rows, trim($reqdate))
-                ->setCellValue('L' . $rows, $data['SALESNAME'])
-                ->setCellValue('M' . $rows, $data['ORDERDESC'])
-                ->setCellValue('M' . $rows, $data['SERVICETYPE'])
-                ->setCellValue('N' . $rows, $data['QTY'])
-                ->setCellValue('O' . $rows, $data['STOCKUNIT'])
-                ->setCellValue('P' . $rows, $postingstatus);
+                ->setCellValue('H' . $rows, trim($pocustdate))
+                ->setCellValue('I' . $rows, trim($reqdate))
+                ->setCellValue('J' . $rows, $data['SALESNAME'])
+                ->setCellValue('K' . $rows, $data['ORDERDESC'])
+                ->setCellValue('L' . $rows, $postingstatus);
             $rows++;
         }
         // tulis dalam format .xlsx

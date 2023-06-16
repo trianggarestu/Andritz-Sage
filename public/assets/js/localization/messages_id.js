@@ -9,7 +9,7 @@ $.extend($.validator.messages, {
 	url: "Silakan masukkan format URL yang benar.",
 	date: "Silakan masukkan format tanggal yang benar.",
 	dateISO: "Silakan masukkan format tanggal(ISO) yang benar.",
-	number: "Silakan masukkan angka yang benar.",
+	number: "Please enter the correct number.",
 	digits: "Harap masukan angka saja.",
 	creditcard: "Harap masukkan format kartu kredit yang benar.",
 	equalTo: "Please enter the same value as before.",

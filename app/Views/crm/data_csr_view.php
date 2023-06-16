@@ -65,6 +65,24 @@
 															<th colspan="3" class="subtitle_head"><strong>CONTRACT</strong></th>
 														</tr>
 														<tr>
+															<td width="300">Status </td>
+															<td width="1">:</td>
+															<td><strong><?php $postingstat = $csropen_data['POSTINGSTAT'];
+																		switch ($postingstat) {
+																			case "0":
+																				echo "<span class='label label-warning'>Open</span>";
+																				break;
+																			case "1":
+																				echo "<span class='label label-success'>Posted</span>";
+																				break;
+																			case "2":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			default:
+																				echo "<span class='label label-warning'>Open</span>";
+																		} ?></strong></td>
+														</tr>
+														<tr>
 															<td width="300">Contract </td>
 															<td width="1">:</td>
 															<td><strong><?= $csropen_data['CONTRACT']; ?></strong></td>
@@ -149,33 +167,58 @@
 															<td><strong><?= $csropen_data['CRMREMARKS']; ?></strong></td>
 														</tr>
 														<tr>
-															<th colspan="3" class="subtitle_head"><strong>SERVICES</strong></th>
+															<th colspan="3" class="subtitle_head"><strong>SPAREPARTS / SERVICES</strong></th>
 														</tr>
 														<tr>
-															<td width="300">Service Type </td>
-															<td width="1">:</td>
-															<td><strong><?= $csropen_data['SERVICETYPE']; ?></strong></td>
+															<td colspan="3">
+																<div class="table-responsive">
+																	<table class="table table-bordered dataTable table-hover nowrap">
+																		<thead class="bg-gray disabled color-palette">
+																			<tr>
+
+																				<th class="padat">No</th>
+
+																				<th>Type </th>
+																				<th>Inventory No.</th>
+																				<th>Material No.</th>
+																				<th>Item Desc.</th>
+																				<th>Qty.</th>
+																				<th>Uom</th>
+
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<?php
+																			$no = 0;
+																			foreach ($csrlopen_data as $items) :
+																			?>
+																				<tr>
+
+																					<td class="text-center"><?= ++$no ?></td>
+																					<td><?= $items['SERVICETYPE']
+																						?></td>
+
+																					<td><?= $items['ITEMNO']
+																						?></td>
+																					<td><?= $items['MATERIALNO']
+																						?></td>
+																					<td nowrap><?= $items['ITEMDESC']
+																								?></td>
+																					<td><?= $items['QTY']
+																						?></td>
+																					<td nowrap><?= $items['STOCKUNIT']
+																								?></td>
+
+																				</tr>
+																			<?php endforeach;
+																			?>
+																		</tbody>
+																	</table>
+																</div>
+															</td>
+
 														</tr>
-														<tr>
-															<td width="300">Inventory No. </td>
-															<td width="1">:</td>
-															<td><strong><?= $csropen_data['ITEMNO']; ?></strong></td>
-														</tr>
-														<tr>
-															<td width="300">Material No. </td>
-															<td width="1">:</td>
-															<td><strong><?= $csropen_data['MATERIALNO']; ?></strong></td>
-														</tr>
-														<tr>
-															<td width="300">Item Description </td>
-															<td width="1">:</td>
-															<td><strong><?= $csropen_data['ITEMDESC']; ?></strong></td>
-														</tr>
-														<tr>
-															<td width="300">Qty. </td>
-															<td width="1">:</td>
-															<td><strong><?= number_format($csropen_data['QTY'], 0, ",", ".") . ' (' . trim($csropen_data['STOCKUNIT']) . ')'; ?></strong></td>
-														</tr>
+
 
 
 													</tbody>

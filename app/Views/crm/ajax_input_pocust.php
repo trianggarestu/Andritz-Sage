@@ -8,7 +8,7 @@
 </script>
 <div class='modal-header'>
     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-    <h4 class='modal-title' id='myModalLabel'> Input Email Manually!</h4>
+    <h4 class='modal-title' id='myModalLabel'> Input P/O Customer Manually!</h4>
 </div>
 
 <form action="<?= $form_action;
@@ -19,10 +19,10 @@
                 <div class="box box-success">
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="contract">Input E-mail Customer</label>
-                            <input type="text" class="form-control input-sm required email" id="email_manual" name="email_manual" placeholder="" value="<?= $cust_email ?>" />
+                            <label for="contract">Input P/O Customer</label>
+                            <input type="text" class="form-control input-sm required" id="po_cust" name="po_cust" placeholder="" value="" />
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                Input E-mail Customer Manually if Blank Data email in Master Customer Sage !
+                                Input P/O Number Customer Manually if Blank Data P/O in the Sage !
 
                             </p>
                         </div>

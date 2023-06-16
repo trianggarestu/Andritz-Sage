@@ -27,7 +27,7 @@
                                 ?>
                                     <option value="<?= trim($data['CONTRACT'])
                                                     ?>">(<?= trim($data['CONTRACT'])
-                                                            ?> - <?= $ct_startdate ?>) - <?= $data['DESC'] . " - " . $data['CUSTOMER']
+                                                            ?> - <?= $ct_startdate ?>) - <?= $data['DESC'] . " - " . $data['NAMECUST']
                                                                                             ?>
                                     </option>
                                 <?php endforeach;
@@ -35,7 +35,7 @@
                             </select>
 
 
-                            <input type="hidden" id="contractx" name="contractx" value="uuu">
+                            <input type="hidden" id="csruniq" name="csruniq" value="<?= session()->get('csruniq') ?>">
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                 only viewed contract with open status
 
