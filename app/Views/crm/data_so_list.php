@@ -92,6 +92,7 @@
 													<thead class="bg-gray disabled color-palette">
 														<tr>
 															<th>No.</th>
+															<th>Action</th>
 															<th>Status</th>
 															<th>Customer Name</th>
 															<th>Customer Email</th>
@@ -122,6 +123,11 @@
 														?>
 															<tr>
 																<td><?= ++$no; ?></td>
+																<td>
+																	<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="SO View">
+																		<i class="fa fa-file"></i>
+																	</a>
+																</td>
 																<td>
 																	<?php $postingstat = $ot_list['POSTINGSTAT'] . $ot_list['OFFLINESTAT'];
 																	switch ($postingstat) {

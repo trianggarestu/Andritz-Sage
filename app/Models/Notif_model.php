@@ -228,4 +228,12 @@ class Notif_model extends Model
 		$query = $this->db->table('webot_MAILBOX')->insert($data_notif);
 		return $query;
 	}
+
+	//Check Duplikat Entry - Return False if double post
+	function get_mail_key($groupuser, $csruniq, $touser)
+	{
+		$query = $this->db->query("select MAILSEQ,OTPROCESS,UNIQPROCESS,MAILKEY,TO_USER  
+        from webot_MAILBOX where OTPROCESS='$groupuser' and UNIQPROCESS='$csruniq' and TO_USER='$touser'");
+		return $query->getRowArray();
+	}
 }

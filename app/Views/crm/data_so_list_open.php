@@ -82,7 +82,15 @@
 															</tr>
 														</thead>
 														<tbody>
+															<?php
+															if (empty($ot_list)) :
 
+															?>
+																<tr>
+																	<td colspan="8" style="text-align: center;"> <strong>Data is Empty.</strong></td>
+
+																</tr>
+															<?php endif; ?>
 															<?php
 															$no = 0;
 															foreach ($so_data as $ot_list) {
@@ -175,13 +183,13 @@
 																				</thead>
 																				<tbody>
 																					<?php
-																					$no = 0;
+																					$no_l = 0;
 																					foreach ($so_l_data as $items) :
 																						if ($ot_list['CSRUNIQ'] == $items['CSRUNIQ']) :
 																					?>
 																							<tr>
 
-																								<td class="text-center" style="width: 5%;"><?= ++$no ?></td>
+																								<td class="text-center" style="width: 5%;"><?= ++$no_l ?></td>
 																								<td style="width: 10%;"><?= $items['SERVICETYPE']
 																														?></td>
 

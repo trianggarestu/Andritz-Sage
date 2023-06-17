@@ -65,6 +65,7 @@
 																<th class="bg-orange">Order Description</th>
 																<th class="bg-orange">Qty</th>
 																<th class="bg-orange">Uom</th>
+																<th class="bg-orange">CRM Remarks</th>
 																<th style="background-color: white;"></th>
 																<th class="bg-yellow">PR Number</th>
 																<th class="bg-yellow">PR Date</th>
@@ -169,6 +170,7 @@
 																	<td><?= $ot_list['ORDERDESC']; ?></td>
 																	<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
 																	<td><?= $ot_list['STOCKUNIT']; ?></td>
+																	<td><?= $ot_list['CRMREMARKS']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $ot_list['RQNNUMBER']; ?></td>
 																	<td><?= $rqndate; ?></td>

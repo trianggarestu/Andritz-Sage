@@ -10,6 +10,7 @@ use App\Models\Login_model;
 use App\Models\Administration_model;
 use App\Models\Notif_model;
 use App\Models\Salesorder_model;
+use App\Models\Ordertracking_model;
 
 //use App\Controllers\AdminController;
 
@@ -33,6 +34,7 @@ class SalesOrder extends BaseController
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
         $this->SalesorderModel = new Salesorder_model();
+        $this->OrdertrackingModel = new Ordertracking_model();
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -917,7 +919,7 @@ class SalesOrder extends BaseController
             $data = array(
                 'csropen_data' =>  $getcsropen,
                 'csrlopen_data' =>  $getcsrlopen,
-                'link_action' => 'salesorder/posting/',
+                'link_action' => base_url('salesorder/posting'),
                 'btn_color' => 'bg-blue',
                 'btn_fa' => 'fa-check-square-o',
                 'button' => 'Posting',
@@ -926,7 +928,7 @@ class SalesOrder extends BaseController
             $data = array(
                 'csropen_data' =>  $getcsropen,
                 'csrlopen_data' =>  $getcsrlopen,
-                'link_action' => 'salesorder/posting/',
+                'link_action' => base_url('salesorder/posting'),
                 'btn_color' => 'bg-blue',
                 'btn_fa' => 'fa-paper-plane-o',
                 'button' => 'Posting & Send Notification',
@@ -936,7 +938,7 @@ class SalesOrder extends BaseController
             $data = array(
                 'csropen_data' =>  $getcsropen,
                 'csrlopen_data' =>  $getcsrlopen,
-                'link_action' => 'salesorder/sendnotif/',
+                'link_action' => base_url('salesorder/sendnotif'),
                 'btn_color' => 'bg-orange',
                 'btn_fa' => 'fa-paper-plane-o',
                 'button' => 'Send Notification Manually',
@@ -949,51 +951,67 @@ class SalesOrder extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
-    public function posting($csruniq)
+    public function posting()
     {
-        $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
-        $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
-        $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
-        //CSR Ready to Post
-        $getcsrrtp = $this->SalesorderModel->get_csr_open_rtp($csruniq);
-        $sender = $this->AdministrationModel->get_mailsender();
-        $groupuser = 2;
-        foreach ($getcsrrtp as $ot) :
-            $data = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'CSRUNIQ' => $ot['CSRUNIQ'],
-                'CSRLUNIQ' => $ot['CSRLUNIQ'],
-                'OTKEY' => $ot['CSRREPLACE'] . '-' . trim($ot['CONTRACT']) . '-' . trim($ot['PROJECT']) . '-' . trim($ot['ITEMNO']) . '-' . $ot['CSRLUNIQ'],
-                'CONTRACT' => $ot['CONTRACT'],
-                'CTDESC' => $ot['CTDESC'],
-                'MANAGER' => $ot['MANAGER'],
-                'SALESNAME' => $ot['SALESNAME'],
-                'PROJECT' => $ot['PROJECT'],
-                'PRJDESC' => $ot['PRJDESC'],
-                'PONUMBERCUST' => $ot['PONUMBERCUST'],
-                'PODATECUST' => $ot['PODATECUST'],
-                'CUSTOMER' => $ot['CUSTOMER'],
-                'NAMECUST' => $ot['NAMECUST'],
-                'EMAIL1CUST' => $ot['EMAIL1CUST'],
-                'CRMNO' => $ot['CRMNO'],
-                'CRMREQDATE' => $ot['CRMREQDATE'],
-                'ORDERDESC' => $ot['ORDERDESC'],
-                'CRMREMARKS' => $ot['CRMREMARKS'],
-                'SERVICETYPE' => $ot['SERVICETYPE'],
-                'ITEMNO' => $ot['ITEMNO'],
-                'MATERIALNO' => $ot['MATERIALNO'],
-                'ITEMDESC' => $ot['ITEMDESC'],
-                'STOCKUNIT' => $ot['STOCKUNIT'],
-                'QTY' => $ot['QTY'],
-            );
-            // Untuk Fungsi Posting & Send Notif
-            $ot_insert = $this->SalesorderModel->ot_insert($data);
-        endforeach;
+        if ($_POST['form_post'] == 'so_post') {
+            $csruniq = $this->request->getPost('csruniq');
+            $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
+            $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
+            $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
+            //CSR Ready to Post
+            $getcsrrtp = $this->SalesorderModel->get_csr_open_rtp($csruniq);
+            $sender = $this->AdministrationModel->get_mailsender();
+            $groupuser = 2;
+            foreach ($getcsrrtp as $ot) :
+                $data = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'CSRUNIQ' => $ot['CSRUNIQ'],
+                    'CSRLUNIQ' => $ot['CSRLUNIQ'],
+                    'OTKEY' => $ot['CSRREPLACE'] . '-' . trim($ot['CONTRACT']) . '-' . trim($ot['PROJECT']) . '-' . trim($ot['ITEMNO']) . '-' . $ot['CSRUNIQ'] . '-' . $ot['CSRLUNIQ'],
+                    'CONTRACT' => $ot['CONTRACT'],
+                    'CTDESC' => $ot['CTDESC'],
+                    'MANAGER' => $ot['MANAGER'],
+                    'SALESNAME' => $ot['SALESNAME'],
+                    'PROJECT' => $ot['PROJECT'],
+                    'PRJDESC' => $ot['PRJDESC'],
+                    'PONUMBERCUST' => $ot['PONUMBERCUST'],
+                    'PODATECUST' => $ot['PODATECUST'],
+                    'CUSTOMER' => $ot['CUSTOMER'],
+                    'NAMECUST' => $ot['NAMECUST'],
+                    'EMAIL1CUST' => $ot['EMAIL1CUST'],
+                    'CRMNO' => $ot['CRMNO'],
+                    'CRMREQDATE' => $ot['CRMREQDATE'],
+                    'ORDERDESC' => $ot['ORDERDESC'],
+                    'CRMREMARKS' => $ot['CRMREMARKS'],
+                    'SERVICETYPE' => $ot['SERVICETYPE'],
+                    'ITEMNO' => $ot['ITEMNO'],
+                    'MATERIALNO' => $ot['MATERIALNO'],
+                    'ITEMDESC' => $ot['ITEMDESC'],
+                    'STOCKUNIT' => $ot['STOCKUNIT'],
+                    'QTY' => $ot['QTY'],
+                );
+                // Untuk Fungsi Posting & Send Notif
+                $csrreplace = $ot['CSRREPLACE'];
+                $contract = trim($ot['CONTRACT']);
+                $project = trim($ot['PROJECT']);
+                $itemno = trim($ot['ITEMNO']);
+                $csruniq = $ot['CSRUNIQ'];
+                $csrluniq = $ot['CSRLUNIQ'];
 
-        if ($ot_insert) {
+                $getotuniq = $this->OrdertrackingModel->get_ot_key($csruniq, $csrluniq);
+                if (!empty($getotuniq['OTKEY']) and $getotuniq['OTKEY'] == $csrreplace . '-' . $contract . '-' . $project . '-' . $itemno . '-' . $csruniq . '-' . $csrluniq) {
+                    session()->set('success', '-1');
+                    return redirect()->to(base_url('/salesorder/csropenview/' . $csruniq));
+                    session()->remove('success');
+                } else if (empty($getotuniq['OTKEY'])) {
+                    $ot_insert = $this->SalesorderModel->ot_insert($data);
+                }
+            endforeach;
+
+            //if ($ot_insert) {
             if ($sender['OFFLINESTAT'] == 0) {
                 //Untuk Update Status Posting CSR
                 $data2 = array(
@@ -1008,7 +1026,7 @@ class SalesOrder extends BaseController
 
                 $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
                 $mail_tmpl = $this->NotifModel->get_template($groupuser);
-                foreach ($notiftouser_data as $sendto_user) {
+                foreach ($notiftouser_data as $sendto_user) :
                     $var_email = array(
                         'TONAME' => $sendto_user['NAME'],
                         'FROMNAME' => $this->audtuser['NAMELGN'],
@@ -1042,46 +1060,55 @@ class SalesOrder extends BaseController
                         'message' => $message,
                     );
 
-                    $sending_mail = $this->send($data_email);
 
-                    if ($sending_mail) {
-                        $data_notif = array(
-                            'FROM_USER' => $this->header_data['usernamelgn'],
-                            'FROM_EMAIL' => $this->header_data['emaillgn'],
-                            'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                            'TO_USER' => $sendto_user['USERNAME'],
-                            'TO_EMAIL' => $sendto_user['EMAIL'],
-                            'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                            'SUBJECT' => $subject,
-                            'MESSAGE' => $message,
-                            'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                            'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                            'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                            'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                            'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                            'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                            'IS_READ' => 0,
-                            'IS_ARCHIVED' => 0,
-                            'IS_TRASHED' => 0,
-                            'IS_DELETED' => 0,
-                            'IS_ATTACHED' => 0,
-                            'IS_STAR' => 0,
-                            'IS_READSENDER' => 1,
-                            'IS_ARCHIVEDSENDER' => 0,
-                            'IS_TRASHEDSENDER' => 0,
-                            'IS_DELETEDSENDER' => 0,
-                            'SENDING_STATUS' => 1,
-                            'OTPROCESS' => $groupuser,
-                            'UNIQPROCESS' => $getcsropen['CSRUNIQ'],
-                        );
-                        $this->NotifModel->mailbox_insert($data_notif);
-                        $this->SalesorderModel->csr_post_update($csruniq, $data2);
+                    $data_notif = array(
+                        'MAILKEY' => $groupuser . '-' . $getcsropen['CSRUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                        'FROM_USER' => $this->header_data['usernamelgn'],
+                        'FROM_EMAIL' => $this->header_data['emaillgn'],
+                        'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                        'TO_USER' => $sendto_user['USERNAME'],
+                        'TO_EMAIL' => $sendto_user['EMAIL'],
+                        'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                        'SUBJECT' => $subject,
+                        'MESSAGE' => $message,
+                        'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                        'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                        'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                        'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                        'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                        'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                        'IS_READ' => 0,
+                        'IS_ARCHIVED' => 0,
+                        'IS_TRASHED' => 0,
+                        'IS_DELETED' => 0,
+                        'IS_ATTACHED' => 0,
+                        'IS_STAR' => 0,
+                        'IS_READSENDER' => 1,
+                        'IS_ARCHIVEDSENDER' => 0,
+                        'IS_TRASHEDSENDER' => 0,
+                        'IS_DELETEDSENDER' => 0,
+                        'SENDING_STATUS' => 1,
+                        'OTPROCESS' => $groupuser,
+                        'UNIQPROCESS' => $getcsropen['CSRUNIQ'],
+                    );
+
+                    //Check Duplicate Entry & Sending Mail
+                    $touser = trim($sendto_user['USERNAME']);
+                    $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $csruniq, $touser);
+                    if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $csruniq . '-' . $touser) {
+                        session()->set('success', '-1');
+                        return redirect()->to(base_url('/salesorderlist'));
+                        session()->remove('success');
+                    } else if (empty($getmailuniq['MAILKEY'])) {
+                        $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                        if ($post_email) {
+                            $sending_mail = $this->send($data_email);
+                        }
                     }
-                }
-                //return redirect()->to(base_url('/salesorder'));
-                //}
-                //}
 
+                endforeach;
+
+                $this->SalesorderModel->csr_post_update($csruniq, $data2);
                 session()->set('success', '1');
                 return redirect()->to(base_url('/salesorderlist'));
                 session()->remove('success');
@@ -1101,6 +1128,7 @@ class SalesOrder extends BaseController
                 session()->remove('success');
             }
         }
+        //}
     }
 
     public function sendnotif($csruniq)
@@ -1122,7 +1150,7 @@ class SalesOrder extends BaseController
 
         $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
         $mail_tmpl = $this->NotifModel->get_template($groupuser);
-        foreach ($notiftouser_data as $sendto_user) {
+        foreach ($notiftouser_data as $sendto_user) :
             $var_email = array(
                 'TONAME' => $sendto_user['NAME'],
                 'FROMNAME' => $this->audtuser['NAMELGN'],
@@ -1155,47 +1183,58 @@ class SalesOrder extends BaseController
                 'message' =>  $message,
             );
 
-            $sending_mail = $this->send($data_email);
+            $data_notif = array(
+                'MAILKEY' => $groupuser . '-' . $getcsropen['CSRUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                'FROM_USER' => $this->header_data['usernamelgn'],
+                'FROM_EMAIL' => $this->header_data['emaillgn'],
+                'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                'TO_USER' => $sendto_user['USERNAME'],
+                'TO_EMAIL' => $sendto_user['EMAIL'],
+                'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                'SUBJECT' => $subject,
+                'MESSAGE' => $message,
+                'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                'IS_READ' => 0,
+                'IS_ARCHIVED' => 0,
+                'IS_TRASHED' => 0,
+                'IS_DELETED' => 0,
+                'IS_ATTACHED' => 0,
+                'IS_STAR' => 0,
+                'IS_READSENDER' => 1,
+                'IS_ARCHIVEDSENDER' => 0,
+                'IS_TRASHEDSENDER' => 0,
+                'IS_DELETEDSENDER' => 0,
+                'SENDING_STATUS' => 1,
+                'OTPROCESS' => $groupuser,
+                'UNIQPROCESS' => $getcsropen['CSRUNIQ'],
+            );
 
-            if ($sending_mail) {
-                $data_notif = array(
-                    'FROM_USER' => $this->header_data['usernamelgn'],
-                    'FROM_EMAIL' => $this->header_data['emaillgn'],
-                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'TO_USER' => $sendto_user['USERNAME'],
-                    'TO_EMAIL' => $sendto_user['EMAIL'],
-                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                    'SUBJECT' => $subject,
-                    'MESSAGE' => $message,
-                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'IS_READ' => 0,
-                    'IS_ARCHIVED' => 0,
-                    'IS_TRASHED' => 0,
-                    'IS_DELETED' => 0,
-                    'IS_ATTACHED' => 0,
-                    'IS_STAR' => 0,
-                    'IS_READSENDER' => 1,
-                    'IS_ARCHIVEDSENDER' => 0,
-                    'IS_TRASHEDSENDER' => 0,
-                    'IS_DELETEDSENDER' => 0,
-                    'SENDING_STATUS' => 1,
-                    'OTPROCESS' => $groupuser,
-                    'UNIQPROCESS' => $getcsropen['CSRUNIQ'],
-                );
-                $this->NotifModel->mailbox_insert($data_notif);
-                $this->SalesorderModel->csr_post_update($csruniq, $data2);
+            $touser = trim($sendto_user['USERNAME']);
+            $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $csruniq, $touser);
+            if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $csruniq . '-' . $touser) {
+                session()->set('success', '1');
+                return redirect()->to(base_url('/salesorderlist'));
+                session()->remove('success');
+            } else if (empty($getmailuniq['MAILKEY'])) {
+                $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                if ($post_email) {
+                    $sending_mail = $this->send($data_email);
+                }
             }
-        }
+
+        endforeach;
+        $this->SalesorderModel->csr_post_update($csruniq, $data2);
 
         session()->set('success', '1');
         return redirect()->to(base_url('/salesorderlist'));
         session()->remove('success');
     }
+
 
     private function send($data_email)
     {
