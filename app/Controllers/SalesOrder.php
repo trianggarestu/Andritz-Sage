@@ -80,6 +80,7 @@ class SalesOrder extends BaseController
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
                     'AUDTUSER' => $infouser['usernamelgn'],
                     'AUDTORG' => $this->db_name->database,
+                    'NAMELGN' => $infouser['namalgn'],
 
                 ];
             } else {
@@ -99,6 +100,7 @@ class SalesOrder extends BaseController
         session()->remove('from_date');
         session()->remove('to_date');
         // Remove Session Delete
+        session()->remove('csruniq');
         session()->remove('manager');
         session()->remove('salesman');
         session()->remove('cust_email');
@@ -121,6 +123,7 @@ class SalesOrder extends BaseController
             'ct_custno' => '',
             'ct_custname' => '',
             'ct_email' => '',
+            'chk_email' => '',
             'prj_no' => '',
             'prj_desc' => '',
             'po_cust' => '',
@@ -160,6 +163,8 @@ class SalesOrder extends BaseController
         session()->set('cust_email', trim($getcsropen['EMAIL1CUST']));
         session()->set('po_cust', trim($getcsropen['PONUMBERCUST']));
         $getcsrl_by_id = $this->SalesorderModel->get_csrl_open($csruniq);
+        $chk_manual = $this->SalesorderModel->get_contract_by_id(trim($getcsropen['CONTRACT']));
+        $chk_manual_p = $this->SalesorderModel->get_project_by_contract(trim($getcsropen['CONTRACT']), trim($getcsropen['PROJECT']));
         $data = array(
             'csruniq' => $csruniq,
             'csr_uniq' => $getcsropen['CSRUNIQ'],
@@ -171,6 +176,9 @@ class SalesOrder extends BaseController
             'ct_custno' => trim($getcsropen['CUSTOMER']),
             'ct_custname' => trim($getcsropen['NAMECUST']),
             'ct_email' => trim($getcsropen['EMAIL1CUST']),
+            'chk_salesperson' => trim($chk_manual['NAME']),
+            'chk_email' => trim($chk_manual['EMAIL1']),
+            'chk_po_cust' => trim($chk_manual_p['PONUMBER']),
             'prj_no' => trim($getcsropen['PROJECT']),
             'prj_desc' => trim($getcsropen['PRJDESC']),
             'po_cust' => trim($getcsropen['PONUMBERCUST']),
@@ -214,6 +222,9 @@ class SalesOrder extends BaseController
                 'ct_custno' => '',
                 'ct_custname' => '',
                 'ct_email' => '',
+                'chk_salesperson' => '',
+                'chk_email' => '',
+                'chk_po_cust' => '',
                 'prj_no' => '',
                 'prj_desc' => '',
                 'po_cust' => '',
@@ -247,6 +258,9 @@ class SalesOrder extends BaseController
                     'ct_custno' => trim($row['CUSTOMER']),
                     'ct_custname' => trim($row['NAMECUST']),
                     'ct_email' => trim($row['EMAIL1']),
+                    'chk_salesperson' => '',
+                    'chk_email' => '',
+                    'chk_po_cust' => '',
                     'prj_no' => '',
                     'prj_desc' => '',
                     'po_cust' => '',
@@ -292,6 +306,9 @@ class SalesOrder extends BaseController
                 'ct_custno' => '',
                 'ct_custname' => '',
                 'ct_email' => '',
+                'chk_salesperson' => '',
+                'chk_email' => '',
+                'chk_po_cust' => '',
                 'prj_no' => '',
                 'prj_desc' => '',
                 'po_cust' => '',
@@ -330,6 +347,9 @@ class SalesOrder extends BaseController
                     'ct_custno' => trim($row['CUSTOMER']),
                     'ct_custname' => trim($row['NAMECUST']),
                     'ct_email' => trim($row['EMAIL1']),
+                    'chk_salesperson' => '',
+                    'chk_email' => '',
+                    'chk_po_cust' => '',
                     'prj_no' => trim($row['PROJECT']),
                     'prj_desc' => trim($row['Prj_Desc']),
                     'po_cust' => trim($row['PONUMBER']),
@@ -654,7 +674,7 @@ class SalesOrder extends BaseController
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
                         'AUDTUSER' => $this->audtuser['AUDTUSER'],
                         'AUDTORG' => $this->audtuser['AUDTORG'],
-                        'CSRKEY' => '0-' . $this->request->getPost('ct_no') . $this->request->getPost('prj_no'),
+                        'CSRKEY' => '0-' . $this->request->getPost('ct_no') . '-' . $this->request->getPost('prj_no'),
                         'CONTRACT' => $this->request->getPost('ct_no'),
                         'CTDESC' => $this->request->getPost('ct_desc'),
                         'MANAGER' => $this->request->getPost('ct_manager'),
@@ -824,7 +844,7 @@ class SalesOrder extends BaseController
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
                         'AUDTUSER' => $this->audtuser['AUDTUSER'],
                         'AUDTORG' => $this->audtuser['AUDTORG'],
-                        'CSRKEY' => '0-' . $this->request->getPost('ct_no') . $this->request->getPost('prj_no'),
+                        'CSRKEY' => '0-' . $this->request->getPost('ct_no') . '-' . $this->request->getPost('prj_no'),
                         'CONTRACT' => $this->request->getPost('ct_no'),
                         'CTDESC' => $this->request->getPost('ct_desc'),
                         'MANAGER' => $this->request->getPost('ct_manager'),
@@ -889,14 +909,26 @@ class SalesOrder extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
+        //check mail sender
+        $sender = $this->AdministrationModel->get_mailsender();
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
         $getcsrlopen = $this->SalesorderModel->get_csrl_open($csruniq);
-        if ($getcsropen['POSTINGSTAT'] == 0) {
+        if ($getcsropen['POSTINGSTAT'] == 0 and $sender['OFFLINESTAT'] == 1) {
             $data = array(
                 'csropen_data' =>  $getcsropen,
                 'csrlopen_data' =>  $getcsrlopen,
                 'link_action' => 'salesorder/posting/',
                 'btn_color' => 'bg-blue',
+                'btn_fa' => 'fa-check-square-o',
+                'button' => 'Posting',
+            );
+        } else if ($getcsropen['POSTINGSTAT'] == 0 and $sender['OFFLINESTAT'] == 0) {
+            $data = array(
+                'csropen_data' =>  $getcsropen,
+                'csrlopen_data' =>  $getcsrlopen,
+                'link_action' => 'salesorder/posting/',
+                'btn_color' => 'bg-blue',
+                'btn_fa' => 'fa-paper-plane-o',
                 'button' => 'Posting & Send Notification',
             );
         } else if ($getcsropen['POSTINGSTAT'] == 1) {
@@ -906,6 +938,7 @@ class SalesOrder extends BaseController
                 'csrlopen_data' =>  $getcsrlopen,
                 'link_action' => 'salesorder/sendnotif/',
                 'btn_color' => 'bg-orange',
+                'btn_fa' => 'fa-paper-plane-o',
                 'button' => 'Send Notification Manually',
             );
         }
@@ -919,39 +952,47 @@ class SalesOrder extends BaseController
     public function posting($csruniq)
     {
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
+        $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
+        $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
+        //CSR Ready to Post
+        $getcsrrtp = $this->SalesorderModel->get_csr_open_rtp($csruniq);
         $sender = $this->AdministrationModel->get_mailsender();
         $groupuser = 2;
-        $data = array(
-            'AUDTDATE' => $this->audtuser['AUDTDATE'],
-            'AUDTTIME' => $this->audtuser['AUDTTIME'],
-            'AUDTUSER' => $this->audtuser['AUDTUSER'],
-            'AUDTORG' => $this->audtuser['AUDTORG'],
-            'CSRUNIQ' => $csruniq,
-            'CONTRACT' => $getcsropen['CONTRACT'],
-            'CTDESC' => $getcsropen['CTDESC'],
-            'MANAGER' => $getcsropen['MANAGER'],
-            'SALESNAME' => $getcsropen['SALESNAME'],
-            'PROJECT' => $getcsropen['PROJECT'],
-            'PRJDESC' => $getcsropen['PRJDESC'],
-            'PONUMBERCUST' => $getcsropen['PONUMBERCUST'],
-            'PODATECUST' => $getcsropen['PODATECUST'],
-            'CUSTOMER' => $getcsropen['CUSTOMER'],
-            'NAMECUST' => $getcsropen['NAMECUST'],
-            'EMAIL1CUST' => $getcsropen['EMAIL1CUST'],
-            'CRMNO' => $getcsropen['CRMNO'],
-            'CRMREQDATE' => $getcsropen['CRMREQDATE'],
-            'ORDERDESC' => $getcsropen['ORDERDESC'],
-            'SERVICETYPE' => $getcsropen['SERVICETYPE'],
-            'CRMREMARKS' => $getcsropen['CRMREMARKS'],
-            'ITEMNO' => $getcsropen['ITEMNO'],
-            'MATERIALNO' => $getcsropen['MATERIALNO'],
-            'STOCKUNIT' => $getcsropen['STOCKUNIT'],
-            'QTY' => $getcsropen['QTY'],
-        );
+        foreach ($getcsrrtp as $ot) :
+            $data = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'CSRUNIQ' => $ot['CSRUNIQ'],
+                'CSRLUNIQ' => $ot['CSRLUNIQ'],
+                'OTKEY' => $ot['CSRREPLACE'] . '-' . trim($ot['CONTRACT']) . '-' . trim($ot['PROJECT']) . '-' . trim($ot['ITEMNO']) . '-' . $ot['CSRLUNIQ'],
+                'CONTRACT' => $ot['CONTRACT'],
+                'CTDESC' => $ot['CTDESC'],
+                'MANAGER' => $ot['MANAGER'],
+                'SALESNAME' => $ot['SALESNAME'],
+                'PROJECT' => $ot['PROJECT'],
+                'PRJDESC' => $ot['PRJDESC'],
+                'PONUMBERCUST' => $ot['PONUMBERCUST'],
+                'PODATECUST' => $ot['PODATECUST'],
+                'CUSTOMER' => $ot['CUSTOMER'],
+                'NAMECUST' => $ot['NAMECUST'],
+                'EMAIL1CUST' => $ot['EMAIL1CUST'],
+                'CRMNO' => $ot['CRMNO'],
+                'CRMREQDATE' => $ot['CRMREQDATE'],
+                'ORDERDESC' => $ot['ORDERDESC'],
+                'CRMREMARKS' => $ot['CRMREMARKS'],
+                'SERVICETYPE' => $ot['SERVICETYPE'],
+                'ITEMNO' => $ot['ITEMNO'],
+                'MATERIALNO' => $ot['MATERIALNO'],
+                'ITEMDESC' => $ot['ITEMDESC'],
+                'STOCKUNIT' => $ot['STOCKUNIT'],
+                'QTY' => $ot['QTY'],
+            );
+            // Untuk Fungsi Posting & Send Notif
+            $ot_insert = $this->SalesorderModel->ot_insert($data);
+        endforeach;
 
-
-        // Untuk Fungsi Posting & Send Notif
-        $ot_insert = $this->SalesorderModel->ot_insert($data);
         if ($ot_insert) {
             if ($sender['OFFLINESTAT'] == 0) {
                 //Untuk Update Status Posting CSR
@@ -966,8 +1007,29 @@ class SalesOrder extends BaseController
                 //inisiasi proses kirim ke group
 
                 $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-
+                $mail_tmpl = $this->NotifModel->get_template($groupuser);
                 foreach ($notiftouser_data as $sendto_user) {
+                    $var_email = array(
+                        'TONAME' => $sendto_user['NAME'],
+                        'FROMNAME' => $this->audtuser['NAMELGN'],
+                        'CONTRACT' => $getcsropen['CONTRACT'],
+                        'CTDESC' => $getcsropen['CTDESC'],
+                        'PROJECT' => $getcsropen['PROJECT'],
+                        'PRJDESC' => $getcsropen['PRJDESC'],
+                        'CUSTOMER' => $getcsropen['CUSTOMER'],
+                        'NAMECUST' => $getcsropen['NAMECUST'],
+                        'PONUMBERCUST' => $getcsropen['PONUMBERCUST'],
+                        'PODATECUST' => $crmpodate,
+                        'CRMNO' => $getcsropen['CRMNO'],
+                        'REQDATE' => $crmreqdate,
+                        'ORDERDESC' => $getcsropen['ORDERDESC'],
+                        'REMARKS' => $getcsropen['CRMREMARKS'],
+                        'SALESCODE' => $getcsropen['MANAGER'],
+                        'SALESPERSON' => $getcsropen['SALESNAME'],
+                    );
+                    $subject = $mail_tmpl['SUBJECT_MAIL'];
+                    $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
                     $data_email = array(
                         'hostname'       => $sender['HOSTNAME'],
                         'sendername'       => $sender['SENDERNAME'],
@@ -976,18 +1038,8 @@ class SalesOrder extends BaseController
                         'ssl'       => $sender['SSL'],
                         'smtpport'       => $sender['SMTPPORT'],
                         'to_email' => $sendto_user['EMAIL'],
-                        'subject' => 'Pending Sales Order Allert. Contract No : ' . $getcsropen['CONTRACT'],
-                        'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-        
-        Please to follow up CRM No :' . $getcsropen['CRMNO'] . ' / Customer PO : ' . $getcsropen['PONUMBERCUST'] . ' from ' . $getcsropen['NAMECUST'] . ' is pending for you to request PR/PO.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        <a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
+                        'subject' =>  $subject,
+                        'message' => $message,
                     );
 
                     $sending_mail = $this->send($data_email);
@@ -1000,19 +1052,8 @@ class SalesOrder extends BaseController
                             'TO_USER' => $sendto_user['USERNAME'],
                             'TO_EMAIL' => $sendto_user['EMAIL'],
                             'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                            'SUBJECT' => 'Pending Sales Order Allert. Contract No : ' . $getcsropen['CONTRACT'],
-                            'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-            
-                Please to follow up CRM No :' . $getcsropen['CRMNO'] . ' / Customer PO : ' . $getcsropen['PONUMBERCUST']  . ' from ' . $getcsropen['NAMECUST'] . ' is pending for you to request PR/PO.
-                <br><br>
-                You can access Order Tracking System Portal via the URL below:
-                <br>
-                <a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
-                <br>
-                Thanks for your cooperation. 
-                <br><br>
-                Order Tracking Administrator',
-
+                            'SUBJECT' => $subject,
+                            'MESSAGE' => $message,
                             'SENDING_DATE' => $this->audtuser['AUDTDATE'],
                             'SENDING_TIME' => $this->audtuser['AUDTTIME'],
                             'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
@@ -1066,6 +1107,8 @@ class SalesOrder extends BaseController
     {
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
         $sender = $this->AdministrationModel->get_mailsender();
+        $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
+        $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
         $groupuser = 2;
         //Untuk Update Status Posting CSR
         $data2 = array(
@@ -1078,8 +1121,28 @@ class SalesOrder extends BaseController
         //inisiasi proses kirim ke group
 
         $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-
+        $mail_tmpl = $this->NotifModel->get_template($groupuser);
         foreach ($notiftouser_data as $sendto_user) {
+            $var_email = array(
+                'TONAME' => $sendto_user['NAME'],
+                'FROMNAME' => $this->audtuser['NAMELGN'],
+                'CONTRACT' => $getcsropen['CONTRACT'],
+                'CTDESC' => $getcsropen['CTDESC'],
+                'PROJECT' => $getcsropen['PROJECT'],
+                'PRJDESC' => $getcsropen['PRJDESC'],
+                'CUSTOMER' => $getcsropen['CUSTOMER'],
+                'NAMECUST' => $getcsropen['NAMECUST'],
+                'PONUMBERCUST' => $getcsropen['PONUMBERCUST'],
+                'PODATECUST' => $crmpodate,
+                'CRMNO' => $getcsropen['CRMNO'],
+                'REQDATE' => $crmreqdate,
+                'ORDERDESC' => $getcsropen['ORDERDESC'],
+                'REMARKS' => $getcsropen['CRMREMARKS'],
+                'SALESCODE' => $getcsropen['MANAGER'],
+                'SALESPERSON' => $getcsropen['SALESNAME'],
+            );
+            $subject = $mail_tmpl['SUBJECT_MAIL'];
+            $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
             $data_email = array(
                 'hostname'       => $sender['HOSTNAME'],
                 'sendername'       => $sender['SENDERNAME'],
@@ -1088,18 +1151,8 @@ class SalesOrder extends BaseController
                 'ssl'       => $sender['SSL'],
                 'smtpport'       => $sender['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending Sales Order Allert. Contract No : ' . $getcsropen['CONTRACT'],
-                'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-
-Please to follow up CRM No :' . $getcsropen['CRMNO'] . ' / Customer PO : ' . $getcsropen['PONUMBERCUST'] . ' from ' . $getcsropen['NAMECUST'] . ' is pending for you to request PR/PO.
-<br><br>
-You can access Order Tracking System Portal via the URL below:
-<br>
-<a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
-<br>
-Thanks for your cooperation. 
-<br><br>
-Order Tracking Administrator',
+                'subject' => $subject,
+                'message' =>  $message,
             );
 
             $sending_mail = $this->send($data_email);
@@ -1112,19 +1165,8 @@ Order Tracking Administrator',
                     'TO_USER' => $sendto_user['USERNAME'],
                     'TO_EMAIL' => $sendto_user['EMAIL'],
                     'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                    'SUBJECT' => 'Pending Sales Order Allert. Contract No : ' . $getcsropen['CONTRACT'],
-                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-        Please to follow up CRM No :' . $getcsropen['CRMNO'] . ' / Customer PO : ' . $getcsropen['PONUMBERCUST']  . ' from ' . $getcsropen['NAMECUST'] . ' is pending for you to request PR/PO.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        <a href="http://jktsms025:8082/Andritz-sage/public" target="blank">http://jktsms025:8082/Andritz-sage/public</a>
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-
+                    'SUBJECT' => $subject,
+                    'MESSAGE' => $message,
                     'SENDING_DATE' => $this->audtuser['AUDTDATE'],
                     'SENDING_TIME' => $this->audtuser['AUDTTIME'],
                     'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],

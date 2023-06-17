@@ -19,6 +19,11 @@ class Notif_model extends Model
 		parent::__construct();
 	}
 
+	function get_template($groupuser)
+	{
+		$query = $this->db->query("select * from webot_MAILTEMPLATE where MAILROUTE='$groupuser'");
+		return $query->getRowArray();
+	}
 
 	function count_new_notif($user)
 	{

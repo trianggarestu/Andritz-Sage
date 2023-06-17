@@ -40,10 +40,11 @@
 				<div class="col-md-12">
 					<div class="box box-info">
 						<div class="box-header with-border">
-							<a href="<?= base_url(); ?>salesorderopen" class="btn btn-social btn-flat btn-info btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Back to Sales Order Open">
-								<i class="fa fa-arrow-circle-left "></i>Back to Sales Order Open
+							<a href="<?= base_url(); ?>salesorderopen" class="btn btn-social btn-flat btn-info btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Back to Sales Orders Open">
+								<i class="fa fa-arrow-circle-left "></i>Back to Sales Orders Open
 							</a>
-							<a href="<?= base_url(); ?>salesorder" title="Reset Data" onclick="<?php echo base_url(); ?>" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class='fa fa-refresh'></i> Reset Sales Order Form</a>
+							<a href="<?= base_url(); ?>salesorder" title="Reset Data" onclick="<?php echo base_url(); ?>" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block <?php if (!empty($csruniq)) : echo 'disabled';
+																																																																	endif; ?>"><i class='fa fa-refresh'></i> Reset Sales Order Form</a>
 						</div>
 
 						<div class="box-body">
@@ -94,8 +95,9 @@
 																																										}  ?>" readonly />
 
 											<span class="input-group-btn">
-												<a href="<?= base_url('salesorder/form_select_salesman/' . $ct_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block <?php if ((!empty($ct_staffcode) or empty($ct_no))) : echo 'disabled';
-																																																																																endif; ?>">
+												<a href="<?= base_url('salesorder/form_select_salesman/' . $ct_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block 
+												<?php if ((empty($ct_staffcode) and empty($ct_no)) or (!empty($ct_staffcode) and !empty($ct_no) and empty($csruniq)) or (!empty($chk_salesperson) and  !empty($csruniq))) : echo 'disabled';
+												endif; ?>">
 													Choose !
 												</a>
 											</span>
@@ -134,8 +136,9 @@
 																																								echo $ct_email;
 																																							}  ?>" readonly />
 											<span class="input-group-btn">
-												<a href="<?= base_url('salesorder/form_input_email/' . $ct_no . '/' . $prj_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block <?php if (!empty($ct_email) or empty($ct_no)) : echo 'disabled';
-																																																																																			endif; ?>">
+												<a href="<?= base_url('salesorder/form_input_email/' . $ct_no . '/' . $prj_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block 
+												<?php if ((empty($ct_email) and empty($ct_no)) or (!empty($ct_email) and !empty($ct_no) and empty($csruniq)) or (!empty($chk_email) and  !empty($csruniq))) : echo 'disabled';
+												endif; ?>">
 													Input !
 												</a>
 											</span>
@@ -176,8 +179,9 @@
 																																							echo $po_cust;
 																																						}  ?>" readonly />
 											<span class="input-group-btn">
-												<a href="<?= base_url('salesorder/form_input_pocust/' . $ct_no . '/' . $prj_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block <?php if (!empty($po_cust) or empty($prj_no)) : echo 'disabled';
-																																																																																			endif; ?>">
+												<a href="<?= base_url('salesorder/form_input_pocust/' . $ct_no . '/' . $prj_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block 
+												<?php if ((empty($po_cust) and empty($prj_no)) or (!empty($po_cust) and !empty($prj_no) and empty($csruniq)) or (!empty($chk_po_cust) and !empty($csruniq))) : echo 'disabled';
+												endif; ?>">
 													Input !
 												</a>
 											</span>

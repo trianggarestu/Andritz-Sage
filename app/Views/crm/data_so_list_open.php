@@ -41,6 +41,7 @@
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
+						<a href="<?= base_url('salesorder/') ?>" title="Add New Sales Orders" class="btn btn-social btn-flat btn-success btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-plus"></i> Add New Sales Orders</a>
 						<a href="<?= base_url() ?>salesorderopen/refresh" title="Refresh Data" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-refresh"></i> Refresh Data</a>
 
 					</div>
@@ -103,7 +104,7 @@
 																			<a href="<?= base_url("salesorder/update/" . $ot_list['CSRUNIQ']) ?>" title="Update" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
 																		<?php } ?>
 																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 1)) { ?>
-																			<a href="<?= base_url("salesorder/csropenview/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Posting & Sending Notif">
+																			<a href="<?= base_url("salesorder/sendnotif/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Posting & Sending Notif">
 																				<i class="fa fa-send-o"></i>
 																			</a>
 																		<?php } ?>
@@ -114,15 +115,21 @@
 
 																	</td>
 																	<td style="vertical-align: top;" nowrap>
-																		<?php $postingstat = $ot_list['POSTINGSTAT'];
+																		<?php $postingstat = $ot_list['POSTINGSTAT'] . $ot_list['OFFLINESTAT'];
 																		switch ($postingstat) {
-																			case "0":
+																			case "00":
 																				echo "<span class='label label-warning'>Open</span>";
 																				break;
-																			case "1":
-																				echo "<span class='label label-success'>Posted</span>";
+																			case "11":
+																				echo "<span class='label label-warning'>Posted Pending Notif</span>";
 																				break;
-																			case "2":
+																			case "10":
+																				echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																				break;
+																			case "20":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			case "21":
 																				echo "<span class='label label-danger'>Deleted</span>";
 																				break;
 																			default:
@@ -174,20 +181,20 @@
 																					?>
 																							<tr>
 
-																								<td class="text-center"><?= ++$no ?></td>
-																								<td><?= $items['SERVICETYPE']
-																									?></td>
+																								<td class="text-center" style="width: 5%;"><?= ++$no ?></td>
+																								<td style="width: 10%;"><?= $items['SERVICETYPE']
+																														?></td>
 
-																								<td><?= $items['ITEMNO']
-																									?></td>
-																								<td><?= $items['MATERIALNO']
-																									?></td>
+																								<td style="width: 12%;"><?= $items['ITEMNO']
+																														?></td>
+																								<td style="width: 12%;"><?= $items['MATERIALNO']
+																														?></td>
 																								<td nowrap><?= $items['ITEMDESC']
 																											?></td>
-																								<td><?= $items['QTY']
-																									?></td>
-																								<td nowrap><?= $items['STOCKUNIT']
-																											?></td>
+																								<td nowrap style="width: 10%;"><?= number_format($items['QTY'], 0, ",", ".")
+																																?></td>
+																								<td nowrap style="width: 10%;"><?= $items['STOCKUNIT']
+																																?></td>
 
 																							</tr>
 
@@ -208,7 +215,7 @@
 											</div>
 										</div>
 									</form>
-									<div class="row">
+									<div class=" row">
 
 
 									</div>

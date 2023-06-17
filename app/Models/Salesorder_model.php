@@ -169,6 +169,14 @@ class Salesorder_model extends Model
         return $query->getRowArray();
     }
 
+    function get_csr_open_rtp($csruniq)
+    {
+        $query = $this->db->query("select a.*,b.CSRLUNIQ,b.SERVICETYPE,b.ITEMNO,b.MATERIALNO,b.ITEMDESC,b.STOCKUNIT,b.QTY 
+        from webot_CSR a inner join webot_CSRL b on b.CSRUNIQ=a.CSRUNIQ
+        where a.POSTINGSTAT <>2 and a.CSRUNIQ='$csruniq'");
+        return $query->getResultArray();
+    }
+
     function get_csrl_open($csruniq)
     {
         $query = $this->db->query("select b.* from webot_CSRL b inner join webot_CSR a on a.CSRUNIQ=b.CSRUNIQ 
