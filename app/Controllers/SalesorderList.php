@@ -296,16 +296,12 @@ class SalesorderList extends BaseController
             ->setCellValue('F1', 'CrmNo')
             ->setCellValue('G1', 'PoCustomer')
             ->setCellValue('H1', 'PoDate')
-            ->setCellValue('I1', 'Inventroy No')
-            ->setCellValue('J1', 'Material No')
-            ->setCellValue('K1', 'Item Desc.')
-            ->setCellValue('L1', 'ReqDate')
-            ->setCellValue('M1', 'SalesPerson')
-            ->setCellValue('N1', 'Order Description')
-            ->setCellValue('O1', 'Service Type')
-            ->setCellValue('P1', 'Qty')
-            ->setCellValue('Q1', 'Uom')
-            ->setCellValue('R1', 'Status');
+            ->setCellValue('I1', 'Material No')
+            ->setCellValue('J1', 'ReqDate')
+            ->setCellValue('K1', 'SalesPerson')
+            ->setCellValue('L1', 'Order Description')
+
+            ->setCellValue('M1', 'Status');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -344,15 +340,10 @@ class SalesorderList extends BaseController
                 ->setCellValue('F' . $rows, $data['CRMNO'])
                 ->setCellValue('G' . $rows, $data['PONUMBERCUST'])
                 ->setCellValue('H' . $rows, trim($pocustdate))
-                ->setCellValue('I' . $rows, $data['ITEMNO'])
-                ->setCellValue('J' . $rows, $data['MATERIALNO'])
-                ->setCellValue('K' . $rows, $data['ITEMDESC'])
                 ->setCellValue('L' . $rows, trim($reqdate))
                 ->setCellValue('M' . $rows, $data['SALESNAME'])
                 ->setCellValue('N' . $rows, $data['ORDERDESC'])
-                ->setCellValue('O' . $rows, $data['SERVICETYPE'])
-                ->setCellValue('P' . $rows, $data['QTY'])
-                ->setCellValue('Q' . $rows, $data['STOCKUNIT'])
+
                 ->setCellValue('R' . $rows, $postingstatus);
             $rows++;
         }
