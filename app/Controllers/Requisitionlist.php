@@ -16,6 +16,8 @@ use App\Models\Settingnavheader_model;
 use App\Models\Notif_model;
 use App\Models\Requisition_model;
 use App\Models\Ordertracking_model;
+use App\Models\Salesorder_model;
+
 
 //use App\Controllers\AdminController;
 
@@ -37,6 +39,7 @@ class RequisitionList extends BaseController
         $this->NotifModel = new Notif_model();
         $this->RequisitionModel = new Requisition_model();
         $this->OrdertrackingModel = new Ordertracking_model();
+        $this->SalesorderModel = new Salesorder_model();
 
         //$this->SettingnavheaderModel = new Settingnavheader_model();
         if (empty(session()->get('keylog'))) {
@@ -211,13 +214,11 @@ class RequisitionList extends BaseController
                 ->orlike('csr.EMAIL1CUST', $keyword)
                 ->orlike('csr.CRMNO', $keyword)
                 ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.SERVICETYPE', $keyword)
+
                 ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('csr.ITEMNO', $keyword)
-                ->orlike('csr.MATERIALNO', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
+
                 ->orlike('csr.CTDESC', $keyword)
-                ->orlike('csr.QTY', $keyword)
+
 
 
 
@@ -388,5 +389,48 @@ class RequisitionList extends BaseController
 
         $writer->save('php://output');
         exit();
+    }
+    public function csropenview($csruniq)
+    {
+        session()->remove('success');
+        session()->set('success', '0');
+        //check mail sender
+
+        $getcsropen = $this->RequisitionModel->get_csr_open($csruniq);
+        $getcsrlopen = $this->RequisitionModel->get_csrl_open($csruniq);
+        if ($getcsropen['POSTINGSTAT'] == 0 and $sender['OFFLINESTAT'] == 1) {
+            $data = array(
+                'csropen_data' =>  $getcsropen,
+                'csrlopen_data' =>  $getcsrlopen,
+                'link_action' => base_url('salesorder/posting'),
+                'btn_color' => 'bg-blue',
+                'btn_fa' => 'fa-check-square-o',
+                'button' => 'Posting',
+            );
+        } else if ($getcsropen['POSTINGSTAT'] == 0 and $sender['OFFLINESTAT'] == 0) {
+            $data = array(
+                'csropen_data' =>  $getcsropen,
+                'csrlopen_data' =>  $getcsrlopen,
+                'link_action' => base_url('salesorder/posting'),
+                'btn_color' => 'bg-blue',
+                'btn_fa' => 'fa-paper-plane-o',
+                'button' => 'Posting & Send Notification',
+            );
+        } else {
+
+            $data = array(
+                'csropen_data' =>  $getcsropen,
+                'csrlopen_data' =>  $getcsrlopen,
+                'link_action' => '',
+                'btn_color' => '',
+                'btn_fa' => '',
+                'button' => '',
+            );
+        }
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('requisition/data_pr_view', $data);
+        echo view('view_footer', $this->footer_data);
     }
 }

@@ -236,4 +236,21 @@ class Requisition_model extends Model
         order by a.RQNDATE asc");
         return $query->getResultArray();
     }
+
+    function get_csr_open($csruniq)
+    {
+        $query = $this->db->query("select a.*,b.* from webot_REQUISITION a 
+        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+         where a.POSTINGSTAT <>2 and a.CSRUNIQ='$csruniq'");
+        return $query->getRowArray();
+    }
+
+    function get_csrl_open($csruniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_REQUISITION a
+        left Join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+        left join webot_CSRL c on b.CSRUNIQ = c.CSRUNIQ 
+        where a.POSTINGSTAT <> 2  and a.CSRUNIQ='$csruniq'");
+        return $query->getResultArray();
+    }
 }

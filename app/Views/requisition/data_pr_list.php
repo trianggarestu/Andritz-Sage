@@ -99,9 +99,6 @@
 															<th>CRM Req. Date</th>
 															<th nowrap>Order Description</th>
 															<th>Sales Person</th>
-															<th>Inventory No</th>
-															<th>Qty</th>
-															<th>UoM</th>
 
 
 
@@ -149,13 +146,12 @@
 																<td><?= $ot_list['CONTRACT']; ?></td>
 																<td><?= $ot_list['CTDESC']; ?></td>
 																<td><?= $ot_list['PROJECT']; ?></td>
-																<td><?= $ot_list['CRMNO']; ?></td>
+																<td><strong><a href="<?= base_url("requisitionlist/csropenview/" . $ot_list['CSRUNIQ']) ?>" title="Click For Detail"><?= $ot_list['CRMNO']; ?></a></strong></td>
 																<td><?= $crmreq_date; ?></td>
 																<td nowrap><?= $ot_list['ORDERDESC']; ?></td>
 																<td><?= $ot_list['SALESNAME']; ?></td>
-																<td><?= $ot_list['MATERIALNO']; ?></td>
-																<td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
-																<td><?= $ot_list['STOCKUNIT']; ?></td>
+
+
 
 
 
@@ -169,7 +165,7 @@
 										</div>
 									</div>
 
-									<div class="row">
+									<div class=" row">
 										<div class="col-sm-6">
 
 										</div>
