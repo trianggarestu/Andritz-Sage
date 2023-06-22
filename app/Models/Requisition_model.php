@@ -170,9 +170,8 @@ class Requisition_model extends Model
 
     function get_so_l_by_id($id_so)
     {
-        $query = $this->db->query("select a.*,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT as RQNPOSTINGSTAT,b.OFFLINESTAT as RQNOFFLINESTAT
-        from webot_CSRL a left join (select x.POSTINGSTAT,x.OFFLINESTAT,y.* from webot_REQUISITION x inner join 
-        webot_REQUISITIONL y on y.RQNUNIQ=x.RQNUNIQ) b on b.CSRUNIQ=a.CSRUNIQ and b.CSRLUNIQ=a.CSRLUNIQ
+        $query = $this->db->query("select a.*
+        from webot_CSRL a
         where a.CSRUNIQ='$id_so' ");
         return $query->getResultArray();
     }

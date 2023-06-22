@@ -154,51 +154,57 @@ class SalesOrder extends BaseController
         // Clear the shopping cart
         $this->cart->destroy();
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
-        $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
-        $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
-        session()->set('crm_no', trim($getcsropen['CRMNO']));
-        session()->set('req_date', $crmreqdate);
-        session()->set('ord_desc', trim($getcsropen['ORDERDESC']));
-        session()->set('so_remarks', trim($getcsropen['CRMREMARKS']));
-        session()->set('manager', trim($getcsropen['MANAGER']));
-        session()->set('salesman', trim($getcsropen['SALESNAME']));
-        session()->set('cust_email', trim($getcsropen['EMAIL1CUST']));
-        session()->set('po_cust', trim($getcsropen['PONUMBERCUST']));
-        $getcsrl_by_id = $this->SalesorderModel->get_csrl_open($csruniq);
-        $chk_manual = $this->SalesorderModel->get_contract_by_id(trim($getcsropen['CONTRACT']));
-        $chk_manual_p = $this->SalesorderModel->get_project_by_contract(trim($getcsropen['CONTRACT']), trim($getcsropen['PROJECT']));
-        $data = array(
-            'csruniq' => $csruniq,
-            'csr_uniq' => $getcsropen['CSRUNIQ'],
-            'ct_no' => trim($getcsropen['CONTRACT']),
-            'ct_desc' => trim($getcsropen['CTDESC']),
-            'ct_staffcode' => trim($getcsropen['MANAGER']),
-            'ct_manager' => trim($getcsropen['MANAGER']),
-            'ct_salesperson' => trim($getcsropen['SALESNAME']),
-            'ct_custno' => trim($getcsropen['CUSTOMER']),
-            'ct_custname' => trim($getcsropen['NAMECUST']),
-            'ct_email' => trim($getcsropen['EMAIL1CUST']),
-            'chk_salesperson' => trim($chk_manual['NAME']),
-            'chk_email' => trim($chk_manual['EMAIL1']),
-            'chk_po_cust' => trim($chk_manual_p['PONUMBER']),
-            'prj_no' => trim($getcsropen['PROJECT']),
-            'prj_desc' => trim($getcsropen['PRJDESC']),
-            'po_cust' => trim($getcsropen['PONUMBERCUST']),
-            'prj_startdate' => $crmpodate,
-            'crm_no' => trim($getcsropen['CRMNO']),
-            'req_date' => $crmreqdate,
-            'order_desc' => trim($getcsropen['ORDERDESC']),
-            'order_remarks' => trim($getcsropen['CRMREMARKS']),
-            'csropen_items' => $getcsrl_by_id,
-            'form_action' => base_url("salesorder/update_salesorder"),
-            'validation' => \Config\Services::validation(),
-            'cart' => $this->cart,
-        );
+        if ($getcsropen['POSTINGSTAT'] == 1) {
+            session()->remove('success');
+            session()->remove('csruniq');
+            return redirect()->to(base_url('salesorderopen'));
+        } else {
+            $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
+            $crmreqdate = substr($getcsropen['CRMREQDATE'], 4, 2) . '/' . substr($getcsropen['CRMREQDATE'], 6, 2) . '/' . substr($getcsropen['CRMREQDATE'], 0, 4);
+            session()->set('crm_no', trim($getcsropen['CRMNO']));
+            session()->set('req_date', $crmreqdate);
+            session()->set('ord_desc', trim($getcsropen['ORDERDESC']));
+            session()->set('so_remarks', trim($getcsropen['CRMREMARKS']));
+            session()->set('manager', trim($getcsropen['MANAGER']));
+            session()->set('salesman', trim($getcsropen['SALESNAME']));
+            session()->set('cust_email', trim($getcsropen['EMAIL1CUST']));
+            session()->set('po_cust', trim($getcsropen['PONUMBERCUST']));
+            $getcsrl_by_id = $this->SalesorderModel->get_csrl_open($csruniq);
+            $chk_manual = $this->SalesorderModel->get_contract_by_id(trim($getcsropen['CONTRACT']));
+            $chk_manual_p = $this->SalesorderModel->get_project_by_contract(trim($getcsropen['CONTRACT']), trim($getcsropen['PROJECT']));
+            $data = array(
+                'csruniq' => $csruniq,
+                'csr_uniq' => $getcsropen['CSRUNIQ'],
+                'ct_no' => trim($getcsropen['CONTRACT']),
+                'ct_desc' => trim($getcsropen['CTDESC']),
+                'ct_staffcode' => trim($getcsropen['MANAGER']),
+                'ct_manager' => trim($getcsropen['MANAGER']),
+                'ct_salesperson' => trim($getcsropen['SALESNAME']),
+                'ct_custno' => trim($getcsropen['CUSTOMER']),
+                'ct_custname' => trim($getcsropen['NAMECUST']),
+                'ct_email' => trim($getcsropen['EMAIL1CUST']),
+                'chk_salesperson' => trim($chk_manual['NAME']),
+                'chk_email' => trim($chk_manual['EMAIL1']),
+                'chk_po_cust' => trim($chk_manual_p['PONUMBER']),
+                'prj_no' => trim($getcsropen['PROJECT']),
+                'prj_desc' => trim($getcsropen['PRJDESC']),
+                'po_cust' => trim($getcsropen['PONUMBERCUST']),
+                'prj_startdate' => $crmpodate,
+                'crm_no' => trim($getcsropen['CRMNO']),
+                'req_date' => $crmreqdate,
+                'order_desc' => trim($getcsropen['ORDERDESC']),
+                'order_remarks' => trim($getcsropen['CRMREMARKS']),
+                'csropen_items' => $getcsrl_by_id,
+                'form_action' => base_url("salesorder/update_salesorder"),
+                'validation' => \Config\Services::validation(),
+                'cart' => $this->cart,
+            );
 
-        echo view('view_header', $this->header_data);
-        echo view('view_nav', $this->nav_data);
-        echo view('crm/data_so_form', $data);
-        echo view('view_footer', $this->footer_data);
+            echo view('view_header', $this->header_data);
+            echo view('view_nav', $this->nav_data);
+            echo view('crm/data_so_form', $data);
+            echo view('view_footer', $this->footer_data);
+        }
     }
 
 

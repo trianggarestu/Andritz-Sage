@@ -51,8 +51,9 @@
 									<i class="fa fa-paper-plane-o"></i>Send Notification Manually
 								</a>
 							<?php endif; ?>
-							<a href="<?= base_url('salesorder/update/' . $csropen_data['CSRUNIQ']) ?>" title="Edit" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Form Entry</a>
-
+							<?php if (($csropen_data['POSTINGSTAT'] == 0)) : ?>
+								<a href="<?= base_url('salesorder/update/' . $csropen_data['CSRUNIQ']) ?>" title="Edit" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Form Entry</a>
+							<?php endif; ?>
 						</form>
 					</div>
 					<div class="box-body">
