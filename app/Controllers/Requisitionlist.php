@@ -317,11 +317,7 @@ class RequisitionList extends BaseController
             ->setCellValue('I1', 'PROJECT NO')
             ->setCellValue('J1', 'CRM NO')
             ->setCellValue('K1', 'CRM DESC')
-            ->setCellValue('L1', 'CRM DATE')
-            ->setCellValue('M1', 'ITEM NO')
-            ->setCellValue('N1', 'QTY')
-            ->setCellValue('O1', 'UOM')
-            ->setCellValue('P1', 'STATUS');
+            ->setCellValue('L1', 'CRM DATE');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -370,11 +366,8 @@ class RequisitionList extends BaseController
                 ->setCellValue('I' . $rows, $data['PROJECT'])
                 ->setCellValue('J' . $rows, $data['CRMNO'])
                 ->setCellValue('K' . $rows, trim($reqdate))
-                ->setCellValue('L' . $rows, $data['ORDERDESC'])
-                ->setCellValue('M' . $rows, $data['MATERIALNO'])
-                ->setCellValue('N' . $rows, $data['QTY'])
-                ->setCellValue('O' . $rows, $data['STOCKUNIT'])
-                ->setCellValue('P' . $rows, $postingstatus);
+
+                ->setCellValue('L' . $rows, $postingstatus);
 
             $rows++;
         }

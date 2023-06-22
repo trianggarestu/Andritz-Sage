@@ -54,11 +54,7 @@
                                     <th>Order Description</th>
                                     <th>Sales Person</th>
                                     <th>Material No</th>
-                                    <th>Services Type</th>
-                                    <th>Qty</th>
-                                    <th>UOM</th>
-                                    <th>Status</th>
-                                </tr>
+
                             </thead>
                             <tbody>
                                 <?php
@@ -89,10 +85,6 @@
                                         <td><?= $crmreqdate; ?></td>
                                         <td><?= $ot_list['ORDERDESC']; ?></td>
                                         <td><?= $ot_list['SALESNAME']; ?></td>
-                                        <td><?= $ot_list['MATERIALNO']; ?></td>
-                                        <td><?= $ot_list['SERVICETYPE']; ?></td>
-                                        <td><?= number_format($ot_list['QTY'], 0, ",", "."); ?></td>
-                                        <td><?= $ot_list['STOCKUNIT']; ?></td>
 
                                         <td>
                                             <?php $postingstat = $ot_list['POSTINGSTAT'];
