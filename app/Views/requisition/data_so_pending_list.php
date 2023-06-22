@@ -8,7 +8,7 @@
 	<section class="content-header">
 		<h1>Waiting List Sales Order to process by Requester</h1>
 		<ol class="breadcrumb">
-			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+			<li><a href="<?= base_url('administration'); ?>"><i class="fa fa-home"></i> Home</a></li>
 			<li class="active">Waiting List Sales Order</li>
 		</ol>
 	</section>
@@ -39,6 +39,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 												<code> { only viewed <strong>Sales Order</strong> data that waiting to be processed by the requester }</code>
+
 											</div>
 											<div class="col-sm-6">
 												<div class="box-tools">
@@ -59,14 +60,14 @@
 															<tr>
 																<th>No.</th>
 																<th nowrap>Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
+																<th nowrap>PO Customer - P/O Date<br>Customer Name<br>Customer Email</th>
 																<th style="vertical-align: top;">Req Date</th>
+																<th style="vertical-align: top;">S/O Status</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
-																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;">PR Number</th>
-																<th style="vertical-align: top;">PR Date</th>
-
-
+																<th>Requisition No.</th>
+																<th>Requisition Date.</th>
+																<th>Status</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -74,11 +75,12 @@
 															<?php
 															$no = 1;
 															foreach ($requisition_data as $ot_list) {
-																$crmreq_date = substr($ot_list['CRMREQDATE'], 4, 2) . "/" . substr($ot_list['CRMREQDATE'], 6, 2) . "/" . substr($ot_list['CRMREQDATE'], 0, 4);
-																if ($ot_list['RQNDATE'] == '') {
-																	$pr_date = '';
+																$crmpodate = substr($ot_list['PODATECUST'], 4, 2) . "/" . substr($ot_list['PODATECUST'], 6, 2) . "/" .  substr($ot_list['PODATECUST'], 0, 4);
+																$crmreqdate = substr($ot_list['CRMREQDATE'], 4, 2) . '/' . substr($ot_list['CRMREQDATE'], 6, 2) . '/' . substr($ot_list['CRMREQDATE'], 0, 4);
+																if (empty($ot_list['RQNDATE'])) {
+																	$rqndate = '';
 																} else {
-																	$pr_date = substr($ot_list['RQNDATE'], 4, 2) . "/" . substr($ot_list['RQNDATE'], 6, 2) . "/" . substr($ot_list['RQNDATE'], 0, 4);
+																	$rqndate = substr($ot_list['RQNDATE'], 4, 2) . '/' . substr($ot_list['RQNDATE'], 6, 2) . '/' . substr($ot_list['RQNDATE'], 0, 4);
 																}
 															?>
 
@@ -88,57 +90,56 @@
 																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
 																		<small>(<?= $ot_list['NAMECUST']; ?>)</small><br>
-																		<table class="table table-bordered table-striped dataTable">
-																			<thead class="bg-gray disabled">
-																				<tr>
-																					<th colspan="3"><small>Inventory Info</small>
-																					</th>
-																				</tr>
-																			</thead>
-																			<tr>
-																				<td style="width: 15%;"><small>Item No./Material No.</small></td>
-																				<td style="width: 1%;"><small>:</small></td>
-																				<td><small><?= $ot_list['ITEMNO'] . " / " .  $ot_list['MATERIALNO'];
-																							?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Item Description</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= "<strong>" .  $ot_list['ITEMDESC'] . "</strong><br>"; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Type</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= $ot_list['SERVICETYPE']; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Qty</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= number_format($ot_list['QTY'], 0, ",", ".") . ' (' . trim($ot_list['STOCKUNIT']) . ')' ?></small></td>
-																			</tr>
-																		</table>
+
 
 																	</td>
-																	<td style="vertical-align: top;" nowrap><?= $crmreq_date; ?></td>
+																	<td style="vertical-align: top;">
+																		<strong><?= $ot_list['PONUMBERCUST'] . ' - ' . $crmpodate; ?></strong><br>
+																		<?= $ot_list['ORDERDESC']; ?><br>
+																		CRM Remarks : <?= $ot_list['CRMREMARKS']; ?>
 
+																	</td>
+																	<td style="vertical-align: top;" nowrap><?= $crmreqdate; ?></td>
+																	<td nowrap>
+																		<?php $postingstat = $ot_list['POSTINGSTAT'] . $ot_list['OFFLINESTAT'];
+																		switch ($postingstat) {
+																			case "00":
+																				echo "<span class='label label-warning'>Open</span>";
+																				break;
+																			case "11":
+																				echo "<span class='label label-warning'>Posted Pending Notif</span>";
+																				break;
+																			case "10":
+																				echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																				break;
+																			case "20":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			case "21":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			default:
+																				echo "<span class='label label-warning'>Open</span>";
+																		} ?>
+																	</td>
 																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;" nowrap>
+																	<td nowrap>
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-																				<?php if ($ot_list['POSTINGSTAT'] == 0) :
+																				<?php if ($ot_list['RQNPOSTINGSTAT'] == 0) :
 																				?>
 																					<li>
-																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Select Requisition & Post</a>
+																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-check-square-o"></i> Select Requisition & Post</a>
 																					</li>
 
 																					<li>
-																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Select Requisition & Save</a>
+																						<a href="<?= base_url("requisition/update/" . $ot_list['CSRUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Select Requisition & Save</a>
 																					</li>
 																				<?php endif;
 																				?>
 
-																				<?php if ($ot_list['POSTINGSTAT'] == 1 and $ot_list['OFFLINESTAT'] == 1) :
+																				<?php if ($ot_list['RQNPOSTINGSTAT'] == 1 and $ot_list['RQNOFFLINESTAT'] == 1) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("requisition/sendnotif/" . $ot_list['RQNUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
@@ -150,24 +151,94 @@
 																		</div>
 
 																	</td>
-																	<td style="vertical-align: top;" nowrap>
-																		<?php $postingstat = $ot_list['POSTINGSTAT'];
+																	<td style="vertical-align: top;"><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
+																	<td style="vertical-align: top;"><?= $rqndate ?></td>
+																	<td>
+																		<?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
 																		switch ($postingstat) {
-																			case "0":
-																				echo "Open";
+																			case "00":
+																				echo "<span class='label label-default'>Open</span>";
 																				break;
-																			case "1":
-																				echo "Posted";
+																			case "11":
+																				echo "<span class='label label-warning'>Posted Pending Notif</span>";
 																				break;
-																			case "2":
-																				echo "Deleted";
+																			case "10":
+																				echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																				break;
+																			case "20":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			case "21":
+																				echo "<span class='label label-danger'>Deleted</span>";
 																				break;
 																			default:
-																				echo "";
+																				echo "<span class='label label-default'>Open</span>";
 																		} ?>
 																	</td>
-																	<td style="vertical-align: top;" nowrap><?= $ot_list['RQNNUMBER']; ?></td>
-																	<td style="vertical-align: top;" nowrap><?= $pr_date; ?></td>
+																</tr>
+																<tr>
+																	<td style="vertical-align: top;" nowrap></td>
+
+																	<td style="vertical-align: top;" colspan="4" nowrap>
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<thead class="bg-gray disabled color-palette">
+																					<tr>
+
+																						<th class="padat">No</th>
+
+																						<th>Type</th>
+																						<th>Inventory No.</th>
+																						<th>Material No.</th>
+																						<th>Item Desc.</th>
+																						<th>Qty.</th>
+																						<th>Uom</th>
+
+
+
+
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<?php
+																					$no_l = 0;
+																					foreach ($so_l_data as $items) :
+																						if ($ot_list['CSRUNIQ'] == $items['CSRUNIQ']) :
+																							if (empty($items['RQNDATE'])) {
+																								$rqndate = '';
+																							} else {
+																								$rqndate = substr($items['RQNDATE'], 6, 2) . "/" . substr($items['RQNDATE'], 4, 2) . "/" . substr($items['RQNDATE'], 0, 4);
+																							}
+																					?>
+																							<tr>
+
+																								<td class="text-center" style="width: 5%;"><?= ++$no_l ?></td>
+																								<td style="width: 10%;"><?= $items['SERVICETYPE']
+																														?></td>
+
+																								<td style="width: 12%;"><?= $items['ITEMNO']
+																														?></td>
+																								<td style="width: 12%;"><?= $items['MATERIALNO']
+																														?></td>
+																								<td nowrap><?= $items['ITEMDESC']
+																											?></td>
+																								<td nowrap style="width: 10%;"><?= number_format($items['QTY'], 0, ",", ".")
+																																?></td>
+																								<td nowrap style="width: 10%;"><?= $items['STOCKUNIT']
+																																?></td>
+
+
+
+																							</tr>
+
+																					<?php
+																						endif;
+																					endforeach;
+																					?>
+																				</tbody>
+																			</table>
+																		</div>
+																	</td>
 
 																</tr>
 

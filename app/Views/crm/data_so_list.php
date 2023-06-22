@@ -8,7 +8,7 @@
 	<section class="content-header">
 		<h1>Sales Order List</h1>
 		<ol class="breadcrumb">
-			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+			<li><a href="<?= base_url('administration') ?>"><i class="fa fa-home"></i> Home</a></li>
 			<li class="active">Sales Order List</li>
 		</ol>
 	</section>

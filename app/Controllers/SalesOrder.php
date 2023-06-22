@@ -933,15 +933,15 @@ class SalesOrder extends BaseController
                 'btn_fa' => 'fa-paper-plane-o',
                 'button' => 'Posting & Send Notification',
             );
-        } else if ($getcsropen['POSTINGSTAT'] == 1) {
+        } else {
 
             $data = array(
                 'csropen_data' =>  $getcsropen,
                 'csrlopen_data' =>  $getcsrlopen,
-                'link_action' => base_url('salesorder/sendnotif'),
-                'btn_color' => 'bg-orange',
-                'btn_fa' => 'fa-paper-plane-o',
-                'button' => 'Send Notification Manually',
+                'link_action' => '',
+                'btn_color' => '',
+                'btn_fa' => '',
+                'button' => '',
             );
         }
 
@@ -1022,8 +1022,8 @@ class SalesOrder extends BaseController
                     'POSTINGSTAT' => 1,
                     'OFFLINESTAT' => 0,
                 );
-                //inisiasi proses kirim ke group
 
+                //inisiasi proses kirim ke group
                 $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
                 $mail_tmpl = $this->NotifModel->get_template($groupuser);
                 foreach ($notiftouser_data as $sendto_user) :
@@ -1133,6 +1133,8 @@ class SalesOrder extends BaseController
 
     public function sendnotif($csruniq)
     {
+        //if ($_POST['form_post'] == 'so_post') {
+        //$csruniq = $this->request->getPost('csruniq');
         $getcsropen = $this->SalesorderModel->get_csr_open($csruniq);
         $sender = $this->AdministrationModel->get_mailsender();
         $crmpodate = substr($getcsropen['PODATECUST'], 4, 2) . "/" . substr($getcsropen['PODATECUST'], 6, 2) . "/" .  substr($getcsropen['PODATECUST'], 0, 4);
@@ -1144,6 +1146,7 @@ class SalesOrder extends BaseController
             'AUDTTIME' => $this->audtuser['AUDTTIME'],
             'AUDTUSER' => $this->audtuser['AUDTUSER'],
             'AUDTORG' => $this->audtuser['AUDTORG'],
+            'POSTINGSTAT' => 1,
             'OFFLINESTAT' => 0,
         );
         //inisiasi proses kirim ke group
@@ -1171,6 +1174,7 @@ class SalesOrder extends BaseController
             );
             $subject = $mail_tmpl['SUBJECT_MAIL'];
             $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
             $data_email = array(
                 'hostname'       => $sender['HOSTNAME'],
                 'sendername'       => $sender['SENDERNAME'],
@@ -1179,9 +1183,10 @@ class SalesOrder extends BaseController
                 'ssl'       => $sender['SSL'],
                 'smtpport'       => $sender['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
-                'subject' => $subject,
-                'message' =>  $message,
+                'subject' =>  $subject,
+                'message' => $message,
             );
+
 
             $data_notif = array(
                 'MAILKEY' => $groupuser . '-' . $getcsropen['CSRUNIQ'] . '-' . trim($sendto_user['USERNAME']),
@@ -1214,10 +1219,11 @@ class SalesOrder extends BaseController
                 'UNIQPROCESS' => $getcsropen['CSRUNIQ'],
             );
 
+            //Check Duplicate Entry & Sending Mail
             $touser = trim($sendto_user['USERNAME']);
             $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $csruniq, $touser);
             if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $csruniq . '-' . $touser) {
-                session()->set('success', '1');
+                session()->set('success', '-1');
                 return redirect()->to(base_url('/salesorderlist'));
                 session()->remove('success');
             } else if (empty($getmailuniq['MAILKEY'])) {
@@ -1230,9 +1236,10 @@ class SalesOrder extends BaseController
         endforeach;
         $this->SalesorderModel->csr_post_update($csruniq, $data2);
 
-        session()->set('success', '1');
+        session()->set('success', '-9');
         return redirect()->to(base_url('/salesorderlist'));
         session()->remove('success');
+        //}
     }
 
 
@@ -1245,8 +1252,8 @@ class SalesOrder extends BaseController
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
-        $subject            = $data_email['subject'];
-        $message            = $data_email['message'];
+        $subject             = $data_email['subject'];
+        $message             = $data_email['message'];
 
         $mail = new PHPMailer(true);
 
@@ -1269,11 +1276,56 @@ class SalesOrder extends BaseController
             $mail->Body    = $message;
 
             $mail->send();
-            session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/salesorder'));
+            session()->set('success', '9');
+            return redirect()->to(base_url('/salesorderlist'));
+            session()->remove('success');
         } catch (Exception $e) {
-            session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/salesorder'));
+            session()->set('success', '-9');
+            return redirect()->to(base_url('/salesorderlist'));
+            session()->remove('success');
         }
     }
+
+
+    // For Trial
+    /*
+    public function send1()
+    {
+        $hostname           = 'Atlxsmtp.andritz.com';
+        $sendername         = 'admin.deliv@andritz.com';
+        $senderemail        = 'admin.deliv@andritz.com';
+        $passwordemail      = '';
+        $ssl                = '';
+        $smtpport           = 25;
+        $to                 = 'triangga.restu@gmail.com';
+        $subject            = 'test';
+        $message            = 'Andritze Test';
+        //$mail = new PHPMailer(true);
+
+
+        $mail = new PHPMailer;
+        $mail->isSMTP();
+        $mail->SMTPDebug = 2;
+        $mail->Debugoutput = 'html';
+        $mail->Host = $hostname;
+        $mail->Port = $smtpport;
+        $mail->SMTPAuth = false;
+        //$mail->SMTPAutoTLS = false;
+        $mail->SMTPSecure = '';
+        $mail->setFrom($senderemail, $sendername);
+        $mail->addAddress($to, "Recepient Name");
+        $mail->addReplyTo($to, "Reply");
+        $mail->isHTML(true);
+
+        $mail->Subject = "Subject Text";
+        $mail->Body = "<i>Mail body in HTML</i>";
+        $mail->AltBody = "This is the plain text version of the email content";
+
+        if (!$mail->send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        } else {
+            echo "Message has been sent successfully";
+        }
+    }
+    */
 }

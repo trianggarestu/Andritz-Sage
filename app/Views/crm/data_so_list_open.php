@@ -8,7 +8,7 @@
 	<section class="content-header">
 		<h1>Sales Order List</h1>
 		<ol class="breadcrumb">
-			<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+			<li><a href="<?= base_url('administration') ?>"><i class="fa fa-home"></i> Home</a></li>
 			<li class="active">Sales Order List</li>
 		</ol>
 	</section>
@@ -74,23 +74,15 @@
 																<th style="vertical-align: top;">No.</th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
-																<th nowrap>Contract/Project/CRM Number<br>Contract Desc.<br>Order Description</th>
-																<th nowrap>PO Customer - Order Desc.<br>Customer Name<br>Customer Email</th>
+																<th nowrap>Contract/Project/CRM Number<br>Contract Desc.<br>Customer Name</th>
+																<th nowrap>PO Customer - Order Desc.<br>Order Description</th>
 																<th style="vertical-align: top;">P/O Cust. Date</th>
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="vertical-align: top;">Sales Person</th>
 															</tr>
 														</thead>
 														<tbody>
-															<?php
-															if (empty($ot_list)) :
 
-															?>
-																<tr>
-																	<td colspan="8" style="text-align: center;"> <strong>Data is Empty.</strong></td>
-
-																</tr>
-															<?php endif; ?>
 															<?php
 															$no = 0;
 															foreach ($so_data as $ot_list) {
@@ -112,7 +104,7 @@
 																			<a href="<?= base_url("salesorder/update/" . $ot_list['CSRUNIQ']) ?>" title="Update" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
 																		<?php } ?>
 																		<?php if (($ot_list['POSTINGSTAT'] == 1) and ($ot_list['OFFLINESTAT'] == 1)) { ?>
-																			<a href="<?= base_url("salesorder/sendnotif/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Posting & Sending Notif">
+																			<a href="<?= base_url("salesorder/sendnotif/" . $ot_list['CSRUNIQ']) ?>" class="btn btn-default btn-sm" title="Send Notification Manually">
 																				<i class="fa fa-send-o"></i>
 																			</a>
 																		<?php } ?>
@@ -144,16 +136,17 @@
 																				echo "<span class='label label-warning'>Open</span>";
 																		} ?>
 																	</td>
-																	<td nowrap><strong><a href="#"><?= $ot_list['CONTRACT'] ?></a></strong>
-																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
+																	<td nowrap><strong><?= $ot_list['CONTRACT'] ?>
+																			<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?></strong><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
-																		CRM Remarks : <?= $ot_list['CRMREMARKS']; ?>
+																		<small>(<?= trim($ot_list['NAMECUST']); ?>)</small>
+
 																	</td>
 
 																	<td style="vertical-align: top;">
 																		<strong><?= $ot_list['PONUMBERCUST'] . ' - ' . $ot_list['ORDERDESC']; ?></strong><br>
-																		<strong><?= $ot_list['NAMECUST']; ?></strong><br>
-																		e-Mail : <?= $ot_list['EMAIL1CUST']; ?>
+																		CRM Remarks : <?= $ot_list['CRMREMARKS']; ?>
+
 																	</td>
 																	<td style="vertical-align: top;"><?= $crmpodate ?></td>
 																	<td style="vertical-align: top;"><?= $crmreqdate ?></td>

@@ -87,6 +87,7 @@ class Requisition extends BaseController
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
                     'AUDTUSER' => $infouser['usernamelgn'],
                     'AUDTORG' => $this->db_name->database,
+                    'NAMELGN' => $infouser['namalgn'],
 
                 ];
             } else {
@@ -102,11 +103,16 @@ class Requisition extends BaseController
         session()->remove('success');
         session()->set('success', '0');
         session()->remove('cari');
+        session()->remove('rqnnumber_all');
+        session()->remove('rqndate_all');
+        session()->remove('rqndate_disp_all');
 
         $requisitiondata = $this->RequisitionModel->get_requisition_open();
+        $so_l_open_data = $this->RequisitionModel->get_csrl_list_post();
 
         $data = array(
             'requisition_data' => $requisitiondata,
+            'so_l_data' => $so_l_open_data,
             'keyword' => '',
         );
 
@@ -144,11 +150,14 @@ class Requisition extends BaseController
         $keyword = session()->get('cari');
         if (empty($keyword)) {
             $requisitiondata = $this->RequisitionModel->get_requisition_open();
+            $so_l_open_data = $this->RequisitionModel->get_csrl_list_post();
         } else {
             $requisitiondata = $this->RequisitionModel->get_requisition_open_search($keyword);
+            $so_l_open_data = $this->RequisitionModel->get_csrl_list_post();
         }
         $data = array(
             'requisition_data' => $requisitiondata,
+            'so_l_data' => $so_l_open_data,
             'keyword' => $keyword,
         );
 
@@ -162,323 +171,498 @@ class Requisition extends BaseController
     public function update($id_so, $postingstat)
     {
         $get_so = $this->RequisitionModel->get_so_by_id($id_so);
+        $get_so_l = $this->RequisitionModel->get_so_l_by_id($id_so);
         $get_pr = $this->RequisitionModel->get_requisition_by_so($id_so);
         if ($get_so) {
             if (!empty($get_pr['CSRUNIQ']) and $get_pr['POSTINGSTAT'] == 0) {
                 $act = 'requisition/update_action';
+                if ($postingstat == 0) {
+                    $button = 'Update & Save';
+                } else {
+                    $button = 'Update & Posting';
+                }
                 $id_pr = $get_pr['RQNUNIQ'];
                 $rqnnumber = $get_pr['RQNNUMBER'];
-                $podatecust = substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
-                $crmreqdate = substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
+                $rqndate = $get_pr['RQNDATE'];
+                $rqnndate_disp = substr($get_pr['RQNDATE'], 4, 2) . "/" . substr($get_pr['RQNDATE'], 6, 2) . "/" . substr($get_pr['RQNDATE'], 0, 4);
+                $podatecust = substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
             } else {
                 $act = 'requisition/insert_action';
+                if ($postingstat == 0) {
+                    $button = 'Save';
+                } else {
+                    $button = 'Save & Posting';
+                }
                 $id_pr = '';
                 $rqnnumber = '';
-                $podatecust = substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
-                $crmreqdate = substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
+                $rqndate = '';
+                $rqnndate_disp = '';
+                $podatecust = substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" . substr($get_so['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_so['CRMREQDATE'], 4, 2) . "/" . substr($get_so['CRMREQDATE'], 6, 2) . "/" . substr($get_so['CRMREQDATE'], 0, 4);
             }
             $contract = $get_so['CONTRACT'];
             $data = array(
-                'id_so' => trim($get_so['CSRUNIQ']),
-                'ct_no' => trim($get_so['CONTRACT']),
-                'prj_no' => trim($get_so['PROJECT']),
-                'crm_no' => trim($get_so['CRMNO']),
-                'cust_no' => trim($get_so['CUSTOMER']),
-                'cust_name' => trim($get_so['NAMECUST']),
-                'cust_email' => trim($get_so['EMAIL1CUST']),
-                'cust_po' => trim($get_so['PONUMBERCUST']),
-                'po_date' => $podatecust,
-                'req_date' => $crmreqdate,
-                'salesperson' => trim($get_so['SALESNAME']),
-                'inventory_no' => trim($get_so['ITEMNO']),
-                'material_no' => trim($get_so['MATERIALNO']),
-                'inventory_desc' => trim($get_so['ITEMDESC']),
-                'order_desc' => trim($get_so['ORDERDESC']),
-                'qty' => trim($get_so['QTY']),
-                'uom' => trim($get_so['STOCKUNIT']),
-                'requisition_list' => $this->RequisitionModel->get_requisition_sage($contract),
+                'csruniq' => $id_so,
+                'csropen_data' => $get_so,
+                'csrlopen_data' => $get_so_l,
                 'form_action' => base_url($act),
+                'button' => $button,
                 'post_stat' => $postingstat,
                 'id_pr' => $id_pr,
                 'rqn_number' => $rqnnumber,
+                'rqn_date' => $rqndate,
+                'rqn_date_disp' => $rqnndate_disp,
             );
         }
+
+
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('requisition/data_rqn_form', $data);
+        echo view('view_footer', $this->footer_data);
+    }
+
+    function form_select_rqn_all($csruniq, $post_stat)
+    {
+
+
+        $data = array(
+            'csruniq' => $csruniq,
+            'csrluniq' => '',
+            'post_stat' => $post_stat,
+            'requisition_list' => $this->RequisitionModel->get_requisition_sage(),
+            'form_action' => base_url('requisition/çhooserqn'),
+        );
         echo view('requisition/ajax_add_requisition', $data);
     }
 
+    /*function form_select_rqn_det($csruniq, $csrluniq, $post_stat)
+    {
+        session()->remove("rqnnumber_$csruniq$csrluniq");
+        session()->remove("rqndate_$csruniq$csrluniq");
+        session()->remove("rqndate_disp_$csruniq$csrluniq");
+        $data = array(
+            'csruniq' => $csruniq,
+            'csrluniq' => $csrluniq,
+            'post_stat' => $post_stat,
+            'requisition_list' => $this->RequisitionModel->get_requisition_sage(),
+            'form_action' => base_url('requisition/çhooserqndet'),
+        );
+        echo view('requisition/ajax_add_requisition', $data);
+    }*/
 
+    public function çhooserqn()
+    {
+        session()->remove('success');
+        if (null == ($this->request->getPost('csruniq'))) {
+            $csruniq = "contract not found";
+        } else {
+            $csruniq = $this->request->getPost('csruniq');
+            $postingstat = $this->request->getPost('postingstat');
+            $rqnnumber = $this->request->getPost('rqnnumber');
+            $rqn_data = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
+            $rqndate = substr($rqn_data['RQNDATE'], 6, 2) . "/" . substr($rqn_data['RQNDATE'], 4, 2) . "/" . substr($rqn_data['RQNDATE'], 0, 4);
+            session()->set('rqnnumber_all', trim($rqn_data['RQNNUMBER']));
+            session()->set('rqndate_all', trim($rqn_data['RQNDATE']));
+            session()->set('rqndate_disp_all', trim($rqndate));
+        }
+
+        return redirect()->to(base_url('requisition/update/' . $csruniq . '/' . $postingstat));
+    }
+
+    /*public function çhooserqndet()
+    {
+        session()->remove('success');
+        if (null == ($this->request->getPost('csruniq'))) {
+            $csruniq = "contract not found";
+        } else {
+            $csruniq = $this->request->getPost('csruniq');
+            $csrluniq = $this->request->getPost('csrluniq');
+            $postingstat = $this->request->getPost('postingstat');
+            $rqnnumber = $this->request->getPost('rqnnumber');
+            $rqn_data = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
+            $rqndate = substr($rqn_data['RQNDATE'], 6, 2) . "/" . substr($rqn_data['RQNDATE'], 4, 2) . "/" . substr($rqn_data['RQNDATE'], 0, 4);
+            session()->set("rqnnumber_$csruniq$csrluniq", trim($rqn_data['RQNNUMBER']));
+            session()->set("rqndate_$csruniq$csrluniq", trim($rqn_data['RQNDATE']));
+            session()->set("rqndate_disp_$csruniq$csrluniq", trim($rqndate));
+        }
+
+        return redirect()->to(base_url('requisition/update/' . $csruniq . '/' . $postingstat));
+    }
+    */
+
+
+    public function resetrqn($csruniq, $post_stat)
+    {
+        session()->remove('rqnnumber_all');
+        session()->remove('rqndate_all');
+        session()->remove('rqndate_disp_all');
+        return redirect()->to(base_url('requisition/update/' . $csruniq . '/' . $post_stat));
+    }
 
     public function insert_action()
     {
-        $id_so = $this->request->getPost('id_so');
+        $id_so = $this->request->getPost('csruniq');
+        $post_stat = $this->request->getPost('post_stat');
         //$rqnuniq = $this->request->getPost('id_pr');
-        if (null == ($this->request->getPost('id_so'))) {
+        if (null == ($this->request->getPost('csruniq'))) {
             session()->set('success', '-1');
-            return redirect()->to(base_url('requisition'));
+            return redirect()->to(base_url('requisition/update/' . $id_so . '/' . $post_stat));
         } else {
             $sender = $this->AdministrationModel->get_mailsender();
-            $rqnnumber = $this->request->getPost('rqnnumber');
+            $rqnnumber = $this->request->getPost('rqnnumber_all');
             $post_stat = $this->request->getPost('post_stat');
-            $get_so = $this->RequisitionModel->get_so_by_id($id_so);
+            $get_so = $this->RequisitionModel->get_so_detail_by_id($id_so);
             $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
+
             $groupuser = 3;
-            if ($choose_rqn) {
-                $data1 = array(
+            $data1 = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'RQNKEY' => $id_so . '-' . $rqnnumber,
+                'CSRUNIQ' => $id_so,
+                'RQNDATE' => $choose_rqn['RQNDATE'],
+                'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
+                'RQNREMARKS' => '',
+                'OTPROCESS' => $groupuser,
+                'POSTINGSTAT' => $post_stat,
+                'OFFLINESTAT' => $sender['OFFLINESTAT'],
+            );
+            $getrqnuniq = $this->RequisitionModel->get_rqnuniq_open($id_so, $rqnnumber);
+            if (empty($getrqnuniq['RQNKEY'])) {
+                $this->RequisitionModel->requisition_insert($data1);
+                session()->set('success', '1');
+                return redirect()->to(base_url('/requisition'));
+                session()->remove('success');
+            }
+            if (!empty($getrqnuniq['RQNKEY']) and $getrqnuniq['RQNKEY'] == $id_so . '-' . $rqnnumber) {
+                session()->set('success', '-1');
+                return redirect()->to(base_url('requisition/update/' . $id_so . '/' . $post_stat));
+                session()->remove('success');
+            }
+
+            if ($post_stat == 1) {
+                $get_rqn_data = $this->RequisitionModel->get_rqnjoincsr_by_so($id_so);
+                //Date for Variable Email
+                $crmpodate = substr($get_rqn_data['PODATECUST'], 4, 2) . "/" . substr($get_rqn_data['PODATECUST'], 6, 2) . "/" .  substr($get_rqn_data['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_rqn_data['CRMREQDATE'], 4, 2) . '/' . substr($get_rqn_data['CRMREQDATE'], 6, 2) . '/' . substr($get_rqn_data['CRMREQDATE'], 0, 4);
+                $rqndate = substr($get_rqn_data['RQNDATE'], 4, 2) . "/" . substr($get_rqn_data['RQNDATE'], 6, 2) . "/" .  substr($get_rqn_data['RQNDATE'], 0, 4);
+                $pocust_date = date_create(substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" .  substr($get_so['PODATECUST'], 0, 4));
+                $requisitiondate = date_create(substr($get_rqn_data['RQNDATE'], 4, 2) . "/" . substr($get_rqn_data['RQNDATE'], 6, 2) . "/" .  substr($get_rqn_data['RQNDATE'], 0, 4));
+                $pocusttoprdiff = date_diff($requisitiondate, $pocust_date);
+                $pocusttoprdiff = $pocusttoprdiff->format("%a");
+                $data2 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'CSRUNIQ' => $get_so['CSRUNIQ'],
-                    'CONTRACT' => $get_so['CONTRACT'],
-                    'PROJECT' => $get_so['PROJECT'],
-                    'CUSTOMER' => $get_so['CUSTOMER'],
-                    'ITEMNO' => $get_so['ITEMNO'],
-                    'RQNDATE' => $choose_rqn["DATE"],
-                    'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
-                    'OTPROCESS' => $groupuser,
-                    'POSTINGSTAT' => $post_stat,
-                    'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                    'RQNNUMBER' => $choose_rqn['RQNNUMBER'],
+                    'RQNDATE' => $choose_rqn['RQNDATE'],
+                    'POCUSTTOPRDAYS' => $pocusttoprdiff,
                 );
-                $this->RequisitionModel->requisition_insert($data1);
 
-                if ($post_stat == 1) {
-                    $pocust_date = date_create(substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" .  substr($get_so['PODATECUST'], 0, 4));
-                    $requisitiondate = date_create(substr($choose_rqn["DATE"], 4, 2) . "/" . substr($choose_rqn["DATE"], 6, 2) . "/" .  substr($choose_rqn["DATE"], 0, 4));
-                    $pocusttoprdiff = date_diff($requisitiondate, $pocust_date);
-                    $pocusttoprdiff = $pocusttoprdiff->format("%a");
-                    $data2 = array(
+                $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+
+                if ($sender['OFFLINESTAT'] == 0) {
+                    //Untuk Update Status Posting REQUISITION
+                    $data3 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
                         'AUDTUSER' => $this->audtuser['AUDTUSER'],
                         'AUDTORG' => $this->audtuser['AUDTORG'],
-                        'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
-                        'RQNDATE' => $choose_rqn["DATE"],
-                        'POCUSTTOPRDAYS' => $pocusttoprdiff,
+                        'POSTINGSTAT' => 1,
+                        'OFFLINESTAT' => 0,
                     );
+                    //inisiasi proses kirim ke group
+                    $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                    $mail_tmpl = $this->NotifModel->get_template($groupuser);
+                    foreach ($notiftouser_data as $sendto_user) :
+                        $var_email = array(
+                            'TONAME' => $sendto_user['NAME'],
+                            'FROMNAME' => $this->audtuser['NAMELGN'],
+                            'CONTRACT' => $get_rqn_data['CONTRACT'],
+                            'CTDESC' => $get_rqn_data['CTDESC'],
+                            'PROJECT' => $get_rqn_data['PROJECT'],
+                            'PRJDESC' => $get_rqn_data['PRJDESC'],
+                            'CUSTOMER' => $get_rqn_data['CUSTOMER'],
+                            'NAMECUST' => $get_rqn_data['NAMECUST'],
+                            'PONUMBERCUST' => $get_rqn_data['PONUMBERCUST'],
+                            'PODATECUST' => $crmpodate,
+                            'CRMNO' => $get_rqn_data['CRMNO'],
+                            'REQDATE' => $crmreqdate,
+                            'ORDERDESC' => $get_rqn_data['ORDERDESC'],
+                            'REMARKS' => $get_rqn_data['CRMREMARKS'],
+                            'SALESCODE' => $get_rqn_data['MANAGER'],
+                            'SALESPERSON' => $get_rqn_data['SALESNAME'],
+                            'RQNDATE' => $rqndate,
+                            'RQNNUMBER' => $get_rqn_data['RQNNUMBER'],
+                        );
+                        $subject = $mail_tmpl['SUBJECT_MAIL'];
+                        $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
 
-                    $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+                        $data_email = array(
+                            'hostname'       => $sender['HOSTNAME'],
+                            'sendername'       => $sender['SENDERNAME'],
+                            'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                            'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                            'ssl'       => $sender['SSL'],
+                            'smtpport'       => $sender['SMTPPORT'],
+                            'to_email' => $sendto_user['EMAIL'],
+                            'subject' =>  $subject,
+                            'message' => $message,
+                        );
 
-                    if ($sender['OFFLINESTAT'] == 0) {
-                        //$get_rqn = $this->RequisitionModel->get_requisition_post($n_rqnnumber);
-                        $rqndate = substr($choose_rqn["DATE"], 6, 2) . "/" . substr($choose_rqn["DATE"], 4, 2) . "/" . substr($choose_rqn["DATE"], 0, 4);
 
-                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                        $data_notif = array(
+                            'MAILKEY' => $groupuser . '-' . $get_rqn_data['RQNUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                            'FROM_USER' => $this->header_data['usernamelgn'],
+                            'FROM_EMAIL' => $this->header_data['emaillgn'],
+                            'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                            'TO_USER' => $sendto_user['USERNAME'],
+                            'TO_EMAIL' => $sendto_user['EMAIL'],
+                            'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                            'SUBJECT' => $subject,
+                            'MESSAGE' => $message,
+                            'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                            'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                            'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                            'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                            'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                            'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                            'IS_READ' => 0,
+                            'IS_ARCHIVED' => 0,
+                            'IS_TRASHED' => 0,
+                            'IS_DELETED' => 0,
+                            'IS_ATTACHED' => 0,
+                            'IS_STAR' => 0,
+                            'IS_READSENDER' => 1,
+                            'IS_ARCHIVEDSENDER' => 0,
+                            'IS_TRASHEDSENDER' => 0,
+                            'IS_DELETEDSENDER' => 0,
+                            'SENDING_STATUS' => 1,
+                            'OTPROCESS' => $groupuser,
+                            'UNIQPROCESS' => $get_rqn_data['RQNUNIQ'],
+                        );
 
-                        foreach ($notiftouser_data as $sendto_user) {
-                            $data_email = array(
-                                'hostname'       => $sender['HOSTNAME'],
-                                'sendername'       => $sender['SENDERNAME'],
-                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                                'ssl'       => $sender['SSL'],
-                                'smtpport'       => $sender['SMTPPORT'],
-                                'to_email' => $sendto_user['EMAIL'],
-                                'subject' => 'Pending Requisition Allert. Requisition No : ' . $rqnnumber,
-                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                    Please to follow up Requisition Number :' . $rqnnumber . '(' . $rqndate . ') / Contract : ' . $get_so['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-                            );
-
-                            $sending_mail = $this->send($data_email);
-
-                            if ($sending_mail) {
-                                $data_notif = array(
-                                    'FROM_USER' => $this->header_data['usernamelgn'],
-                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
-                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                                    'TO_USER' => $sendto_user['USERNAME'],
-                                    'TO_EMAIL' => $sendto_user['EMAIL'],
-                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                                    'SUBJECT' => 'Pending Requisition Allert. Requisition No : ' . $rqnnumber,
-                                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                                    Please to follow up Requisition Number :' . $rqnnumber . '(' . $rqndate . ') / Contract : ' . $get_so['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
-                        <br><br>
-                        You can access Order Tracking System Portal via the URL below:
-                        <br>
-                        Http://jktsms025:...
-                        <br>
-                        Thanks for your cooperation. 
-                        <br><br>
-                        Order Tracking Administrator',
-
-                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                                    'IS_READ' => 0,
-                                    'IS_ARCHIVED' => 0,
-                                    'IS_TRASHED' => 0,
-                                    'IS_DELETED' => 0,
-                                    'IS_ATTACHED' => 0,
-                                    'IS_STAR' => 0,
-                                    'IS_READSENDER' => 1,
-                                    'IS_ARCHIVEDSENDER' => 0,
-                                    'IS_TRASHEDSENDER' => 0,
-                                    'IS_DELETEDSENDER' => 0,
-                                    'SENDING_STATUS' => 1,
-                                    'OTPROCESS' => $groupuser,
-                                    'UNIQPROCESS' => $get_so['CSRUNIQ'],
-                                );
-
-                                $this->NotifModel->mailbox_insert($data_notif);
+                        //Check Duplicate Entry & Sending Mail
+                        $touser = trim($sendto_user['USERNAME']);
+                        $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_rqn_data['RQNUNIQ'], $touser);
+                        if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_rqn_data['RQNUNIQ'] . '-' . $touser) {
+                            session()->set('success', '-1');
+                            return redirect()->to(base_url('/requisition'));
+                            session()->remove('success');
+                        } else if (empty($getmailuniq['MAILKEY'])) {
+                            $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                            if ($post_email) {
+                                $sending_mail = $this->send($data_email);
                             }
                         }
-                    }
+
+                    endforeach;
+
+                    $this->RequisitionModel->rqn_post_update($get_rqn_data['RQNUNIQ'], $data3);
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/requisitionlist'));
+                    session()->remove('success');
+                } else {
+                    $data3 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'POSTINGSTAT' => 1,
+                        'OFFLINESTAT' => 1,
+                    );
+                    $this->RequisitionModel->rqn_post_update($get_rqn_data['RQNUNIQ'], $data3);
+                    //session()->setFlashdata('messageerror', 'Create Record Failed');
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/requisitionlist'));
+                    session()->remove('success');
                 }
             }
+            session()->set('success', '1');
+            return redirect()->to(base_url('/requisition'));
+            session()->remove('success');
         }
-        session()->set('success', '1');
-        return redirect()->to(base_url('/requisition'));
-        session()->remove('success');
     }
 
 
     public function update_action()
     {
-        $id_so = $this->request->getPost('id_so');
-        $rqnuniq = $this->request->getPost('id_pr');
-        if (null == ($this->request->getPost('id_so'))) {
+        $id_so = $this->request->getPost('csruniq');
+        $post_stat = $this->request->getPost('post_stat');
+        $rqnuniq = $this->request->getPost('rqnuniq');
+        if (null == ($this->request->getPost('csruniq'))) {
             session()->set('success', '-1');
             return redirect()->to(base_url('requisition'));
         } else {
             $sender = $this->AdministrationModel->get_mailsender();
-            $rqnnumber = $this->request->getPost('rqnnumber');
+            $rqnnumber = $this->request->getPost('rqnnumber_all');
             $post_stat = $this->request->getPost('post_stat');
             $get_so = $this->RequisitionModel->get_so_by_id($id_so);
             $choose_rqn = $this->RequisitionModel->get_requisition_by_id($rqnnumber);
 
             $groupuser = 3;
-            if ($choose_rqn) {
-                $data1 = array(
+            $data1 = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'RQNKEY' => $id_so . '-' . $rqnnumber,
+                'CSRUNIQ' => $id_so,
+                'RQNDATE' => $choose_rqn['RQNDATE'],
+                'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
+                'RQNREMARKS' => '',
+                'OTPROCESS' => $groupuser,
+                'POSTINGSTAT' => $post_stat,
+                'OFFLINESTAT' => $sender['OFFLINESTAT'],
+            );
+            $this->RequisitionModel->requisition_update($rqnuniq, $data1);
+
+            if ($post_stat == 1) {
+                $get_rqn_data = $this->RequisitionModel->get_rqnjoincsr_by_so($id_so);
+                //Date for Variable Email
+                $crmpodate = substr($get_rqn_data['PODATECUST'], 4, 2) . "/" . substr($get_rqn_data['PODATECUST'], 6, 2) . "/" .  substr($get_rqn_data['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_rqn_data['CRMREQDATE'], 4, 2) . '/' . substr($get_rqn_data['CRMREQDATE'], 6, 2) . '/' . substr($get_rqn_data['CRMREQDATE'], 0, 4);
+                $rqndate = substr($get_rqn_data['RQNDATE'], 4, 2) . "/" . substr($get_rqn_data['RQNDATE'], 6, 2) . "/" .  substr($get_rqn_data['RQNDATE'], 0, 4);
+                $pocust_date = date_create(substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" .  substr($get_so['PODATECUST'], 0, 4));
+                $requisitiondate = date_create(substr($get_rqn_data['RQNDATE'], 4, 2) . "/" . substr($get_rqn_data['RQNDATE'], 6, 2) . "/" .  substr($get_rqn_data['RQNDATE'], 0, 4));
+                $pocusttoprdiff = date_diff($requisitiondate, $pocust_date);
+                $pocusttoprdiff = $pocusttoprdiff->format("%a");
+                $data2 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'CSRUNIQ' => $get_so['CSRUNIQ'],
-                    'CONTRACT' => $get_so['CONTRACT'],
-                    'PROJECT' => $get_so['PROJECT'],
-                    'CUSTOMER' => $get_so['CUSTOMER'],
-                    'ITEMNO' => $get_so['ITEMNO'],
-                    'RQNDATE' => $choose_rqn["DATE"],
-                    'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
-                    'OTPROCESS' => $groupuser,
-                    'POSTINGSTAT' => $post_stat,
-                    'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                    'RQNNUMBER' => $choose_rqn['RQNNUMBER'],
+                    'RQNDATE' => $choose_rqn['RQNDATE'],
+                    'POCUSTTOPRDAYS' => $pocusttoprdiff,
                 );
-                $this->RequisitionModel->requisition_update($rqnuniq, $data1);
 
-                if ($post_stat == 1) {
-                    $pocust_date = date_create(substr($get_so['PODATECUST'], 4, 2) . "/" . substr($get_so['PODATECUST'], 6, 2) . "/" .  substr($get_so['PODATECUST'], 0, 4));
-                    $requisitiondate = date_create(substr($choose_rqn["DATE"], 4, 2) . "/" . substr($choose_rqn["DATE"], 6, 2) . "/" .  substr($choose_rqn["DATE"], 0, 4));
-                    $pocusttoprdiff = date_diff($requisitiondate, $pocust_date);
-                    $pocusttoprdiff = $pocusttoprdiff->format("%a");
-                    $data2 = array(
+                $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+
+                if ($sender['OFFLINESTAT'] == 0) {
+                    //Untuk Update Status Posting REQUISITION
+                    $data3 = array(
                         'AUDTDATE' => $this->audtuser['AUDTDATE'],
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
                         'AUDTUSER' => $this->audtuser['AUDTUSER'],
                         'AUDTORG' => $this->audtuser['AUDTORG'],
-                        'RQNNUMBER' => $choose_rqn["RQNNUMBER"],
-                        'RQNDATE' => $choose_rqn["DATE"],
-                        'POCUSTTOPRDAYS' => $pocusttoprdiff,
+                        'POSTINGSTAT' => 1,
+                        'OFFLINESTAT' => 0,
                     );
+                    //inisiasi proses kirim ke group
+                    $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                    $mail_tmpl = $this->NotifModel->get_template($groupuser);
+                    foreach ($notiftouser_data as $sendto_user) :
+                        $var_email = array(
+                            'TONAME' => $sendto_user['NAME'],
+                            'FROMNAME' => $this->audtuser['NAMELGN'],
+                            'CONTRACT' => $get_rqn_data['CONTRACT'],
+                            'CTDESC' => $get_rqn_data['CTDESC'],
+                            'PROJECT' => $get_rqn_data['PROJECT'],
+                            'PRJDESC' => $get_rqn_data['PRJDESC'],
+                            'CUSTOMER' => $get_rqn_data['CUSTOMER'],
+                            'NAMECUST' => $get_rqn_data['NAMECUST'],
+                            'PONUMBERCUST' => $get_rqn_data['PONUMBERCUST'],
+                            'PODATECUST' => $crmpodate,
+                            'CRMNO' => $get_rqn_data['CRMNO'],
+                            'REQDATE' => $crmreqdate,
+                            'ORDERDESC' => $get_rqn_data['ORDERDESC'],
+                            'REMARKS' => $get_rqn_data['CRMREMARKS'],
+                            'SALESCODE' => $get_rqn_data['MANAGER'],
+                            'SALESPERSON' => $get_rqn_data['SALESNAME'],
+                            'RQNDATE' => $rqndate,
+                            'RQNNUMBER' => $get_rqn_data['RQNNUMBER'],
+                        );
+                        $subject = $mail_tmpl['SUBJECT_MAIL'];
+                        $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
 
-                    $this->RequisitionModel->ot_requisition_update($id_so, $data2);
+                        $data_email = array(
+                            'hostname'       => $sender['HOSTNAME'],
+                            'sendername'       => $sender['SENDERNAME'],
+                            'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                            'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                            'ssl'       => $sender['SSL'],
+                            'smtpport'       => $sender['SMTPPORT'],
+                            'to_email' => $sendto_user['EMAIL'],
+                            'subject' =>  $subject,
+                            'message' => $message,
+                        );
 
-                    if ($sender['OFFLINESTAT'] == 0) {
-                        //$get_rqn = $this->RequisitionModel->get_requisition_post($rqnnumber);
-                        $rqndate = substr($choose_rqn["DATE"], 6, 2) . "/" . substr($choose_rqn["DATE"], 4, 2) . "/" . substr($choose_rqn["DATE"], 0, 4);
 
-                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                        $data_notif = array(
+                            'MAILKEY' => $groupuser . '-' . $get_rqn_data['RQNUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                            'FROM_USER' => $this->header_data['usernamelgn'],
+                            'FROM_EMAIL' => $this->header_data['emaillgn'],
+                            'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                            'TO_USER' => $sendto_user['USERNAME'],
+                            'TO_EMAIL' => $sendto_user['EMAIL'],
+                            'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                            'SUBJECT' => $subject,
+                            'MESSAGE' => $message,
+                            'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                            'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                            'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                            'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                            'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                            'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                            'IS_READ' => 0,
+                            'IS_ARCHIVED' => 0,
+                            'IS_TRASHED' => 0,
+                            'IS_DELETED' => 0,
+                            'IS_ATTACHED' => 0,
+                            'IS_STAR' => 0,
+                            'IS_READSENDER' => 1,
+                            'IS_ARCHIVEDSENDER' => 0,
+                            'IS_TRASHEDSENDER' => 0,
+                            'IS_DELETEDSENDER' => 0,
+                            'SENDING_STATUS' => 1,
+                            'OTPROCESS' => $groupuser,
+                            'UNIQPROCESS' => $get_rqn_data['RQNUNIQ'],
+                        );
 
-                        foreach ($notiftouser_data as $sendto_user) {
-                            $data_email = array(
-                                'hostname'       => $sender['HOSTNAME'],
-                                'sendername'       => $sender['SENDERNAME'],
-                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                                'ssl'       => $sender['SSL'],
-                                'smtpport'       => $sender['SMTPPORT'],
-                                'to_email' => $sendto_user['EMAIL'],
-                                'subject' => 'Pending Requisition Allert. Requisition No : ' . $choose_rqn["RQNNUMBER"],
-                                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                    Please to follow up Requisition Number :' . $choose_rqn["RQNNUMBER"] . '(' . $rqndate . ') / Contract : ' . $get_so['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-                            );
-
-                            $sending_mail = $this->send($data_email);
-
-                            if ($sending_mail) {
-                                $data_notif = array(
-                                    'FROM_USER' => $this->header_data['usernamelgn'],
-                                    'FROM_EMAIL' => $this->header_data['emaillgn'],
-                                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                                    'TO_USER' => $sendto_user['USERNAME'],
-                                    'TO_EMAIL' => $sendto_user['EMAIL'],
-                                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                                    'SUBJECT' => 'Pending Requisition Allert. Requisition No : ' . $choose_rqn["RQNNUMBER"],
-                                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                                    Please to follow up Requisition Number :' . $choose_rqn["RQNNUMBER"] . '(' . $rqndate . ') / Contract : ' . $get_so['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
-                        <br><br>
-                        You can access Order Tracking System Portal via the URL below:
-                        <br>
-                        Http://jktsms025:...
-                        <br>
-                        Thanks for your cooperation. 
-                        <br><br>
-                        Order Tracking Administrator',
-
-                                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                                    'IS_READ' => 0,
-                                    'IS_ARCHIVED' => 0,
-                                    'IS_TRASHED' => 0,
-                                    'IS_DELETED' => 0,
-                                    'IS_ATTACHED' => 0,
-                                    'IS_STAR' => 0,
-                                    'IS_READSENDER' => 1,
-                                    'IS_ARCHIVEDSENDER' => 0,
-                                    'IS_TRASHEDSENDER' => 0,
-                                    'IS_DELETEDSENDER' => 0,
-                                    'SENDING_STATUS' => 1,
-                                    'OTPROCESS' => $groupuser,
-                                    'UNIQPROCESS' => $get_so['CSRUNIQ'],
-                                );
-
-                                $this->NotifModel->mailbox_insert($data_notif);
+                        //Check Duplicate Entry & Sending Mail
+                        $touser = trim($sendto_user['USERNAME']);
+                        $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_rqn_data['RQNUNIQ'], $touser);
+                        if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_rqn_data['RQNUNIQ'] . '-' . $touser) {
+                            session()->set('success', '-1');
+                            return redirect()->to(base_url('/requisition'));
+                            session()->remove('success');
+                        } else if (empty($getmailuniq['MAILKEY'])) {
+                            $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                            if ($post_email) {
+                                $sending_mail = $this->send($data_email);
                             }
                         }
-                        //return redirect()->to(base_url('/salesorder'));
-                        //}
-                        //}
 
+                    endforeach;
 
-                    }
+                    $this->RequisitionModel->rqn_post_update($get_rqn_data['RQNUNIQ'], $data3);
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/requisitionlist'));
+                    session()->remove('success');
+                } else {
+                    $data3 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'POSTINGSTAT' => 1,
+                        'OFFLINESTAT' => 1,
+                    );
+                    $this->RequisitionModel->rqn_post_update($get_rqn_data['RQNUNIQ'], $data3);
+                    //session()->setFlashdata('messageerror', 'Create Record Failed');
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/requisitionlist'));
+                    session()->remove('success');
                 }
             }
+
             session()->set('success', '1');
             return redirect()->to(base_url('/requisition'));
             session()->remove('success');
@@ -491,6 +675,10 @@ class Requisition extends BaseController
 
         $getreq = $this->RequisitionModel->get_requisition_post($rqnuniq);
         $sender = $this->AdministrationModel->get_mailsender();
+        //Date for Variable Email
+        $crmpodate = substr($getreq['PODATECUST'], 4, 2) . "/" . substr($getreq['PODATECUST'], 6, 2) . "/" .  substr($getreq['PODATECUST'], 0, 4);
+        $crmreqdate = substr($getreq['CRMREQDATE'], 4, 2) . '/' . substr($getreq['CRMREQDATE'], 6, 2) . '/' . substr($getreq['CRMREQDATE'], 0, 4);
+        $rqndate = substr($getreq['RQNDATE'], 4, 2) . "/" . substr($getreq['RQNDATE'], 6, 2) . "/" .  substr($getreq['RQNDATE'], 0, 4);
         $groupuser = 3;
 
         //inisiasi proses kirim ke group
@@ -503,8 +691,30 @@ class Requisition extends BaseController
         );
         //inisiasi proses kirim ke group
         $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-        $rqndate = substr($getreq['RQNDATE'], 6, 2) . "/" . substr($getreq['RQNDATE'], 4, 2) . "/" . substr($getreq['RQNDATE'], 0, 4);
-        foreach ($notiftouser_data as $sendto_user) {
+        $mail_tmpl = $this->NotifModel->get_template($groupuser);
+        foreach ($notiftouser_data as $sendto_user) :
+            $var_email = array(
+                'TONAME' => $sendto_user['NAME'],
+                'FROMNAME' => $this->audtuser['NAMELGN'],
+                'CONTRACT' => $getreq['CONTRACT'],
+                'CTDESC' => $getreq['CTDESC'],
+                'PROJECT' => $getreq['PROJECT'],
+                'PRJDESC' => $getreq['PRJDESC'],
+                'CUSTOMER' => $getreq['CUSTOMER'],
+                'NAMECUST' => $getreq['NAMECUST'],
+                'PONUMBERCUST' => $getreq['PONUMBERCUST'],
+                'PODATECUST' => $crmpodate,
+                'CRMNO' => $getreq['CRMNO'],
+                'REQDATE' => $crmreqdate,
+                'ORDERDESC' => $getreq['ORDERDESC'],
+                'REMARKS' => $getreq['CRMREMARKS'],
+                'SALESCODE' => $getreq['MANAGER'],
+                'SALESPERSON' => $getreq['SALESNAME'],
+                'RQNDATE' => $rqndate,
+                'RQNNUMBER' => $getreq['RQNNUMBER'],
+            );
+            $subject = $mail_tmpl['SUBJECT_MAIL'];
+            $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
 
             $data_email = array(
                 'hostname'       => $sender['HOSTNAME'],
@@ -514,139 +724,65 @@ class Requisition extends BaseController
                 'ssl'       => $sender['SSL'],
                 'smtpport'       => $sender['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending Requisition Allert. Requisition No : ' . $getreq['RQNNUMBER'],
-                'message' =>    'Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-
-Please to follow up Requisition Number :' . $getreq['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $getreq['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
-<br><br>
-You can access Order Tracking System Portal via the URL below:
-<br>
-Http://jktsms025:...
-<br>
-Thanks for your cooperation. 
-<br><br>
-Order Tracking Administrator',
+                'subject' =>  $subject,
+                'message' => $message,
             );
 
-            $sending_mail = $this->send($data_email);
-            if ($sending_mail) {
-                $data_notif = array(
-                    'FROM_USER' => $this->header_data['usernamelgn'],
-                    'FROM_EMAIL' => $this->header_data['emaillgn'],
-                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'TO_USER' => $sendto_user['USERNAME'],
-                    'TO_EMAIL' => $sendto_user['EMAIL'],
-                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                    'SUBJECT' => 'Pending Requisition Allert. Requisition No : ' . $getreq['RQNNUMBER'],
-                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                    Please to follow up Requisition Number :' . $getreq['RQNNUMBER'] . '(' . $rqndate . ') / Contract : ' . $getreq['CONTRACT'] . ' is pending for you to process Purchase Order Vendor.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
 
-                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'IS_READ' => 0,
-                    'IS_ARCHIVED' => 0,
-                    'IS_TRASHED' => 0,
-                    'IS_DELETED' => 0,
-                    'IS_ATTACHED' => 0,
-                    'IS_STAR' => 0,
-                    'IS_READSENDER' => 1,
-                    'IS_ARCHIVEDSENDER' => 0,
-                    'IS_TRASHEDSENDER' => 0,
-                    'IS_DELETEDSENDER' => 0,
-                    'SENDING_STATUS' => 1,
-                    'OTPROCESS' => $groupuser,
-                    'UNIQPROCESS' => $getreq['CSRUNIQ'],
-                );
-                $this->NotifModel->mailbox_insert($data_notif);
-                $this->RequisitionModel->rqn_post_update($rqnuniq, $data2);
-            } else {
-                return redirect()->to(base_url('/requisition'));
+            $data_notif = array(
+                'MAILKEY' => $groupuser . '-' . $getreq['RQNUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                'FROM_USER' => $this->header_data['usernamelgn'],
+                'FROM_EMAIL' => $this->header_data['emaillgn'],
+                'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                'TO_USER' => $sendto_user['USERNAME'],
+                'TO_EMAIL' => $sendto_user['EMAIL'],
+                'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                'SUBJECT' => $subject,
+                'MESSAGE' => $message,
+                'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                'IS_READ' => 0,
+                'IS_ARCHIVED' => 0,
+                'IS_TRASHED' => 0,
+                'IS_DELETED' => 0,
+                'IS_ATTACHED' => 0,
+                'IS_STAR' => 0,
+                'IS_READSENDER' => 1,
+                'IS_ARCHIVEDSENDER' => 0,
+                'IS_TRASHEDSENDER' => 0,
+                'IS_DELETEDSENDER' => 0,
+                'SENDING_STATUS' => 1,
+                'OTPROCESS' => $groupuser,
+                'UNIQPROCESS' => $getreq['RQNUNIQ'],
+            );
+
+            //Check Duplicate Entry & Sending Mail
+            $touser = trim($sendto_user['USERNAME']);
+            $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $getreq['RQNUNIQ'], $touser);
+            if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $getreq['RQNUNIQ'] . '-' . $touser) {
+                session()->set('success', '-1');
+                return redirect()->to(base_url('/requisitionlist'));
+                session()->remove('success');
+            } else if (empty($getmailuniq['MAILKEY'])) {
+                $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                if ($post_email) {
+                    $sending_mail = $this->send($data_email);
+                }
             }
-        }
 
-        session()->setFlashdata('messagesuccess', 'Create Record Success');
-        return redirect()->to(base_url('/requisition'));
+        endforeach;
+
+        $this->RequisitionModel->rqn_post_update($getreq['RQNUNIQ'], $data2);
+        session()->set('success', '1');
+        return redirect()->to(base_url('/requisitionlist'));
+        session()->remove('success');
     }
 
 
-    public function export_excel()
-    {
-        //$peoples = $this->builder->get()->getResultArray();
-        $requisitiondata = $this->RequisitionModel->get_requisition_open();
-        $spreadsheet = new Spreadsheet();
-        // tulis header/nama kolom 
-        $spreadsheet->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'No')
-            ->setCellValue('B1', 'ContractNo')
-            ->setCellValue('C1', 'ProjectNo')
-            ->setCellValue('D1', 'CustomerName')
-            ->setCellValue('E1', 'CustomerEmail')
-            ->setCellValue('F1', 'CrmNo')
-            ->setCellValue('G1', 'PoCustomer')
-            ->setCellValue('H1', 'InventoryNo')
-            ->setCellValue('I1', 'MaterialNo')
-            ->setCellValue('J1', 'PoDate')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'OrderDescription')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', '')
-            ->setCellValue('Q1', 'Pr Date')
-            ->setCellValue('R1', 'PR Number')
-            ->setCellValue('S1', '');
-
-        $rows = 2;
-        // tulis data mobil ke cell
-        $no = 1;
-        foreach ($requisitiondata as $data) {
-            $spreadsheet->setActiveSheetIndex(0)
-                ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['ContractNo'])
-                ->setCellValue('C' . $rows, $data['ProjectNo'])
-                ->setCellValue('D' . $rows, $data['CustomerName'])
-                ->setCellValue('E' . $rows, $data['CustomerEmail'])
-                ->setCellValue('F' . $rows, $data['CrmNo'])
-                ->setCellValue('G' . $rows, $data['PoCustomer'])
-                ->setCellValue('H' . $rows, $data['InventoryNo'])
-                ->setCellValue('I' . $rows, $data['MaterialNo'])
-                ->setCellValue('J' . $rows, $data['PoDate'])
-                ->setCellValue('K' . $rows, $data['ReqDate'])
-                ->setCellValue('L' . $rows, $data['SalesPerson'])
-                ->setCellValue('M' . $rows, $data['OrderDesc'])
-                ->setCellValue('N' . $rows, $data['Qty'])
-                ->setCellValue('O' . $rows, $data['Uom'])
-                ->setCellValue('P' . $rows, '')
-                ->setCellValue('Q' . $rows, $data['PrDate'])
-                ->setCellValue('R' . $rows, $data['PrNumber'])
-                ->setCellValue('S' . $rows, '');
-            $rows++;
-        }
-        // tulis dalam format .xlsx
-        $writer = new Xlsx($spreadsheet);
-        $fileName = 'Ordertracking_data';
-
-        // Redirect hasil generate xlsx ke web client
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
-        exit();
-    }
 
     private function send($data_email)
     {

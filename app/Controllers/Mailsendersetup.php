@@ -128,7 +128,7 @@ class Mailsendersetup extends BaseController
             'sender_hostname' => 'required|valid_url',
             'sender_name' => 'required|alpha_space',
             'sender_email' => 'required|valid_email',
-            'sender_password' => 'required',
+            //'sender_password' => 'required',
             'sender_ssl' => 'required|alpha',
             'sender_smtpport' => 'required|numeric',
 

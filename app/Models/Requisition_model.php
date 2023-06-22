@@ -24,23 +24,25 @@ class Requisition_model extends Model
 
     function get_requisition_open()
     {
-        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT,b.OFFLINESTAT," . 'it."DESC"' . " as ITEMDESC from webot_CSR a
-        left join ICITEM it on it.ITEMNO=a.ITEMNO 
+        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNKEY,b.RQNDATE,b.RQNNUMBER,b.RQNREMARKS,b.POSTINGSTAT as RQNPOSTINGSTAT,b.OFFLINESTAT as RQNOFFLINESTAT 
+        from webot_CSR a
         left join webot_REQUISITION b on b.CSRUNIQ=a.CSRUNIQ
         where (a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1)");
-        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+
         return $query->getResultArray();
     }
 
     function get_requisition_open_search($keyword)
     {
-        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT,b.OFFLINESTAT," . 'it."DESC"' . " as ITEMDESC 
+        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT as RQNPOSTINGSTAT,b.OFFLINESTAT as RQNOFFLINESTAT
         from webot_CSR a
-        left join ICITEM it on it.ITEMNO=a.ITEMNO 
         left join webot_REQUISITION b on b.CSRUNIQ=a.CSRUNIQ
         where ((a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1))
-        and (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.CRMNO like '%$keyword%' or a.NAMECUST like '%$keyword%'
-        or a.ITEMNO like '%$keyword%' or a.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or b.RQNNUMBER like '%$keyword%')");
+        and (a.CONTRACT like '%$keyword%' or a.CTDESC like '%$keyword%' or a.MANAGER like '%$keyword%' or a.SALESNAME like '%$keyword%'
+        or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
+        or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
+        or a.CRMREMARKS like '%$keyword%'
+        or b.RQNNUMBER like '%$keyword%')");
 
         return $query->getResultArray();
     }
@@ -57,6 +59,30 @@ class Requisition_model extends Model
         return $query->getResultArray();
     }
 
+
+    function get_csruniq_open()
+    {
+        $query = $this->db->query("select c.CSRUNIQ,c.CSRLUNIQ 
+        from webot_CSR a
+        inner join webot_CSRL c on c.CSRUNIQ=a.CSRUNIQ
+        left join webot_REQUISITION b on b.CSRUNIQ=a.CSRUNIQ
+        where (a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1)");
+        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        return $query->getResultArray();
+    }
+
+
+    function get_csrl_list_post()
+    {
+        $query = $this->db->query("select a.* from webot_CSRL a
+        inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        where b.POSTINGSTAT=1 order by CSRUNIQ asc, CSRLUNIQ asc");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+
     function count_rqn_posting()
     {
         $builder = $this->db->table('webot_REQUISITION');
@@ -66,57 +92,111 @@ class Requisition_model extends Model
         return $builder->countAllResults();
     }
 
-    function get_requisition_sage($contract)
+    function get_requisition_sage()
     {
         // Sementara Untuk simulasi, Cari Request yang ketemu sampai Received
         // kalau sudah Go Live, Hapus Inner Join POPORH1 & inner join PORCPH1
+        // Kalau mau job relate tambahkan where $contract
         $query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
         from ENRQNH a 
         inner join POPORH1 b on b.PONUMBER=a.PONUMBERS
         inner join PORCPH1 c on c.PONUMBER=a.PONUMBERS
         where " . 'a."DATE"' . ">=20220101 and
-        a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)");
+        a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
+        order by " . 'a."DATE"' . " desc");
 
 
-        // untuk simulasi 
-        /*$query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER,a." . '"DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS
-        from ENRQNH a
-        inner join (select r.PONUMBER,r." . '"DATE"' . ",s.PORHSEQ,s.PORLSEQ,s.CONTRACT,s.PROJECT,s.ITEMDESC from POPORH1 r inner join POPORL s on s.PORHSEQ=r.PORHSEQ) c on c.PONUMBER=a.PONUMBERS
-        inner join (select x.PONUMBER,x.RCPNUMBER,x." . '"DATE"' . ",y.PORHSEQ,y.PORLSEQ,y.CONTRACT,y.PROJECT,y.ITEMDESC from PORCPH1 x inner join PORCPL y on y.RCPHSEQ=x.RCPHSEQ) d on d.PORHSEQ=c.PORHSEQ and d.PORLSEQ=c.PORLSEQ
-        where c.CONTRACT='$contract'");*/
+        // untuk Data Live
+        /*$query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
+        from ENRQNH a 
+        where " . 'a."DATE"' . ">=20220101 and
+        a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
+        order by " . 'a."DATE"' . " asc");*/
         return $query->getResultArray();
     }
 
     function get_requisition_by_id($rqnnumber)
     {
-        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER='$rqnnumber' ");
+        $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . " as RQNDATE,DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER='$rqnnumber' ");
+        return $query->getRowArray();
+    }
+
+    function get_rqn_uniq($rqnnumber)
+    {
+        $query = $this->db->query("select DISTINCT a.RQNUNIQ,a.RQNNUMBER,a.RQNKEY,COUNT(b.RQNLUNIQ) as CHKRQNL 
+        from webot_REQUISITION a
+        left join webot_REQUISITIONL b on b.RQNUNIQ=a.RQNUNIQ
+        where a.RQNNUMBER='$rqnnumber'
+        group by a.RQNUNIQ,a.CSRUNIQ,a.RQNKEY");
         return $query->getRowArray();
     }
 
     function get_requisition_by_so($id_so)
     {
-        $query = $this->db->query("select * from webot_REQUISITION where CSRUNIQ='$id_so' ");
+        $query = $this->db->query("select a.* from webot_REQUISITION a
+        where a.CSRUNIQ='$id_so' ");
+        return $query->getRowArray();
+    }
+
+    function get_rqnjoincsr_by_so($id_so)
+    {
+        $query = $this->db->query("select a.*,b.* from webot_REQUISITION a left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        where a.CSRUNIQ='$id_so' ");
+        return $query->getRowArray();
+    }
+
+
+    function get_rqnuniq_open($id_so, $rqnnumber)
+    {
+        $query = $this->db->query("select a.RQNUNIQ,a.RQNNUMBER,a.RQNKEY,a.CSRUNIQ from webot_REQUISITION a
+        where a.CSRUNIQ='$id_so' and a.RQNNUMBER='$rqnnumber'");
         return $query->getRowArray();
     }
 
     function get_so_by_id($id_so)
     {
-        $query = $this->db->query("select a.*," . 'b."DESC"' . " as ITEMDESC from webot_CSR a left join ICITEM b on b.ITEMNO=a.ITEMNO "
-            . "where a.POSTINGSTAT=1 and a.CSRUNIQ='$id_so' ");
+        $query = $this->db->query("select a.* from webot_CSR a
+        where a.POSTINGSTAT=1 and a.CSRUNIQ='$id_so' ");
         return $query->getRowArray();
+    }
+
+    function get_so_detail_by_id($id_so)
+    {
+        $query = $this->db->query("select a.* from webot_CSR a
+        where a.POSTINGSTAT=1 and a.CSRUNIQ='$id_so' ");
+        return $query->getRowArray();
+    }
+
+
+    function get_so_l_by_id($id_so)
+    {
+        $query = $this->db->query("select a.*,b.RQNDATE,b.RQNNUMBER,b.POSTINGSTAT as RQNPOSTINGSTAT,b.OFFLINESTAT as RQNOFFLINESTAT
+        from webot_CSRL a left join (select x.POSTINGSTAT,x.OFFLINESTAT,y.* from webot_REQUISITION x inner join 
+        webot_REQUISITIONL y on y.RQNUNIQ=x.RQNUNIQ) b on b.CSRUNIQ=a.CSRUNIQ and b.CSRLUNIQ=a.CSRLUNIQ
+        where a.CSRUNIQ='$id_so' ");
+        return $query->getResultArray();
     }
 
     function get_requisition_post($rqnuniq)
     {
-        $query = $this->db->query("select * from webot_REQUISITION where POSTINGSTAT=1 and RQNUNIQ='$rqnuniq' ");
+        $query = $this->db->query("select a.*,b.* from webot_REQUISITION a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ where a.POSTINGSTAT=1 and RQNUNIQ='$rqnuniq' ");
         return $query->getRowArray();
     }
+
 
     function requisition_insert($data1)
     {
         $query = $this->db->table('webot_REQUISITION')->insert($data1);
         return $query;
     }
+
+    function rqnline_insert($datal)
+    {
+        $query = $this->db->table('webot_REQUISITIONL')->insert($datal);
+        return $query;
+    }
+
 
     function requisition_update($id_pr, $data1)
     {

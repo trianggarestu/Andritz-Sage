@@ -77,6 +77,9 @@
 					if ($('#success-code').val() == 1) {
 						notify = 'success';
 						notify_msg = 'data saved successfully';
+					} else if ($('#success-code').val() == 9) {
+						notify = 'success';
+						notify_msg = 'Send Email successfully';
 					} else if ($('#success-code').val() == -1) {
 						notify = 'error';
 						notify_msg = 'data failed to save';
@@ -89,6 +92,9 @@
 					} else if ($('#success-code').val() == -3) {
 						notify = 'error';
 						notify_msg = 'data failed to save, Password & Retype Password Mismatch!.';
+					} else if ($('#success-code').val() == -9) {
+						notify = 'error';
+						notify_msg = 'Send Email failed. Error!.';
 					} else {
 						notify = '';
 						notify_msg = '';
