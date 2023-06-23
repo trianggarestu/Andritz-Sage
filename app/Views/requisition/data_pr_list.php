@@ -88,7 +88,7 @@
 															<th>PR Date</th>
 															<th>Status</th>
 															<th style="background-color: white;"></th>
-															<th>PO Vendor</th>
+															<th>PO Customer</th>
 															<th>PO Date</th>
 															<th style="background-color: white;"></th>
 															<th>Customer Name</th>
@@ -143,10 +143,10 @@
 																<td><?= $pocust_date; ?></td>
 																<td style="background-color: white;"></td>
 																<td><?= $ot_list['NAMECUST']; ?></td>
-																<td><?= $ot_list['CONTRACT']; ?></td>
+																<td><strong><a href="<?= base_url("requisitionlist/csropenview/" . $ot_list['CSRUNIQ']) ?>" title="Click For Detail" target="_blank"><?= $ot_list['CONTRACT']; ?></a></strong></td>
 																<td><?= $ot_list['CTDESC']; ?></td>
 																<td><?= $ot_list['PROJECT']; ?></td>
-																<td><strong><a href="<?= base_url("requisitionlist/csropenview/" . $ot_list['CSRUNIQ']) ?>" title="Click For Detail"><?= $ot_list['CRMNO']; ?></a></strong></td>
+																<td><?= $ot_list['CRMNO']; ?></td>
 																<td><?= $crmreq_date; ?></td>
 																<td nowrap><?= $ot_list['ORDERDESC']; ?></td>
 																<td><?= $ot_list['SALESNAME']; ?></td>

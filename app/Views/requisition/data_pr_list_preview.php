@@ -43,7 +43,7 @@
                                     <th>PR Number</th>
                                     <th>PR Date</th>
                                     <th>Status</th>
-                                    <th>PO Vendor</th>
+                                    <th>PO Customer</th>
                                     <th>PO Date</th>
                                     <th>Customer Name</th>
                                     <th>Contract No</th>
@@ -53,7 +53,7 @@
                                     <th>CRM Req. Date</th>
                                     <th>Order Description</th>
                                     <th>Sales Person</th>
-                                    <th>Material No</th>
+
 
                             </thead>
                             <tbody>
