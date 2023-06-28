@@ -701,7 +701,7 @@ class SalesOrder extends BaseController
                         'CSRREPLACE' => 0,
                         'OTPROCESS' => $groupuser,
                         'POSTINGSTAT' => 0,
-                        'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                        'OFFLINESTAT' => 1,
                     );
                     $contract = $this->request->getPost('ct_no');
                     $project = $this->request->getPost('prj_no');

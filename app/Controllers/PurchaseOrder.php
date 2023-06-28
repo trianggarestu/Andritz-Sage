@@ -256,12 +256,16 @@ class PurchaseOrder extends BaseController
         $cargoreadinessdate = '';
         $origincountry = '';
         $poremarks = '';
+        $csruniq = '';
+        $pouniq = '';
 
 
 
 
         $data = array(
+            'csruniq' => $csruniq,
             'rqnuniq' => $rqnuniq,
+            'pouniq' => $pouniq,
             'po_number' => $ponumber,
             //'povendor_date' => $povendordate,
             'etd_date' => $etddate,
@@ -468,11 +472,7 @@ class PurchaseOrder extends BaseController
             }
             $n_cargoreadiness_date  = empty($n_cargoreadiness_date) ? NULL : $n_cargoreadiness_date;
 
-            if (!empty($po_number) and !empty($n_etd_date) and !empty($n_cargoreadiness_date) and !empty($origin_country) and !empty($po_remarks) and $post_stat == 1) {
-                $offline_stat = $sender['OFFLINESTAT'];
-            } else {
-                $offline_stat = 1;
-            }
+
 
             $groupuser = 4;
 
@@ -493,7 +493,7 @@ class PurchaseOrder extends BaseController
                 'POREMARKS' => $po_remarks,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => $post_stat,
-                'OFFLINESTAT' => $offline_stat,
+                'OFFLINESTAT' => 1,
             );
 
             $getpouniq = $this->PurchaseorderModel->get_pouniq_open($id_so, $get_pr['RQNNUMBER'], $choose_po["PONUMBER"]);
@@ -760,11 +760,7 @@ class PurchaseOrder extends BaseController
             }
             $n_cargoreadiness_date  = empty($n_cargoreadiness_date) ? NULL : $n_cargoreadiness_date;
 
-            if (!empty($po_number) and !empty($n_etd_date) and !empty($n_cargoreadiness_date) and !empty($origin_country) and !empty($po_remarks) and $post_stat == 1) {
-                $offline_stat = $sender['OFFLINESTAT'];
-            } else {
-                $offline_stat = 1;
-            }
+
 
             $groupuser = 4;
 
@@ -779,7 +775,7 @@ class PurchaseOrder extends BaseController
                 'POREMARKS' => $po_remarks,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => $post_stat,
-                'OFFLINESTAT' => $offline_stat,
+                'OFFLINESTAT' => 1,
             );
             $this->PurchaseorderModel->purchaseorder_update($id_po, $data1);
 
@@ -983,12 +979,6 @@ class PurchaseOrder extends BaseController
 
             $n_cargoreadiness_date  = empty($n_cargoreadiness_date) ? NULL : $n_cargoreadiness_date;
 
-            if (!empty($n_cargoreadiness_date) and $post_stat == 1) {
-                $offline_stat = $sender['OFFLINESTAT'];
-            } else {
-                $offline_stat = 1;
-            }
-
             $groupuser = 4;
 
             $data1 = array(
@@ -998,7 +988,7 @@ class PurchaseOrder extends BaseController
                 'AUDTORG' => $this->audtuser['AUDTORG'],
                 'CARGOREADINESSDATE' => $n_cargoreadiness_date,
                 'OTPROCESS' => $groupuser,
-                'OFFLINESTAT' => $offline_stat,
+                'OFFLINESTAT' => 1,
             );
             $this->PurchaseorderModel->purchaseorder_update($id_po, $data1);
 

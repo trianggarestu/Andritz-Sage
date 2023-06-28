@@ -331,7 +331,7 @@ class Requisition extends BaseController
                 'RQNREMARKS' => '',
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => $post_stat,
-                'OFFLINESTAT' => $sender['OFFLINESTAT'],
+                'OFFLINESTAT' => 1,
             );
             $getrqnuniq = $this->RequisitionModel->get_rqnuniq_open($id_so, $rqnnumber);
             if (!empty($getrqnuniq['RQNKEY']) and $getrqnuniq['RQNKEY'] == $id_so . '-' . $rqnnumber) {

@@ -153,8 +153,8 @@
 																		</div>
 
 																	</td>
-																	<td style="vertical-align: top;"><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
-																	<td style="vertical-align: top;"><?= $rqndate ?></td>
+																	<td><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
+																	<td><?= $rqndate ?></td>
 																	<td>
 																		<?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
 																		switch ($postingstat) {
