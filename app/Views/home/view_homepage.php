@@ -139,15 +139,27 @@
 												<td><a href="#"><?= $data['CONTRACT'] ?></a></td>
 												<td><?= $data['CTDESC'] ?></td>
 
-												<td><?php if ($data['POSTINGSTAT'] == 1 and $data['OFFLINESTAT'] == 0) : ?>
-														<span class="label label-success">Processed</span>
-													<?php endif; ?>
-													<?php if ($data['POSTINGSTAT'] == 1 and $data['OFFLINESTAT'] == 1) : ?>
-														<span class="label label-danger">Pending Notif</span>
-													<?php endif; ?>
-													<?php if ($data['POSTINGSTAT'] == 0) : ?>
-														<span class="label label-warning">Open</span>
-													<?php endif; ?>
+												<td>
+													<?php $postingstat = $data['POSTINGSTAT'] . $data['OFFLINESTAT'];
+													switch ($postingstat) {
+														case "00":
+															echo "<span class='label label-warning'>Open</span>";
+															break;
+														case "11":
+															echo "<span class='label label-warning'>Posted Pending Notif</span>";
+															break;
+														case "10":
+															echo "<span class='label label-success'>Posted & Sending Notif</span>";
+															break;
+														case "20":
+															echo "<span class='label label-danger'>Deleted</span>";
+															break;
+														case "21":
+															echo "<span class='label label-danger'>Deleted</span>";
+															break;
+														default:
+															echo "<span class='label label-warning'>Open</span>";
+													} ?>
 
 												</td>
 

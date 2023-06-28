@@ -39,7 +39,8 @@ class Salesorder_model extends Model
     function get_csr_list_open()
     {
         $query = $this->db->query("select a.* from webot_CSR a 
-        where a.POSTINGSTAT=0 or (a.POSTINGSTAT=1 and a.OFFLINESTAT=1) order by a.PODATECUST asc");
+        where a.POSTINGSTAT=0 or (a.POSTINGSTAT=1 and a.OFFLINESTAT=1)
+        order by a.PODATECUST asc, a.CUSTOMER asc,a.CONTRACT asc");
         if ($query->getResult() > 0) {
             return $query->getResultArray();
         }
@@ -48,7 +49,7 @@ class Salesorder_model extends Model
     function get_csrl_list_open()
     {
         $query = $this->db->query("select a.CRMNO,b.* from webot_CSR a inner join webot_CSRL b on b.CSRUNIQ=a.CSRUNIQ
-        where a.POSTINGSTAT=0 or (a.POSTINGSTAT=1 and a.OFFLINESTAT=1) order by a.PODATECUST asc");
+        where a.POSTINGSTAT=0 or (a.POSTINGSTAT=1 and a.OFFLINESTAT=1) order by a.PODATECUST asc,b.CSRLUNIQ asc");
         if ($query->getResult() > 0) {
             return $query->getResultArray();
         }

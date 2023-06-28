@@ -23,32 +23,92 @@ class Purchaseorder_model extends Model
 
     function get_requisition_pending()
     {
-        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.POUNIQ,c.PODATE,c.PONUMBER,c.ETDDATE,c.CARGOREADINESSDATE,c.ORIGINCOUNTRY,c.POREMARKS,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        $query = $this->db->query("select a.RQNUNIQ,a.RQNNUMBER,a.RQNDATE,a.POSTINGSTAT as RQNPOSTINGSTAT,a.OFFLINESTAT as RQNOFFLINESTAT,
+        b.*,c.RQNUNIQPOPOST,c.POPOSTINGSTAT,c.POOFFLINESTAT,c.CTPOSTINGSTATPOPOST,ISNULL(c.CTITEMPO,0) as CTITEMPO,
+		d.RQNUNIQPOOPEN,ISNULL(d.CTITEMPOOPEN,0) as CTITEMPOOPEN
         from webot_REQUISITION a 
-        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
-        left join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
-        where (a.POSTINGSTAT=1 and c.RQNNUMBER IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
-        //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
+        left join (select x.CSRUNIQ,x.CONTRACT,x.CTDESC,x.PROJECT,x.PRJDESC,x.PONUMBERCUST,x.PODATECUST,x.CUSTOMER,x.NAMECUST,x.CRMNO,x.CRMREQDATE,x.CRMREMARKS,
+        x.MANAGER,x.SALESNAME,x.ORDERDESC,x.POSTINGSTAT as CSRPOSTINGSTAT,x.OFFLINESTAT as CSROFFLINESTAT,count(y.CSRLUNIQ) as CTITEMCSR
+		from webot_CSR x inner join webot_CSRL y on y.CSRUNIQ=x.CSRUNIQ
+		where x.POSTINGSTAT=1
+		group by x.CSRUNIQ,x.CONTRACT,x.CTDESC,x.PROJECT,x.PRJDESC,x.PONUMBERCUST,x.PODATECUST,x.CUSTOMER,x.NAMECUST,x.CRMNO,x.CRMREQDATE,x.CRMREMARKS,
+        x.MANAGER,x.SALESNAME,x.ORDERDESC,x.POSTINGSTAT,x.OFFLINESTAT
+		) b on b.CSRUNIQ=a.CSRUNIQ
+        left join (select x.RQNUNIQ as RQNUNIQPOPOST,MIN(x.POSTINGSTAT) as POPOSTINGSTAT,MAX(x.OFFLINESTAT) as POOFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATPOPOST,count(y.POLUNIQ) as CTITEMPO
+		from webot_PO x inner join webot_POL y on y.POUNIQ=x.POUNIQ
+		where x.POSTINGSTAT=1
+		group by 
+		x.RQNUNIQ
+		) c on c.RQNUNIQPOPOST=a.RQNUNIQ 
+		left join (select x.RQNUNIQ as RQNUNIQPOOPEN,count(y.POLUNIQ) as CTITEMPOOPEN
+		from webot_PO x inner join webot_POL y on y.POUNIQ=x.POUNIQ
+		where x.POSTINGSTAT=0
+		group by 
+		x.RQNUNIQ) d on d.RQNUNIQPOOPEN=a.RQNUNIQ 
+		
+        where (a.POSTINGSTAT=1 and c.RQNUNIQPOPOST IS NULL) or (b.CTITEMCSR<>c.CTITEMPO) or (c.POPOSTINGSTAT=0) or (c.POOFFLINESTAT=1)
+        order by a.RQNDATE asc,a.RQNNUMBER asc, b.CUSTOMER asc,b.CONTRACT asc");
+
         return $query->getResultArray();
     }
 
+    function get_polist_on_poopen()
+    {
+        $query = $this->db->query("select distinct a.RQNUNIQ,a.RQNNUMBER,a.RQNDATE,c.POUNIQ,c.PONUMBER,c.PODATE,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        from webot_REQUISITION a
+        inner join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
+        where (a.POSTINGSTAT=1 and c.RQNUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1)
+        order by c.PONUMBER asc,c.PODATE asc");
+
+        return $query->getResultArray();
+    }
+
+    //CSR Line
+    function get_csrl_list_post()
+    {
+        $query = $this->db->query("select b.*,c.PONUMBER,c.PODATE,c.ETDDATE,c.ORIGINCOUNTRY,c.POREMARKS,
+        c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        from webot_REQUISITION a 
+        left join (select x.* from webot_CSRL x inner join webot_CSR y on y.CSRUNIQ=x.CSRUNIQ) b on b.CSRUNIQ=a.CSRUNIQ
+        left join (select n.*,m.CSRLUNIQ from webot_POL m inner join webot_PO n on n.POUNIQ=m.POUNIQ) c on c.CSRUNIQ=b.CSRUNIQ and c.CSRLUNIQ=b.CSRLUNIQ 
+        where (a.POSTINGSTAT=1 and c.RQNUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1)
+        order by c.PONUMBER asc,c.CSRUNIQ asc, c.CSRLUNIQ asc,b.CSRUNIQ asc, b.CSRLUNIQ asc");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+
     function get_requisition_pending_search($keyword)
     {
-        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.POUNIQ,c.PODATE,c.PONUMBER,c.ETDDATE,c.CARGOREADINESSDATE,c.ORIGINCOUNTRY,c.POREMARKS,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        $query = $this->db->query("select a.RQNUNIQ,a.RQNNUMBER,a.RQNDATE,a.POSTINGSTAT as RQNPOSTINGSTAT,a.OFFLINESTAT as RQNOFFLINESTAT,
+        b.*,c.RQNUNIQPOPOST,c.POPOSTINGSTAT,c.POOFFLINESTAT,c.CTPOSTINGSTATPOPOST,ISNULL(c.CTITEMPO,0) as CTITEMPO,
+		d.RQNUNIQPOOPEN,ISNULL(d.CTITEMPOOPEN,0) as CTITEMPOOPEN
         from webot_REQUISITION a 
-        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
-        left join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
-        where ((a.POSTINGSTAT=1 and c.RQNNUMBER IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or 
-        (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
-        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.RQNNUMBER like '%$keyword%'
-        or c.PONUMBER like '%$keyword%' or c.ORIGINCOUNTRY like '%$keyword%' or c.POREMARKS like '%$keyword%')");
+        left join (select x.CSRUNIQ,x.CONTRACT,x.CTDESC,x.PROJECT,x.PRJDESC,x.PONUMBERCUST,x.PODATECUST,x.CUSTOMER,x.NAMECUST,x.CRMNO,x.CRMREQDATE,x.CRMREMARKS,
+        x.MANAGER,x.SALESNAME,x.ORDERDESC,x.POSTINGSTAT as CSRPOSTINGSTAT,x.OFFLINESTAT as CSROFFLINESTAT,count(y.CSRLUNIQ) as CTITEMCSR
+		from webot_CSR x inner join webot_CSRL y on y.CSRUNIQ=x.CSRUNIQ
+		where x.POSTINGSTAT=1
+		group by x.CSRUNIQ,x.CONTRACT,x.CTDESC,x.PROJECT,x.PRJDESC,x.PONUMBERCUST,x.PODATECUST,x.CUSTOMER,x.NAMECUST,x.CRMNO,x.CRMREQDATE,x.CRMREMARKS,
+        x.MANAGER,x.SALESNAME,x.ORDERDESC,x.POSTINGSTAT,x.OFFLINESTAT
+		) b on b.CSRUNIQ=a.CSRUNIQ
+        left join (select x.RQNUNIQ as RQNUNIQPOPOST,MIN(x.POSTINGSTAT) as POPOSTINGSTAT,MAX(x.OFFLINESTAT) as POOFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATPOPOST,count(y.POLUNIQ) as CTITEMPO
+		from webot_PO x inner join webot_POL y on y.POUNIQ=x.POUNIQ
+		where x.POSTINGSTAT=1
+		group by 
+		x.RQNUNIQ
+		) c on c.RQNUNIQPOPOST=a.RQNUNIQ 
+		left join (select x.RQNUNIQ as RQNUNIQPOOPEN,count(y.POLUNIQ) as CTITEMPOOPEN
+		from webot_PO x inner join webot_POL y on y.POUNIQ=x.POUNIQ
+		where x.POSTINGSTAT=0
+		group by 
+		x.RQNUNIQ) d on d.RQNUNIQPOOPEN=a.RQNUNIQ 
+		
+        where ((a.POSTINGSTAT=1 and c.RQNUNIQPOPOST IS NULL) or (b.CTITEMCSR<>c.CTITEMPO) or (c.POPOSTINGSTAT=0) or (c.POOFFLINESTAT=1))
+        
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.PROJECT like '%$keyword%' or b.CRMNO like '%$keyword%' 
+        or b.PONUMBERCUST like '%$keyword%' or b.NAMECUST like '%$keyword%' or a.RQNNUMBER like '%$keyword%')
+        order by a.RQNDATE asc,a.RQNNUMBER asc, b.CUSTOMER asc,b.CONTRACT asc");
         return $query->getResultArray();
     }
 
@@ -98,9 +158,54 @@ class Purchaseorder_model extends Model
 
     function get_requisition_by_id($rqnuniq)
     {
-        $query = $this->db->query("select a.*,b.PODATECUST from webot_REQUISITION a 
-        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ where a.POSTINGSTAT=1 and a.RQNUNIQ='$rqnuniq' ");
+        $query = $this->db->query("select a.RQNUNIQ,a.RQNDATE,a.RQNNUMBER,a.POSTINGSTAT as RQNPOSTINGSTAT,a.OFFLINESTAT as RQNOFFLINESTAT,
+        b.* from webot_REQUISITION a 
+        inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ 
+        where a.POSTINGSTAT=1 and a.RQNUNIQ='$rqnuniq' ");
         return $query->getRowArray();
+    }
+
+
+    function get_so_l_by_id($rqnuniq)
+    {
+        $query = $this->db->query("select a.*,d.POUNIQ,d.POLUNIQ
+        from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        inner join webot_REQUISITION c on c.CSRUNIQ=b.CSRUNIQ and c.CSRUNIQ=a.CSRUNIQ
+		left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
+        where c.RQNUNIQ='$rqnuniq' and d.POUNIQ is NULL");
+        return $query->getResultArray();
+    }
+
+    function get_po_l_by_id($id_po)
+    {
+        $query = $this->db->query("select b.*,c.POUNIQ,c.POLUNIQ,c.PONUMBER,c.PODATE,c.ETDDATE,c.ORIGINCOUNTRY,c.POREMARKS,
+        c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        from (select x.* from webot_CSRL x inner join webot_CSR y on y.CSRUNIQ=x.CSRUNIQ) b
+        left join (select n.*,m.POLUNIQ,m.CSRLUNIQ from webot_POL m inner join webot_PO n on n.POUNIQ=m.POUNIQ) c on c.CSRUNIQ=b.CSRUNIQ and c.CSRLUNIQ=b.CSRLUNIQ 
+        where c.POUNIQ='$id_po'
+        order by b.CSRUNIQ asc, b.CSRLUNIQ asc");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+
+    function get_pouniq_open($id_so, $rqnnumber, $ponumber)
+    {
+        $query = $this->db->query("select DISTINCT a.POUNIQ,a.RQNNUMBER,a.PONUMBER,a.POKEY,COUNT(b.POUNIQ) as CHKPOL from webot_PO a
+        left join webot_POL b on b.POUNIQ=a.POUNIQ
+        where a.CSRUNIQ='$id_so' and a.RQNNUMBER='$rqnnumber' and a.PONUMBER='$ponumber'
+        group by a.POUNIQ,a.RQNNUMBER,a.PONUMBER,a.POKEY");
+        return $query->getRowArray();
+    }
+
+    function get_po_open_by_id($pouniq)
+    {
+        $query = $this->db->query("select a.POUNIQ,a.POKEY,a.PODATE,a.PONUMBER,a.ETDDATE,a.CARGOREADINESSDATE,a.ORIGINCOUNTRY,a.POREMARKS, 
+        b.CSRUNIQ,b.CSRLUNIQ
+        from webot_PO a inner join webot_POL b on b.POUNIQ=a.POUNIQ
+        where a.POUNIQ='$pouniq'");
+        return $query->getResultArray();
     }
 
     function get_posage_by_id($ponumber)
@@ -121,10 +226,23 @@ class Purchaseorder_model extends Model
         return $query->getRowArray();
     }
 
+    function get_pojoincsr_by_po($pouniq)
+    {
+        $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNDATE,b.RQNNUMBER, 
+        c.*
+        from webot_PO a inner join webot_REQUISITION b on b.RQNUNIQ=a.RQNUNIQ
+        left join webot_CSR c on c.CSRUNIQ=b.CSRUNIQ and c.CSRUNIQ=a.CSRUNIQ
+        where a.POSTINGSTAT=1 and a.POUNIQ='$pouniq' ");
+        return $query->getRowArray();
+    }
+
+
 
     function get_po_list_sage_by_rqn($rqnnumber)
     {
-        $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE from POPORH1 where RQNNUMBER='$rqnnumber'");
+        $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE 
+        from POPORH1 
+        where PONUMBER not in (select DISTINCT PONUMBER from webot_PO where POSTINGSTAT=1) and RQNNUMBER='$rqnnumber'");
         return $query->getResultArray();
     }
 
@@ -190,6 +308,14 @@ class Purchaseorder_model extends Model
     }
 
 
+    function poline_insert($datal)
+    {
+        $query = $this->db->table('webot_POL')->insertBatch($datal);
+        return $query;
+    }
+
+
+
     function purchaseorder_update($id_po, $data1)
     {
         $query = $this->db->table('webot_PO')->update($data1, array('POUNIQ' => $id_po));
@@ -203,12 +329,25 @@ class Purchaseorder_model extends Model
         return $query;
     }
 
-    function ot_purchaseorder_update($id_so, $data2)
+    function ot_purchaseorder_update($id_so, $csrluniq, $data2)
     {
-        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so));
+        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so, 'CSRLUNIQ' => $csrluniq));
         //Tanpa return juga bisa jalan
         return $query;
     }
+
+    function delete_po_open($pouniq)
+    {
+        return $this->db->table('webot_PO')->delete(['POUNIQ' => $pouniq, 'POSTINGSTAT' => 0]);
+    }
+
+    function delete_pol_open($pouniq)
+    {
+        return $this->db->table('webot_POL')->delete(['POUNIQ' => $pouniq]);
+    }
+
+
+
     function get_purchaseorder_preview($nfromdate, $ntodate)
     {
         $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT,a.*

@@ -28,13 +28,16 @@
                                     <label for="po_number">Select PO : </label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-control input-sm select2 required" id="po_number" name="po_number" style="width:100%;">
+                                    <select class="form-control input-sm select2 required" id="po_number" name="po_number" style="width:100%;" <?php if (!empty($po_number)) {
+                                                                                                                                                    echo 'disabled';
+                                                                                                                                                }
+                                                                                                                                                ?> ?>>
                                         <option option value="">___ PO Number - PO Date - Description ___</option>
                                         <?php foreach ($posage_list as $data) :
-                                            $po_date = substr($data['PODATE'], 6, 2) . "/" . substr($data['PODATE'], 4, 2) . "/" . substr($data['PODATE'], 0, 4);
+                                            $po_date = substr($data['PODATE'], 4, 2) . "/" . substr($data['PODATE'], 6, 2) . "/" . substr($data['PODATE'], 0, 4);
                                         ?>
                                             <option value="<?= trim($data['PONUMBER'])
-                                                            ?>" <?php if ($po_number == $data['PONUMBER']) {
+                                                            ?>" <?php if ($po_number == trim($data['PONUMBER'])) {
                                                                     echo "selected";
                                                                 } ?>><?= trim($data['PONUMBER'])
                                                                         ?> - <?= $po_date . " - " . $data['DESCRIPTIO']
@@ -107,12 +110,13 @@
             </div>
         </div>
         <div class="modal-footer">
-            <input type="hidden" id="id_so" name="id_so" value="<?= $csruniq ?>">
+            <input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
             <input type="hidden" id="id_pr" name="id_pr" value="<?= $rqnuniq ?>">
             <input type="hidden" id="id_po" name="id_po" value="<?= $pouniq ?>">
             <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
+            <input type="hidden" id="del_poline" name="del_poline" value="1">
             <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
-            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> Save</button>
+            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>
         </div>
     </div>
 </form>

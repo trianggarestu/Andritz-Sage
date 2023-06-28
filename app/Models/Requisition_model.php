@@ -27,7 +27,8 @@ class Requisition_model extends Model
         $query = $this->db->query("select a.*,b.RQNUNIQ,b.RQNKEY,b.RQNDATE,b.RQNNUMBER,b.RQNREMARKS,b.POSTINGSTAT as RQNPOSTINGSTAT,b.OFFLINESTAT as RQNOFFLINESTAT 
         from webot_CSR a
         left join webot_REQUISITION b on b.CSRUNIQ=a.CSRUNIQ
-        where (a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1)");
+        where (a.POSTINGSTAT=1 and b.RQNNUMBER IS NULL) or ( a.POSTINGSTAT=1 and b.POSTINGSTAT=0) or ( b.POSTINGSTAT=1 and b.OFFLINESTAT=1)
+        order by a.PODATECUST asc, a.CUSTOMER asc,a.CONTRACT asc");
 
         return $query->getResultArray();
     }
@@ -42,7 +43,8 @@ class Requisition_model extends Model
         or a.PROJECT like '%$keyword%' or a.PRJDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' or a.CUSTOMER like '%$keyword%'
         or a.NAMECUST like '%$keyword%' or a.EMAIL1CUST like '%$keyword%' or a.CRMNO like '%$keyword%' or a.ORDERDESC like '%$keyword%'
         or a.CRMREMARKS like '%$keyword%'
-        or b.RQNNUMBER like '%$keyword%')");
+        or b.RQNNUMBER like '%$keyword%')
+        order by a.PODATECUST asc, a.CUSTOMER asc,a.CONTRACT asc");
 
         return $query->getResultArray();
     }
@@ -92,22 +94,26 @@ class Requisition_model extends Model
         return $builder->countAllResults();
     }
 
-    function get_requisition_sage()
+    function get_requisition_sage($pocust_date)
     {
         // Sementara Untuk simulasi, Cari Request yang ketemu sampai Received
         // kalau sudah Go Live, Hapus Inner Join POPORH1 & inner join PORCPH1
         // Kalau mau job relate tambahkan where $contract
-        $query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
+        $query = $this->db->query("select DISTINCT a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
         from ENRQNH a 
-        inner join POPORH1 b on b.PONUMBER=a.PONUMBERS
-        inner join PORCPH1 c on c.PONUMBER=a.PONUMBERS
-        where " . 'a."DATE"' . ">=20220101 and
+        inner join POPORH1 b on b.RQNNUMBER=a.RQNNUMBER
+        inner join PORCPH1 c on c.PONUMBER=b.PONUMBER
+        where " . 'a."DATE"' . ">='$pocust_date' and
         a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
         order by " . 'a."DATE"' . " desc");
 
 
         // untuk Data Live
-        /*$query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
+        //
+        /*
+        
+        inner join PORCPH1 c on c.PONUMBER=a.PONUMBERS
+        $query = $this->db->query("select a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
         from ENRQNH a 
         where " . 'a."DATE"' . ">=20220101 and
         a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
@@ -121,6 +127,7 @@ class Requisition_model extends Model
         return $query->getRowArray();
     }
 
+    /*
     function get_rqn_uniq($rqnnumber)
     {
         $query = $this->db->query("select DISTINCT a.RQNUNIQ,a.RQNNUMBER,a.RQNKEY,COUNT(b.RQNLUNIQ) as CHKRQNL 
@@ -130,7 +137,7 @@ class Requisition_model extends Model
         group by a.RQNUNIQ,a.CSRUNIQ,a.RQNKEY");
         return $query->getRowArray();
     }
-
+*/
     function get_requisition_by_so($id_so)
     {
         $query = $this->db->query("select a.* from webot_REQUISITION a
@@ -190,11 +197,13 @@ class Requisition_model extends Model
         return $query;
     }
 
+    /*
     function rqnline_insert($datal)
     {
         $query = $this->db->table('webot_REQUISITIONL')->insert($datal);
         return $query;
     }
+    */
 
 
     function requisition_update($id_pr, $data1)
@@ -216,6 +225,8 @@ class Requisition_model extends Model
         //Tanpa return juga bisa jalan
         return $query;
     }
+
+
     function get_pr_preview($nfromdate, $ntodate)
     {
         $query = $this->db->query(

@@ -1294,16 +1294,16 @@ class SalesOrder extends BaseController
 
 
     // For Trial
-    /*
+
     public function send1()
     {
-        $hostname           = 'Atlxsmtp.andritz.com';
+        $hostname           = 'atlxsmtp.andritz.com';
         $sendername         = 'admin.deliv@andritz.com';
         $senderemail        = 'admin.deliv@andritz.com';
         $passwordemail      = '';
         $ssl                = '';
         $smtpport           = 25;
-        $to                 = 'triangga.restu@gmail.com';
+        $to                 = 'nurlia.farahfitriani@andritz.com';
         $subject            = 'test';
         $message            = 'Andritze Test';
         //$mail = new PHPMailer(true);
@@ -1333,5 +1333,4 @@ class SalesOrder extends BaseController
             echo "Message has been sent successfully";
         }
     }
-    */
 }

@@ -25,7 +25,7 @@ class Ordertracking_model extends Model
 
     function get_ordertracking()
     {
-        $query = $this->db->query('select * from webot_ORDERTRACKING');
+        $query = $this->db->query('select * from webot_ORDERTRACKING order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc');
         return $query->getResultArray();
     }
 
@@ -38,7 +38,8 @@ class Ordertracking_model extends Model
         or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
         or STOCKUNIT like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' or ORIGINCOUNTRY like '%$keyword%' or POREMARKS like '%$keyword%'
         or VENDSHISTATUS like '%$keyword%' or LOGREMARKS like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'
-        or SHINUMBER like '%$keyword%' or IDINVC like '%$keyword%'");
+        or SHINUMBER like '%$keyword%' or IDINVC like '%$keyword%'
+        order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc");
         return $query->getResultArray();
     }
 

@@ -61,7 +61,8 @@
 																<th>No.</th>
 																<th nowrap>Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
 																<th nowrap>PO Customer - P/O Date<br>Customer Name<br>Customer Email</th>
-																<th style="vertical-align: top;">Req Date</th>
+																<th style="vertical-align: top;">P/O Cust.<br>Date</th>
+																<th style="vertical-align: top;">CRM Req.<br> Date</th>
 																<th style="vertical-align: top;">S/O Status</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
@@ -94,11 +95,12 @@
 
 																	</td>
 																	<td style="vertical-align: top;">
-																		<strong><?= $ot_list['PONUMBERCUST'] . ' - ' . $crmpodate; ?></strong><br>
+																		<strong><?= $ot_list['PONUMBERCUST']; ?></strong><br>
 																		<?= $ot_list['ORDERDESC']; ?><br>
 																		CRM Remarks : <?= $ot_list['CRMREMARKS']; ?>
 
 																	</td>
+																	<td style="vertical-align: top;" nowrap><?= $crmpodate; ?></td>
 																	<td style="vertical-align: top;" nowrap><?= $crmreqdate; ?></td>
 																	<td nowrap>
 																		<?php $postingstat = $ot_list['POSTINGSTAT'] . $ot_list['OFFLINESTAT'];
@@ -179,7 +181,7 @@
 																<tr>
 																	<td style="vertical-align: top;" nowrap></td>
 
-																	<td style="vertical-align: top;" colspan="4" nowrap>
+																	<td style="vertical-align: top;" colspan="5" nowrap>
 																		<div class="table-responsive">
 																			<table class="table table-bordered dataTable table-hover nowrap">
 																				<thead class="bg-gray disabled color-palette">
@@ -277,4 +279,4 @@
 	</div>
 </div>
 
-<?php echo view('settings/confirm_delete') ?>
+<?php echo view('settings/modalbox/modal_confirm_delete') ?>

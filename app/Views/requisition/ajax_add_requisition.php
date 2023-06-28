@@ -28,7 +28,7 @@
                                     <select class="form-control input-sm select2 required" id="rqnnumber" name="rqnnumber" style="width:100%;">
                                         <option option value="">Requisition Number-Requisition Date-Description</option>
                                         <?php foreach ($requisition_list as $data) :
-                                            $rqn_date = substr($data['DATE'], 6, 2) . "/" . substr($data['DATE'], 4, 2) . "/" . substr($data['DATE'], 0, 4);
+                                            $rqn_date = substr($data['DATE'], 4, 2) . "/" . substr($data['DATE'], 6, 2) . "/" . substr($data['DATE'], 0, 4);
                                         ?>
                                             <option value="<?= trim($data['RQNNUMBER'])
                                                             ?>"><?= trim($data['RQNNUMBER'])
