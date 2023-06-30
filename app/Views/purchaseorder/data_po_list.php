@@ -84,8 +84,6 @@
 															<th>Contract. No</th>
 															<th>Contract Desc.</th>
 															<th>Customer</th>
-															<th>Inventory No.</th>
-															<th>Qty</th>
 
 														</tr>
 													</thead>
@@ -103,7 +101,7 @@
 
 															<tr>
 																<td><?= ++$no ?></td>
-																<td><strong><a href="#"><?= $po_list['PONUMBER'] ?></a></strong></td>
+																<td><strong><a href="<?= base_url("purchaseorderlist/popostedview/" . $po_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $po_list['PONUMBER']; ?></a></strong></td>
 																<td><?= $povendate ?></td>
 																<td><?= $etddate ?></td>
 																<td><?= $creadinessdate ?></td>
@@ -124,14 +122,13 @@
 																			echo "Posted";
 																	} ?></td>
 																<td style="background-color: white;"></td>
-																<td><strong><a href="#"><?= $po_list['RQNNUMBER'] ?></a></strong></td>
+																<td><strong><?= $po_list['RQNNUMBER'] ?></strong></td>
 																<td><?= $rqndate ?></td>
 																<td style="background-color: white;"></td>
-																<td><strong><a href="#"><?= $po_list['CONTRACT'] ?></a></strong></td>
+																<td><strong><?= $po_list['CONTRACT'] ?></strong></td>
 																<td><?= $po_list['CTDESC'] ?></td>
 																<td><?= $po_list['NAMECUST'] ?></td>
-																<td><?= $po_list['ITEMNO'] ?></td>
-																<td><?= number_format($po_list['QTY'], 0, ",", ".") . ' (' . $po_list['STOCKUNIT'] . ')' ?></td>
+
 															</tr>
 
 														<?php } ?>

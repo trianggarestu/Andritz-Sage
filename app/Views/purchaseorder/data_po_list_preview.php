@@ -54,8 +54,7 @@
                                     <th>Contract. No</th>
                                     <th>Contract Desc.</th>
                                     <th>Customer</th>
-                                    <th>Inventory No.</th>
-                                    <th>Qty</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -103,8 +102,8 @@
                                         <td><?= $po_list['CONTRACT']; ?></td>
                                         <td><?= $po_list['CTDESC']; ?></td>
                                         <td><?= $po_list['NAMECUST']; ?></td>
-                                        <td><?= $po_list['ITEMNO']; ?></td>
-                                        <TD><?= $po_list['QTY']; ?> <?= $po_list['STOCKUNIT']; ?></TD>
+
+
                                     </tr>
 
 

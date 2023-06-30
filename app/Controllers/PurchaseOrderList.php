@@ -214,18 +214,12 @@ class PurchaseOrderList extends BaseController
                 ->orlike('csr.EMAIL1CUST', $keyword)
                 ->orlike('csr.CRMNO', $keyword)
                 ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.SERVICETYPE', $keyword)
                 ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('csr.ITEMNO', $keyword)
-                ->orlike('csr.MATERIALNO', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('webot_PO.PONUMBER', $keyword)
                 ->orlike('webot_PO.ORIGINCOUNTRY ', $keyword)
                 ->orlike('webot_PO.POREMARKS', $keyword)
                 ->orlike('csr.CTDESC', $keyword)
                 ->orlike('csr.NAMECUST', $keyword)
-                ->orlike('csr.QTY', $keyword)
 
 
                 ->groupEnd()
@@ -325,10 +319,8 @@ class PurchaseOrderList extends BaseController
             ->setCellValue('K1', 'CONTRACTNO')
             ->setCellValue('L1', 'CONTRACTDESC')
             ->setCellValue('M1', 'CUSTOMER')
-            ->setCellValue('N1', 'ITEMNO')
-            ->setCellValue('O1', 'Qty')
-            ->setCellValue('P1', 'Uom')
-            ->setCellValue('P1', 'POSTINGSTATUS');
+
+            ->setCellValue('N1', 'POSTINGSTATUS');
 
 
         $rows = 2;
@@ -404,12 +396,9 @@ class PurchaseOrderList extends BaseController
                 ->setCellValue('K' . $rows, $data['CONTRACT'])
                 ->setCellValue('L' . $rows, $data['CTDESC'])
                 ->setCellValue('M' . $rows, $data['NAMECUST'])
-                ->setCellValue('N' . $rows, $data['ITEMNO'])
-                ->setCellValue('O' . $rows, $data['QTY'])
-                ->setCellValue('P' . $rows, $data['STOCKUNIT'])
-                ->setCellValue('P' . $rows, $postingstatus)
+                ->setCellValue('N' . $rows, $postingstatus)
 
-                ->setCellValue('Q' . $rows, '');
+                ->setCellValue('O' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
@@ -423,5 +412,48 @@ class PurchaseOrderList extends BaseController
 
         $writer->save('php://output');
         exit();
+    }
+    public function popostedview($pouniq)
+    {
+        session()->remove('success');
+        session()->set('success', '0');
+        //check mail sender
+
+        $getpopost = $this->PurchaseorderModel->get_po_post($pouniq);
+        $getpolpost = $this->PurchaseorderModel->get_pol_post($pouniq);
+        if ($getpopost['POSTINGSTAT'] == 1) {
+            $data = array(
+                'csropen_data' =>  $getpopost,
+                'csrlopen_data' =>  $getpolpost,
+                'link_action' => base_url('salesorder/posting'),
+                'btn_color' => 'bg-blue',
+                'btn_fa' => 'fa-check-square-o',
+                'button' => 'Posting',
+            );
+        } else if ($getpopost['POSTINGSTAT'] == 0) {
+            $data = array(
+                'csropen_data' =>  $getpopost,
+                'csrlopen_data' =>  $getpolpost,
+                'link_action' => base_url('salesorder/posting'),
+                'btn_color' => 'bg-blue',
+                'btn_fa' => 'fa-paper-plane-o',
+                'button' => 'Posting & Send Notification',
+            );
+        } else {
+
+            $data = array(
+                'csropen_data' =>  $getpopost,
+                'csrlopen_data' =>  $getpolpost,
+                'link_action' => '',
+                'btn_color' => '',
+                'btn_fa' => '',
+                'button' => '',
+            );
+        }
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('purchaseorder/data_po_view', $data);
+        echo view('view_footer', $this->footer_data);
     }
 }

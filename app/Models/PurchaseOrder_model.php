@@ -353,7 +353,7 @@ class Purchaseorder_model extends Model
 
     function get_purchaseorder_preview($nfromdate, $ntodate)
     {
-        $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT,a.*
+        $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,a.*
         from webot_PO a 
         left join webot_CSR b on b.CSRUNIQ= a.CSRUNIQ
 		left join webot_REQUISITION c on a.RQNUNIQ=c.RQNUNIQ and  b.CSRUNIQ = c.CSRUNIQ
@@ -369,11 +369,31 @@ class Purchaseorder_model extends Model
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%' or a.ORIGINCOUNTRY like '%$keyword%'
+        or b.CRMREMARKS like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%' or a.ORIGINCOUNTRY like '%$keyword%'
         or a.POREMARKS like '%$keyword%') and
         (a.PODATE>=$nfromdate and a.PODATE<=$ntodate)
         order by a.PODATE asc");
+        return $query->getResultArray();
+    }
+    function get_po_post($pouniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_PO a 
+        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+        left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ
+        
+        where a.POSTINGSTAT = 1 and a.POUNIQ='$pouniq'");
+
+        return $query->getRowArray();
+    }
+
+    function get_pol_post($pouniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.*,d.*,e.ITEMDESC from webot_PO a 
+        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+        left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ and c.CSRUNIQ = b.CSRUNIQ
+        left join webot_POL d on d.POUNIQ = a.POUNIQ 
+        left join webot_CSRL e on e.ITEMNO = d.ITEMNO and e.CSRUNIQ = d.CSRUNIQ
+        where a.POSTINGSTAT <>2 and a.POUNIQ='$pouniq'");
         return $query->getResultArray();
     }
 }
