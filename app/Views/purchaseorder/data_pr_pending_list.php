@@ -98,7 +98,7 @@
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td nowrap><strong><a href="#"><?= $ot_list['CONTRACT'] ?></a></strong>
+																	<td nowrap><strong><a href="<?= base_url("administration/csrpostedview/" . $ot_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $ot_list['CONTRACT'] ?></a></strong>
 																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
 																		<strong><?= $ot_list['PONUMBERCUST'] . ' - ' . $crmpodate; ?></strong><br>
@@ -111,7 +111,7 @@
 																				?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td><strong><a href="#"><?= $ot_list['RQNNUMBER']; ?></a></strong></td>
+																	<td><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
 																	<td><?= $rqn_date; ?></td>
 																	<td><?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
 																		switch ($postingstat) {

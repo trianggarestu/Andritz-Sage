@@ -15,10 +15,15 @@ class Administration extends BaseController
     private $nav_data;
     private $header_data;
     private $footer_data;
+    private $audtuser;
+    private $db_name;
+    private $agent;
     public function __construct()
     {
         //parent::__construct();
         helper('form', 'url');
+        $this->db_name = \Config\Database::connect();
+
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
@@ -60,9 +65,19 @@ class Administration extends BaseController
                     'active_navh' => $activenavh,
                     'active_navd' => $activenavd,
                     'menu_nav' => $this->AdministrationModel->get_navigation($user),
-                    //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
-                    //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
-                    //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+                ];
+
+                date_default_timezone_set('Asia/Jakarta');
+                $today = date("d/m/Y H:i:s");
+
+                $this->audtuser = [
+                    'TODAY' => $today,
+                    'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                    'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                    'AUDTUSER' => trim($infouser['usernamelgn']),
+                    'AUDTORG' => $this->db_name->database,
+                    'NAMELGN' => $infouser['namalgn'],
+
                 ];
             } else {
                 header('Location: ' . base_url());
@@ -107,10 +122,42 @@ class Administration extends BaseController
         session()->set('success', '0');
     }
 
-    /*public function testdata()
+    // Preview Data Details
+
+    public function csrpostedview($csruniq)
     {
-        $groupuser = 2;
-        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-        print_r($notiftouser_data);
-    }*/
+        $getcsrpost = $this->AdministrationModel->get_csr_post($csruniq);
+        $getcsrlpost = $this->AdministrationModel->get_csrl_post($csruniq);
+        if (!empty($getcsrpost['CSRUNIQ'])) {
+
+            $data = array(
+                'csrposted_data' =>  $getcsrpost,
+                'csrlposted_data' =>  $getcsrlpost,
+
+            );
+
+            echo view('home/data_csr_preview', $data);
+        } else {
+            return redirect()->to(base_url('administration'));
+        }
+    }
+
+    // Preview P/O Details
+    public function popostedview($pouniq)
+    {
+        $getpopost = $this->AdministrationModel->get_po_post($pouniq);
+        $getpolpost = $this->AdministrationModel->get_pol_post($pouniq);
+        if (!empty($getpopost['POUNIQ'])) {
+
+            $data = array(
+                'poposted_data' =>  $getpopost,
+                'polposted_data' =>  $getpolpost,
+
+            );
+
+            echo view('home/data_po_preview', $data);
+        } else {
+            return redirect()->to(base_url('administration'));
+        }
+    }
 }

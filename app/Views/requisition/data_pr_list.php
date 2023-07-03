@@ -143,7 +143,7 @@
 																<td><?= $pocust_date; ?></td>
 																<td style="background-color: white;"></td>
 																<td><?= $ot_list['NAMECUST']; ?></td>
-																<td><strong><a href="<?= base_url("requisitionlist/csropenview/" . $ot_list['CSRUNIQ']) ?>" title="Click For Detail" target="_blank"><?= $ot_list['CONTRACT']; ?></a></strong></td>
+																<td><strong><a href="<?= base_url('administration/csrpostedview/' . $ot_list['CSRUNIQ']) ?>" target="_blank"><?= $ot_list['CONTRACT']; ?></a></strong></td>
 																<td><?= $ot_list['CTDESC']; ?></td>
 																<td><?= $ot_list['PROJECT']; ?></td>
 																<td><?= $ot_list['CRMNO']; ?></td>

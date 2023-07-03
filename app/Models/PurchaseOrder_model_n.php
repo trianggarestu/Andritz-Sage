@@ -54,7 +54,7 @@ class Purchaseorder_model extends Model
 
     function get_polist_on_poopen()
     {
-        $query = $this->db->query("select distinct a.RQNUNIQ,a.RQNNUMBER,a.RQNDATE,c.POUNIQ,c.PONUMBER,c.PODATE,c.ETDDATE,c.CARGOREADINESSDATE,c.ORIGINCOUNTRY,c.POREMARKS,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
+        $query = $this->db->query("select distinct a.RQNUNIQ,a.RQNNUMBER,a.RQNDATE,c.POUNIQ,c.PONUMBER,c.PODATE,c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
         from webot_REQUISITION a
         inner join webot_PO c on c.RQNUNIQ=a.RQNUNIQ 
         where (a.POSTINGSTAT=1 and c.RQNUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.CARGOREADINESSDATE IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1 and c.OFFLINESTAT=1)
@@ -66,7 +66,7 @@ class Purchaseorder_model extends Model
     //CSR Line
     function get_csrl_list_post()
     {
-        $query = $this->db->query("select b.*,c.PONUMBER,c.PODATE,c.ETDDATE,c.CARGOREADINESSDATE,c.ORIGINCOUNTRY,c.POREMARKS,
+        $query = $this->db->query("select b.*,c.PONUMBER,c.PODATE,c.ETDDATE,c.ORIGINCOUNTRY,c.POREMARKS,
         c.POSTINGSTAT as POPOSTINGSTAT,c.OFFLINESTAT as POOFFLINESTAT
         from webot_REQUISITION a 
         left join (select x.* from webot_CSRL x inner join webot_CSR y on y.CSRUNIQ=x.CSRUNIQ) b on b.CSRUNIQ=a.CSRUNIQ
@@ -284,6 +284,7 @@ class Purchaseorder_model extends Model
         return $builder->countAllResults();
     }*/
 
+
     function get_PurchaseOrder_sage()
     {
         $query = $this->db->query("select RQNHSEQ,RQNNUMBER," . '"DATE"' . ",DESCRIPTIO,DOCSTATUS  from ENRQNH where RQNNUMBER in (select distinct RQNNUMBER from DATAN1.dbo.POPORH1)");
@@ -353,7 +354,7 @@ class Purchaseorder_model extends Model
 
     function get_purchaseorder_preview($nfromdate, $ntodate)
     {
-        $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,a.*
+        $query = $this->db->query("select c.RQNDATE,b.CONTRACT,b.CTDESC,b.NAMECUST,b.ITEMNO,b.QTY,b.STOCKUNIT,a.*
         from webot_PO a 
         left join webot_CSR b on b.CSRUNIQ= a.CSRUNIQ
 		left join webot_REQUISITION c on a.RQNUNIQ=c.RQNUNIQ and  b.CSRUNIQ = c.CSRUNIQ
@@ -369,7 +370,8 @@ class Purchaseorder_model extends Model
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-        or b.CRMREMARKS like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%' or a.ORIGINCOUNTRY like '%$keyword%'
+        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
+        or b.STOCKUNIT like '%$keyword%' or c.RQNNUMBER like '%$keyword%' or a.PONUMBER like '%$keyword%' or a.ORIGINCOUNTRY like '%$keyword%'
         or a.POREMARKS like '%$keyword%') and
         (a.PODATE>=$nfromdate and a.PODATE<=$ntodate)
         order by a.PODATE asc");

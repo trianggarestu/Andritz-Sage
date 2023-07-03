@@ -59,11 +59,13 @@
 														<thead class="bg-gray disabled">
 															<tr>
 																<th style="vertical-align: top;">No.</th>
-																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
-																<th style="vertical-align: top;">Req. Date</th>
+																<th style="vertical-align: top;">P/O Vendor</th>
+																<th style="vertical-align: top;">P/O Date</th>
+																<th style="vertical-align: top;">P/O Info</th>
 																<th style="background-color: white;"></th>
-																<th style="vertical-align: top;">PO Vendor<br>
-																	Remarks</th>
+
+																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>P/O Customer<br>Customer</th>
+																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
@@ -79,6 +81,7 @@
 															$no = 1;
 															foreach ($logistics_data as $log_list) {
 																$crmreq_date = substr($log_list['CRMREQDATE'], 4, 2) . "/" . substr($log_list['CRMREQDATE'], 6, 2) . "/" . substr($log_list['CRMREQDATE'], 0, 4);
+																$crmpodate = substr($log_list['PODATECUST'], 4, 2) . "/" . substr($log_list['PODATECUST'], 6, 2) . "/" .  substr($log_list['PODATECUST'], 0, 4);
 																$po_date = substr($log_list['PODATE'], 4, 2) . "/" . substr($log_list['PODATE'], 6, 2) . "/" . substr($log_list['PODATE'], 0, 4);
 																$etd_date = substr($log_list['ETDDATE'], 4, 2) . "/" . substr($log_list['ETDDATE'], 6, 2) . "/" . substr($log_list['ETDDATE'], 0, 4);
 																$cargo_readiness_date = substr($log_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($log_list['CARGOREADINESSDATE'], 6, 2) . "/" . substr($log_list['CARGOREADINESSDATE'], 0, 4);
@@ -106,60 +109,19 @@
 															?>
 
 																<tr>
+
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $log_list['CONTRACT'] ?></a></strong> <?php echo "/" . $log_list['PROJECT'] . "/" . $log_list['CRMNO'] . "<br><strong>" .
-																																												$log_list['CTDESC'] . "</strong><br><small>( " .
-																																												trim($log_list['NAMECUST']) . " )</small>"; ?>
-																		<table class="table table-bordered table-striped dataTable">
-																			<thead class="bg-gray disabled">
-																				<tr>
-																					<th colspan="3"><small>Inventory Info</small>
-																					</th>
-																				</tr>
-																			</thead>
-																			<tr>
-																				<td><small>Item No./Material No.</small></td>
-																				<td>:</td>
-																				<td><small><?= $log_list['ITEMNO'] . " / " . $log_list['MATERIALNO'];
-																							?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Item Description</small></td>
-																				<td>:</td>
-																				<td><?= "<strong><small>" . $log_list['ITEMDESC'] . "</small></strong><br>"; ?></td>
-																			</tr>
-																			<tr>
-																				<td><small>Type</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= $log_list['SERVICETYPE']; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Qty</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= number_format($log_list['QTY'], 0, ",", ".") . ' (' . trim($log_list['STOCKUNIT']) . ')' ?></small></td>
-																			</tr>
-																		</table>
-																	</td>
-
-																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
-																											?></td>
-
-																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;"><strong><a href="#"><?= $log_list['PONUMBER']; ?></a></strong><br>
-																		<?= $log_list['POREMARKS']; ?>
-																		<?php if (!empty($log_list['PONUMBER'])) : ?>
+																	<td style="vertical-align: top;"><strong><a href="<?= base_url('administration/popostedview/' . $log_list['POUNIQ']) ?>" target="_blank"><?= $log_list['PONUMBER']; ?></a></strong></td>
+																	<td style="vertical-align: top;"><?= $po_date ?></td>
+																	<td style="vertical-align: top;"><?php if (!empty($log_list['PONUMBER'])) : ?>
 																			<table class="table table-bordered table-striped dataTable">
 																				<thead class="bg-gray disabled">
 																					<tr>
-																						<th colspan="3"><small>P/O Date Info</small>
+																						<th colspan="3">
 																						</th>
 																					</tr>
 																				</thead>
-																				<tr>
-																					<td><small>P/O Date</small></td>
-																					<td><small>:</small></td>
-																					<td><small><?= $po_date ?></small></td>
-																				</tr>
+
 																				<tr>
 																					<td><small>ETD Date</small></td>
 																					<td><small>:</small></td>
@@ -175,15 +137,34 @@
 																					<td><small>:</small></td>
 																					<td><strong><small><?= $log_list['ORIGINCOUNTRY']; ?></small></strong></td>
 																				</tr>
+																				<tr>
+																					<td><small>P/O Remarks</small></td>
+																					<td><small>:</small></td>
+																					<td><small><?= $log_list['POREMARKS']; ?></small></td>
+																				</tr>
 																			</table>
 																		<?php endif; ?>
 																	</td>
 																	<td style="background-color: white;"></td>
+																	<td style="vertical-align: top;" nowrap><strong>
+																			<a href="<?= base_url("administration/csrpostedview/" . $log_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $log_list['CONTRACT'] ?></a></strong>
+																		<?= " / " . $log_list['PROJECT'] . " / " . $log_list['CRMNO']; ?><br>
+																		<strong><?= $log_list['CTDESC']; ?></strong><br>
+																		<strong><?= $log_list['PONUMBERCUST'] . ' - ' . $crmpodate; ?></strong><br>
+																		<small>(<?= $log_list['NAMECUST']; ?>)</small><br>
+
+																	</td>
+
+																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
+																											?></td>
+
+																	<td style="background-color: white;"></td>
+
 																	<td style="vertical-align: top;" nowrap>
 																		<div class="btn-group">
 																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
 																			<ul class="dropdown-menu" role="menu">
-																				<?php if (($log_list['LOGPOSTINGSTAT'] == 0) or ($log_list['LOGPOSTINGSTAT'] == 1 and (empty($log_list['ATDORIGINDATE']) or empty($log_list['ETAPORTDATE']) or empty($log_list['PIBDATE'])))) :
+																				<?php if (($log_list['LOGPOSTINGSTAT'] == 0) or ($log_list['LOGPOSTINGSTAT'] == 1 and (empty($log_list['ETDORIGINDATE']) or empty($log_list['ATDORIGINDATE']) or empty($log_list['ETAPORTDATE']) or empty($log_list['PIBDATE']) or empty($log_list['VENDSHISTATUS'])))) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("arrangeshipment/update/" . $log_list['POUNIQ'] .  '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Arrange Shipment PO & Posting</a>
@@ -197,7 +178,7 @@
 																					</li>
 																				<?php endif;
 																				?>
-																				<?php if ($log_list['LOGPOSTINGSTAT'] == 1 and $log_list['LOGOFFLINESTAT'] == 1) :
+																				<?php if ($log_list['LOGPOSTINGSTAT'] == 1 and $log_list['LOGOFFLINESTAT'] == 1 and !empty($log_list['ETDORIGINDATE']) and !empty($log_list['ATDORIGINDATE']) and !empty($log_list['ETAPORTDATE']) and !empty($log_list['PIBDATE']) and !empty($log_list['VENDSHISTATUS'])) :
 																				?>
 																					<li>
 																						<a href="<?= base_url("arrangeshipment/sendnotif/" . $log_list['LOGUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
@@ -209,19 +190,25 @@
 																		</div>
 
 																	</td>
-																	<td style="vertical-align: top;"><?php $postingstat = $log_list['LOGPOSTINGSTAT'];
+																	<td style="vertical-align: top;"><?php $postingstat = $log_list['LOGPOSTINGSTAT'] . $log_list['LOGOFFLINESTAT'];
 																										switch ($postingstat) {
-																											case "0":
-																												echo "Open";
+																											case "00":
+																												echo "<span class='label label-default'>Open</span>";
 																												break;
-																											case "1":
-																												echo "Posted";
+																											case "11":
+																												echo "<span class='label label-warning'>Posted Pending Notif</span>";
 																												break;
-																											case "2":
-																												echo "Deleted";
+																											case "10":
+																												echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																												break;
+																											case "20":
+																												echo "<span class='label label-danger'>Deleted</span>";
+																												break;
+																											case "21":
+																												echo "<span class='label label-danger'>Deleted</span>";
 																												break;
 																											default:
-																												echo "";
+																												echo "<span class='label label-default'>Open</span>";
 																										} ?></td>
 																	<td style="vertical-align: top;">
 																		<?php if (!empty($log_list['LOGUNIQ'])) : ?>

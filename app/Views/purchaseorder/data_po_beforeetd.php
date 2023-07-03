@@ -95,7 +95,11 @@
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;"><strong><?= $ot_list['PONUMBER'] ?></strong></td>
+																	<td style="vertical-align: top;">
+																		<strong>
+																			<a href="<?= base_url("administration/popostedview/" . $ot_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $ot_list['PONUMBER'] ?></a>
+																		</strong>
+																	</td>
 																	<td style="vertical-align: top;"><?= $povendor_date ?></td>
 																	<td style="vertical-align: top;"><?= $ot_list['diff'] ?></td>
 																	<td>
@@ -176,8 +180,9 @@
 																		</div>
 
 																	</td>
-																	<td style="background-color: white;"></td>
-																	<td nowrap><strong><a href="#"><?= $ot_list['CONTRACT'] ?></a></strong>
+																	<td style="background-color: white;vertical-align: top;"></td>
+																	<td style="vertical-align: top;" nowrap><strong><a href="<?= base_url("administration/csrpostedview/" . $ot_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank">
+																				<?= $ot_list['CONTRACT'] ?></a></strong>
 																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
 																		<strong><?= $ot_list['PONUMBERCUST'] . ' - ' . $crmpodate; ?></strong><br>
@@ -186,32 +191,32 @@
 
 																	</td>
 
-																	<td nowrap><?= $crmreq_date;
-																				?></td>
+																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
+																											?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
-																	<td><?= $rqn_date; ?></td>
-																	<td><?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
-																		switch ($postingstat) {
-																			case "00":
-																				echo "<span class='label label-default'>Open</span>";
-																				break;
-																			case "11":
-																				echo "<span class='label label-warning'>Posted Pending Notif</span>";
-																				break;
-																			case "10":
-																				echo "<span class='label label-success'>Posted & Sending Notif</span>";
-																				break;
-																			case "20":
-																				echo "<span class='label label-danger'>Deleted</span>";
-																				break;
-																			case "21":
-																				echo "<span class='label label-danger'>Deleted</span>";
-																				break;
-																			default:
-																				echo "<span class='label label-default'>Open</span>";
-																		} ?></td>
+																	<td style="vertical-align: top;"><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
+																	<td style="vertical-align: top;"><?= $rqn_date; ?></td>
+																	<td style="vertical-align: top;"><?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
+																										switch ($postingstat) {
+																											case "00":
+																												echo "<span class='label label-default'>Open</span>";
+																												break;
+																											case "11":
+																												echo "<span class='label label-warning'>Posted Pending Notif</span>";
+																												break;
+																											case "10":
+																												echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																												break;
+																											case "20":
+																												echo "<span class='label label-danger'>Deleted</span>";
+																												break;
+																											case "21":
+																												echo "<span class='label label-danger'>Deleted</span>";
+																												break;
+																											default:
+																												echo "<span class='label label-default'>Open</span>";
+																										} ?></td>
 
 
 

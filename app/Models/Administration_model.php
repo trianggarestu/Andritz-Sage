@@ -113,4 +113,44 @@ class Administration_model extends Model
         $query = $this->db->query("SELECT * FROM webot_MAILSENDER where ID='1'");
         return $query->getRowArray();
     }
+
+    // END Dashboard
+
+    #Get Form View
+
+    function get_csr_post($csruniq)
+    {
+        $query = $this->db->query("select a.* from webot_CSR a where a.POSTINGSTAT =1 and a.CSRUNIQ='$csruniq'");
+        return $query->getRowArray();
+    }
+
+    function get_csrl_post($csruniq)
+    {
+        $query = $this->db->query("select b.* from webot_CSRL b inner join webot_CSR a on a.CSRUNIQ=b.CSRUNIQ 
+        where a.POSTINGSTAT =1 and a.CSRUNIQ='$csruniq'");
+        return $query->getResultArray();
+    }
+
+
+    function get_po_post($pouniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_PO a 
+        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+        left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ
+        
+        where a.POSTINGSTAT = 1 and a.POUNIQ='$pouniq'");
+
+        return $query->getRowArray();
+    }
+
+    function get_pol_post($pouniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.*,d.*,e.ITEMDESC from webot_PO a 
+        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+        left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ and c.CSRUNIQ = b.CSRUNIQ
+        left join webot_POL d on d.POUNIQ = a.POUNIQ 
+        left join webot_CSRL e on e.ITEMNO = d.ITEMNO and e.CSRUNIQ = d.CSRUNIQ
+        where a.POSTINGSTAT <>2 and a.POUNIQ='$pouniq'");
+        return $query->getResultArray();
+    }
 }

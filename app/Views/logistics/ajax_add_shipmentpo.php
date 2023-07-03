@@ -141,9 +141,9 @@
                                     <label for="vendorshi_status">Shipment Status : </label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm required" id="vendorshi_status" name="vendorshi_status" placeholder="" value="<?= $vendorshistatus; ?>" <?php if ($post_stat_data == 1 and !empty($vendorshistatus)) :
-                                                                                                                                                                                                echo 'readonly';
-                                                                                                                                                                                            endif; ?> />
+                                    <input type="text" class="form-control input-sm" id="vendorshi_status" name="vendorshi_status" placeholder="" value="<?= $vendorshistatus; ?>" <?php if ($post_stat_data == 1 and !empty($vendorshistatus)) :
+                                                                                                                                                                                        echo 'readonly';
+                                                                                                                                                                                    endif; ?> />
 
                                 </div>
                             </div>
@@ -152,7 +152,7 @@
                     </div>
                     <div class="box-body">
                         <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                            Field ETD Origin, Shipment Status, Remarks required.<br>
+                            Field ETD Origin is required.<br>
                             Notification to next process running when data posting and all fields are required in completely.
                         </p>
                     </div>

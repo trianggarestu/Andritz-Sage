@@ -148,7 +148,6 @@ class PobeforeEtdnotice extends BaseController
         }
         $data = array(
             'purchaseOrder_data' => $pobeforeetd_data,
-            'ct_po_beforeetd' => $this->PurchaseorderModel->count_po_beforeetd(),
             'keyword' => $keyword,
         );
 
@@ -373,7 +372,7 @@ class PobeforeEtdnotice extends BaseController
 
                         $this->PurchaseorderModel->po_post_update($get_po_data['POUNIQ'], $data3);
                         session()->set('success', '1');
-                        return redirect()->to(base_url('/pobeforeetdnoticelist'));
+                        return redirect()->to(base_url('/pobeforeetdnotice'));
                         session()->remove('success');
                     } else {
                         $data3 = array(

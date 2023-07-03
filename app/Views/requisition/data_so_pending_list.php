@@ -87,7 +87,7 @@
 
 																<tr>
 																	<td><?= $no++; ?></td>
-																	<td nowrap><strong><a href="#"><?= $ot_list['CONTRACT'] ?></a></strong>
+																	<td nowrap><strong><a href="<?= base_url('administration/csrpostedview/' . $ot_list['CSRUNIQ']) ?>" target="_blank"><?= $ot_list['CONTRACT'] ?></a></strong>
 																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
 																		<small>(<?= $ot_list['NAMECUST']; ?>)</small><br>

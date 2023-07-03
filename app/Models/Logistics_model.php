@@ -24,11 +24,10 @@ class Logistics_model extends Model
     function get_po_pending_to_arrangeshipment()
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
         c.LOGUNIQ,c.ETDORIGINDATE,c.ATDORIGINDATE,c.ETAPORTDATE,c.PIBDATE,c.VENDSHISTATUS,c.LOGREMARKS,c.POSTINGSTAT as LOGPOSTINGSTAT,c.OFFLINESTAT as LOGOFFLINESTAT
         from webot_PO a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
         left join webot_LOGISTICS c on c.POUNIQ=a.POUNIQ 
         where (a.POSTINGSTAT=1 and a.CARGOREADINESSDATE IS NOT NULL and c.LOGUNIQ IS NULL) or (a.POSTINGSTAT=1 and a.CARGOREADINESSDATE IS NOT NULL and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1) 
         or (c.POSTINGSTAT=1 and (c.ETDORIGINDATE is NULL or c.ATDORIGINDATE is NULL or c.ETAPORTDATE is NULL or c.PIBDATE is NULL or c.VENDSHISTATUS is NULL))");
@@ -39,17 +38,15 @@ class Logistics_model extends Model
     function get_po_pending_to_arrangeshipment_search($keyword)
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
         c.LOGUNIQ,c.ETDORIGINDATE,c.ATDORIGINDATE,c.ETAPORTDATE,c.PIBDATE,c.VENDSHISTATUS,c.LOGREMARKS,c.POSTINGSTAT as LOGPOSTINGSTAT,c.OFFLINESTAT as LOGOFFLINESTAT
         from webot_PO a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
         left join webot_LOGISTICS c on c.POUNIQ=a.POUNIQ 
         where ((a.POSTINGSTAT=1 and a.CARGOREADINESSDATE IS NOT NULL and c.LOGUNIQ IS NULL) or (a.POSTINGSTAT=1 and a.CARGOREADINESSDATE IS NOT NULL and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1) 
         or (c.POSTINGSTAT=1 and (c.ETDORIGINDATE is NULL or c.ATDORIGINDATE is NULL or c.ETAPORTDATE is NULL or c.PIBDATE is NULL or c.VENDSHISTATUS is NULL)))
         and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.PONUMBER like '%$keyword%'
-        or a.ORIGINCOUNTRY like '%$keyword%' or a.POREMARKS like '%$keyword%' or c.VENDSHISTATUS like '%$keyword%')");
+        or a.PONUMBER like '%$keyword%' or a.ORIGINCOUNTRY like '%$keyword%' or a.POREMARKS like '%$keyword%')");
         return $query->getResultArray();
     }
 
@@ -73,6 +70,26 @@ class Logistics_model extends Model
         and LOGUNIQ='$loguniq' ");
         return $query->getRowArray();
     }
+
+    function get_loguniq_open($id_so, $id_po)
+    {
+        $query = $this->db->query("select a.LOGUNIQ,a.PONUMBER,a.LOGKEY from webot_LOGISTICS a
+        where a.CSRUNIQ='$id_so' and a.POUNIQ='$id_po'");
+        return $query->getRowArray();
+    }
+
+
+    function get_logjoincsr_by_po($n_loguniq)
+    {
+        $query = $this->db->query("select a.*,b.POUNIQ,b.PODATE,b.PONUMBER,b.ETDDATE,b.CARGOREADINESSDATE,b.ORIGINCOUNTRY,b.POREMARKS, 
+        c.RQNNUMBER,c.RQNDATE,d.*
+        from webot_LOGISTICS a inner join webot_PO b on b.POUNIQ=a.POUNIQ
+        left join webot_REQUISITION c on c.RQNUNIQ=b.RQNUNIQ
+        left join webot_CSR d on d.CSRUNIQ=b.CSRUNIQ and c.CSRUNIQ=d.CSRUNIQ
+        where a.POSTINGSTAT=1 and a.LOGUNIQ='$n_loguniq' ");
+        return $query->getRowArray();
+    }
+
 
     function count_log_posting()
     {
@@ -105,9 +122,9 @@ class Logistics_model extends Model
         return $query;
     }
 
-    function ot_logistics_update($id_so, $data2)
+    function ot_logistics_update($id_so, $po_number, $data2)
     {
-        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so));
+        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so, 'PONUMBER' => $po_number));
         //Tanpa return juga bisa jalan
         return $query;
     }

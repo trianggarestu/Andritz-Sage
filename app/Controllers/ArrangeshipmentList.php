@@ -83,6 +83,7 @@ class ArrangeshipmentList extends BaseController
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
                     'AUDTUSER' => trim($infouser['usernamelgn']),
                     'AUDTORG' => $this->db_name->database,
+                    'NAMELGN' => $infouser['namalgn'],
 
                 ];
             } else {
@@ -105,8 +106,8 @@ class ArrangeshipmentList extends BaseController
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
         $log_data = $this->LogisticsModel->select('webot_LOGISTICS.*,po.*,csr.*')
-            ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'left')
-            ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
+            ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'inner')
+            ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'inner')
             ->groupStart()
             ->where('webot_LOGISTICS.POSTINGSTAT =', 1)
             ->groupEnd()
@@ -178,8 +179,8 @@ class ArrangeshipmentList extends BaseController
         $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
         if (empty($keyword)) {
             $log_data = $this->LogisticsModel->select('webot_LOGISTICS.*,po.*,csr.*')
-                ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'left')
-                ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
+                ->join('webot_PO po', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'inner')
+                ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'inner')
                 ->groupStart()
                 ->where('webot_LOGISTICS.POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -190,8 +191,8 @@ class ArrangeshipmentList extends BaseController
                 ->orderBy('webot_LOGISTICS.ETDORIGINDATE', 'ASC');
         } else {
             $log_data = $this->LogisticsModel->select('webot_LOGISTICS.*,po.*,csr.*')
-                ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'left')
-                ->join('webot_PO po', 'po.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'left')
+                ->join('webot_PO po', 'po.POUNIQ = webot_LOGISTICS.POUNIQ', 'inner')
+                ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_LOGISTICS.CSRUNIQ', 'inner')
                 ->groupStart()
                 ->where('webot_LOGISTICS.POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -200,28 +201,10 @@ class ArrangeshipmentList extends BaseController
                 ->where('webot_LOGISTICS.ETDORIGINDATE <=', $ntodate)
                 ->groupEnd()
                 ->groupStart()
-                ->like('csr.CONTRACT', $keyword)
-                ->orlike('csr.PROJECT', $keyword)
-                ->orlike('csr.MANAGER', $keyword)
-                ->orlike('csr.SALESNAME', $keyword)
-                ->orlike('csr.PROJECT', $keyword)
-                ->orlike('csr.PRJDESC', $keyword)
-                ->orlike('csr.PONUMBERCUST', $keyword)
-                ->orlike('csr.CUSTOMER', $keyword)
-                ->orlike('csr.NAMECUST', $keyword)
-                ->orlike('csr.EMAIL1CUST', $keyword)
-                ->orlike('csr.CRMNO', $keyword)
-                ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.SERVICETYPE', $keyword)
-                ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('csr.ITEMNO', $keyword)
-                ->orlike('csr.MATERIALNO', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
+                ->like('webot_LOGISTICS.PONUMBER', $keyword)
                 ->orlike('po.ORIGINCOUNTRY', $keyword)
-                ->orlike('webot_LOGISTICS.PONUMBER', $keyword)
                 ->orlike('po.POREMARKS', $keyword)
                 ->orlike('webot_LOGISTICS.VENDSHISTATUS', $keyword)
-
                 ->groupEnd()
                 ->orderBy('webot_LOGISTICS.ETDORIGINDATE', 'ASC');
             //$so_data = $this->LogisticsModel->get_csr_list_post_search($keyword);
