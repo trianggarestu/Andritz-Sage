@@ -62,8 +62,9 @@
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
-																<th style="vertical-align: top;">PO Vendor</th>
-																<th style="vertical-align: top;">PO Date</th>
+																<th style="vertical-align: top;">P/O Vendor</th>
+																<th style="vertical-align: top;">P/O Date</th>
+																<th style="vertical-align: top;">Logistics Info</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;">Status</th>
@@ -76,7 +77,9 @@
 															$no = 1;
 															foreach ($receipt_data as $rcp_list) {
 																$crmreq_date = substr($rcp_list['CRMREQDATE'], 4, 2) . "/" . substr($rcp_list['CRMREQDATE'], 6, 2) . "/" . substr($rcp_list['CRMREQDATE'], 0, 4);
+																$pocust_date = substr($rcp_list['PODATECUST'], 4, 2) . "/" . substr($rcp_list['PODATECUST'], 6, 2) . "/" . substr($rcp_list['PODATECUST'], 0, 4);
 																$po_date = substr($rcp_list['PODATE'], 4, 2) . "/" . substr($rcp_list['PODATE'], 6, 2) . "/" . substr($rcp_list['PODATE'], 0, 4);
+
 																if (null == $rcp_list['RECPDATE']) {
 																	$rcp_date = '';
 																} else {
@@ -108,52 +111,30 @@
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $rcp_list['CONTRACT'] ?></a></strong> <?php echo "/" . $rcp_list['PROJECT'] . "/" . $rcp_list['CRMNO'] . "<br><strong>" .
-																																												$rcp_list['CTDESC'] . "</strong><br><small>( " .
-																																												trim($rcp_list['NAMECUST']) . " )</small>"; ?><br>
-																		<table class="table table-bordered table-striped dataTable">
-																			<thead class="bg-gray disabled">
-																				<tr>
-																					<th colspan="3"><small>Inventory Info</small>
-																					</th>
-																				</tr>
-																			</thead>
-																			<tr>
-																				<td><small>Item No./Material No.</small></td>
-																				<td>:</td>
-																				<td><small><?= $rcp_list['ITEMNO'] . " / " . $rcp_list['MATERIALNO'];
-																							?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Item Description</small></td>
-																				<td>:</td>
-																				<td><?= "<strong><small>" . $rcp_list['ITEMDESC'] . "</small></strong><br>"; ?></td>
-																			</tr>
-																			<tr>
-																				<td><small>Type</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= $rcp_list['SERVICETYPE']; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Qty</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= number_format($rcp_list['QTY'], 0, ",", ".") . ' (' . trim($rcp_list['STOCKUNIT']) . ')' ?></small></td>
-																			</tr>
-																		</table>
+																	<td style="vertical-align: top;" nowrap>
+																		<strong><a href="<?= base_url("administration/csrpostedview/" . $rcp_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $rcp_list['CONTRACT'] ?></a></strong>
+																		<?= " / " . $rcp_list['PROJECT'] . " / " . $rcp_list['CRMNO']; ?><br>
+																		<strong><?= $rcp_list['CTDESC']; ?></strong><br>
+																		<strong><?= $rcp_list['PONUMBERCUST'] . ' - ' . $pocust_date; ?></strong><br>
+																		<small>(<?= $rcp_list['NAMECUST']; ?>)</small><br>
+
 																	</td>
 
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;"><strong><a href="#"><?= $rcp_list['PONUMBER']; ?></a></strong><br>
+																	<td style="vertical-align: top;">
+																		<strong><a href="<?= base_url("administration/popostedview/" . $rcp_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $rcp_list['PONUMBER']; ?></a></strong>
+
+																	</td>
+																	<td style="vertical-align: top;">
+																		<?= $po_date ?></td>
+																	<td style="vertical-align: top;">
 																		<?php if (!empty($rcp_list['LOGUNIQ'])) : ?>
 																			<table class="table table-bordered table-striped dataTable">
 																				<thead class="bg-gray disabled">
-																					<tr>
-																						<th colspan="3"><small>Logistics-Date Info</small>
-																						</th>
-																					</tr>
+
 																				</thead>
 																				<tr>
 																					<td><small>ETD Origin</small></td>
@@ -183,7 +164,6 @@
 																			</table>
 																		<?php endif; ?>
 																	</td>
-																	<td style="vertical-align: top;"><?= $po_date ?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
 																		<div class="btn-group">
@@ -192,8 +172,12 @@
 																				<?php if (($rcp_list['RCPPOSTINGSTAT'] == 0) or (empty($rcp_list['RCPOFFLINESTAT']))) :
 																				?>
 																					<li>
-																						<a href="<?= base_url("goodreceipt/update/" . $rcp_list['POUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Choose Good Receipt & Save</a>
+																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/1/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Choose Good Receipt & Posting</a>
 																					</li>
+																					<li>
+																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/0/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Choose Good Receipt & Save</a>
+																					</li>
+
 																				<?php endif;
 																				?>
 																				<?php if ($rcp_list['RCPPOSTINGSTAT'] == 1 and $rcp_list['RCPOFFLINESTAT'] == 1) :
@@ -226,45 +210,127 @@
 																		<?= $rcp_list['DESCRIPTIO']; ?><br>
 																		<small>(<?= $rcp_list['VDNAME']; ?>)</small>
 
-																		<?php if (!empty($rcp_list['RCPUNIQ'])) : ?>
-																			<table class="table table-bordered table-striped dataTable">
-																				<thead class="bg-gray disabled">
-																					<tr>
-																						<th colspan="3"><small>Good Receipts Info</small>
-																						</th>
-																					</tr>
-																				</thead>
-																				<tr>
-																					<td><small>GR Date</small></td>
-																					<td><small>:</small></td>
-																					<td><small><?= $rcp_date; ?></small></td>
-																				</tr>
-																				<tr>
-																					<td><small>QTY GR.</small></td>
-																					<td><small>:</small></td>
-																					<td><small><?= number_format($rcp_list['RECPQTY'], 0, ",", "."); ?></small></td>
-																				</tr>
-																				<tr>
-																					<td><small>Status</small></td>
-																					<td><small>:</small></td>
-																					<td><small><?php $grstatus = $rcp_list['GRSTATUS'];
-																								switch ($grstatus) {
-																									case "0":
-																										echo "Partial";
-																										break;
-																									case "1":
-																										echo "Completed";
-																										break;
-																									default:
-																										echo "";
-																								} ?></small></td>
-																				</tr>
 
-																			</table>
-																		<?php endif; ?>
 																	</td>
 																</tr>
+																<tr>
+																	<td style="vertical-align: top;" nowrap></td>
 
+																	<td style="vertical-align: top;" colspan="6" nowrap>
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<thead class="bg-gray disabled color-palette">
+																					<tr>
+
+																						<th class="padat">No</th>
+
+																						<th>Type</th>
+																						<th>Inventory <br>No.</th>
+																						<th>Material <br>No.</th>
+																						<th>Item Description</th>
+																						<th>Qty.</th>
+																						<th>Uom</th>
+
+
+
+
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<?php
+																					$no_l = 0;
+																					foreach ($po_l_data as $items) :
+																						if ($rcp_list['POUNIQ'] == $items['POUNIQ']) :
+
+																					?>
+																							<tr>
+
+																								<td class="text-center" style="width: 5%;"><?= ++$no_l ?></td>
+																								<td style="width: 10%;"><?= $items['SERVICETYPE']
+																														?></td>
+
+																								<td style="width: 12%;"><?= $items['ITEMNO']
+																														?></td>
+																								<td style="width: 12%;"><?= $items['MATERIALNO']
+																														?></td>
+																								<td nowrap><?= $items['ITEMDESC']
+																											?></td>
+																								<td nowrap style="width: 10%;"><?= number_format($items['QTY'], 0, ",", ".")
+																																?></td>
+																								<td nowrap style="width: 10%;"><?= $items['STOCKUNIT']
+																																?></td>
+
+
+
+																							</tr>
+
+																					<?php
+																						endif;
+																					endforeach;
+																					?>
+																				</tbody>
+																			</table>
+																		</div>
+																	</td>
+																	<td style="background-color: white;"></td>
+																	<td colspan="3" style="vertical-align: top;">
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<thead class="bg-gray disabled color-palette">
+																					<tr>
+																						<th class="padat">Status</th>
+																						<th>Last <br>G/R Date</th>
+																						<th>G/R Qty</th>
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<?php
+
+																					foreach ($po_l_data as $items) :
+																						if ($rcp_list['POUNIQ'] == $items['POUNIQ']) :
+																							if (empty($items['L_RECPDATE'])) {
+																								$l_rcpdate = '';
+																							} else {
+																								$l_rcpdate = substr($items['L_RECPDATE'], 6, 2) . "/" . substr($items['L_RECPDATE'], 4, 2) . "/" . substr($items['L_RECPDATE'], 0, 4);
+																							}
+																					?>
+																							<tr>
+
+																								<td class="text-center" style="width: 10%;">
+																									<?php
+																									if ($items['S_QTYRCP'] == 0) {
+																										echo "<span class='label label-danger'>Pending</span>";
+																									} else if ($items['S_QTYRCP'] > 0 and $items['QTY'] != $items['S_QTYRCP']) {
+																										echo "<span class='label label-warning'>Partial</span>";
+																									} else if ($items['S_QTYRCP'] > 0 and $items['QTY'] == $items['S_QTYRCP']) {
+																										echo "<span class='label label-success'>Completed</span>";
+																									}
+
+
+																									?>
+																								</td>
+																								<td><?= $l_rcpdate
+																									?></td>
+
+																								<td><?= number_format($items['S_QTYRCP'], 0, ",", ".")
+																									?></td>
+
+
+
+
+																							</tr>
+
+																					<?php
+																						endif;
+																					endforeach;
+																					?>
+																				</tbody>
+																			</table>
+																		</div>
+																	</td>
+
+
+																</tr>
 															<?php } ?>
 														</tbody>
 													</table>
@@ -277,13 +343,7 @@
 									<div class="row">
 										<div class="col-sm-12">&nbsp;
 										</div>
-										<div class="col-sm-12">
 
-											<p><i class="fa fa-info-circle"></i><code> Choose Button info :</code><br>
-												<code>- Choose Good Receipt P/O & Save, data is only saved without updated to Order Tracking</code><br>
-												<code>- Choose Good Receipt P/O & Posting, data will be saved and updated to Order Tracking</code>
-											</p>
-										</div>
 									</div>
 								</div>
 							</div>

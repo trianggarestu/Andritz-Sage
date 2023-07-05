@@ -35,6 +35,8 @@
                         </div>
                         <input type="hidden" id="po_uniq" name="po_uniq" value="<?= $po_uniq ?>">
                         <input type="hidden" id="csr_uniq" name="csr_uniq" value="<?= $csr_uniq ?>">
+                        <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
+                        <input type="hidden" id="delgrline" name="delgrline" value="<?= $delgrline ?>">
                         <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                             <small> Viewed Good Receipt with P/O Number : <strong><?= $po_number ?></strong></small>
                         </p>

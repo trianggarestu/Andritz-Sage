@@ -63,7 +63,7 @@
                                             <td><strong><?= $csrposted_data['CTDESC']; ?></strong></td>
                                         </tr>
                                         <tr>
-                                            <td width="300">Customer </td>
+                                            <td width="300" style="vertical-align: top;">Customer</td>
                                             <td width="1">:</td>
                                             <td><strong>
                                                     <?= $csrposted_data['CUSTOMER'] . ' - ' . $csrposted_data['NAMECUST']; ?>
@@ -189,7 +189,16 @@
 
                                         </tr>
 
+                                        <tr>
+                                            <td colspan="3" style="padding: 5px 20px;">
 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding: 5px 20px;">
+                                                <hr style="border-bottom: 2px solid #000000; height:0px;">
+                                            </td>
+                                        </tr>
 
 
 

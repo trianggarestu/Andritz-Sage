@@ -134,11 +134,13 @@ class Administration_model extends Model
 
     function get_po_post($pouniq)
     {
-        $query = $this->db->query("select a.*,b.*,c.* from webot_PO a 
-        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
-        left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ
-        
-        where a.POSTINGSTAT = 1 and a.POUNIQ='$pouniq'");
+        $query = $this->db->query("select a.*,b.*,c.*,
+        d.LOGUNIQ,d.ETDORIGINDATE,d.ATDORIGINDATE,d.ETAPORTDATE,d.PIBDATE,d.VENDSHISTATUS,d.LOGREMARKS
+        from webot_PO a 
+                left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+                left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ
+                left join webot_LOGISTICS d on d.POUNIQ=a.POUNIQ
+                where a.POSTINGSTAT = 1 and a.POUNIQ='$pouniq'");
 
         return $query->getRowArray();
     }

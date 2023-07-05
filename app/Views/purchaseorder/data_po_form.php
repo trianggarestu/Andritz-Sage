@@ -467,7 +467,7 @@
 																				?></td>
 																			<td nowrap><?= $items['options']['itemdesc']
 																						?></td>
-																			<td><?= $items['qty']
+																			<td><?= number_format($items['options']['so_qty'], 0, ",", ".")
 																				?></td>
 																			<td nowrap><?= $items['options']['so_uom']
 																						?></td>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Purchase Order List - Preview</title>
+    <title>Purchase Order Details - Preview</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="<?= base_url() ?>assets/images/logo/favicon.ico" />
     <link href="<?= base_url() ?>assets/css/report.css" rel="stylesheet" type="text/css">
@@ -63,7 +63,7 @@
                                             <td><strong><?= $poposted_data['CTDESC']; ?></strong></td>
                                         </tr>
                                         <tr>
-                                            <td width="300">Customer </td>
+                                            <td width="300" style="vertical-align: top;">Customer </td>
                                             <td width="1">:</td>
                                             <td><strong>
                                                     <?= $poposted_data['CUSTOMER'] . ' - ' . $poposted_data['NAMECUST']; ?>
@@ -197,6 +197,41 @@
                                             <td><strong><?= $poposted_data['POREMARKS']; ?></td>
 
                                         </tr>
+                                        <?php if (!empty($poposted_data['LOGUNIQ'])) :
+                                            $etdorigin = substr($poposted_data['ETDORIGINDATE'], 4, 2) . '/' . substr($poposted_data['ETDORIGINDATE'], 6, 2) . '/' . substr($poposted_data['ETDORIGINDATE'], 0, 4);
+                                            $atdorigin = substr($poposted_data['ATDORIGINDATE'], 4, 2) . '/' . substr($poposted_data['ATDORIGINDATE'], 6, 2) . '/' . substr($poposted_data['ATDORIGINDATE'], 0, 4);
+                                            $etaport = substr($poposted_data['ETAPORTDATE'], 4, 2) . '/' . substr($poposted_data['ETAPORTDATE'], 6, 2) . '/' . substr($poposted_data['ETAPORTDATE'], 0, 4);
+                                            $pibdate = substr($poposted_data['PIBDATE'], 4, 2) . '/' . substr($poposted_data['PIBDATE'], 6, 2) . '/' . substr($poposted_data['PIBDATE'], 0, 4);
+                                        ?>
+                                            <tr>
+                                                <td colspan="3" class="subtitle_head"><strong>Arrange Shipment by Logistics</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="300">ETD Origin (Date)</td>
+                                                <td width="1">:</td>
+                                                <td><strong><?= $etdorigin; ?></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="300">ATD Origin (Date)</td>
+                                                <td width="1">:</td>
+                                                <td><strong><?= $atdorigin; ?></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="300">ETA Port (Date)</td>
+                                                <td width="1">:</td>
+                                                <td><strong><?= $etaport; ?></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="300">PIB (Date)</td>
+                                                <td width="1">:</td>
+                                                <td><strong><?= $pibdate; ?></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="300">Shipment Status</td>
+                                                <td width="1">:</td>
+                                                <td><strong><?= $poposted_data['VENDSHISTATUS']; ?></strong></td>
+                                            </tr>
+                                        <?php endif; ?>
                                         <tr>
                                             <td colspan="3" class="subtitle_head"><strong>SPAREPARTS / SERVICES</strong></td>
                                         </tr>
@@ -241,13 +276,23 @@
                                                                 </tr>
                                                             <?php endforeach;
                                                             ?>
+
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </td>
 
                                         </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding: 5px 20px;">
 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding: 5px 20px;">
+                                                <hr style="border-bottom: 2px solid #000000; height:0px;">
+                                            </td>
+                                        </tr>
 
 
                                     </tbody>

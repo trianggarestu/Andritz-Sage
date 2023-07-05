@@ -206,10 +206,10 @@ class PurchaseOrder extends BaseController
                 foreach ($get_so_l as $items) :
                     $this->cart->insert(array(
                         'id'      => trim($items['ITEMNO']),
-                        'qty'     => $items['QTY'],
+                        'qty'     => '1',
                         'price'   => '1',
                         'name'    => 'Item Description Sage',
-                        'options' => array('so_service' => $items['SERVICETYPE'], 'material_no' => $items['MATERIALNO'], 'itemdesc' => $items['ITEMDESC'], 'so_uom' => $items['STOCKUNIT'], 'csruniq' => $items['CSRUNIQ'], 'csrluniq' => $items['CSRLUNIQ'])
+                        'options' => array('so_service' => $items['SERVICETYPE'], 'material_no' => $items['MATERIALNO'], 'itemdesc' => $items['ITEMDESC'], 'so_qty' => $items['QTY'], 'so_uom' => $items['STOCKUNIT'], 'csruniq' => $items['CSRUNIQ'], 'csrluniq' => $items['CSRLUNIQ'])
                     ));
                 endforeach;
             }
@@ -514,8 +514,10 @@ class PurchaseOrder extends BaseController
                         'CSRLUNIQ' => $items['options']['csrluniq'],
                         'SERVICETYPE' => $items['options']['so_service'],
                         'ITEMNO' => $items['id'],
+                        'MATERIALNO' => $items['options']['material_no'],
+                        'ITEMDESC' => $items['options']['itemdesc'],
                         'STOCKUNIT' => $items['options']['so_uom'],
-                        'QTY' => $items['qty'],
+                        'QTY' => $items['options']['so_qty'],
                     );
                     $pol_insert = $this->PurchaseorderModel->poline_insert($datal);
                 endforeach;

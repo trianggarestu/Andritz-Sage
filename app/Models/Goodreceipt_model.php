@@ -26,25 +26,64 @@ class Goodreceipt_model extends Model
     function get_po_pending_to_gr()
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
+        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
         from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
 		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
         where (a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
 
+
+    function get_grlist_on_gropen()
+    {
+        $query = $this->db->query("select distinct a.POUNIQ,a.PODATE,c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        from webot_PO a
+        inner join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ 
+        where (a.POSTINGSTAT=1 and c.RCPUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0)
+        order by c.RECPNUMBER asc,c.RECPDATE asc");
+
+        return $query->getResultArray();
+    }
+
+    //PO Line
+    function get_pol_list_post()
+    {
+        $query = $this->db->query("select a.*,c.SERVICETYPE,c.MATERIALNO,c.ITEMDESC,
+        (select top 1 RECPDATE from webot_RECEIPTS where POUNIQ=b.POUNIQ order by RECPDATE desc) as L_RECPDATE,isnull(d.S_QTYRCP,0) as S_QTYRCP
+        from webot_POL a
+		inner join webot_PO b on b.POUNIQ=a.POUNIQ
+		left join webot_CSRL c on c.CSRUNIQ=a.CSRUNIQ and c.CSRLUNIQ=a.CSRLUNIQ
+		left join (select POUNIQ,POLUNIQ,sum(QTY) as S_QTYRCP from webot_RCPL
+		group by POUNIQ,POLUNIQ) d on d.POUNIQ=a.POUNIQ and d.POLUNIQ=a.POLUNIQ
+		where (b.POSTINGSTAT=1)
+        order by a.POUNIQ asc, a.POLUNIQ asc,c.CSRUNIQ asc, c.CSRLUNIQ asc
+		");
+        if ($query->getResult() > 0) {
+            return $query->getResultArray();
+        }
+    }
+
+    function get_po_l_by_id($pouniq)
+    {
+        $query = $this->db->query("select a.*,d.POUNIQ,d.POLUNIQ
+        from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+		left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
+        left join webot_RCPL e on e.POUNIQ=d.POUNIQ and e.POLUNIQ=d.POLUNIQ
+        where d.POUNIQ='$pouniq' and e.RCPUNIQ is NULL");
+        return $query->getResultArray();
+    }
+
+
     function get_po_pending_to_gr_search($keyword)
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
         c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
         from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
 		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
         where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
         and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
@@ -56,12 +95,11 @@ class Goodreceipt_model extends Model
 
     function get_po_pending_by_pouniq($pouniq)
     {
-        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
-        " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.ITEMNO,b.MATERIALNO," . 'it."DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.RCPUNIQ,c.RCPHSEQ,c.RECPNUMBER,c.RECPDATE,c.VDNAME,c.DESCRIPTIO,c.RECPITEMNO,c.ITEMDESC as RECPITEMDESC,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
-        from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+        $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,b.EMAIL1CUST,
+        " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
+        c.RCPUNIQ,c.RCPHSEQ,c.RECPNUMBER,c.RECPDATE,c.VDNAME,c.DESCRIPTIO,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        from (select x.*,y.PODATE,y.ORIGINCOUNTRY from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
 		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
         where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)) and a.POUNIQ='$pouniq' ");
         return $query->getRowArray();
@@ -81,6 +119,15 @@ class Goodreceipt_model extends Model
         where b.PONUMBER='$ponumber' ");
         return $query->getResultArray();
     }
+
+    function list_pol_by_po($po_uniq)
+    {
+        $query = $this->db->query("select a.*,b.MATERIALNO,b.ITEMDESC from webot_POL a
+		inner join webot_CSRL b on b.CSRUNIQ=a.CSRUNIQ and b.CSRLUNIQ=a.CSRLUNIQ
+        where a.POUNIQ='$po_uniq' ");
+        return $query->getResultArray();
+    }
+
 
     function get_rcpl_by_receipt($rcphseq, $contract)
     {

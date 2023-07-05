@@ -283,7 +283,7 @@
 
 																	<th class="padat">No</th>
 
-																	<th>Type<?= session()->get('csruniq') ?> </th>
+																	<th>Type</th>
 																	<th>Inventory No.</th>
 																	<th>Material No.</th>
 																	<th>Item Desc.</th>

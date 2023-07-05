@@ -26,11 +26,13 @@ class GoodReceipt extends BaseController
     private $footer_data;
     private $audtuser;
     private $db_name;
+    private $cart;
     public function __construct()
     {
         //parent::__construct();
         helper('form', 'url');
         $this->db_name = \Config\Database::connect();
+        $this->cart = \Config\Services::cart();
 
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
@@ -85,6 +87,7 @@ class GoodReceipt extends BaseController
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
                     'AUDTUSER' => trim($infouser['usernamelgn']),
                     'AUDTORG' => $this->db_name->database,
+                    'NAMELGN' => $infouser['namalgn'],
 
                 ];
             } else {
@@ -99,10 +102,16 @@ class GoodReceipt extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
+        session()->remove('sage_rcphseq');
+        $this->cart->destroy();
         $receiptdata = $this->GoodreceiptModel->get_po_pending_to_gr();
+        $grlist_data = $this->GoodreceiptModel->get_grlist_on_gropen();
+        $po_l_open_data = $this->GoodreceiptModel->get_pol_list_post();
 
         $data = array(
             'receipt_data' => $receiptdata,
+            'grlist_data' => $grlist_data,
+            'po_l_data' => $po_l_open_data,
             'keyword' => '',
         );
 
@@ -154,96 +163,78 @@ class GoodReceipt extends BaseController
     }
 
 
-    public function update($pouniq)
+    public function add($pouniq, $post_stat, $delgrline)
     {
         session()->remove('success');
         session()->set('success', '0');
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($pouniq);
+        $get_po_l = $this->GoodreceiptModel->get_po_l_by_id($pouniq);
         $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
         $podate = substr($getpodata['PODATE'], 4, 2) . '/' . substr($getpodata['PODATE'], 6, 2) . '/' . substr($getpodata['PODATE'], 0, 4);
         $etaportdate = substr($getpodata['ETAPORTDATE'], 4, 2) . '/' . substr($getpodata['ETAPORTDATE'], 6, 2) . '/' . substr($getpodata['ETAPORTDATE'], 0, 4);
-        if ($getpodata['RCPUNIQ'] == NULL) {
-            $button_text = 'Save';
-            $act = 'goodreceipt/insert_action';
+        $button_text = 'Save';
+        $act = 'goodreceipt/insert_action';
 
-
-            $data = array(
-                'csr_uniq' => $getpodata['CSRUNIQ'],
-                'ct_no' => $getpodata['CONTRACT'],
-                'ct_desc' => $getpodata['CTDESC'],
-                'prj_no' => $getpodata['PROJECT'],
-                'ct_custname' => $getpodata['NAMECUST'],
-                'crm_no' => $getpodata['CRMNO'],
-                'req_date' => $reqdate,
-                'csr_item_no' => $getpodata['ITEMNO'],
-                'csr_material_no' => $getpodata['MATERIALNO'],
-                'csr_item_desc' => $getpodata['ITEMDESC'],
-                'csr_srvtype' => $getpodata['SERVICETYPE'],
-                'csr_qty' => $getpodata['QTY'],
-                'csr_uom' => $getpodata['STOCKUNIT'],
-                'po_uniq' => $getpodata['POUNIQ'],
-                'po_number' => $getpodata['PONUMBER'],
-                'po_date' => $podate,
-                'etaport_date' => $etaportdate,
-                'vendorshi_status' => $getpodata['VENDSHISTATUS'],
-                'rcpuniq' => '',
-                'rcphseq' => '',
-                'rcp_number' => '',
-                'rcp_date' => '',
-                'vd_name' => '',
-                'rcp_desc' => '',
-                'item_no' => '',
-                'material_no' => '',
-                'item_desc' => '',
-                'qty_rcp' => '',
-                'rcp_unit' => '',
-                'button_text' => $button_text,
-                //'grsage_data' => $this->GoodreceiptModel->get_receipt(),
-                'form_action' => base_url($act),
-            );
+        if (!empty(session()->get('sage_rcphseq'))) {
+            $getrcpdata = $this->GoodreceiptModel->get_receipt_sage_by_id(session()->get('sage_rcphseq'));
+            $rcpdate = substr($getrcpdata['RCPDATE'], 4, 2) . '/' . substr($getrcpdata['RCPDATE'], 6, 2) . '/' . substr($getrcpdata['RCPDATE'], 0, 4);
+            $rcphseq = session()->get('sage_rcphseq');
+            $rcp_number = trim($getrcpdata['RCPNUMBER']);
+            $rcp_date = $rcpdate;
+            $vd_name = $getrcpdata['VDNAME'];
+            $rcp_desc = $getrcpdata['DESCRIPTIO'];
         } else {
-
-            $rcpdate = substr($getpodata['RECPDATE'], 4, 2) . '/' . substr($getpodata['RECPDATE'], 6, 2) . '/' . substr($getpodata['RECPDATE'], 0, 4);
-            $etaportdate = substr($getpodata['ETAPORTDATE'], 4, 2) . '/' . substr($getpodata['ETAPORTDATE'], 6, 2) . '/' . substr($getpodata['ETAPORTDATE'], 0, 4);
-            $button_text = 'Update';
-            $act = 'goodreceipt/update_action';
-
-
-            $data = array(
-                'csr_uniq' => $getpodata['CSRUNIQ'],
-                'ct_no' => $getpodata['CONTRACT'],
-                'ct_desc' => $getpodata['CTDESC'],
-                'prj_no' => $getpodata['PROJECT'],
-                'ct_custname' => $getpodata['NAMECUST'],
-                'crm_no' => $getpodata['CRMNO'],
-                'req_date' => $reqdate,
-                'csr_item_no' => $getpodata['ITEMNO'],
-                'csr_material_no' => $getpodata['MATERIALNO'],
-                'csr_item_desc' => $getpodata['ITEMDESC'],
-                'csr_srvtype' => $getpodata['SERVICETYPE'],
-                'csr_qty' => $getpodata['QTY'],
-                'csr_uom' => $getpodata['STOCKUNIT'],
-                'po_uniq' => $getpodata['POUNIQ'],
-                'po_number' => $getpodata['PONUMBER'],
-                'po_date' => $podate,
-                'etaport_date' => $etaportdate,
-                'vendorshi_status' => $getpodata['VENDSHISTATUS'],
-                'rcpuniq' => $getpodata['RCPUNIQ'],
-                'rcphseq' => $getpodata['RCPHSEQ'],
-                'rcp_number' => $getpodata['RECPNUMBER'],
-                'rcp_date' => $rcpdate,
-                'vd_name' => $getpodata['VDNAME'],
-                'rcp_desc' => $getpodata['DESCRIPTIO'],
-                'item_no' => $getpodata['RECPITEMNO'],
-                'material_no' => $getpodata['MATERIALNO'],
-                'item_desc' => $getpodata['RECPITEMDESC'],
-                'qty_rcp' => $getpodata['RECPQTY'],
-                'rcp_unit' => $getpodata['RECPUNIT'],
-                'button_text' => $button_text,
-                //'grsage_data' => $this->GoodreceiptModel->get_receipt(),
-                'form_action' => base_url($act),
-            );
+            $rcphseq = '';
+            $rcp_number = '';
+            $rcp_date = '';
+            $vd_name = '';
+            $rcp_desc = '';
         }
+        if ($delgrline == 0) {
+            foreach ($get_po_l as $items) :
+                $this->cart->insert(array(
+                    'id'      => trim($items['ITEMNO']),
+                    'qty'     => '1',
+                    'price'   => '1',
+                    'name'    => 'Item Description Sage',
+                    'options' => array('so_service' => $items['SERVICETYPE'], 'material_no' => $items['MATERIALNO'], 'itemdesc' => $items['ITEMDESC'], 'so_qty' => $items['QTY'], 'so_uom' => $items['STOCKUNIT'], 'csruniq' => $items['CSRUNIQ'], 'csrluniq' => $items['CSRLUNIQ'], 'pouniq' => $items['POUNIQ'], 'poluniq' => $items['POLUNIQ'])
+                ));
+            endforeach;
+        }
+
+        if ($this->cart->totalItems() == 0) {
+            return redirect()->to(base_url('goodreceipt'));
+        }
+
+        $data = array(
+            'csr_uniq' => $getpodata['CSRUNIQ'],
+            'ct_no' => $getpodata['CONTRACT'],
+            'ct_desc' => $getpodata['CTDESC'],
+            'prj_no' => $getpodata['PROJECT'],
+            'ct_custname' => $getpodata['NAMECUST'],
+            'ct_email1' => $getpodata['EMAIL1CUST'],
+            'crm_no' => $getpodata['CRMNO'],
+            'req_date' => $reqdate,
+            'po_uniq' => $getpodata['POUNIQ'],
+            'po_number' => $getpodata['PONUMBER'],
+            'po_date' => $podate,
+            'etaport_date' => $etaportdate,
+            'origin_country' => $getpodata['ORIGINCOUNTRY'],
+            'vendorshi_status' => $getpodata['VENDSHISTATUS'],
+            'rcpuniq' => '',
+            'rcphseq' => $rcphseq,
+            'rcp_number' => $rcp_number,
+            'rcp_date' => $rcp_date,
+            'vd_name' => $vd_name,
+            'rcp_desc' => $rcp_desc,
+            'button_text' => $button_text,
+            'post_stat' => $post_stat,
+            'delgrline' => $delgrline,
+            'form_action' => base_url($act),
+            'polforrcp_data' => $this->cart->contents(),
+            'cart' => $this->cart,
+        );
+
 
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
@@ -251,16 +242,18 @@ class GoodReceipt extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
-    public function form_select_goodreceipt($po_uniq)
+    public function form_select_goodreceipt($po_uniq, $post_stat, $delgrline)
     {
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($po_uniq);
         $data = array(
             'gr_by_po' => $this->GoodreceiptModel->list_gr_by_po($getpodata['PONUMBER']),
             'form_action' => base_url("goodreceipt/choosegoodreceipt"),
             'po_uniq' => $po_uniq,
+            'post_stat' => $post_stat,
+            'delgrline' => $delgrline,
             'csr_uniq' => $getpodata['CSRUNIQ'],
             'po_number' => $getpodata['PONUMBER'],
-            //'rcphseq' => $getpodata['RCPHSEQ'],
+            'rcphseq' => $getpodata['RCPHSEQ'],
         );
 
         //$data['gr_by_po'] = $this->GoodreceiptModel->list_gr_by_po($ponumber);
@@ -270,29 +263,6 @@ class GoodReceipt extends BaseController
         echo view('goodreceipt/ajax_add_goodreceipt', $data);
     }
 
-    /*public function form_select_goodreceiptline($po_uniq, $rcphseq)
-    {
-        $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($po_uniq);
-        $getrcpdata = $this->GoodreceiptModel->get_receipt_sage_by_id($rcphseq);
-        $contract = trim($getpodata['CONTRACT']);
-        $data = array(
-            'getrcpldata' => $this->GoodreceiptModel->get_rcpl_by_receipt($rcphseq, $contract),
-            'form_action' => base_url("goodreceipt/choosegoodreceiptline"),
-            'po_uniq' => $po_uniq,
-            'csr_uniq' => $getpodata['CSRUNIQ'],
-            'po_number' => $getpodata['PONUMBER'],
-            'ct_no' => $contract,
-            'ct_desc' => $getpodata['CTDESC'],
-            'rcp_number' => $getrcpdata['RCPNUMBER']
-        );
-
-        //$data['gr_by_po'] = $this->GoodreceiptModel->list_gr_by_po($ponumber);
-        //$data['gr_by_po'] = $this->GoodreceiptModel->get_receipt();
-        //$data['form_action'] = base_url("salesorder/choosegr");
-        //echo view('crm/ajax_add_contract', $data);
-        echo view('goodreceipt/ajax_add_goodreceiptline', $data);
-    }*/
-
 
     public function choosegoodreceipt()
     {
@@ -301,210 +271,65 @@ class GoodReceipt extends BaseController
         } else {
             $sage_rcphseq = $this->request->getPost('rcph_seq');
             $po_uniq = $this->request->getPost('po_uniq');
+            $post_stat = $this->request->getPost('post_stat');
+            $delgrline = $this->request->getPost('delgrline');
+            session()->set('sage_rcphseq', $sage_rcphseq);
         }
 
-        return redirect()->to(base_url('goodreceipt/selectgoodreceipt/' . $po_uniq . '/' . $sage_rcphseq));
+        return redirect()->to(base_url('goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline));
     }
 
 
-    /*public function choosegoodreceiptline()
+    public function form_update_item($po_uniq, $post_stat, $rowid, $qty, $delgrline)
     {
-        if (null == ($this->request->getPost('sage_rcplseq'))) {
-            $sage_rcplseq = "receipt number not found";
+        //$getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($po_uniq);
+        $data = array(
+            'form_action' => base_url("goodreceipt/chooseitem"),
+            'po_uniq' => $po_uniq,
+            'post_stat' => $post_stat,
+            'delgrline' => $delgrline,
+            'rcphseq' => '',
+            'rowid' => $rowid,
+            'qty' => number_format($qty, 0, ",", "."),
+            'select_item' => '',
+        );
+
+        echo view('goodreceipt/ajax_input_item_gr', $data);
+    }
+
+
+
+    public function chooseitem()
+    {
+        if (null == ($this->request->getPost('row_id'))) {
+            $row_id = "Item not found";
         } else {
-            //$rcp_number = $this->request->getPost('rcp_number');
+            $row_id = $this->request->getPost('row_id');
+            $gr_qty = $this->request->getPost('gr_qty');
             $po_uniq = $this->request->getPost('po_uniq');
-            $sage_rcphseq = $this->request->getPost('sage_rcphseq');
-            $sage_rcplseq = $this->request->getPost('sage_rcplseq');
+            $post_stat = $this->request->getPost('post_stat');
+            $delgrline = $this->request->getPost('delgrline');
+            // data option harus di bawa
+            $this->cart->update(array(
+                'rowid'   => $row_id,
+                'qty'     => '1',
+                'price'   => '1',
+                'name'    => 'Item Description Sage',
+                'options' => array('so_service' => '', 'material_no' => '', 'itemdesc' => '', 'so_qty' => $gr_qty, 'so_uom' => '', 'csruniq' => '', 'csrluniq' => '', 'pouniq' => '', 'poluniq' => '')
+            ));
         }
 
-        return redirect()->to(base_url('goodreceipt/selectgoodreceiptline/' . $po_uniq . '/' . $sage_rcphseq . '/' . $sage_rcplseq));
-    }*/
-
-
-    public function selectgoodreceipt($pouniq, $sage_rcphseq = 0, $postingstat = 0)
-    {
-        $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($pouniq);
-        $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
-        $podate = substr($getpodata['PODATE'], 4, 2) . '/' . substr($getpodata['PODATE'], 6, 2) . '/' . substr($getpodata['PODATE'], 0, 4);
-        $getrcpdata = $this->GoodreceiptModel->get_receipt_sage_by_id($sage_rcphseq);
-        if ($postingstat == 0) {
-            $button_text = 'Save';
-            $act = 'goodreceipt/insert_action';
-        } else {
-            $button_text = 'Save & Posting';
-            $act = 'goodreceipt/update_action';
-        }
-        if ($sage_rcphseq == '') {
-            $data = array(
-                'csr_uniq' => $getpodata['CSRUNIQ'],
-                'ct_no' => $getpodata['CONTRACT'],
-                'ct_desc' => $getpodata['CTDESC'],
-                'prj_no' => $getpodata['PROJECT'],
-                'ct_custname' => $getpodata['NAMECUST'],
-                'crm_no' => $getpodata['CRMNO'],
-                'req_date' => $reqdate,
-                'csr_item_no' => $getpodata['ITEMNO'],
-                'csr_material_no' => $getpodata['MATERIALNO'],
-                'csr_item_desc' => $getpodata['ITEMDESC'],
-                'csr_srvtype' => $getpodata['SERVICETYPE'],
-                'csr_qty' => $getpodata['QTY'],
-                'csr_uom' => $getpodata['STOCKUNIT'],
-                'po_uniq' => $getpodata['POUNIQ'],
-                'po_number' => $getpodata['PONUMBER'],
-                'po_date' => $podate,
-                'etaport_date' => $getpodata['ETAPORTDATE'],
-                'vendorshi_status' => $getpodata['VENDSHISTATUS'],
-                'rcpuniq' => $getpodata['RCPUNIQ'],
-                'rcphseq' => '',
-                'rcp_number' => '',
-                'rcp_date' => '',
-                'vd_name' => '',
-                'rcp_desc' => '',
-                'item_no' => '',
-                'material_no' => '',
-                'item_desc' => '',
-                'qty_rcp' => '',
-                'rcp_unit' => '',
-                'button_text' => $button_text,
-                'form_action' => base_url($act),
-            );
-        } else {
-
-            $rcpdate = substr($getrcpdata['RCPDATE'], 4, 2) . '/' . substr($getrcpdata['RCPDATE'], 6, 2) . '/' . substr($getrcpdata['RCPDATE'], 0, 4);
-
-            $data = array(
-
-                'csr_uniq' => $getpodata['CSRUNIQ'],
-                'ct_no' => $getpodata['CONTRACT'],
-                'ct_desc' => $getpodata['CTDESC'],
-                'prj_no' => $getpodata['PROJECT'],
-                'ct_custname' => $getpodata['NAMECUST'],
-                'crm_no' => $getpodata['CRMNO'],
-                'req_date' => $reqdate,
-                'csr_item_no' => $getpodata['ITEMNO'],
-                'csr_material_no' => $getpodata['MATERIALNO'],
-                'csr_item_desc' => $getpodata['ITEMDESC'],
-                'csr_srvtype' => $getpodata['SERVICETYPE'],
-                'csr_qty' => $getpodata['QTY'],
-                'csr_uom' => $getpodata['STOCKUNIT'],
-                'po_uniq' => $getpodata['POUNIQ'],
-                'po_number' => $getpodata['PONUMBER'],
-                'po_date' => $podate,
-                'etaport_date' => $getpodata['ETAPORTDATE'],
-                'vendorshi_status' => $getpodata['VENDSHISTATUS'],
-                'rcpuniq' => $getpodata['RCPUNIQ'],
-                'rcphseq' => $sage_rcphseq,
-                'rcp_number' => trim($getrcpdata['RCPNUMBER']),
-                'rcp_date' => $rcpdate,
-                'vd_name' => $getrcpdata['VDNAME'],
-                'rcp_desc' => $getrcpdata['DESCRIPTIO'],
-                'item_no' => $getpodata['ITEMNO'],
-                'material_no' => $getpodata['MATERIALNO'],
-                'item_desc' => $getpodata['ITEMDESC'],
-                'qty_rcp' => 0,
-                'rcp_unit' => $getpodata['STOCKUNIT'],
-                'button_text' => $button_text,
-                'form_action' => base_url($act),
-            );
-        }
-        //return view('welcome_message');
-        echo view('view_header', $this->header_data);
-        echo view('view_nav', $this->nav_data);
-        echo view('goodreceipt/goodreceipt_form', $data);
-        echo view('view_footer', $this->footer_data);
+        return redirect()->to(base_url('goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline));
     }
 
 
-    /*public function selectgoodreceiptline($pouniq, $sage_rcphseq = '', $sage_rcplseq = '', $postingstat = 0)
+    // delete item Cart
+    public function delete_item_cart($po_uniq, $post_stat, $rowid, $delgrline)
     {
-        $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($pouniq);
-        $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
-        $podate = substr($getpodata['PODATE'], 4, 2) . '/' . substr($getpodata['PODATE'], 6, 2) . '/' . substr($getpodata['PODATE'], 0, 4);
-        $getrcpldata = $this->GoodreceiptModel->get_receiptline_sage_by_id($sage_rcphseq, $sage_rcplseq);
-        if ($postingstat == 0) {
-            $button_text = 'Save';
-            $act = 'goodreceipt/insert_action';
-        } else {
-            $button_text = 'Save & Posting';
-            $act = 'goodreceipt/update_action';
-        }
-        if ($sage_rcphseq == '' and $sage_rcplseq == '') {
-            $data = array(
-                'csr_uniq' => $getpodata['CSRUNIQ'],
-                'ct_no' => $getpodata['CONTRACT'],
-                'ct_desc' => $getpodata['CTDESC'],
-                'prj_no' => $getpodata['PROJECT'],
-                'ct_custname' => $getpodata['NAMECUST'],
-                'crm_no' => $getpodata['CRMNO'],
-                'req_date' => $reqdate,
-                'csr_item_no' => $getpodata['ITEMNO'],
-                'csr_item_desc' => $getpodata['ITEMDESC'],
-                'csr_srvtype' => $getpodata['SERVICETYPE'],
-                'csr_qty' => $getpodata['QTY'],
-                'csr_uom' => $getpodata['STOCKUNIT'],
-                'po_uniq' => $getpodata['POUNIQ'],
-                'po_number' => $getpodata['PONUMBER'],
-                'po_date' => $podate,
-                'etaport_date' => $getpodata['ETAPORTDATE'],
-                'vendorshi_status' => $getpodata['VENDSHISTATUS'],
-                'rcpuniq' => $getpodata['RCPUNIQ'],
-                'rcphseq' => '',
-                'rcplseq' => '',
-                'rcp_number' => '',
-                'rcp_date' => '',
-                'vd_name' => '',
-                'rcp_desc' => '',
-                'item_no' => '',
-                'item_desc' => '',
-                'qty_rcp' => '',
-                'rcp_unit' => '',
-                'button_text' => $button_text,
-                'form_action' => base_url($act),
-            );
-        } else {
-
-            $rcpdate = substr($getrcpldata['RCPDATE'], 4, 2) . '/' . substr($getrcpldata['RCPDATE'], 6, 2) . '/' . substr($getrcpldata['RCPDATE'], 0, 4);
-            $data = array(
-                'csr_uniq' => $getpodata['CSRUNIQ'],
-                'ct_no' => $getpodata['CONTRACT'],
-                'ct_desc' => $getpodata['CTDESC'],
-                'prj_no' => $getpodata['PROJECT'],
-                'ct_custname' => $getpodata['NAMECUST'],
-                'crm_no' => $getpodata['CRMNO'],
-                'req_date' => $reqdate,
-                'csr_item_no' => $getpodata['ITEMNO'],
-                'csr_item_desc' => $getpodata['ITEMDESC'],
-                'csr_srvtype' => $getpodata['SERVICETYPE'],
-                'csr_qty' => $getpodata['QTY'],
-                'csr_uom' => $getpodata['STOCKUNIT'],
-                'po_uniq' => $getpodata['POUNIQ'],
-                'po_number' => $getpodata['PONUMBER'],
-                'po_date' => $podate,
-                'etaport_date' => $getpodata['ETAPORTDATE'],
-                'vendorshi_status' => $getpodata['VENDSHISTATUS'],
-                'rcpuniq' => $getpodata['RCPUNIQ'],
-                'rcphseq' => $sage_rcphseq,
-                'rcplseq' => $sage_rcplseq,
-                'rcp_number' => trim($getrcpldata['RCPNUMBER']),
-                'rcp_date' => $rcpdate,
-                'vd_name' => $getrcpldata['VDNAME'],
-                'rcp_desc' => $getrcpldata['DESCRIPTIO'],
-                'item_no' => $getrcpldata['ITEMNO'],
-                'item_desc' => $getrcpldata['ITEMDESC'],
-                'qty_rcp' => $getrcpldata['RQRECEIVED'],
-                'rcp_unit' => $getrcpldata['RCPUNIT'],
-                'button_text' => $button_text,
-                'form_action' => base_url($act),
-            );
-        }
-        //return view('welcome_message');
-        echo view('view_header', $this->header_data);
-        echo view('view_nav', $this->nav_data);
-        echo view('goodreceipt/goodreceipt_form', $data);
-        echo view('view_footer', $this->footer_data);
+        // Remove an item using its `rowid`
+        $this->cart->remove($rowid);
+        return redirect()->to(base_url('goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline));
     }
-*/
 
 
     public function insert_action()
