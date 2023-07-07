@@ -114,11 +114,21 @@
 				//Autofill Mailsender
 				if ($('#smtpauth:checked').length) {
 					$('#sender_password').attr('readonly', false); // On Load, should it be read only?
-				} else {
-					$('#sender_password').attr('readonly', true);
+				} else if ($('#smtpauth:not(:checked)').length) {
+					$('#sender_password').attr('readonly', true); // On Load, should it be read only?
 				}
 
 				$('#smtpauth:checked').change(function() {
+					var passwd;
+					if ($('#smtpauth:checked').length) {
+						$('#sender_password').attr('readonly', false); //Not Checked - Read Only
+					} else {
+						passwd = $('******').val();
+						$('#sender_password').val(passwd).attr('readonly', true); //If Non checked - Normal
+					}
+				});
+
+				$('#smtpauth:not(:checked)').change(function() {
 					var passwd;
 					if ($('#smtpauth:checked').length) {
 						$('#sender_password').attr('readonly', false); //Not Checked - Read Only

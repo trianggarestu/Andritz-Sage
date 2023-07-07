@@ -28,7 +28,8 @@ class Goodreceipt_model extends Model
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
         c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
-        from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+        from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
+		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
 		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
         where (a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
@@ -39,10 +40,10 @@ class Goodreceipt_model extends Model
 
     function get_grlist_on_gropen()
     {
-        $query = $this->db->query("select distinct a.POUNIQ,a.PODATE,c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        $query = $this->db->query("select distinct a.POUNIQ,c.CSRUNIQ,a.PODATE,c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
         from webot_PO a
         inner join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ 
-        where (a.POSTINGSTAT=1 and c.RCPUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0)
+        where (a.POSTINGSTAT=1 and c.RCPUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1)
         order by c.RECPNUMBER asc,c.RECPDATE asc");
 
         return $query->getResultArray();
@@ -81,8 +82,9 @@ class Goodreceipt_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
-        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.RECPQTY,c.RECPUNIT,c.GRSTATUS,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
-        from (select x.*,y.PODATE from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
+		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
 		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
         where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
@@ -167,12 +169,27 @@ class Goodreceipt_model extends Model
         return $query->getRowArray();
     }
 
-    function get_rcp_open_by_id($rcpuniq)
+    function get_rcpjoincsr_by_rcp($rcpuniq)
     {
-        $query = $this->db->query("select a.POUNIQ,a.POKEY,a.PODATE,a.PONUMBER,a.ETDDATE,a.CARGOREADINESSDATE,a.ORIGINCOUNTRY,a.POREMARKS, 
-        b.CSRUNIQ,b.CSRLUNIQ
-        from webot_PO a inner join webot_POL b on b.POUNIQ=a.POUNIQ
-        where a.RCPUNIQ='$rcpuniq'");
+        $query = $this->db->query("select a.*,b.*,c.*,d.*,e.*
+        from webot_RECEIPTS a
+		left join webot_PO b on b.POUNIQ=a.POUNIQ
+		left join webot_LOGISTICS c on c.POUNIQ=a.POUNIQ
+		left join webot_REQUISITION d on d.RQNNUMBER=b.RQNNUMBER
+        left join webot_CSR e on e.CSRUNIQ=a.CSRUNIQ and e.CSRUNIQ=a.CSRUNIQ
+        where a.POSTINGSTAT=1 and a.RCPUNIQ='$rcpuniq' ");
+        return $query->getRowArray();
+    }
+
+
+    function get_rcp_open_by_id($rcpuniq, $csruniq)
+    {
+        $query = $this->db->query("select  
+        b.CSRUNIQ,b.CSRLUNIQ,c.QTY,sum(b.QTY) as S_QTYRCP
+        from webot_RECEIPTS a inner join webot_RCPL b on b.RCPUNIQ=a.RCPUNIQ
+		left join webot_CSRL c on c.CSRUNIQ=b.CSRUNIQ and c.CSRLUNIQ=b.CSRLUNIQ
+        where b.CSRUNIQ='$csruniq'
+		group by b.CSRUNIQ,b.CSRLUNIQ,c.QTY");
         return $query->getResultArray();
     }
 
@@ -182,6 +199,7 @@ class Goodreceipt_model extends Model
         $query = $this->db->query("select a.* from webot_RECEIPTS a where a.POSTINGSTAT <>2 and a.RCPUNIQ='$rcpuniq'");
         return $query->getRowArray();
     }
+
 
 
     function goodreceipt_insert($data)
@@ -203,11 +221,21 @@ class Goodreceipt_model extends Model
         return $query;
     }
 
-    function ot_goodreceipt_update($id_so, $data2)
+    function ot_goodreceipt_update($csruniq, $csrluniq, $data2)
     {
-        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so));
+        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $csruniq, 'CSRLUNIQ' => $csrluniq));
         //Tanpa return juga bisa jalan
         return $query;
+    }
+
+    function delete_rcp_open($rcpuniq)
+    {
+        return $this->db->table('webot_RECEIPTS')->delete(['RCPUNIQ' => $rcpuniq, 'POSTINGSTAT' => 0]);
+    }
+
+    function delete_rcpl_open($rcpuniq)
+    {
+        return $this->db->table('webot_RCPL')->delete(['RCPUNIQ' => $rcpuniq]);
     }
 
 

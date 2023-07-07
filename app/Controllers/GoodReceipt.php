@@ -314,7 +314,6 @@ class GoodReceipt extends BaseController
     }
 
 
-
     public function chooseitem()
     {
         if (null == ($this->request->getPost('row_id'))) {
@@ -347,6 +346,26 @@ class GoodReceipt extends BaseController
         return redirect()->to(base_url('goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline));
     }
 
+    // delete rcp open
+    public function delete($rcpuniq)
+    {
+        $chk_rcp = $this->GoodreceiptModel->get_goodreceipt_open($rcpuniq);
+        if ($chk_rcp['POSTINGSTAT'] == 1) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('goodreceipt'));
+            session()->remove('success');
+        } else {
+            // Remove an PO Open
+            $del_rcp_open = $this->GoodreceiptModel->delete_rcp_open($rcpuniq);
+            if ($del_rcp_open) {
+                $this->GoodreceiptModel->delete_rcpl_open($rcpuniq);
+            }
+
+            session()->set('success', '1');
+            return redirect()->to(base_url('goodreceipt'));
+            session()->remove('success');
+        }
+    }
 
     // delete item Cart
     public function delete_item_cart($po_uniq, $post_stat, $rowid, $delgrline)
@@ -778,18 +797,11 @@ class GoodReceipt extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
-    public function posting($rcpuniq)
+    public function posting($rcpuniq, $csruniq)
     {
-        $getrcpopen = $this->GoodreceiptModel->get_goodreceipt_open($rcpuniq);
-        $id_so = $getrcpopen['CSRUNIQ'];
-        $po_number = $getrcpopen['PONUMBER'];
-        $rcp_number = $getrcpopen['RECPNUMBER'];
-        $rcp_date = substr($getrcpopen['RECPDATE'], 4, 2) . '/' . substr($getrcpopen['RECPDATE'], 6, 2) . '/' . substr($getrcpopen['RECPDATE'], 0, 4);
-        if ($getrcpopen['GRSTATUS'] == 0) {
-            $grstatus = 'Partial';
-        } else {
-            $grstatus = 'Completed';
-        }
+        $rcp_to_ot = $this->GoodreceiptModel->get_rcp_open_by_id($rcpuniq, $csruniq);
+
+
 
         $sender = $this->AdministrationModel->get_mailsender();
         $groupuser = 6;
@@ -799,28 +811,37 @@ class GoodReceipt extends BaseController
             'AUDTUSER' => $this->audtuser['AUDTUSER'],
             'AUDTORG' => $this->audtuser['AUDTORG'],
             'POSTINGSTAT' => 1,
-            'OFFLINESTAT' => $sender['OFFLINESTAT'],
+            'OFFLINESTAT' => 1,
 
         );
         $gr_update = $this->GoodreceiptModel->goodreceipt_update($rcpuniq, $data);
 
         if ($gr_update) {
-            $data2 = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'RECPNUMBER' => $getrcpopen['RECPNUMBER'],
-                'RECPDATE' => $getrcpopen['RECPDATE'],
-                'RECPQTY' => $getrcpopen['RECPQTY'],
-                'RECPUNIT' => $getrcpopen['RECPUNIT'],
-                'GRSTATUS' => $getrcpopen['GRSTATUS'],
-            );
-            $this->GoodreceiptModel->ot_goodreceipt_update($id_so, $data2);
+            $get_rcp = $this->GoodreceiptModel->get_goodreceipt_post($rcpuniq);
+            foreach ($rcp_to_ot as $data_rcpl) :
+                $csruniq = $data_rcpl['CSRUNIQ'];
+                $csrluniq = $data_rcpl['CSRLUNIQ'];
+                if ($data_rcpl['QTY'] == $data_rcpl['S_QTYRCP']) {
+                    $grstatus = 1;
+                } else if ($data_rcpl['QTY'] > $data_rcpl['S_QTYRCP']) {
+                    $grstatus = 0;
+                }
+
+                $data2 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'RECPDATE' => $get_rcp['RECPDATE'],
+                    'RECPQTY' => $data_rcpl['S_QTYRCP'],
+                    'GRSTATUS' => $grstatus,
+                );
+                $this->GoodreceiptModel->ot_goodreceipt_update($csruniq, $csrluniq, $data2);
+            endforeach;
 
             if ($sender['OFFLINESTAT'] == 0) {
                 //Untuk Update Status Posting CSR
-                $data2 = array(
+                $data3 = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
@@ -829,88 +850,126 @@ class GoodReceipt extends BaseController
                     'OFFLINESTAT' => 0,
                 );
                 //inisiasi proses kirim ke group
+                $get_rcp_data = $this->GoodreceiptModel->get_rcpjoincsr_by_rcp($rcpuniq);
+                $crmpodate = substr($get_rcp_data['PODATECUST'], 4, 2) . "/" . substr($get_rcp_data['PODATECUST'], 6, 2) . "/" .  substr($get_rcp_data['PODATECUST'], 0, 4);
+                $crmreqdate = substr($get_rcp_data['CRMREQDATE'], 4, 2) . '/' . substr($get_rcp_data['CRMREQDATE'], 6, 2) . '/' . substr($get_rcp_data['CRMREQDATE'], 0, 4);
+                $rqndate = substr($get_rcp_data['RQNDATE'], 4, 2) . "/" . substr($get_rcp_data['RQNDATE'], 6, 2) . "/" .  substr($get_rcp_data['RQNDATE'], 0, 4);
+                $povendordate = substr($get_rcp_data['PODATE'], 4, 2) . "/" . substr($get_rcp_data['PODATE'], 6, 2) . "/" .  substr($get_rcp_data['PODATE'], 0, 4);
+                $etddate = substr($get_rcp_data['ETDDATE'], 4, 2) . "/" . substr($get_rcp_data['ETDDATE'], 6, 2) . "/" .  substr($get_rcp_data['ETDDATE'], 0, 4);
+                $cargoreadinessdate = substr($get_rcp_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_rcp_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_rcp_data['CARGOREADINESSDATE'], 0, 4);
+                $etdorigindate = substr($get_rcp_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_rcp_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_rcp_data['ETDORIGINDATE'], 0, 4);
+                $atdorigindate = substr($get_rcp_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_rcp_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_rcp_data['ATDORIGINDATE'], 0, 4);
+                $etaportdate = substr($get_rcp_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_rcp_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_rcp_data['ETAPORTDATE'], 0, 4);
+                $pibdate = substr($get_rcp_data['PIBDATE'], 4, 2) . "/" . substr($get_rcp_data['PIBDATE'], 6, 2) . "/" .  substr($get_rcp_data['PIBDATE'], 0, 4);
+                $rcpdate = substr($get_rcp_data['RECPDATE'], 4, 2) . "/" . substr($get_rcp_data['RECPDATE'], 6, 2) . "/" .  substr($get_rcp_data['RECPDATE'], 0, 4);
 
                 $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                $mail_tmpl = $this->NotifModel->get_template($groupuser);
 
-                foreach ($notiftouser_data as $sendto_user) {
+                foreach ($notiftouser_data as $sendto_user) :
+                    $var_email = array(
+                        'TONAME' => $sendto_user['NAME'],
+                        'FROMNAME' => $this->audtuser['NAMELGN'],
+                        'CONTRACT' => $get_rcp_data['CONTRACT'],
+                        'CTDESC' => $get_rcp_data['CTDESC'],
+                        'PROJECT' => $get_rcp_data['PROJECT'],
+                        'PRJDESC' => $get_rcp_data['PRJDESC'],
+                        'CUSTOMER' => $get_rcp_data['CUSTOMER'],
+                        'NAMECUST' => $get_rcp_data['NAMECUST'],
+                        'PONUMBERCUST' => $get_rcp_data['PONUMBERCUST'],
+                        'PODATECUST' => $crmpodate,
+                        'CRMNO' => $get_rcp_data['CRMNO'],
+                        'REQDATE' => $crmreqdate,
+                        'ORDERDESC' => $get_rcp_data['ORDERDESC'],
+                        'REMARKS' => $get_rcp_data['CRMREMARKS'],
+                        'SALESCODE' => $get_rcp_data['MANAGER'],
+                        'SALESPERSON' => $get_rcp_data['SALESNAME'],
+                        'RQNDATE' => $rqndate,
+                        'RQNNUMBER' => $get_rcp_data['RQNNUMBER'],
+                        //DATA VARIABLE PO
+                        'PODATE' => $povendordate,
+                        'PONUMBER' => $get_rcp_data['PONUMBER'],
+                        'ETDDATE' => $etddate,
+                        'CARGOREADINESSDATE' => $cargoreadinessdate,
+                        'ORIGINCOUNTRY' => $get_rcp_data['ORIGINCOUNTRY'],
+                        'POREMARKS' => $get_rcp_data['POREMARKS'],
+                        //DATA VARIABLE LOGISTICS
+                        'ETDORIGINDATE' => $etdorigindate,
+                        'ATDORIGINDATE' => $atdorigindate,
+                        'ETAPORTDATE' => $etaportdate,
+                        'PIBDATE' => $pibdate,
+                        'VENDSHISTATUS' => $get_rcp_data['VENDSHISTATUS'],
+                        //DATA VARIABLE RECEIPTS
+                        'RECPNUMBER' => $get_rcp_data['RECPNUMBER'],
+                        'RECPDATE' => $rcpdate,
+                        'VDNAME' => $get_rcp_data['VDNAME'],
+                        'DESCRIPTIO' => $get_rcp_data['DESCRIPTIO'],
+
+                    );
+                    $subject = $mail_tmpl['SUBJECT_MAIL'];
+                    $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
                     $data_email = array(
                         'hostname'       => $sender['HOSTNAME'],
                         'sendername'       => $sender['SENDERNAME'],
                         'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                         'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                        'smtpauth'       => $sender['SMTPAUTH'],
                         'ssl'       => $sender['SSL'],
                         'smtpport'       => $sender['SMTPPORT'],
                         'to_email' => $sendto_user['EMAIL'],
-                        'subject' => 'Pending Good Receipts Allert. Receipt Number :' . $rcp_number,
-                        'message' =>    ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-
-                        Please to follow up Good Receipt Number :' . $rcp_number . ', GR Date :' . $rcp_date . ') is pending for you to process Delivery Team.
-            <br><br>
-            PO Number :' . $po_number . '<br>
-            Receipt Number :' . $rcp_number . '<br>
-            Receipt Date :' . $rcp_date . '<br>
-            GR Status :' . $grstatus . '<br>
-            <hr>
-            You can access Order Tracking System Portal via the URL below:
-            <br>
-            Http://jktsms025:...
-            <br>
-            Thanks for your cooperation. 
-            <br><br>
-            Order Tracking Administrator',
+                        'subject' =>  $subject,
+                        'message' => $message,
                     );
 
-                    $sending_mail = $this->send($data_email);
 
-                    if ($sending_mail) {
-                        $data_notif = array(
-                            'FROM_USER' => $this->header_data['usernamelgn'],
-                            'FROM_EMAIL' => $this->header_data['emaillgn'],
-                            'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                            'TO_USER' => $sendto_user['USERNAME'],
-                            'TO_EMAIL' => $sendto_user['EMAIL'],
-                            'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                            'SUBJECT' => 'Pending Good Receipts Allert. Receipt Number :' . $rcp_number,
-                            'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+                    $data_notif = array(
+                        'MAILKEY' => $groupuser . '-' . $get_rcp_data['RCPUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                        'FROM_USER' => $this->header_data['usernamelgn'],
+                        'FROM_EMAIL' => $this->header_data['emaillgn'],
+                        'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                        'TO_USER' => $sendto_user['USERNAME'],
+                        'TO_EMAIL' => $sendto_user['EMAIL'],
+                        'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                        'SUBJECT' => $subject,
+                        'MESSAGE' => $message,
+                        'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                        'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                        'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                        'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                        'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                        'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                        'IS_READ' => 0,
+                        'IS_ARCHIVED' => 0,
+                        'IS_TRASHED' => 0,
+                        'IS_DELETED' => 0,
+                        'IS_ATTACHED' => 0,
+                        'IS_STAR' => 0,
+                        'IS_READSENDER' => 1,
+                        'IS_ARCHIVEDSENDER' => 0,
+                        'IS_TRASHEDSENDER' => 0,
+                        'IS_DELETEDSENDER' => 0,
+                        'SENDING_STATUS' => 1,
+                        'OTPROCESS' => $groupuser,
+                        'UNIQPROCESS' => $get_rcp_data['RCPUNIQ'],
+                    );
 
-                            Please to follow up Good Receipt Number :' . $rcp_number . ', GR Date :' . $rcp_date . ') is pending for you to process Delivery Team.
-                <br><br>
-                PO Number :' . $po_number . '<br>
-                Receipt Number :' . $rcp_number . '<br>
-                Receipt Date :' . $rcp_date . '<br>
-                GR Status :' . $grstatus . '<br>
-                <hr>
-                You can access Order Tracking System Portal via the URL below:
-                <br>
-                Http://jktsms025:...
-                <br>
-                Thanks for your cooperation. 
-                <br><br>
-                Order Tracking Administrator',
-
-                            'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                            'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                            'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                            'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                            'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                            'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                            'IS_READ' => 0,
-                            'IS_ARCHIVED' => 0,
-                            'IS_TRASHED' => 0,
-                            'IS_DELETED' => 0,
-                            'IS_ATTACHED' => 0,
-                            'IS_STAR' => 0,
-                            'IS_READSENDER' => 1,
-                            'IS_ARCHIVEDSENDER' => 0,
-                            'IS_TRASHEDSENDER' => 0,
-                            'IS_DELETEDSENDER' => 0,
-                            'SENDING_STATUS' => 1,
-                            'OTPROCESS' => $groupuser,
-                            'UNIQPROCESS' => $getrcpopen['CSRUNIQ'],
-                        );
-                        $this->NotifModel->mailbox_insert($data_notif);
+                    //Check Duplicate Entry & Sending Mail
+                    $touser = trim($sendto_user['USERNAME']);
+                    $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_rcp_data['RCPUNIQ'], $touser);
+                    if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_rcp_data['RCPUNIQ'] . '-' . $touser) {
+                        session()->set('success', '-1');
+                        return redirect()->to(base_url('/goodreceipt'));
+                        session()->remove('success');
+                    } else if (empty($getmailuniq['MAILKEY'])) {
+                        $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                        if ($post_email) {
+                            $sending_mail = $this->send($data_email);
+                        }
                     }
-                }
+
+                endforeach;
+                $this->GoodreceiptModel->goodreceipt_update($get_rcp_data['RCPUNIQ'], $data3);
             }
         }
         session()->set('success', '1');
@@ -1104,11 +1163,18 @@ class GoodReceipt extends BaseController
         $sendername         = $data_email['sendername'];
         $senderemail        = $data_email['senderemail'];
         $passwordemail      = $data_email['passwordemail'];
+        $chksmtpauth           = $data_email['smtpauth'];
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
+
+        if ($data_email['smtpauth'] == 1) {
+            $smtpauth = 'TRUE';
+        } else {
+            $smtpauth = 'FALSE';
+        }
 
         $mail = new PHPMailer(true);
 
@@ -1116,9 +1182,11 @@ class GoodReceipt extends BaseController
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
             $mail->Host       = $hostname;
-            $mail->SMTPAuth   = true;
+            $mail->SMTPAuth   = $smtpauth;
             $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            if ($chksmtpauth == TRUE) :
+                $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            endif;
             $mail->SMTPSecure = $ssl;
             $mail->Port       = $smtpport;
 
@@ -1132,10 +1200,10 @@ class GoodReceipt extends BaseController
 
             $mail->send();
             session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/PurchaseOrder'));
+            return redirect()->to(base_url('/goodreceipt'));
         } catch (Exception $e) {
             session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/PurchaseOrder'));
+            return redirect()->to(base_url('/goodreceipt'));
         }
     }
 }

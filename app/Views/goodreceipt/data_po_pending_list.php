@@ -64,10 +64,8 @@
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">P/O Vendor</th>
 																<th style="vertical-align: top;">P/O Date</th>
-																<th style="vertical-align: top;">Logistics Info</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
-																<th style="vertical-align: top;">Good Receipt Data</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -124,16 +122,13 @@
 
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;">
-																		<strong><a href="<?= base_url("administration/popostedview/" . $rcp_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $rcp_list['PONUMBER']; ?></a></strong>
-
-																	</td>
-																	<td style="vertical-align: top;">
-																		<?= $po_date ?></td>
-																	<td style="vertical-align: top;">
+																		<strong><a href="<?= base_url("administration/popostedview/" . $rcp_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $rcp_list['PONUMBER']; ?></a></strong><br>
 																		<?php if (!empty($rcp_list['LOGUNIQ'])) : ?>
 																			<table class="table table-bordered table-striped dataTable">
 																				<thead class="bg-gray disabled">
-
+																					<tr>
+																						<td colspan="3">Logistics-Info</td>
+																					</tr>
 																				</thead>
 																				<tr>
 																					<td><small>ETD Origin</small></td>
@@ -162,7 +157,10 @@
 																				</tr>
 																			</table>
 																		<?php endif; ?>
+
 																	</td>
+																	<td style="vertical-align: top;">
+																		<?= $po_date ?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
 																		<div class="btn-group">
@@ -189,20 +187,21 @@
 
 																			</ul>
 																		</div>
-
-																	</td>
-
-																	<td style="vertical-align: top;"><?php if (is_array($grlist_data)) { ?>
+																		<?php if (is_array($grlist_data)) { ?>
 																			<div class="table-responsive">
 																				<table class="table table-bordered dataTable table-hover nowrap">
-
+																					<thead class="bg-gray disabled">
+																						<tr>
+																							<td colspan="3">G/R Info.</td>
+																						</tr>
+																					</thead>
 																					<tbody>
 																						<?php
-																											$no_l = 0;
+																						$no_l = 0;
 
-																											foreach ($grlist_data as $grheader) :
-																												if ($rcp_list['POUNIQ'] == $grheader['POUNIQ']) :
-																													$gr_date = substr($grheader['RECPDATE'], 4, 2) . "/" . substr($grheader['RECPDATE'], 6, 2) . "/" . substr($grheader['RECPDATE'], 0, 4);
+																						foreach ($grlist_data as $grheader) :
+																							if ($rcp_list['POUNIQ'] == $grheader['POUNIQ']) :
+																								$gr_date = substr($grheader['RECPDATE'], 4, 2) . "/" . substr($grheader['RECPDATE'], 6, 2) . "/" . substr($grheader['RECPDATE'], 0, 4);
 
 																						?>
 																								<tr>
@@ -212,16 +211,14 @@
 																										<?php if ($grheader['RCPPOSTINGSTAT'] == 0) :
 																										?>
 
-																											<a href="<?= base_url("goodreceipt/update/" . $grheader['RCPUNIQ'] . '/1') ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat btn-info btn-sm">
-																												<i class="fa fa-check-square-o"></i> Update & Posting
+																											<a href="<?= base_url("goodreceipt/posting/" . $grheader['RCPUNIQ'] . '/' . $grheader['CSRUNIQ']) ?>" class="btn btn-social btn-flat bg-blue btn-sm">
+																												<i class="fa fa-check-square-o"></i> Posting G/R
 																											</a>
 
-																											<a href="<?= base_url("goodreceipt/update/" . $grheader['RCPUNIQ'] . '/0') ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social bg-yellow btn-flat btn-sm">
-																												<i class="fa fa-edit"></i> Update & Save
-																											</a>
+
 																											<a href="" data-href="<?= base_url("goodreceipt/delete/" . $grheader['RCPUNIQ']) ?>" class="btn bg-red btn-flat btn-sm" title="Delete Data" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
 																										<?php
-																													endif;
+																										endif;
 																										?>
 
 
@@ -232,14 +229,14 @@
 																												<i class="fa fa-send-o"></i>Send Notif
 																											</a>
 																										<?php
-																													endif;
+																										endif;
 																										?>
 																									</td>
 																								</tr>
 
 																						<?php
-																												endif;
-																											endforeach;
+																							endif;
+																						endforeach;
 
 																						?>
 																					</tbody>
@@ -248,11 +245,13 @@
 																		<?php } ?>
 
 																	</td>
+
+
 																</tr>
 																<tr>
 																	<td style="vertical-align: top;" nowrap></td>
 
-																	<td style="vertical-align: top;" colspan="6" nowrap>
+																	<td style="vertical-align: top;" colspan="5" nowrap>
 																		<div class="table-responsive">
 																			<table class="table table-bordered dataTable table-hover nowrap">
 																				<thead class="bg-gray disabled color-palette">
@@ -309,7 +308,7 @@
 																		</div>
 																	</td>
 																	<td style="background-color: white;"></td>
-																	<td colspan="3" style="vertical-align: top;">
+																	<td style="vertical-align: top;">
 																		<div class="table-responsive">
 																			<table class="table table-bordered dataTable table-hover nowrap">
 																				<thead class="bg-gray disabled color-palette">

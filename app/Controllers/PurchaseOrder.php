@@ -1301,12 +1301,18 @@ class PurchaseOrder extends BaseController
         $sendername         = $data_email['sendername'];
         $senderemail        = $data_email['senderemail'];
         $passwordemail      = $data_email['passwordemail'];
-        $smtpauth           = $data_email['smtpauth'];
+        $chksmtpauth           = $data_email['smtpauth'];
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
+        if ($data_email['smtpauth'] == 1) {
+            $smtpauth = 'TRUE';
+        } else {
+            $smtpauth = 'FALSE';
+        }
+
 
         $mail = new PHPMailer(true);
 
@@ -1316,7 +1322,7 @@ class PurchaseOrder extends BaseController
             $mail->Host       = $hostname;
             $mail->SMTPAuth   = $smtpauth;
             $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            if ($smtpauth == TRUE) :
+            if ($chksmtpauth == TRUE) :
                 $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
             endif;
             $mail->SMTPSecure = $ssl;
