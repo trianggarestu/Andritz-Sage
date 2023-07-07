@@ -60,8 +60,8 @@
 																			<td class="col-sm-6">
 																				<div class="input-group">
 																					<span class="input-group-addon input-sm "><i class="fa fa-lock"></i></span>
-																					<input id="sender_password" name="sender_password" class="form-control input-sm" type="text" placeholder="Password Email Sender" value="<?= ($mailsender_data['PASSWORDEMAIL']) ?>" maxlength="50"></input>
-																					<span class="input-group-addon input-sm "><i class="fa fa-eye"></i></span>
+																					<input id="sender_password" name="sender_password" class="form-control input-sm" type="password" placeholder="Password Email Sender" value="<?= ($mailsender_data['PASSWORDEMAIL']) ?>" maxlength="50"></input>
+																					<span toggle="#password-field" class="input-group-addon input-sm fa fa-eye-slash field_icon toggle-password"></span>
 																				</div>
 
 																			</td>

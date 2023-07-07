@@ -110,6 +110,17 @@
 					$('#shi_qty_outs').val(shiqty - csrqty);
 					//$("#shi_qty_outs").val(this.value);
 				});
+				// Show & Hide Password
+				$("body").on('click', '.toggle-password', function() {
+					$(this).toggleClass("fa-eye-slash fa-eye");
+					var input = $("#sender_password");
+					if (input.attr("type") === "password") {
+						input.attr("type", "text");
+					} else {
+						input.attr("type", "password");
+					}
+
+				});
 
 				//Autofill Mailsender
 				if ($('#smtpauth:checked').length) {
