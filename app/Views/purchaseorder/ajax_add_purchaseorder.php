@@ -28,21 +28,17 @@
                                     <label for="po_number">Select PO : </label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <select class="form-control input-sm select2 required" id="po_number" name="po_number" style="width:100%;" <?php if (!empty($po_number)) {
-                                                                                                                                                    echo 'disabled';
-                                                                                                                                                }
-                                                                                                                                                ?> ?>>
+                                    <select class="form-control input-sm select2 required" id="po_number" name="po_number" style="width:100%;">
                                         <option option value="">___ PO Number - PO Date - Description ___</option>
                                         <?php foreach ($posage_list as $data) :
                                             $po_date = substr($data['PODATE'], 4, 2) . "/" . substr($data['PODATE'], 6, 2) . "/" . substr($data['PODATE'], 0, 4);
                                         ?>
                                             <option value="<?= trim($data['PONUMBER'])
-                                                            ?>" <?php if ($po_number == trim($data['PONUMBER'])) {
-                                                                    echo "selected";
-                                                                } ?>><?= trim($data['PONUMBER'])
-                                                                        ?> - <?= $po_date . " - " . $data['DESCRIPTIO']
-                                                                                ?>
+                                                            ?>"><?= trim($data['PONUMBER'])
+                                                                ?> - <?= $po_date . " - " . $data['DESCRIPTIO']
+                                                                        ?>
                                             </option>
+
                                         <?php endforeach;
                                         ?>
                                     </select>

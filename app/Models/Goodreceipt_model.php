@@ -128,6 +128,16 @@ class Goodreceipt_model extends Model
         return $query->getResultArray();
     }
 
+    function get_po_l_item($pouniq, $itemno)
+    {
+        $query = $this->db->query("select a.*,d.POUNIQ,d.POLUNIQ
+        from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+		left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
+        left join webot_RCPL e on e.POUNIQ=d.POUNIQ and e.POLUNIQ=d.POLUNIQ
+        where d.POUNIQ='$pouniq' and d.ITEMNO='$itemno' and e.RCPUNIQ is NULL");
+        return $query->getRowArray();
+    }
+
 
     function get_rcpl_by_receipt($rcphseq, $contract)
     {
@@ -148,11 +158,24 @@ class Goodreceipt_model extends Model
         return $query->getRowArray();
     }
 
-    function get_rcpuniq_open($csruniq, $pouniq, $rcph_seq)
+    function get_rcpuniq_open($csruniq, $po_number, $rcp_number)
     {
-        $query = $this->db->query("select RCPUNIQ from webot_RECEIPTS where POSTINGSTAT =0 and CSRUNIQ='$csruniq' and POUNIQ='$pouniq' and RCPHSEQ='$rcph_seq'");
+        $query = $this->db->query("select DISTINCT a.RCPUNIQ,a.PONUMBER,a.RECPNUMBER,a.RCPKEY,COUNT(b.RCPUNIQ) as CHKRCPL from webot_RECEIPTS a
+        left join webot_RCPL b on b.RCPUNIQ=a.RCPUNIQ
+        where a.CSRUNIQ='$csruniq' and a.PONUMBER='$po_number' and a.RECPNUMBER='$rcp_number'
+        group by a.RCPUNIQ,a.PONUMBER,a.RECPNUMBER,a.RCPKEY");
         return $query->getRowArray();
     }
+
+    function get_rcp_open_by_id($rcpuniq)
+    {
+        $query = $this->db->query("select a.POUNIQ,a.POKEY,a.PODATE,a.PONUMBER,a.ETDDATE,a.CARGOREADINESSDATE,a.ORIGINCOUNTRY,a.POREMARKS, 
+        b.CSRUNIQ,b.CSRLUNIQ
+        from webot_PO a inner join webot_POL b on b.POUNIQ=a.POUNIQ
+        where a.RCPUNIQ='$rcpuniq'");
+        return $query->getResultArray();
+    }
+
 
     function get_goodreceipt_open($rcpuniq)
     {
@@ -164,6 +187,12 @@ class Goodreceipt_model extends Model
     function goodreceipt_insert($data)
     {
         $query = $this->db->table('webot_RECEIPTS')->insert($data);
+        return $query;
+    }
+
+    function rcpline_insert($datal)
+    {
+        $query = $this->db->table('webot_RCPL')->insertBatch($datal);
         return $query;
     }
 

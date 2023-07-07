@@ -110,6 +110,23 @@
 					$('#shi_qty_outs').val(shiqty - csrqty);
 					//$("#shi_qty_outs").val(this.value);
 				});
+
+				//Autofill Mailsender
+				if ($('#smtpauth:checked').length) {
+					$('#sender_password').attr('readonly', false); // On Load, should it be read only?
+				} else {
+					$('#sender_password').attr('readonly', true);
+				}
+
+				$('#smtpauth:checked').change(function() {
+					var passwd;
+					if ($('#smtpauth:checked').length) {
+						$('#sender_password').attr('readonly', false); //Not Checked - Read Only
+					} else {
+						passwd = $('******').val();
+						$('#sender_password').val(passwd).attr('readonly', true); //If Non checked - Normal
+					}
+				});
 			</script>
 			<?= session()->GET('success') == 0; ?>
 

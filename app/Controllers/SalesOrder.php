@@ -1059,6 +1059,7 @@ class SalesOrder extends BaseController
                         'sendername'       => $sender['SENDERNAME'],
                         'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                         'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                        'smtpauth'       => $sender['SMTPAUTH'],
                         'ssl'       => $sender['SSL'],
                         'smtpport'       => $sender['SMTPPORT'],
                         'to_email' => $sendto_user['EMAIL'],
@@ -1186,6 +1187,7 @@ class SalesOrder extends BaseController
                 'sendername'       => $sender['SENDERNAME'],
                 'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                 'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                'smtpauth'       => $sender['SMTPAUTH'],
                 'ssl'       => $sender['SSL'],
                 'smtpport'       => $sender['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
@@ -1242,7 +1244,7 @@ class SalesOrder extends BaseController
         endforeach;
         $this->SalesorderModel->csr_post_update($csruniq, $data2);
 
-        session()->set('success', '-9');
+        session()->set('success', '9');
         return redirect()->to(base_url('/salesorderlist'));
         session()->remove('success');
         //}
@@ -1255,6 +1257,7 @@ class SalesOrder extends BaseController
         $sendername         = $data_email['sendername'];
         $senderemail        = $data_email['senderemail'];
         $passwordemail      = $data_email['passwordemail'];
+        $smtpauth           = $data_email['smtpauth'];
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
@@ -1267,9 +1270,11 @@ class SalesOrder extends BaseController
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
             $mail->Host       = $hostname;
-            $mail->SMTPAuth   = true;
+            $mail->SMTPAuth   = $smtpauth;
             $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            if ($smtpauth == TRUE) :
+                $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            endif;
             $mail->SMTPSecure = $ssl;
             $mail->Port       = $smtpport;
 

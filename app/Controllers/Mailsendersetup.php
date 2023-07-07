@@ -94,6 +94,7 @@ class Mailsendersetup extends BaseController
     {
         $mailsender_data = $this->SetupModel->get_mailsender();
         $nav['act_tab'] = 1;
+
         $data = array(
             'mailsender_data' => $mailsender_data,
             'form_action' => base_url("mailsendersetup/update_mailsender"),
@@ -147,6 +148,7 @@ class Mailsendersetup extends BaseController
                 'HOSTNAME' => $this->request->getPost('sender_hostname'),
                 'SENDERNAME' => $this->request->getPost('sender_name'),
                 'SENDEREMAIL' => $this->request->getPost('sender_email'),
+                'SMTPAUTH' => $this->request->getPost('smtpauth'),
                 'PASSWORDEMAIL' => $this->request->getPost('sender_password'),
                 'SSL' => $this->request->getPost('sender_ssl'),
                 'SMTPPORT' => $this->request->getPost('sender_smtpport'),

@@ -544,6 +544,8 @@ class PurchaseOrder extends BaseController
                             'CSRLUNIQ' => $items['options']['csrluniq'],
                             'SERVICETYPE' => $items['options']['so_service'],
                             'ITEMNO' => $items['id'],
+                            'MATERIALNO' => $items['options']['material_no'],
+                            'ITEMDESC' => $items['options']['itemdesc'],
                             'STOCKUNIT' => $items['options']['so_uom'],
                             'QTY' => $items['qty'],
                         );
@@ -650,6 +652,7 @@ class PurchaseOrder extends BaseController
                                         'sendername'       => $sender['SENDERNAME'],
                                         'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                                         'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                        'smtpauth'       => $sender['SMTPAUTH'],
                                         'ssl'       => $sender['SSL'],
                                         'smtpport'       => $sender['SMTPPORT'],
                                         'to_email' => $sendto_user['EMAIL'],
@@ -877,6 +880,7 @@ class PurchaseOrder extends BaseController
                                 'sendername'       => $sender['SENDERNAME'],
                                 'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                                 'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'smtpauth'       => $sender['SMTPAUTH'],
                                 'ssl'       => $sender['SSL'],
                                 'smtpport'       => $sender['SMTPPORT'],
                                 'to_email' => $sendto_user['EMAIL'],
@@ -1077,6 +1081,7 @@ class PurchaseOrder extends BaseController
                                 'sendername'       => $sender['SENDERNAME'],
                                 'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                                 'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                'smtpauth'       => $sender['SMTPAUTH'],
                                 'ssl'       => $sender['SSL'],
                                 'smtpport'       => $sender['SMTPPORT'],
                                 'to_email' => $sendto_user['EMAIL'],
@@ -1222,6 +1227,7 @@ class PurchaseOrder extends BaseController
                     'sendername'       => $sender['SENDERNAME'],
                     'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                     'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                    'smtpauth'       => $sender['SMTPAUTH'],
                     'ssl'       => $sender['SSL'],
                     'smtpport'       => $sender['SMTPPORT'],
                     'to_email' => $sendto_user['EMAIL'],
@@ -1295,6 +1301,7 @@ class PurchaseOrder extends BaseController
         $sendername         = $data_email['sendername'];
         $senderemail        = $data_email['senderemail'];
         $passwordemail      = $data_email['passwordemail'];
+        $smtpauth           = $data_email['smtpauth'];
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
@@ -1307,9 +1314,11 @@ class PurchaseOrder extends BaseController
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
             $mail->Host       = $hostname;
-            $mail->SMTPAuth   = true;
+            $mail->SMTPAuth   = $smtpauth;
             $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            if ($smtpauth == TRUE) :
+                $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            endif;
             $mail->SMTPSecure = $ssl;
             $mail->Port       = $smtpport;
 

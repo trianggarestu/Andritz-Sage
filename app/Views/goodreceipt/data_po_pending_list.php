@@ -67,8 +67,7 @@
 																<th style="vertical-align: top;">Logistics Info</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
-																<th style="vertical-align: top;">Status</th>
-																<th style="vertical-align: top;">Good Receipt<br>Vendor<br>Description</th>
+																<th style="vertical-align: top;">Good Receipt Data</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -172,10 +171,10 @@
 																				<?php if (($rcp_list['RCPPOSTINGSTAT'] == 0) or (empty($rcp_list['RCPOFFLINESTAT']))) :
 																				?>
 																					<li>
-																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/1/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Choose Good Receipt & Posting</a>
+																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/1/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Add Good Receipt & Posting</a>
 																					</li>
 																					<li>
-																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/0/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Choose Good Receipt & Save</a>
+																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/0/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Add Good Receipt & Save</a>
 																					</li>
 
 																				<?php endif;
@@ -192,24 +191,61 @@
 																		</div>
 
 																	</td>
-																	<td style="vertical-align: top;"><?php $postingstat = $rcp_list['RCPPOSTINGSTAT'];
-																										switch ($postingstat) {
-																											case "0":
-																												echo "Open";
-																												break;
-																											case "1":
-																												echo "Posted";
-																												break;
-																											case "2":
-																												echo "Deleted";
-																												break;
-																											default:
-																												echo "";
-																										} ?></td>
-																	<td style="vertical-align: top;"><strong><a href=""><?= $rcp_list['RECPNUMBER']; ?></a></strong><br>
-																		<?= $rcp_list['DESCRIPTIO']; ?><br>
-																		<small>(<?= $rcp_list['VDNAME']; ?>)</small>
 
+																	<td style="vertical-align: top;"><?php if (is_array($grlist_data)) { ?>
+																			<div class="table-responsive">
+																				<table class="table table-bordered dataTable table-hover nowrap">
+
+																					<tbody>
+																						<?php
+																											$no_l = 0;
+
+																											foreach ($grlist_data as $grheader) :
+																												if ($rcp_list['POUNIQ'] == $grheader['POUNIQ']) :
+																													$gr_date = substr($grheader['RECPDATE'], 4, 2) . "/" . substr($grheader['RECPDATE'], 6, 2) . "/" . substr($grheader['RECPDATE'], 0, 4);
+
+																						?>
+																								<tr>
+																									<td style="width: 32%;"><?= trim($grheader['RECPNUMBER']) ?> <small>(<?= $gr_date ?>)</small></td>
+
+																									<td>
+																										<?php if ($grheader['RCPPOSTINGSTAT'] == 0) :
+																										?>
+
+																											<a href="<?= base_url("goodreceipt/update/" . $grheader['RCPUNIQ'] . '/1') ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat btn-info btn-sm">
+																												<i class="fa fa-check-square-o"></i> Update & Posting
+																											</a>
+
+																											<a href="<?= base_url("goodreceipt/update/" . $grheader['RCPUNIQ'] . '/0') ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social bg-yellow btn-flat btn-sm">
+																												<i class="fa fa-edit"></i> Update & Save
+																											</a>
+																											<a href="" data-href="<?= base_url("goodreceipt/delete/" . $grheader['RCPUNIQ']) ?>" class="btn bg-red btn-flat btn-sm" title="Delete Data" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+																										<?php
+																													endif;
+																										?>
+
+
+																										<?php if ($grheader['RCPPOSTINGSTAT'] == 1 and $grheader['RCPOFFLINESTAT'] == 1) :
+																										?>
+																											<a href="<?= base_url("purchaseorder/sendnotif/" . $grheader['RCPUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm 
+																											" title="Sending Notif Manually">
+																												<i class="fa fa-send-o"></i>Send Notif
+																											</a>
+																										<?php
+																													endif;
+																										?>
+																									</td>
+																								</tr>
+
+																						<?php
+																												endif;
+																											endforeach;
+
+																						?>
+																					</tbody>
+																				</table>
+																			</div>
+																		<?php } ?>
 
 																	</td>
 																</tr>
@@ -281,6 +317,7 @@
 																						<th class="padat">Status</th>
 																						<th>Last <br>G/R Date</th>
 																						<th>G/R Qty</th>
+																						<th>G/R Status</th>
 																					</tr>
 																				</thead>
 																				<tbody>
@@ -291,12 +328,42 @@
 																							if (empty($items['L_RECPDATE'])) {
 																								$l_rcpdate = '';
 																							} else {
-																								$l_rcpdate = substr($items['L_RECPDATE'], 6, 2) . "/" . substr($items['L_RECPDATE'], 4, 2) . "/" . substr($items['L_RECPDATE'], 0, 4);
+																								$l_rcpdate = substr($items['L_RECPDATE'], 4, 2) . "/" . substr($items['L_RECPDATE'], 6, 2) . "/" . substr($items['L_RECPDATE'], 0, 4);
 																							}
 																					?>
 																							<tr>
 
 																								<td class="text-center" style="width: 10%;">
+																									<?php
+
+																									$postingstat = $rcp_list['RCPPOSTINGSTAT'] . $rcp_list['RCPOFFLINESTAT'];
+																									switch ($postingstat) {
+																										case "00":
+																											echo "<span class='label label-default'>Open</span>";
+																											break;
+																										case "11":
+																											echo "<span class='label label-warning'>Posted Pending Notif</span>";
+																											break;
+																										case "10":
+																											echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																											break;
+																										case "20":
+																											echo "<span class='label label-danger'>Deleted</span>";
+																											break;
+																										case "21":
+																											echo "<span class='label label-danger'>Deleted</span>";
+																											break;
+																										default:
+																											echo "<span class='label label-default'>Open</span>";
+																									}
+																									?>
+																								</td>
+																								<td><?= $l_rcpdate
+																									?></td>
+
+																								<td><?= number_format($items['S_QTYRCP'], 0, ",", ".")
+																									?></td>
+																								<td>
 																									<?php
 																									if ($items['S_QTYRCP'] == 0) {
 																										echo "<span class='label label-danger'>Pending</span>";
@@ -309,11 +376,6 @@
 
 																									?>
 																								</td>
-																								<td><?= $l_rcpdate
-																									?></td>
-
-																								<td><?= number_format($items['S_QTYRCP'], 0, ",", ".")
-																									?></td>
 
 
 

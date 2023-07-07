@@ -172,8 +172,14 @@ class GoodReceipt extends BaseController
         $reqdate = substr($getpodata['CRMREQDATE'], 4, 2) . '/' . substr($getpodata['CRMREQDATE'], 6, 2) . '/' . substr($getpodata['CRMREQDATE'], 0, 4);
         $podate = substr($getpodata['PODATE'], 4, 2) . '/' . substr($getpodata['PODATE'], 6, 2) . '/' . substr($getpodata['PODATE'], 0, 4);
         $etaportdate = substr($getpodata['ETAPORTDATE'], 4, 2) . '/' . substr($getpodata['ETAPORTDATE'], 6, 2) . '/' . substr($getpodata['ETAPORTDATE'], 0, 4);
-        $button_text = 'Save';
+
         $act = 'goodreceipt/insert_action';
+        if ($post_stat == 0) {
+            $button_text = 'Save';
+        } else {
+            $button_text = 'Save & Posting';
+        }
+
 
         if (!empty(session()->get('sage_rcphseq'))) {
             $getrcpdata = $this->GoodreceiptModel->get_receipt_sage_by_id(session()->get('sage_rcphseq'));
@@ -242,6 +248,7 @@ class GoodReceipt extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
+
     public function form_select_goodreceipt($po_uniq, $post_stat, $delgrline)
     {
         $getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($po_uniq);
@@ -280,9 +287,10 @@ class GoodReceipt extends BaseController
     }
 
 
-    public function form_update_item($po_uniq, $post_stat, $rowid, $qty, $delgrline)
+    public function form_update_item($po_uniq, $post_stat, $rowid, $itemno, $delgrline)
     {
         //$getpodata = $this->GoodreceiptModel->get_po_pending_by_pouniq($po_uniq);
+        $poitem = $this->GoodreceiptModel->get_po_l_item($po_uniq, $itemno);
         $data = array(
             'form_action' => base_url("goodreceipt/chooseitem"),
             'po_uniq' => $po_uniq,
@@ -290,7 +298,15 @@ class GoodReceipt extends BaseController
             'delgrline' => $delgrline,
             'rcphseq' => '',
             'rowid' => $rowid,
-            'qty' => number_format($qty, 0, ",", "."),
+            'csr_uniq' => $poitem['CSRUNIQ'],
+            'csrl_uniq' => $poitem['CSRLUNIQ'],
+            'pol_uniq' => $poitem['POLUNIQ'],
+            'itemno' => $itemno,
+            'material_no' => $poitem['MATERIALNO'],
+            'itemdesc' => $poitem['ITEMDESC'],
+            'service_type' => $poitem['SERVICETYPE'],
+            'uom' => $poitem['STOCKUNIT'],
+            'gr_qty' => number_format($poitem['QTY'], 0, ",", "."),
             'select_item' => '',
         );
 
@@ -305,17 +321,26 @@ class GoodReceipt extends BaseController
             $row_id = "Item not found";
         } else {
             $row_id = $this->request->getPost('row_id');
+            $service_type = $this->request->getPost('service_type');
+            $inventory_no = $this->request->getPost('inventory_no');
+            $material_no = $this->request->getPost('material_no');
+            $itemdesc = $this->request->getPost('itemdesc');
+            $uom = $this->request->getPost('uom');
             $gr_qty = $this->request->getPost('gr_qty');
+            $csr_uniq = $this->request->getPost('csr_uniq');
+            $csrl_uniq = $this->request->getPost('csrl_uniq');
             $po_uniq = $this->request->getPost('po_uniq');
+            $pol_uniq = $this->request->getPost('pol_uniq');
             $post_stat = $this->request->getPost('post_stat');
             $delgrline = $this->request->getPost('delgrline');
             // data option harus di bawa
             $this->cart->update(array(
                 'rowid'   => $row_id,
+                'id'      => $inventory_no,
                 'qty'     => '1',
                 'price'   => '1',
                 'name'    => 'Item Description Sage',
-                'options' => array('so_service' => '', 'material_no' => '', 'itemdesc' => '', 'so_qty' => $gr_qty, 'so_uom' => '', 'csruniq' => '', 'csrluniq' => '', 'pouniq' => '', 'poluniq' => '')
+                'options' => array('so_service' => $service_type, 'material_no' => $material_no, 'itemdesc' => $itemdesc, 'so_qty' => $gr_qty, 'so_uom' => $uom, 'csruniq' => $csr_uniq, 'csrluniq' => $csrl_uniq, 'pouniq' => $po_uniq, 'poluniq' => $pol_uniq)
             ));
         }
 
@@ -334,31 +359,28 @@ class GoodReceipt extends BaseController
 
     public function insert_action()
     {
+        $po_uniq = $this->request->getPost('po_uniq');
+        $rcp_number = $this->request->getPost('rcp_number');
+        $post_stat = $this->request->getPost('post_stat');
+        $delgrline = $this->request->getPost('delgrline');
         if (!$this->validate([
             'rcp_number' => 'required',
             'rcp_date' => 'required',
             'vd_name' => 'required',
             'rcp_desc' => 'required',
-            'rcp_item_no' => 'required',
-            'item_desc' => 'required',
-            'qty_rcp' => 'required|numeric|greater_than[0]',
-            'rcp_unit' => 'required',
 
         ])) {
-            $po_uniq = $this->request->getPost('po_uniq');
-            $rcph_seq = $this->request->getPost('rcph_seq');
-            $rcpl_seq = $this->request->getPost('rcpl_seq');
-            $rcp_number = $this->request->getPost('rcp_number');
-            $item_no = $this->request->getPost('rcp_item_no');
-            if (($rcp_number == "") and ($item_no == "")) {
+
+
+            if (($rcp_number == "")) {
                 session()->set('success', '-1');
-                return redirect()->to(base_url('/goodreceipt/update/' . $po_uniq))->withInput();
-            } else if (($rcp_number <> "") and ($item_no == "")) {
+                return redirect()->to(base_url('/goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline))->withInput();
+            } else if (($rcp_number <> "")) {
                 session()->set('success', '-1');
-                return redirect()->to(base_url('/goodreceipt/selectgoodreceipt/' . $po_uniq . '/' . $rcph_seq))->withInput();
-            } else if (($rcp_number <> "") and ($item_no <> "")) {
+                return redirect()->to(base_url('/goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline))->withInput();
+            } else if (($rcp_number <> "")) {
                 session()->set('success', '-1');
-                return redirect()->to(base_url('/goodreceipt/selectgoodreceiptline/' . $po_uniq . '/' . $rcph_seq . '/' . $rcpl_seq))->withInput();
+                return redirect()->to(base_url('/goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline))->withInput();
                 //return redirect()->back()->withInput();
             }
 
@@ -372,12 +394,8 @@ class GoodReceipt extends BaseController
             $rcpl_seq = $this->request->getPost('rcpl_seq');
             $rcp_date = $this->request->getPost('rcp_date');
             $rcp_date = substr($rcp_date, 6, 4)  . "" . substr($rcp_date, 0, 2) . "" . substr($rcp_date, 3, 2);
-            if ($this->request->getPost('csr_qty') == $this->request->getPost('qty_rcp')) {
-                $gr_status = 1;
-            } else {
-                $gr_status = 0;
-            }
-
+            $po_number = $this->request->getPost('po_number');
+            $rcp_number = $this->request->getPost('rcp_number');
             $groupuser = 6;
 
             $data = array(
@@ -385,35 +403,262 @@ class GoodReceipt extends BaseController
                 'AUDTTIME' => $this->audtuser['AUDTTIME'],
                 'AUDTUSER' => $this->audtuser['AUDTUSER'],
                 'AUDTORG' => $this->audtuser['AUDTORG'],
-                'CSRUNIQ' => $this->request->getPost('csr_uniq'),
+                'CSRUNIQ' => $csruniq,
                 'POUNIQ' => $this->request->getPost('po_uniq'),
-                'PONUMBER' => $this->request->getPost('po_number'),
+                'PONUMBER' => $po_number,
+                'RCPKEY' => $csruniq . '-' . trim($po_number) . '-' . trim($rcp_number),
                 'RCPHSEQ' => $this->request->getPost('rcph_seq'),
                 'RECPNUMBER' => $this->request->getPost('rcp_number'),
                 'RECPDATE' => $rcp_date,
                 'VDNAME' => $this->request->getPost('vd_name'),
                 'DESCRIPTIO' => $this->request->getPost('rcp_desc'),
-                'RECPITEMNO' => $this->request->getPost('rcp_item_no'),
-                'ITEMDESC' => $this->request->getPost('item_desc'),
-                'RECPQTY' => $this->request->getPost('qty_rcp'),
-                'RECPUNIT' => $this->request->getPost('rcp_unit'),
-                'GRSTATUS' => $gr_status,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => 0,
                 'OFFLINESTAT' => 1,
             );
 
-            //print_r($data_notif);
-            $receipt_insert = $this->GoodreceiptModel->goodreceipt_insert($data);
 
-            $csruniq = $this->request->getPost('csr_uniq');
-            $pouniq = $this->request->getPost('po_uniq');
-            $rcpno = $this->request->getPost('rcp_number');
-            $rcpl_seq = $this->request->getPost('rcpl_seq');
-            $getrcpuniq = $this->GoodreceiptModel->get_rcpuniq_open($csruniq, $pouniq, $rcph_seq, $rcpl_seq);
-            //session()->setFlashdata('messageerror', 'Create Record Failed');
+
+            // Check Sampai Disini
+            $getrcpuniq = $this->GoodreceiptModel->get_rcpuniq_open($csruniq, $po_number, $rcp_number);
+            if (!empty($getrcpuniq['RCPKEY']) and $getrcpuniq['CHKRCPL'] > 0 and $getrcpuniq['RCPKEY'] == $csruniq . '-' . $po_number . '-' . $rcp_number) {
+                session()->set('success', '-1');
+                return redirect()->to(base_url('/goodreceipt/add/' . $po_uniq . '/' . $post_stat . '/' . $delgrline));
+                session()->remove('success');
+            } else if (!empty($getrcpuniq['RCPKEY']) and $getrcpuniq['CHKRCPL'] == 0 and $getrcpuniq['RCPKEY'] == $csruniq . '-' . $po_number . '-' . $rcp_number) {
+
+                foreach ($this->cart->contents() as $items) :
+                    $datal = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => trim($this->audtuser['AUDTUSER']),
+                        'AUDTORG' => trim($this->audtuser['AUDTORG']),
+                        'RCPUNIQ' => $getrcpuniq['RCPUNIQ'],
+                        'CSRUNIQ' => $items['options']['csruniq'],
+                        'CSRLUNIQ' => $items['options']['csrluniq'],
+                        'POUNIQ' => $items['options']['pouniq'],
+                        'POLUNIQ' => $items['options']['poluniq'],
+                        'SERVICETYPE' => $items['options']['so_service'],
+                        'ITEMNO' => $items['id'],
+                        'MATERIALNO' => $items['options']['material_no'],
+                        'ITEMDESC' => $items['options']['itemdesc'],
+                        'STOCKUNIT' => $items['options']['so_uom'],
+                        'QTY' => $items['options']['so_qty'],
+                    );
+                    $rcpl_insert = $this->GoodreceiptModel->rcpline_insert($datal);
+                endforeach;
+                if ($rcpl_insert) {
+                    $this->cart->destroy();
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('goodreceipt'));
+                    session()->remove('success');
+                }
+            } else if (empty($getrcpuniq['RCPKEY'])) {
+                $receipt_insert = $this->GoodreceiptModel->goodreceipt_insert($data);
+                if ($receipt_insert) {
+                    $getrcpuniq = $this->GoodreceiptModel->get_rcpuniq_open($csruniq, $po_number, $rcp_number);
+                    $rcpuniq = $getrcpuniq['RCPUNIQ'];
+                    foreach ($this->cart->contents() as $items) :
+                        $datal = array(
+                            'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                            'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                            'AUDTUSER' => trim($this->audtuser['AUDTUSER']),
+                            'AUDTORG' => trim($this->audtuser['AUDTORG']),
+                            'RCPUNIQ' => $getrcpuniq['RCPUNIQ'],
+                            'CSRUNIQ' => $items['options']['csruniq'],
+                            'CSRLUNIQ' => $items['options']['csrluniq'],
+                            'POUNIQ' => $items['options']['pouniq'],
+                            'POLUNIQ' => $items['options']['poluniq'],
+                            'SERVICETYPE' => $items['options']['so_service'],
+                            'ITEMNO' => $items['id'],
+                            'MATERIALNO' => $items['options']['material_no'],
+                            'ITEMDESC' => $items['options']['itemdesc'],
+                            'STOCKUNIT' => $items['options']['so_uom'],
+                            'QTY' => $items['options']['so_qty'],
+                        );
+
+                        $rcpl_insert = $this->GoodreceiptModel->rcpline_insert($datal);
+                    endforeach;
+
+                    $this->cart->destroy();
+
+
+                    // Jika Posting (Check Sampai Sini)
+                    if ($post_stat == 1) {
+                        $getrcpuniq = $this->GoodreceiptModel->get_rcpuniq_open($csruniq, $po_number, $rcp_number);
+                        $rcpuniq = $getrcpuniq['RCPUNIQ'];
+                        $rcp_to_ot = $this->GoodreceiptModel->get_rcp_open_by_id($rcpuniq);
+                        foreach ($rcp_to_ot as $data_pol) :
+                            $csrluniq = $data_pol['CSRLUNIQ'];
+
+                            $podate = substr($data_pol['PODATE'], 4, 2) . "/" . substr($data_pol['PODATE'], 6, 2) . "/" . substr($data_pol['PODATE'], 0, 4);
+                            $podate2 = date_create(substr($data_pol['PODATE'], 4, 2) . "/" . substr($data_pol['PODATE'], 6, 2) . "/" . substr($data_pol['PODATE'], 0, 4));
+                            $pocust_date = date_create(substr($get_pr['PODATECUST'], 4, 2) . "/" . substr($get_pr['PODATECUST'], 6, 2) . "/" .  substr($get_pr['PODATECUST'], 0, 4));
+                            $pocusttopodiff = date_diff($podate2, $pocust_date);
+                            $pocusttopodiff = $pocusttopodiff->format("%a");
+                            $data2 = array(
+                                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                                'AUDTORG' => $this->audtuser['AUDTORG'],
+                                'PODATE' => $data_pol["PODATE"],
+                                'PONUMBER' => $data_pol["PONUMBER"],
+                                'ETDDATE' => $data_pol["ETDDATE"],
+                                'CARGOREADINESSDATE' => $n_cargoreadiness_date,
+                                'ORIGINCOUNTRY' => $data_pol["ORIGINCOUNTRY"],
+                                'POREMARKS' => $data_pol["POREMARKS"],
+                                'POTOPODAYS' => $pocusttopodiff,
+                            );
+
+                            $this->PurchaseorderModel->ot_purchaseorder_update($id_so, $csrluniq, $data2);
+
+                        endforeach;
+
+                        // for check complete input
+                        $chk_ponumber = $this->request->getPost('po_number');
+                        $chk_etd_date = $this->request->getPost('etd_date');
+                        $chk_cargoreadiness_date = $this->request->getPost('cargoreadiness_date');
+                        $chk_origin_country = $this->request->getPost('origin_country');
+                        $chk_po_remarks = $this->request->getPost('po_remarks');
+                        if (!empty($chk_ponumber) and !empty($chk_etd_date) and !empty($chk_cargoreadiness_date) and !empty($chk_origin_country) and !empty($chk_po_remarks)) {
+
+                            $get_po_data = $this->PurchaseorderModel->get_pojoincsr_by_po($pouniq);
+                            $crmpodate = substr($get_po_data['PODATECUST'], 4, 2) . "/" . substr($get_po_data['PODATECUST'], 6, 2) . "/" .  substr($get_po_data['PODATECUST'], 0, 4);
+                            $crmreqdate = substr($get_po_data['CRMREQDATE'], 4, 2) . '/' . substr($get_po_data['CRMREQDATE'], 6, 2) . '/' . substr($get_po_data['CRMREQDATE'], 0, 4);
+                            $rqndate = substr($get_po_data['RQNDATE'], 4, 2) . "/" . substr($get_po_data['RQNDATE'], 6, 2) . "/" .  substr($get_po_data['RQNDATE'], 0, 4);
+                            $povendordate = substr($get_po_data['PODATE'], 4, 2) . "/" . substr($get_po_data['PODATE'], 6, 2) . "/" .  substr($get_po_data['PODATE'], 0, 4);
+                            $etddate = substr($get_po_data['ETDDATE'], 4, 2) . "/" . substr($get_po_data['ETDDATE'], 6, 2) . "/" .  substr($get_po_data['ETDDATE'], 0, 4);
+                            $cargoreadinessdate = substr($get_po_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_po_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_po_data['CARGOREADINESSDATE'], 0, 4);
+
+                            if ($sender['OFFLINESTAT'] == 0) {
+                                //Untuk Update Status Posting PO
+                                $data3 = array(
+                                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                                    'POSTINGSTAT' => 1,
+                                    'OFFLINESTAT' => 0,
+                                );
+                                //inisiasi proses kirim ke group
+                                $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                                $mail_tmpl = $this->NotifModel->get_template($groupuser);
+                                foreach ($notiftouser_data as $sendto_user) :
+                                    $var_email = array(
+                                        'TONAME' => $sendto_user['NAME'],
+                                        'FROMNAME' => $this->audtuser['NAMELGN'],
+                                        'CONTRACT' => $get_po_data['CONTRACT'],
+                                        'CTDESC' => $get_po_data['CTDESC'],
+                                        'PROJECT' => $get_po_data['PROJECT'],
+                                        'PRJDESC' => $get_po_data['PRJDESC'],
+                                        'CUSTOMER' => $get_po_data['CUSTOMER'],
+                                        'NAMECUST' => $get_po_data['NAMECUST'],
+                                        'PONUMBERCUST' => $get_po_data['PONUMBERCUST'],
+                                        'PODATECUST' => $crmpodate,
+                                        'CRMNO' => $get_po_data['CRMNO'],
+                                        'REQDATE' => $crmreqdate,
+                                        'ORDERDESC' => $get_po_data['ORDERDESC'],
+                                        'REMARKS' => $get_po_data['CRMREMARKS'],
+                                        'SALESCODE' => $get_po_data['MANAGER'],
+                                        'SALESPERSON' => $get_po_data['SALESNAME'],
+                                        'RQNDATE' => $rqndate,
+                                        'RQNNUMBER' => $get_po_data['RQNNUMBER'],
+                                        //DATA VARIABLE PO
+                                        'PODATE' => $povendordate,
+                                        'PONUMBER' => $get_po_data['PONUMBER'],
+                                        'ETDDATE' => $etddate,
+                                        'CARGOREADINESSDATE' => $cargoreadinessdate,
+                                        'ORIGINCOUNTRY' => $get_po_data['ORIGINCOUNTRY'],
+                                        'POREMARKS' => $get_po_data['POREMARKS'],
+                                    );
+                                    $subject = $mail_tmpl['SUBJECT_MAIL'];
+                                    $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
+                                    $data_email = array(
+                                        'hostname'       => $sender['HOSTNAME'],
+                                        'sendername'       => $sender['SENDERNAME'],
+                                        'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                        'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                        'ssl'       => $sender['SSL'],
+                                        'smtpport'       => $sender['SMTPPORT'],
+                                        'to_email' => $sendto_user['EMAIL'],
+                                        'subject' =>  $subject,
+                                        'message' => $message,
+                                    );
+
+
+                                    $data_notif = array(
+                                        'MAILKEY' => $groupuser . '-' . $get_po_data['POUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                                        'FROM_USER' => $this->header_data['usernamelgn'],
+                                        'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                        'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                        'TO_USER' => $sendto_user['USERNAME'],
+                                        'TO_EMAIL' => $sendto_user['EMAIL'],
+                                        'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                        'SUBJECT' => $subject,
+                                        'MESSAGE' => $message,
+                                        'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                        'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                        'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                        'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                        'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                        'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                        'IS_READ' => 0,
+                                        'IS_ARCHIVED' => 0,
+                                        'IS_TRASHED' => 0,
+                                        'IS_DELETED' => 0,
+                                        'IS_ATTACHED' => 0,
+                                        'IS_STAR' => 0,
+                                        'IS_READSENDER' => 1,
+                                        'IS_ARCHIVEDSENDER' => 0,
+                                        'IS_TRASHEDSENDER' => 0,
+                                        'IS_DELETEDSENDER' => 0,
+                                        'SENDING_STATUS' => 1,
+                                        'OTPROCESS' => $groupuser,
+                                        'UNIQPROCESS' => $get_po_data['POUNIQ'],
+                                    );
+
+                                    //Check Duplicate Entry & Sending Mail
+                                    $touser = trim($sendto_user['USERNAME']);
+                                    $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_po_data['POUNIQ'], $touser);
+                                    if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_po_data['POUNIQ'] . '-' . $touser) {
+                                        session()->set('success', '-1');
+                                        return redirect()->to(base_url('/purchaseorder'));
+                                        session()->remove('success');
+                                    } else if (empty($getmailuniq['MAILKEY'])) {
+                                        $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                                        if ($post_email) {
+                                            $sending_mail = $this->send($data_email);
+                                        }
+                                    }
+
+                                endforeach;
+
+                                $this->PurchaseorderModel->po_post_update($get_po_data['POUNIQ'], $data3);
+                                session()->set('success', '1');
+                                return redirect()->to(base_url('/purchaseorderlist'));
+                                session()->remove('success');
+                            } else {
+                                $data3 = array(
+                                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                                    'POSTINGSTAT' => 1,
+                                    'OFFLINESTAT' => 1,
+                                );
+                                $this->PurchaseorderModel->po_post_update($get_po_data['POUNIQ'], $data3);
+                                //session()->setFlashdata('messageerror', 'Create Record Failed');
+                                session()->set('success', '1');
+                                return redirect()->to(base_url('/purchaseorderlist'));
+                                session()->remove('success');
+                            }
+                        }
+                    }
+                }
+            }
             session()->set('success', '1');
-            return redirect()->to(base_url('/goodreceipt/gropenview/' . $getrcpuniq['RCPUNIQ']));
+            return redirect()->to(base_url('/goodreceipt'));
             session()->remove('success');
         }
     }
