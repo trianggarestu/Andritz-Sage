@@ -120,7 +120,7 @@ class Administration_model extends Model
 
     function get_csr_post($csruniq)
     {
-        $query = $this->db->query("select a.* from webot_CSR a where a.POSTINGSTAT =1 and a.CSRUNIQ='$csruniq'");
+        $query = $this->db->query("select a.* from webot_CSR a where a.POSTINGSTAT=1 and a.CSRUNIQ='$csruniq'");
         return $query->getRowArray();
     }
 
@@ -140,7 +140,7 @@ class Administration_model extends Model
                 left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
                 left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ
                 left join webot_LOGISTICS d on d.POUNIQ=a.POUNIQ
-                where a.POSTINGSTAT = 1 and a.POUNIQ='$pouniq'");
+                where a.POSTINGSTAT =1 and a.POUNIQ='$pouniq'");
 
         return $query->getRowArray();
     }
@@ -152,7 +152,27 @@ class Administration_model extends Model
         left join webot_REQUISITION c on c.RQNUNIQ = a.RQNUNIQ and c.CSRUNIQ = b.CSRUNIQ
         left join webot_POL d on d.POUNIQ = a.POUNIQ 
         left join webot_CSRL e on e.ITEMNO = d.ITEMNO and e.CSRUNIQ = d.CSRUNIQ
-        where a.POSTINGSTAT <>2 and a.POUNIQ='$pouniq'");
+        where a.POSTINGSTAT =1 and a.POUNIQ='$pouniq'");
+        return $query->getResultArray();
+    }
+
+    function get_rcp_post($rcpuniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.*,e.*,
+        d.LOGUNIQ,d.ETDORIGINDATE,d.ATDORIGINDATE,d.ETAPORTDATE,d.PIBDATE,d.VENDSHISTATUS,d.LOGREMARKS
+        from webot_RECEIPTS a 
+                left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+                left join webot_REQUISITION c on c.CSRUNIQ = b.CSRUNIQ
+                left join webot_LOGISTICS d on d.POUNIQ=a.POUNIQ
+				 left join webot_PO e on e.POUNIQ=a.POUNIQ
+                where a.POSTINGSTAT = 1 and a.RCPUNIQ='$rcpuniq'");
+
+        return $query->getRowArray();
+    }
+
+    function get_rcpl_post($rcpuniq)
+    {
+        $query = $this->db->query("select a.* from webot_RCPL a where a.RCPUNIQ='$rcpuniq'");
         return $query->getResultArray();
     }
 }

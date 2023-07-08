@@ -1,12 +1,12 @@
 <p>Hello <?= ucwords(strtolower($TONAME)) ?>,</p><Br>
-<p>Please to follow up Good Receipt Number : <strong><?= $RECPNUMBER ?></strong>, G/R Date :<small><?= $RECPDATE ?></small>
+<p>Please to follow up Good Receipt Number : <strong><?= trim($RECPNUMBER) ?></strong>, Receipt Date : <small><?= $RECPDATE ?></small>
     is pending for you to process Delivery Team.
 </p>
 <small>
     <p>
-        PO Number : <strong><?= $PONUMBER ?></strong><br>
-        Receipt Number :<strong><?= $RECPNUMBER ?></strong><br>
-        Receipt Date : <?= $RECPDATE ?><br>
+        PO Number : <strong><?= trim($PONUMBER) ?></strong><br>
+        Vendor Name : <?= trim($VDNAME) ?><br>
+        Description : <?= trim($DESCRIPTIO) ?><br>
         <hr>
     </p>
 </small>

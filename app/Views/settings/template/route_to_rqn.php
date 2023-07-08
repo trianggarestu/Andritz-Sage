@@ -1,10 +1,12 @@
-<p>Hello <?= $TONAME ?>,</p><Br><br>
+<p>Hello <?= $TONAME ?>,</p><Br>
 <p>Please to follow up CRM No : <strong><?= $CRMNO ?></strong> / Customer PO : <strong><?= $PONUMBERCUST ?></strong>(<?= $PODATECUST ?>) from <?= $NAMECUST ?><small>(<?= $CUSTOMER ?>)</small>
     is pending for you to request PR/PO.
 </p>
 <small>
     <p>Contract : <?= $CONTRACT ?>-<?= $CTDESC ?><br>
-        Sales Person : <?= $SALESPERSON ?><br><br>
+        Project : <?= $PROJECT ?>-<?= $PRJDESC ?><br>
+        Sales Person : <?= $SALESPERSON ?><br>
+        Customer Req. Date : <?= $REQDATE ?><br>
     </p>
 </small>
 <p>You can access Order Tracking System Portal via the URL below:

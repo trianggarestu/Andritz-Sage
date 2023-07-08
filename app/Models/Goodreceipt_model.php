@@ -27,12 +27,17 @@ class Goodreceipt_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
-        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        grcpl.RCPPOSTINGSTAT,grcpl.RCPOFFLINESTAT
         from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
 		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+		left join (	select POUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as QTYPO from webot_POL
+		group by POUNIQ) gpol on gpol.POUNIQ=a.POUNIQ
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
-        where (a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)");
+		left join (select x.POUNIQ,COUNT(ITEMNO) as ROWITEMRCP,sum(QTY) as QTYRCP,MIN(y.POSTINGSTAT) as RCPPOSTINGSTAT,MAX(y.OFFLINESTAT) as RCPOFFLINESTAT,COUNT( DISTINCT y.POSTINGSTAT) as CTPOSTINGSTATRCPPOST 
+		from webot_RCPL x inner join webot_RECEIPTS y on y.RCPUNIQ=x.RCPUNIQ
+		group by x.POUNIQ) grcpl on grcpl.POUNIQ=a.POUNIQ
+        where (a.POSTINGSTAT=1 and grcpl.POUNIQ IS NULL) or (a.POSTINGSTAT=1 and grcpl.RCPPOSTINGSTAT=0) or (grcpl.RCPPOSTINGSTAT=1 and grcpl.RCPOFFLINESTAT=1)
+		or (gpol.QTYPO<>grcpl.QTYRCP)");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
@@ -53,7 +58,8 @@ class Goodreceipt_model extends Model
     function get_pol_list_post()
     {
         $query = $this->db->query("select a.*,c.SERVICETYPE,c.MATERIALNO,c.ITEMDESC,
-        (select top 1 RECPDATE from webot_RECEIPTS where POUNIQ=b.POUNIQ order by RECPDATE desc) as L_RECPDATE,isnull(d.S_QTYRCP,0) as S_QTYRCP
+        (select top 1 x.RECPDATE from webot_RECEIPTS x inner join webot_RCPL y on y.POUNIQ=d.POUNIQ and y.POLUNIQ=d.POLUNIQ
+		order by RECPDATE desc) as L_RECPDATE,isnull(d.S_QTYRCP,0) as S_QTYRCP
         from webot_POL a
 		inner join webot_PO b on b.POUNIQ=a.POUNIQ
 		left join webot_CSRL c on c.CSRUNIQ=a.CSRUNIQ and c.CSRLUNIQ=a.CSRLUNIQ
@@ -69,11 +75,14 @@ class Goodreceipt_model extends Model
 
     function get_po_l_by_id($pouniq)
     {
-        $query = $this->db->query("select a.*,d.POUNIQ,d.POLUNIQ
-        from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-		left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
-        left join webot_RCPL e on e.POUNIQ=d.POUNIQ and e.POLUNIQ=d.POLUNIQ
-        where d.POUNIQ='$pouniq' and e.RCPUNIQ is NULL");
+        $query = $this->db->query("select * from (
+            select a.CSRUNIQ,a.CSRLUNIQ,a.SERVICETYPE,a.ITEMNO,a.MATERIALNO,a.ITEMDESC,a.STOCKUNIT,a.QTY,d.POUNIQ,d.POLUNIQ,isnull(sum(e.QTY),0) as S_QTYRCP,(a.QTY-isnull(sum(e.QTY),0)) as QTYRCP_OUTS
+                    from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+                    left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
+                    left join webot_RCPL e on e.POUNIQ=d.POUNIQ and e.POLUNIQ=d.POLUNIQ
+                    where d.POUNIQ='$pouniq'
+                    group by a.CSRUNIQ,a.CSRLUNIQ,a.SERVICETYPE,a.ITEMNO,a.MATERIALNO,a.ITEMDESC,a.STOCKUNIT,a.QTY,d.POUNIQ,d.POLUNIQ) polforrcpl 
+                    where polforrcpl.QTYRCP_OUTS>0");
         return $query->getResultArray();
     }
 
@@ -82,15 +91,19 @@ class Goodreceipt_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
-        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        grcpl.RCPPOSTINGSTAT,grcpl.RCPOFFLINESTAT
         from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
 		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+		left join (	select POUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as QTYPO from webot_POL
+		group by POUNIQ) gpol on gpol.POUNIQ=a.POUNIQ
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
-        where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
+		left join (select x.POUNIQ,COUNT(ITEMNO) as ROWITEMRCP,sum(QTY) as QTYRCP,MIN(y.POSTINGSTAT) as RCPPOSTINGSTAT,MAX(y.OFFLINESTAT) as RCPOFFLINESTAT,COUNT( DISTINCT y.POSTINGSTAT) as CTPOSTINGSTATRCPPOST 
+		from webot_RCPL x inner join webot_RECEIPTS y on y.RCPUNIQ=x.RCPUNIQ
+		group by x.POUNIQ) grcpl on grcpl.POUNIQ=a.POUNIQ
+        where ((a.POSTINGSTAT=1 and grcpl.POUNIQ IS NULL) or (a.POSTINGSTAT=1 and grcpl.RCPPOSTINGSTAT=0) or (grcpl.RCPPOSTINGSTAT=1 and grcpl.RCPOFFLINESTAT=1)
+		or (gpol.QTYPO<>grcpl.QTYRCP))
         and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.PONUMBER like '%$keyword%'
-        or a.VENDSHISTATUS like '%$keyword%' or c.RECPNUMBER like '%$keyword%' or c.DESCRIPTIO like '%$keyword%' or c.VDNAME like '%$keyword%')");
+        or a.PONUMBER like '%$keyword%' or a.VENDSHISTATUS like '%$keyword%')");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
     }
@@ -98,12 +111,18 @@ class Goodreceipt_model extends Model
     function get_po_pending_by_pouniq($pouniq)
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,b.EMAIL1CUST,
-        " . 'b."CONTRACT"' . ",b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
-        c.RCPUNIQ,c.RCPHSEQ,c.RECPNUMBER,c.RECPDATE,c.VDNAME,c.DESCRIPTIO,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
-        from (select x.*,y.PODATE,y.ORIGINCOUNTRY from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+        b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
+        c.RCPUNIQ,c.RECPNUMBER,c.RECPDATE,c.DESCRIPTIO,c.VDNAME,c.POSTINGSTAT as RCPPOSTINGSTAT,c.OFFLINESTAT as RCPOFFLINESTAT
+        from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
+		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
+		left join (	select POUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as QTYPO from webot_POL
+		group by POUNIQ) gpol on gpol.POUNIQ=a.POUNIQ
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
 		left join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ
-        where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)) and a.POUNIQ='$pouniq' ");
+		left join (select POUNIQ,COUNT(ITEMNO) as ROWITEMRCP,sum(QTY) as QTYRCP from webot_RCPL
+		group by POUNIQ) grcpl on grcpl.POUNIQ=a.POUNIQ
+        where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1)
+		or (gpol.QTYPO<>grcpl.QTYRCP)) and a.POUNIQ='$pouniq' ");
         return $query->getRowArray();
     }
 
@@ -118,7 +137,7 @@ class Goodreceipt_model extends Model
     function list_gr_by_po($ponumber)
     {
         $query = $this->db->query("select DISTINCT b.RCPHSEQ,b.PONUMBER,b.RCPNUMBER," . 'b."DATE"' . " as RCPDATE,b.VDNAME from PORCPH1 b
-        where b.PONUMBER='$ponumber' ");
+        where b.PONUMBER='$ponumber'  and b.RCPNUMBER not in (select RECPNUMBER from webot_RECEIPTS) ");
         return $query->getResultArray();
     }
 
@@ -132,11 +151,15 @@ class Goodreceipt_model extends Model
 
     function get_po_l_item($pouniq, $itemno)
     {
-        $query = $this->db->query("select a.*,d.POUNIQ,d.POLUNIQ
-        from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-		left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
-        left join webot_RCPL e on e.POUNIQ=d.POUNIQ and e.POLUNIQ=d.POLUNIQ
-        where d.POUNIQ='$pouniq' and d.ITEMNO='$itemno' and e.RCPUNIQ is NULL");
+        $query = $this->db->query("select * from (
+            select a.CSRUNIQ,a.CSRLUNIQ,a.SERVICETYPE,a.ITEMNO,a.MATERIALNO,a.ITEMDESC,a.STOCKUNIT,a.QTY,d.POUNIQ,d.POLUNIQ,isnull(sum(e.QTY),0) as S_QTYRCP,(a.QTY-isnull(sum(e.QTY),0)) as QTYRCP_OUTS
+            from webot_CSRL a inner join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+            left join webot_POL d on d.CSRUNIQ=a.CSRUNIQ and d.CSRLUNIQ=a.CSRLUNIQ
+            left join webot_RCPL e on e.POUNIQ=d.POUNIQ and e.POLUNIQ=d.POLUNIQ
+            where d.POUNIQ='$pouniq' and d.ITEMNO='$itemno'
+            group by a.CSRUNIQ,a.CSRLUNIQ,a.SERVICETYPE,a.ITEMNO,a.MATERIALNO,a.ITEMDESC,a.STOCKUNIT,a.QTY,d.POUNIQ,d.POLUNIQ
+            ) grouts 
+            where grouts.QTYRCP_OUTS>0");
         return $query->getRowArray();
     }
 

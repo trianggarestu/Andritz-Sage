@@ -2,7 +2,6 @@
 <p>Please to follow up PO Number : <strong><?= $PONUMBER ?></strong><small>(<?= $PODATE ?> )</small> / Contract : <strong><?= $CONTRACT ?></strong>
     is pending for you to process Logistics Team.
 </p>
-<br>
 <small>
     <p>PO Number :<?= $PONUMBER ?><br>
         PO Vendor Date :<?= $PODATE ?><br>

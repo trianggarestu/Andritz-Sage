@@ -78,7 +78,16 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class='form-group'>
+                            <div class="col-sm-12" style="margin: 2px;">
+                                <div class="col-sm-4" style="text-align: right;">
+                                    <label for="so_qty">Qty Outstanding</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control input-sm required number" id="so_qty" name="so_qty" value="<?= $gr_qty ?>" maxlength="5" readonly />
+                                </div>
+                            </div>
+                        </div>
 
                         <div class='form-group'>
                             <div class="col-sm-12" style="margin: 2px;">
@@ -86,7 +95,7 @@
                                     <label for="gr_qty">Qty <code> (input) </code> </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control input-sm required number" id="gr_qty" name="gr_qty" value="<?= $gr_qty ?>" maxlength="5" />
+                                    <input type="number" class="form-control input-sm required" min="0" max="<?= $gr_qty ?>" id="gr_qty" name="gr_qty" value="<?= $gr_qty ?>" maxlength="5" />
                                 </div>
                             </div>
                         </div>

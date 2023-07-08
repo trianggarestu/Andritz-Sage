@@ -160,4 +160,23 @@ class Administration extends BaseController
             return redirect()->to(base_url('administration'));
         }
     }
+
+    // Preview P/O Details
+    public function rcppostedview($rcpuniq)
+    {
+        $getrcppost = $this->AdministrationModel->get_rcp_post($rcpuniq);
+        $getrcplpost = $this->AdministrationModel->get_rcpl_post($rcpuniq);
+        if (!empty($getrcppost['RCPUNIQ'])) {
+
+            $data = array(
+                'rcpposted_data' =>  $getrcppost,
+                'rcplposted_data' =>  $getrcplpost,
+
+            );
+
+            echo view('home/data_rcp_preview', $data);
+        } else {
+            return redirect()->to(base_url('administration'));
+        }
+    }
 }

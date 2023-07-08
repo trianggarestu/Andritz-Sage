@@ -77,11 +77,6 @@
 																$pocust_date = substr($rcp_list['PODATECUST'], 4, 2) . "/" . substr($rcp_list['PODATECUST'], 6, 2) . "/" . substr($rcp_list['PODATECUST'], 0, 4);
 																$po_date = substr($rcp_list['PODATE'], 4, 2) . "/" . substr($rcp_list['PODATE'], 6, 2) . "/" . substr($rcp_list['PODATE'], 0, 4);
 
-																if (null == $rcp_list['RECPDATE']) {
-																	$rcp_date = '';
-																} else {
-																	$rcp_date = substr($rcp_list['RECPDATE'], 4, 2) . "/" . substr($rcp_list['RECPDATE'], 6, 2) . "/" . substr($rcp_list['RECPDATE'], 0, 4);
-																}
 
 																if (null == $rcp_list['ETDORIGINDATE']) {
 																	$etdorigin_date = '';
@@ -177,13 +172,7 @@
 
 																				<?php endif;
 																				?>
-																				<?php if ($rcp_list['RCPPOSTINGSTAT'] == 1 and $rcp_list['RCPOFFLINESTAT'] == 1) :
-																				?>
-																					<li>
-																						<a href="<?= base_url("goodreceipt/sendnotif/" . $rcp_list['RCPUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-send-o"></i> Sending Notif Manually</a>
-																					</li>
-																				<?php endif;
-																				?>
+
 
 																			</ul>
 																		</div>
@@ -192,7 +181,8 @@
 																				<table class="table table-bordered dataTable table-hover nowrap">
 																					<thead class="bg-gray disabled">
 																						<tr>
-																							<td colspan="3">G/R Info.</td>
+																							<td>Status</td>
+																							<td colspan="2">G/R Info.</td>
 																						</tr>
 																					</thead>
 																					<tbody>
@@ -205,9 +195,34 @@
 
 																						?>
 																								<tr>
+																									<td><?php
+
+																										$postingstat = $grheader['RCPPOSTINGSTAT'];
+																										switch ($postingstat) {
+																											case "0":
+																												echo "<span class='label label-default'>Open</span>";
+																												break;
+																											case "1":
+																												echo "<span class='label label-success'>Posted</span>";
+																												break;
+																											case "2":
+																												echo "<span class='label label-danger'>Deleted</span>";
+																												break;
+																											default:
+																												echo "<span class='label label-default'>Open</span>";
+																										}
+																										?></td>
 																									<td style="width: 32%;"><?= trim($grheader['RECPNUMBER']) ?> <small>(<?= $gr_date ?>)</small></td>
 
 																									<td>
+																										<?php if ($grheader['RCPPOSTINGSTAT'] == 1) :
+																										?>
+																											<a href="<?= base_url("administration/rcppostedview/" . $grheader['RCPUNIQ']) ?>" class="btn btn-default btn-sm" title="GR View" target="_blank">
+																												<i class="fa fa-file"></i>
+																											</a>
+																										<?php
+																										endif;
+																										?>
 																										<?php if ($grheader['RCPPOSTINGSTAT'] == 0) :
 																										?>
 
@@ -224,7 +239,7 @@
 
 																										<?php if ($grheader['RCPPOSTINGSTAT'] == 1 and $grheader['RCPOFFLINESTAT'] == 1) :
 																										?>
-																											<a href="<?= base_url("purchaseorder/sendnotif/" . $grheader['RCPUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm 
+																											<a href="<?= base_url("goodreceipt/sendnotif/" . $grheader['RCPUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm 
 																											" title="Sending Notif Manually">
 																												<i class="fa fa-send-o"></i>Send Notif
 																											</a>
@@ -306,6 +321,7 @@
 																				</tbody>
 																			</table>
 																		</div>
+
 																	</td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;">

@@ -185,7 +185,8 @@
 																		<th>Inventory No.</th>
 																		<th>Material No.</th>
 																		<th>Item Desc.</th>
-																		<th>Qty.</th>
+																		<th>Qty. Outstanding</th>
+																		<th>Qty. G/R</th>
 																		<th>Uom</th>
 																		<th class="padat">Action</th>
 																	</tr>
@@ -193,8 +194,10 @@
 																<tbody>
 																	<?php
 																	$no = 0;
+																	$total_gr = 0;
 
 																	foreach ($polforrcp_data as $items) :
+																		$total_gr += $items['options']['gr_qty'];
 																	?>
 																		<tr>
 
@@ -210,21 +213,29 @@
 																						?></td>
 																			<td><?= number_format($items['options']['so_qty'], 0, ",", ".")
 																				?></td>
+																			<td><?= number_format($items['options']['gr_qty'], 0, ",", ".")
+																				?></td>
 																			<td nowrap><?= $items['options']['so_uom']
 																						?></td>
 																			<td nowrap>
 																				<a href="<?= base_url('goodreceipt/form_update_item/' . $po_uniq . '/' . $post_stat . '/' . $items['rowid'] . '/' . $items['id'] . '/1') ?>" class="btn bg-orange btn-flat btn-sm" title="Update Item" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i></a>
 																				<a href="" data-href="<?= base_url("goodreceipt/delete_item_cart/" . $po_uniq . '/' . $post_stat . '/' . $items['rowid']  . '/1') ?>" class="btn bg-maroon btn-flat btn-sm" title="Delete Data" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
 																			</td>
+
 																		</tr>
-																	<?php endforeach;
+
+																	<?php
+
+																	endforeach;
 
 																	?>
+
 
 																</tbody>
 															</table>
 														</div>
 													</div>
+
 												</div>
 											</div>
 										</div>
@@ -260,6 +271,7 @@
 					<input type="hidden" id="rcph_seq" name="rcph_seq" value="<?= $rcphseq ?>">
 					<input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
 					<input type="hidden" id="delgrline" name="delgrline" value="<?= $delgrline ?>">
+					<input type="hidden" id="gr_total" name="gr_total" value="<?= $total_gr ?>">
 					<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
 					<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> <?= $button_text ?></button>
 				</div>

@@ -2,7 +2,7 @@
 <p>Please to follow up Requisition Number : <strong><?= $RQNNUMBER ?></strong>(<?= $RQNDATE ?> ) / Contract : <strong><?= $CONTRACT ?></strong>(<?= $PODATECUST ?>)
     is pending for you to process Purchase Order Vendor.
 </p>
-<br>
+
 <small>
     <p>Contract : <?= $CONTRACT ?>-<?= $CTDESC ?><br>
     </p>

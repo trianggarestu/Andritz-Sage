@@ -547,7 +547,7 @@ class PurchaseOrder extends BaseController
                             'MATERIALNO' => $items['options']['material_no'],
                             'ITEMDESC' => $items['options']['itemdesc'],
                             'STOCKUNIT' => $items['options']['so_uom'],
-                            'QTY' => $items['qty'],
+                            'QTY' => $items['options']['so_qty'],
                         );
 
                         $pol_insert = $this->PurchaseorderModel->poline_insert($datal);

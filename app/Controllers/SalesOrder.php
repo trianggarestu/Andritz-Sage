@@ -1305,7 +1305,7 @@ class SalesOrder extends BaseController
 
 
     // For Trial
-
+    /*
     public function send1()
     {
         $hostname           = 'atlxsmtp.andritz.com';
@@ -1337,6 +1337,58 @@ class SalesOrder extends BaseController
         $mail->Subject = "Subject Text";
         $mail->Body = "<i>Mail body in HTML</i>";
         $mail->AltBody = "This is the plain text version of the email content";
+
+        if (!$mail->send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        } else {
+            echo "Message has been sent successfully";
+        }
+    }
+    */
+
+
+    public function send2()
+    {
+        $hostname           = 'mail.mustikacl.co.id';
+        $sendername         = 'Prototype Order Tracking Andritz';
+        $senderemail        = 'ordertracking@mustikacl.co.id';
+        $chksmtpauth        = 1;
+        $passwordemail      = '@Ordertracking2023.';
+        $ssl                = 'ssl';
+        $smtpport           = 465;
+        $to                 = 'triangga.restu@gmail.com';
+        $subject            = 'test';
+        $message            = 'Andritze Test';
+
+        if ($chksmtpauth == 1) {
+            $smtpauth = 'TRUE';
+        } else {
+            $smtpauth = 'FALSE';
+        }
+        //$mail = new PHPMailer(true);
+
+
+        $mail = new PHPMailer;
+        $mail->isSMTP();
+        $mail->SMTPDebug = 2;
+        $mail->Debugoutput = 'html';
+        $mail->Host = $hostname;
+        $mail->Port = $smtpport;
+        $mail->SMTPAuth = $smtpauth;
+        $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
+        if ($chksmtpauth == TRUE) :
+            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+        endif;
+        //$mail->SMTPAutoTLS = false;
+        $mail->SMTPSecure = $ssl;
+
+        $mail->setFrom($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
+        $mail->addAddress($to);
+        $mail->addReplyTo($senderemail, $sendername); // silahkan ganti dengan alamat email Anda
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $message;
 
         if (!$mail->send()) {
             echo "Mailer Error: " . $mail->ErrorInfo;
