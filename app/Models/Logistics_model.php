@@ -147,8 +147,8 @@ class Logistics_model extends Model
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or a.PONUMBER like '%$keyword%'
+       or b.CRMREMARKS like '%$keyword%' 
+      or a.PONUMBER like '%$keyword%'
         or a.ORIGINCOUNTRY like '%$keyword%' or a.POREMARKS like '%$keyword%' or c.VENDSHISTATUS like '%$keyword%') and
         (c.ETDORIGINDATE>=$nfromdate and c.ETDORIGINDATE<=$ntodate)
         order by c.ETDORIGINDATE asc");

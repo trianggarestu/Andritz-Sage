@@ -76,9 +76,9 @@
 															<th>GR. Date</th>
 															<th>Vendor Name</th>
 															<th>Description</th>
-															<th>Item</th>
-															<th>QTY Receipt</th>
-															<th>GR Status</th>
+
+
+
 															<th style="background-color: white;"></th>
 															<th>PO Number</th>
 															<th>PO Date</th>
@@ -119,29 +119,15 @@
 																			echo "";
 																	} ?>
 																</td>
-																<td><?= $data_list['RECPNUMBER'] ?></td>
+																<td><strong><a href="<?= base_url('administration/rcppostedview/' . $data_list['RCPUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['RECPNUMBER'] ?></a></strong></td>
 																<td><?= $rcpdate; ?></td>
 																<td><?= $data_list['VDNAME'] ?></td>
 																<td><?= $data_list['DESCRIPTIO'] ?></td>
-																<td><?= $data_list['ITEMDESC'] ?></td>
-																<td><?= $data_list['RECPQTY'] ?></td>
-																<td><?php $rcppostingstat = $data_list['GRSTATUS'];
-																	switch ($rcppostingstat) {
-																		case "0":
-																			echo "Open";
-																			break;
-																		case "1":
-																			echo "Posted";
-																			break;
-																		case "2":
-																			echo "Deleted";
-																			break;
-																		default:
-																			echo "";
-																	} ?>
-																</td>
+
+
+
 																<td style="background-color: white;"></td>
-																<td><strong><a href="#"><?= $data_list['PONUMBER'] ?></a></strong></td>
+																<td><strong><a href="<?= base_url("administration/popostedview/" . $data_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['PONUMBER']; ?></a></strong></td>
 																<td><?= $povendate; ?></td>
 															</tr>
 
