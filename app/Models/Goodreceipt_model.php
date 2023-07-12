@@ -295,9 +295,8 @@ class Goodreceipt_model extends Model
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or c.PONUMBER like '%$keyword%' or a.RECPNUMBER like '%$keyword%' or a.VDNAME like '%$keyword%' 
-        or a.ITEMDESC like '%$keyword%' or a.DESCRIPTIO like '%$keyword%'   or a.RECPITEMNO like '%$keyword%') and
+         or b.CRMREMARKS like '%$keyword%'  or c.PONUMBER like '%$keyword%' or a.RECPNUMBER like '%$keyword%' or a.VDNAME like '%$keyword%' 
+       or a.DESCRIPTIO like '%$keyword%' ) and
         (a.RECPDATE>=$nfromdate and a.RECPDATE<=$ntodate)
         order by a.RECPDATE asc");
         return $query->getResultArray();

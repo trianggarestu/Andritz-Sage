@@ -215,14 +215,12 @@ class GoodreceiptList extends BaseController
                 ->orlike('csr.EMAIL1CUST', $keyword)
                 ->orlike('csr.CRMNO', $keyword)
                 ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.SERVICETYPE', $keyword)
+
                 ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('csr.ITEMNO', $keyword)
-                ->orlike('csr.MATERIALNO', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
+
                 ->orlike('po.PONUMBER', $keyword)
                 ->orlike('webot_RECEIPTS.RECPNUMBER', $keyword)
-                ->orlike('webot_RECEIPTS.ITEMDESC', $keyword)
+
                 ->orlike('webot_RECEIPTS.VDNAME', $keyword)
                 ->orlike('webot_RECEIPTS.DESCRIPTIO', $keyword)
 
@@ -313,15 +311,13 @@ class GoodreceiptList extends BaseController
         $spreadsheet->setActiveSheetIndex(0)
 
             ->setCellValue('A1', 'NO')
-            ->setCellValue('B1', 'PONUMBER')
-            ->setCellValue('C1', 'PODATE')
-            ->setCellValue('D1', 'RECEIPTNUMBER')
-            ->setCellValue('E1', 'RECEIPTDATE')
-            ->setCellValue('F1', 'VENDORNAME')
-            ->setCellValue('G1', 'ITEMNO')
-            ->setCellValue('H1', 'ITEMDESC')
-            ->setCellValue('I1', 'RECEIPTQTY')
-            ->setCellValue('J1', 'RECEIPTSTATUS');
+            ->setCellValue('B1', 'STATUS')
+            ->setCellValue('C1', 'RECEIPTNUMBER')
+            ->setCellValue('D1', 'RECEIPTDATE')
+            ->setCellValue('E1', 'VENDORNAME')
+            ->setCellValue('F1', 'PONUMBER')
+            ->setCellValue('G1', 'PODATE')
+            ->setCellValue('H1', 'RECEIPTSTATUS');
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -389,17 +385,14 @@ class GoodreceiptList extends BaseController
 
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['PONUMBER'])
-                ->setCellValue('C' . $rows, $podate)
-                ->setCellValue('D' . $rows, $data['RECPNUMBER'])
-                ->setCellValue('E' . $rows, $grdate)
-                ->setCellValue('F' . $rows, $data['VDNAME'])
-                ->setCellValue('G' . $rows, $data['RECPITEMNO'])
-                ->setCellValue('H' . $rows, $data['ITEMDESC'])
-                ->setCellValue('I' . $rows, $data['RECPQTY'])
-                ->setCellValue('J' . $rows, $postingstatus)
-
-                ->setCellValue('K' . $rows, '');
+                ->setCellValue('B' . $rows, $postingstatus)
+                ->setCellValue('C' . $rows, $data['RECPNUMBER'])
+                ->setCellValue('D' . $rows, $grdate)
+                ->setCellValue('E' . $rows, $data['VDNAME'])
+                ->setCellValue('F' . $rows, $data['DESCRIPTIO'])
+                ->setCellValue('G' . $rows, $data['PONUMBER'])
+                ->setCellValue('H' . $rows, $podate)
+                ->setCellValue('I' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx

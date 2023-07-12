@@ -39,53 +39,43 @@
                         <table class="border thick">
                             <thead>
                                 <tr class="border thick">
+                                <tr>
                                     <th>No.</th>
+                                    <th>Status</th>
+                                    <th>Receipt Number</th>
+                                    <th>GR. Date</th>
+                                    <th>Vendor Name</th>
+                                    <th>Description</th>
+
+
+
+                                    <th style="background-color: white;"></th>
                                     <th>PO Number</th>
                                     <th>PO Date</th>
-                                    <th>Receipt Number</th>
-                                    <th>Receipt Date</th>
-                                    <th>Vendor Name</th>
-                                    <th>Item No</th>
-                                    <th>Item Desc</th>
-                                    <th>Qty Receipt</th>
-                                    <th>Receipt Status</th>
 
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-
-                                use Predis\Command\Redis\SUBSTR;
-
                                 $no = 0;
-
                                 ?>
-
-
                                 <?php foreach ($gr_data as $data_list) {
+                                    $rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['RECPDATE'], 6, 2) . "/" .  substr($data_list['RECPDATE'], 0, 4);
                                     $povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);
-                                    $rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['RECPDATE'], 6, 2) . "/" .  substr($data_list['ETDDATE'], 0, 4);
-                                    // $creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
-                                    // $etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
-                                    // $atdorigindate = substr($data_list['ATDORIGINDATE'], 4, 2) . "/" . substr($data_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ATDORIGINDATE'], 0, 4);
-                                    // $etaportdate = substr($data_list['ETAPORTDATE'], 4, 2) . "/" . substr($data_list['ETAPORTDATE'], 6, 2) . "/" .  substr($data_list['ETAPORTDATE'], 0, 4);
-                                    // $pibdate = substr($data_list['PIBDATE'], 4, 2) . "/" . substr($data_list['PIBDATE'], 6, 2) . "/" .  substr($data_list['PIBDATE'], 0, 4);
-
+                                    /*
+																
+																$creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
+																$etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
+																$atdorigindate = substr($data_list['ATDORIGINDATE'], 4, 2) . "/" . substr($data_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ATDORIGINDATE'], 0, 4);
+																$etaportdate = substr($data_list['ETAPORTDATE'], 4, 2) . "/" . substr($data_list['ETAPORTDATE'], 6, 2) . "/" .  substr($data_list['ETAPORTDATE'], 0, 4);
+																$pibdate = substr($data_list['PIBDATE'], 4, 2) . "/" . substr($data_list['PIBDATE'], 6, 2) . "/" .  substr($data_list['PIBDATE'], 0, 4);
+*/
                                 ?>
 
                                     <tr>
-                                        <td><?= ++$no; ?></td>
-                                        <td><?= $data_list['PONUMBER']; ?></td>
-                                        <td><?= $povendate; ?></td>
-                                        <td><?= $data_list['RECPNUMBER']; ?></td>
-                                        <td><?= $rcpdate; ?></td>
-                                        <td><?= $data_list['VDNAME']; ?></td>
-                                        <td><?= $data_list['RECPITEMNO']; ?></td>
-                                        <td><?= $data_list['ITEMDESC']; ?></td>
-                                        <td><?= $data_list['RECPQTY']; ?></td>
-                                        <td>
-                                            <?php $postingstat = $data_list['POSTINGSTAT'];
-                                            switch ($postingstat) {
+                                        <td><?= ++$no ?></td>
+                                        <td><?php $rcppostingstat = $data_list['POSTINGSTAT'];
+                                            switch ($rcppostingstat) {
                                                 case "0":
                                                     echo "Open";
                                                     break;
@@ -96,15 +86,21 @@
                                                     echo "Deleted";
                                                     break;
                                                 default:
-                                                    echo "Open";
+                                                    echo "";
                                             } ?>
                                         </td>
+                                        <td><strong><a href="<?= base_url('administration/rcppostedview/' . $data_list['RCPUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['RECPNUMBER'] ?></a></strong></td>
+                                        <td><?= $rcpdate; ?></td>
+                                        <td><?= $data_list['VDNAME'] ?></td>
+                                        <td><?= $data_list['DESCRIPTIO'] ?></td>
 
 
 
-
-
+                                        <td style="background-color: white;"></td>
+                                        <td><strong><a href="<?= base_url("administration/popostedview/" . $data_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['PONUMBER']; ?></a></strong></td>
+                                        <td><?= $povendate; ?></td>
                                     </tr>
+
 
 
                                 <?php } ?>
