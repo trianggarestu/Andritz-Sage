@@ -24,14 +24,13 @@
                                     <label for="so_service">Service Type <code> (choose) </code> </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <select name="so_service" class="form-control input-sm required">
+                                    <select name="so_service" class="form-control input-sm required" readonly>
                                         <option value="">--Choose One--</option>
-                                        <option value="SPAREPARTS" <?php if ($so_service == "SPAREPARTS") {
-                                                                        echo "selected";
-                                                                    } ?>>SPAREPARTS</option>
-                                        <option value="SERVICES" <?php if ($so_service == "SERVICES") {
-                                                                        echo "selected";
-                                                                    } ?>>SERVICES</option>
+                                        <option value="SPAREPARTS" selected>SPAREPARTS</option>
+                                        <option value="SERVICES" <?php //if ($so_service == "SERVICES") {
+                                                                    //echo "selected";
+                                                                    //} 
+                                                                    ?>>SERVICES</option>
 
                                     </select>
                                 </div>

@@ -199,6 +199,7 @@
 									<thead>
 										<tr>
 											<th>P/O Date</th>
+											<th>RQN. Number</th>
 											<th>P/O Number</th>
 											<th>Origin Country</th>
 											<th>Remarks</th>
@@ -211,6 +212,7 @@
 											<tr>
 
 												<td><?= $podate ?></td>
+												<td><?= $data['RQNNUMBER'] ?></td>
 												<td><?= $data['PONUMBER'] ?></td>
 												<td><?= $data['ORIGINCOUNTRY'] ?></td>
 												<td><?= $data['POREMARKS'] ?></td>
@@ -351,6 +353,7 @@
 									<thead>
 										<tr>
 											<th>G/R Date</th>
+											<th>P/O Number</th>
 											<th>G/R Number</th>
 											<th>Vendor</th>
 											<th>Description</th>
@@ -363,19 +366,31 @@
 											<tr>
 
 												<td><?= $grdate ?></td>
+												<td><?= $data['PONUMBER'] ?></td>
 												<td><?= $data['RECPNUMBER'] ?></td>
 												<td><?= $data['VDNAME'] ?></td>
 												<td><?= $data['DESCRIPTIO'] ?></td>
 
-												<td><?php if ($data['POSTINGSTAT'] == 1 and $data['OFFLINESTAT'] == 0) : ?>
-														<span class="label label-success">Processed</span>
-													<?php endif; ?>
-													<?php if ($data['POSTINGSTAT'] == 1 and $data['OFFLINESTAT'] == 1) : ?>
-														<span class="label label-danger">Pending Notif</span>
-													<?php endif; ?>
-													<?php if ($data['POSTINGSTAT'] == 0) : ?>
-														<span class="label label-warning">Open</span>
-													<?php endif; ?>
+												<td><?php $postingstat = $data['POSTINGSTAT'] . $data['OFFLINESTAT'];
+													switch ($postingstat) {
+														case "00":
+															echo "<span class='label label-warning'>Open</span>";
+															break;
+														case "11":
+															echo "<span class='label label-warning'>Posted Pending Notif</span>";
+															break;
+														case "10":
+															echo "<span class='label label-success'>Posted & Sending Notif</span>";
+															break;
+														case "20":
+															echo "<span class='label label-danger'>Deleted</span>";
+															break;
+														case "21":
+															echo "<span class='label label-danger'>Deleted</span>";
+															break;
+														default:
+															echo "<span class='label label-warning'>Open</span>";
+													} ?>
 
 												</td>
 

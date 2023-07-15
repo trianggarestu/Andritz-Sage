@@ -69,7 +69,7 @@ class Administration_model extends Model
 
     function get_latest_po()
     {
-        $query = $this->db->query("select TOP 6 a.PODATE,a.PONUMBER,a.ORIGINCOUNTRY,a.POREMARKS,a.POSTINGSTAT,a.OFFLINESTAT 
+        $query = $this->db->query("select TOP 6 a.PODATE,a.RQNNUMBER,a.PONUMBER,a.ORIGINCOUNTRY,a.POREMARKS,a.POSTINGSTAT,a.OFFLINESTAT 
         from webot_PO a
         order by a.PODATE desc, a.POUNIQ desc");
         return $query->getResultArray();
@@ -85,7 +85,7 @@ class Administration_model extends Model
 
     function get_latest_gr()
     {
-        $query = $this->db->query("select TOP 6 a.RECPDATE,a.RECPNUMBER,a.VDNAME,a.DESCRIPTIO,a.POSTINGSTAT,a.OFFLINESTAT 
+        $query = $this->db->query("select TOP 6 a.RECPDATE,a.PONUMBER,a.RECPNUMBER,a.VDNAME,a.DESCRIPTIO,a.POSTINGSTAT,a.OFFLINESTAT 
         from webot_RECEIPTS a
         order by a.RECPDATE desc, a.RCPUNIQ desc");
         return $query->getResultArray();
@@ -173,6 +173,27 @@ class Administration_model extends Model
     function get_rcpl_post($rcpuniq)
     {
         $query = $this->db->query("select a.* from webot_RCPL a where a.RCPUNIQ='$rcpuniq'");
+        return $query->getResultArray();
+    }
+
+    function get_shi_post($shiuniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.*,e.*,
+        d.LOGUNIQ,d.ETDORIGINDATE,d.ATDORIGINDATE,d.ETAPORTDATE,d.PIBDATE,d.VENDSHISTATUS,d.LOGREMARKS
+        from webot_SHIPMENTS a 
+                left join webot_CSR b on b.CSRUNIQ = a.CSRUNIQ
+                left join webot_REQUISITION c on c.CSRUNIQ = b.CSRUNIQ
+                left join webot_LOGISTICS d on d.CSRUNIQ=a.CSRUNIQ
+				 left join webot_PO e on e.CSRUNIQ=a.CSRUNIQ
+                where a.POSTINGSTAT = 1 and a.SHIUNIQ='$shiuniq'");
+
+        return $query->getRowArray();
+    }
+
+
+    function get_shil_post($shiuniq)
+    {
+        $query = $this->db->query("select a.* from webot_SHIL a where a.SHIUNIQ='$shiuniq'");
         return $query->getResultArray();
     }
 }

@@ -158,11 +158,13 @@
 																		<?= $po_date ?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
-																		<div class="btn-group">
-																			<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
-																			<ul class="dropdown-menu" role="menu">
-																				<?php if (($rcp_list['RCPPOSTINGSTAT'] == 0) or (empty($rcp_list['RCPOFFLINESTAT']))) :
-																				?>
+																		<?php if (($rcp_list['RCPPOSTINGSTAT'] == 0) or (empty($rcp_list['RCPOFFLINESTAT'])) or ($rcp_list['QTYPO'] <> $rcp_list['QTYRCP'])) :
+																		?>
+																			<div class="btn-group">
+
+																				<button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown"><i class='fa fa-arrow-circle-down'></i> Choose Button</button>
+																				<ul class="dropdown-menu" role="menu">
+
 																					<li>
 																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/1/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Add Good Receipt & Posting</a>
 																					</li>
@@ -170,12 +172,13 @@
 																						<a href="<?= base_url("goodreceipt/add/" . $rcp_list['POUNIQ'] . '/0/0') ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-edit"></i> Add Good Receipt & Save</a>
 																					</li>
 
-																				<?php endif;
-																				?>
 
 
-																			</ul>
-																		</div>
+
+																				</ul>
+																			</div>
+																		<?php endif;
+																		?>
 																		<?php if (is_array($grlist_data)) { ?>
 																			<div class="table-responsive">
 																				<table class="table table-bordered dataTable table-hover nowrap">
@@ -226,7 +229,7 @@
 																										<?php if ($grheader['RCPPOSTINGSTAT'] == 0) :
 																										?>
 
-																											<a href="<?= base_url("goodreceipt/posting/" . $grheader['RCPUNIQ'] . '/' . $grheader['CSRUNIQ']) ?>" class="btn btn-social btn-flat bg-blue btn-sm">
+																											<a href="<?= base_url("goodreceipt/posting/" . $grheader['RCPUNIQ'] . '/' . $grheader['POUNIQ'] . '/' . $grheader['CSRUNIQ']) ?>" class="btn btn-social btn-flat bg-blue btn-sm">
 																												<i class="fa fa-check-square-o"></i> Posting G/R
 																											</a>
 
@@ -331,7 +334,7 @@
 																					<tr>
 																						<th class="padat">Status</th>
 																						<th>Last <br>G/R Date</th>
-																						<th>G/R Qty</th>
+																						<th>G/R Qty<br>(Sum)</th>
 																						<th>G/R Status</th>
 																					</tr>
 																				</thead>

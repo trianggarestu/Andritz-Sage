@@ -27,7 +27,8 @@ class Goodreceipt_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
-        grcpl.RCPPOSTINGSTAT,grcpl.RCPOFFLINESTAT
+		gpol.QTYPO,
+        grcpl.QTYRCP,grcpl.RCPPOSTINGSTAT,grcpl.RCPOFFLINESTAT
         from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
 		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
 		left join (	select POUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as QTYPO from webot_POL
@@ -49,7 +50,7 @@ class Goodreceipt_model extends Model
         from webot_PO a
         inner join webot_RECEIPTS c on c.POUNIQ=a.POUNIQ 
         where (a.POSTINGSTAT=1 and c.RCPUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1)
-        order by c.RECPNUMBER asc,c.RECPDATE asc");
+        order by c.RECPDATE asc,c.RECPNUMBER asc");
 
         return $query->getResultArray();
     }
@@ -91,7 +92,8 @@ class Goodreceipt_model extends Model
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,
         b.CONTRACT,b.CTDESC,b.PROJECT,b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,
-        grcpl.RCPPOSTINGSTAT,grcpl.RCPOFFLINESTAT
+		gpol.QTYPO,
+        grcpl.QTYRCP,grcpl.RCPPOSTINGSTAT,grcpl.RCPOFFLINESTAT
         from (select x.*,y.PODATE,y.ETDDATE,y.CARGOREADINESSDATE,y.ORIGINCOUNTRY,y.POREMARKS 
 		from webot_LOGISTICS x left join webot_PO y on y.POUNIQ=x.POUNIQ) a 
 		left join (	select POUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as QTYPO from webot_POL
@@ -102,7 +104,7 @@ class Goodreceipt_model extends Model
 		group by x.POUNIQ) grcpl on grcpl.POUNIQ=a.POUNIQ
         where ((a.POSTINGSTAT=1 and grcpl.POUNIQ IS NULL) or (a.POSTINGSTAT=1 and grcpl.RCPPOSTINGSTAT=0) or (grcpl.RCPPOSTINGSTAT=1 and grcpl.RCPOFFLINESTAT=1)
 		or (gpol.QTYPO<>grcpl.QTYRCP))
-        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
         or a.PONUMBER like '%$keyword%' or a.VENDSHISTATUS like '%$keyword%')");
         //where PrNumber IS NULL or PoVendor IS NULL And PrStatus= 'Open'  (yang ni nanti)
         return $query->getResultArray();
@@ -262,10 +264,11 @@ class Goodreceipt_model extends Model
     }
 
 
-    function get_goodreceipt_post($rcpuniq)
+    function get_goodreceipt_post($po_uniq)
     {
-        $query = $this->db->query("select * from webot_RECEIPTS 
-        where POSTINGSTAT=1 and RCPUNIQ='$rcpuniq' ");
+        $query = $this->db->query("select top 1 * from webot_RECEIPTS 
+        where POSTINGSTAT=1 and POUNIQ='$po_uniq'
+        order by RECPDATE desc");
         return $query->getRowArray();
     }
 

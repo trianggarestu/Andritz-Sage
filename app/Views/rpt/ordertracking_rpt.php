@@ -189,17 +189,14 @@
 																	<td><?= $ot_list['VENDSHISTATUS']; ?></td>
 																	<td style="background-color: white;"></td>
 																	<td><?= $grdate ?></td>
-																	<td><?= $ot_list['RECPQTY']; ?></td>
+																	<td><?= number_format($ot_list['RECPQTY'], 0, ",", "."); ?></td>
 																	<td><?php $dnpostingstat = $ot_list['GRSTATUS'];
 																		switch ($dnpostingstat) {
 																			case "0":
-																				echo "Open";
+																				echo "Partial";
 																				break;
 																			case "1":
-																				echo "Posted";
-																				break;
-																			case "2":
-																				echo "Deleted";
+																				echo "Completed";
 																				break;
 																			default:
 																				echo "";

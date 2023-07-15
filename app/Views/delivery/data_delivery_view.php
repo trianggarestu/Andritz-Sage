@@ -38,7 +38,7 @@
 							</a>
 
 
-							<a href="<?= base_url('deliveryorders/update/' . $shiopen_data['RCPUNIQ']) ?>" title="Edit" class="btn btn-social btn-flat bg-olive btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Form Entry</a>
+
 						<?php } ?>
 					</div>
 					<div class="box-body">
@@ -93,33 +93,7 @@
 																		echo $custrcp_date; ?></strong></td>
 														</tr>
 
-														<tr>
-															<th colspan="3" class="subtitle_head"><strong>ITEM</strong></th>
-														</tr>
-														<tr>
-															<td width="250">ITEM </td>
-															<td width="1">:</td>
-															<td><strong><?= $shiopen_data['SHIITEMNO']; ?></strong></td>
-														</tr>
-														<tr>
-															<td width="250">QTY Shipment </td>
-															<td width="1">:</td>
-															<td><strong><?= number_format($shiopen_data['SHIQTY'], 0, ",", ".") . ' (' . $shiopen_data['SHIUNIT'] . ')'; ?></strong></td>
-														</tr>
-														<tr>
-															<td width="250">QTY Outstanding </td>
-															<td width="1">:</td>
-															<td><strong><?= number_format($shiopen_data['SHIQTYOUTSTANDING'], 0, ",", ".") . ' (' . $shiopen_data['SHIUNIT'] . ')'; ?></strong></td>
-														</tr>
-														<tr>
-															<td width="300">P/O Status</td>
-															<td width="1">:</td>
-															<td><strong><?php if ($shiopen_data['POCUSTSTATUS'] == 1) {
-																			echo 'Completed';
-																		} else {
-																			echo 'Partial';
-																		} ?></strong></td>
-														</tr>
+
 														<tr>
 															<th colspan="3" class="subtitle_head"><strong>e-Delivery Note</strong></th>
 														</tr>

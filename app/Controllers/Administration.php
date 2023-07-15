@@ -179,4 +179,23 @@ class Administration extends BaseController
             return redirect()->to(base_url('administration'));
         }
     }
+
+    // Preview D/N Details
+    public function shipostedview($shiuniq)
+    {
+        $getshipost = $this->AdministrationModel->get_shi_post($shiuniq);
+        $getshilpost = $this->AdministrationModel->get_shil_post($shiuniq);
+        if (!empty($getshipost['SHIUNIQ'])) {
+
+            $data = array(
+                'shiposted_data' =>  $getshipost,
+                'shilposted_data' =>  $getshilpost,
+
+            );
+
+            echo view('home/data_shi_preview', $data);
+        } else {
+            return redirect()->to(base_url('administration'));
+        }
+    }
 }

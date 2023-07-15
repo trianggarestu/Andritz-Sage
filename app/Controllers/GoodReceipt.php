@@ -512,7 +512,7 @@ class GoodReceipt extends BaseController
                     $this->cart->destroy();
 
 
-                    // Jika Posting (Check Sampai Sini)
+                    // Jika Posting
                     if ($post_stat == 1) {
                         $rcp_to_ot = $this->GoodreceiptModel->get_rcp_open_by_id($rcpuniq, $csruniq);
                         $sender = $this->AdministrationModel->get_mailsender();
@@ -530,7 +530,7 @@ class GoodReceipt extends BaseController
                         $gr_update = $this->GoodreceiptModel->goodreceipt_update($rcpuniq, $data);
 
                         if ($gr_update) {
-                            $get_rcp = $this->GoodreceiptModel->get_goodreceipt_post($rcpuniq);
+                            $get_rcp = $this->GoodreceiptModel->get_goodreceipt_post($po_uniq);
                             foreach ($rcp_to_ot as $data_rcpl) :
                                 $csruniq = $data_rcpl['CSRUNIQ'];
                                 $csrluniq = $data_rcpl['CSRLUNIQ'];
@@ -724,7 +724,7 @@ class GoodReceipt extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
-    public function posting($rcpuniq, $csruniq)
+    public function posting($rcpuniq, $pouniq, $csruniq)
     {
         $rcp_to_ot = $this->GoodreceiptModel->get_rcp_open_by_id($rcpuniq, $csruniq);
         $sender = $this->AdministrationModel->get_mailsender();
@@ -742,7 +742,7 @@ class GoodReceipt extends BaseController
         $gr_update = $this->GoodreceiptModel->goodreceipt_update($rcpuniq, $data);
 
         if ($gr_update) {
-            $get_rcp = $this->GoodreceiptModel->get_goodreceipt_post($rcpuniq);
+            $get_rcp = $this->GoodreceiptModel->get_goodreceipt_post($pouniq);
             foreach ($rcp_to_ot as $data_rcpl) :
                 $csruniq = $data_rcpl['CSRUNIQ'];
                 $csrluniq = $data_rcpl['CSRLUNIQ'];

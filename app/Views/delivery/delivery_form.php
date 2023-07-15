@@ -15,10 +15,10 @@
 </style>
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Delivery Orders Form</h1>
+		<h1>Delivery Note Form</h1>
 		<ol class="breadcrumb">
 			<li><a href="<?= base_url('') ?>"><i class="fa fa-home"></i> Home</a></li>
-			<li><a href="#"> Delivery Orders</a></li>
+			<li><a href="<?= base_url('delveryorders') ?>"> Delivery Note</a></li>
 			<li class="active">Form</li>
 		</ol>
 	</section>
@@ -41,7 +41,7 @@
 					<div class="box box-info">
 						<div class="box-header with-border">
 							<a href="<?= base_url(); ?>deliveryorders" class="btn btn-social btn-flat btn-info btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Back to Waiting List Good Receipts">
-								<i class="fa fa-arrow-circle-left "></i>Back to Waiting List Delivery Orders
+								<i class="fa fa-arrow-circle-left "></i>Back to Waiting List Delivery Note
 							</a>
 						</div>
 
@@ -49,243 +49,265 @@
 
 							<div class="row">
 								<div class="col-sm-12">
-									<div class="col-sm-6">
-										<div class="box box-success">
-											<div class="box-body">
-												<div class="table-responsive">
-													<table id="tabel" class="table table-bordered dataTable table-hover">
-														<thead class="bg-gray disabled color-palette">
-															<tr>
-																<th nowrap>Contract </th>
-																<th>:</th>
-																<th nowrap></th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr>
-																<td nowrap> CRM Req. Date</td>
-																<td>: </td>
-																<td nowrap><?= $req_date ?></td>
-															</tr>
-															<tr>
-																<td nowrap>Contract/Project/CRM No. </td>
-																<td>: </td>
-																<td nowrap><strong><a href="#"><?= $ct_no . '/' . $prj_no . '/' . $crm_no ?></a></strong></td>
-															</tr>
-															<tr>
-																<td nowrap style="vertical-align: top;">Contract Desc. / Customer</td>
-																<td style="vertical-align: top;">: </td>
-																<td nowrap><?= $ct_desc ?><br><strong><small>(<?= $ct_custname ?>)</small></strong></td>
-															</tr>
-															<tr>
-																<td nowrap style="vertical-align: top;">Item No / Material No<br>Type<br>Item Desc</td>
-																<td style="vertical-align: top;">: </td>
-																<td nowrap><?= $csr_item_no . '/' . $csr_material_no ?><br>
-																	<?= $csr_srvtype ?><br>
-																	<strong><?= $csr_item_desc ?></strong>
-																</td>
-															</tr>
-															<tr>
-																<td nowrap style="vertical-align: top;">QTY Orders</td>
-																<td style="vertical-align: top;">: </td>
-																<td nowrap>
-																	<?= number_format($csr_qty, 0, ",", ".") . ' (' . trim($csr_uom) . ')' ?>
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="box box-success">
-											<div class="box-body">
-												<div class="table-responsive">
-													<table id="tabel" class="table table-bordered dataTable table-hover">
-														<thead class="bg-gray disabled color-palette">
-															<tr>
-																<th nowrap>Good Receipt </th>
-																<th>:</th>
-																<th nowrap></th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr>
-																<td nowrap> P/O Number - Date</td>
-																<td>: </td>
-																<td nowrap><strong><a href="#"><?= $po_number ?></a></strong> - <?= $po_date ?></td>
-															</tr>
-															<tr>
-																<td nowrap>Receipt Number - Date </td>
-																<td>: </td>
-																<td nowrap><strong><a href="#"><?= $rcp_number ?></a></strong> - <?= $rcp_date ?></td>
-															</tr>
-															<tr>
-																<td nowrap>Description </td>
-																<td>: </td>
-																<td nowrap><?= $rcp_desc ?></td>
-															</tr>
-															<tr>
-																<td nowrap style="vertical-align: top;">Item No / Material No<br>Type<br>Item Desc</td>
-																<td style="vertical-align: top;">: </td>
-																<td nowrap><?= $csr_item_no . '/' . $csr_material_no ?><br>
-																	<?= $csr_srvtype ?><br>
-																	<strong><?= $csr_item_desc ?></strong>
-																</td>
-															</tr>
-															<tr>
-																<td nowrap style="vertical-align: top;">QTY Receipt</td>
-																<td style="vertical-align: top;">: </td>
-																<td nowrap>
-																	<?= number_format($rcp_qty, 0, ",", ".") . ' (' . trim($rcp_unit) . ') / Status : ' ?>
-																	<strong><?php
-																			switch ($gr_status) {
-																				case "0":
-																					echo "Partial";
-																					break;
-																				case "1":
-																					echo "Completed";
-																					break;
-																				default:
-																					echo "";
-																			} ?></strong>
-																</td>
-															</tr>
+									<div class="col-md-6">
+										<div class="box box-default">
+											<div class="box-header with-border">
+												<i class="fa fa-file-text"></i>
 
-														</tbody>
-													</table>
-												</div>
+												<h3 class="box-title">Contract</h3>
+											</div>
+											<!-- /.box-header -->
+											<div class="box-body">
+												<table class="table table-bordered table-striped table-hover">
+													<tr>
+														<td width=" 150">Contract / Project / CRM No.
+														</td>
+														<td width="1">:</td>
+														<td><strong><a href="<?= base_url("administration/csrpostedview/" . $csr_uniq) ?>" title="Click here for detail" target="_blank"><?= $ct_no ?></a><?= '/' . $prj_no . '/' . $crm_no ?></strong></td>
+													</tr>
+													<tr>
+														<td width="150">Contract Description </td>
+														<td width="1">:</td>
+														<td><strong><?= $ct_desc ?></strong></td>
+													</tr>
+													<tr>
+														<td width="150">Customer </td>
+														<td width="1">:</td>
+														<td><strong>
+																<?= $ct_custname ?>
+															</strong><br>
+															<small>(<?= $ct_email1 ?>)</small>
+
+
+														</td>
+													</tr>
+													<tr>
+														<td width="150">Sales Person </td>
+														<td width="1">:</td>
+														<td><strong><?= $manager . '(' . trim($salesperson) . ')'; ?></strong></td>
+													</tr>
+
+												</table>
 											</div>
 										</div>
 									</div>
 
+									<div class="col-md-6">
+										<div class="box box-default">
+											<div class="box-header with-border">
+												<i class="fa fa-file-text"></i>
+
+												<h3 class="box-title">Project</h3>
+											</div>
+											<!-- /.box-header -->
+											<div class="box-body">
+												<table class="table table-bordered table-striped table-hover">
+													<tr>
+														<td width="150">Project </td>
+														<td width="1">:</td>
+														<td><strong><?= $prj_no; ?></strong></td>
+													</tr>
+													<tr>
+														<td width="150">Project Description </td>
+														<td width="1">:</td>
+														<td><strong><?= $prj_desc; ?></strong></td>
+													</tr>
+													<tr>
+														<td width="150">PO Number Customer </td>
+														<td width="1">:</td>
+														<td><strong><?= $ponumbercust; ?></strong></td>
+													</tr>
+													<tr>
+														<td width="150">PO Customer Date </td>
+														<td width="1">:</td>
+														<td><strong><?= $pocustdate; ?></strong></td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
 									<div class="row">
 										<div class="col-sm-12">
 											<div class="form-group subtitle_head">
-												<label class="text-right"><strong>Delivery Orders :</strong></label>
+												<label class="text-right"><strong>Delivery Note :</strong></label>
 											</div>
 										</div>
 									</div>
 									<div class="row">
 										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="sage_shi_number">Shipment Number <code> (choose)</code></label>
+												<label for="shi_number">Ref. Delivery Number <code> (choose)</code></label>
 												<div class="input-group">
-													<span class="input-group-addon input-sm"><a href="<?= base_url(); ?>deliveryorders/form_select_sage_shipment/<?= $rcp_uniq ?>" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-search"></i></a></span>
-													<input type="text" maxlength="22" size="22" class="form-control input-sm required" name="sage_shi_number" id="sage_shi_number" placeholder="Shipment Number" value="<?= $sage_shi_number ?>" readonly>
+													<span class="input-group-addon input-sm"><a href="<?= base_url('deliveryorders/form_select_sage_shipment/' . $csr_uniq . '/' . $post_stat . '/' . $uf_pocustdate); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-search"></i></a></span>
+													<input type="text" maxlength="22" size="22" class="form-control input-sm required" name="shi_number" id="shi_number" placeholder="D/N Number" value="<?= session()->get('sage_shidoc') ?>" readonly>
 												</div></input>
 											</div>
 										</div>
 										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="shi_date">Delivery Date</label>
+												<label for="dn_number">D/N Number</label>
+												<input type="text" class="form-control input-sm required" id="dn_number" name="dn_number" value="<?= session()->get('sage_dnnumber') ?>" readonly />
+											</div>
+										</div>
+										<div class='col-sm-2'>
+											<div class='form-group'>
+												<label for="shi_date">Delivery. Date</label>
 												<div class="input-group input-group-sm date">
 													<div class="input-group-addon">
 														<i class="fa fa-calendar"></i>
 													</div>
-													<input class="form-control input-sm required" id="shi_date" name="shi_date" type="text" value="<?= $shi_date ?>" readonly>
+													<input class="form-control input-sm required" id="shi_date" name="shi_date" type="text" value="<?= session()->get('sage_shidate') ?>" readonly>
+												</div>
+											</div>
+										</div>
+
+										<div class='col-sm-2'>
+											<div class='form-group'>
+												<label for="received_date">Received Date</label>
+												<div class="input-group input-group-sm date">
+													<div class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</div>
+													<input class="form-control input-sm required" id="received_date" name="received_date" type="text" value="<?= session()->get('sage_rcpdate') ?>" readonly>
 												</div>
 											</div>
 										</div>
 										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="cust_rcp_date">Cust. Received Date</label>
-												<div class="input-group input-group-sm date">
-													<div class="input-group-addon">
-														<i class="fa fa-calendar"></i>
-													</div>
-													<input class="datepicker form-control input-sm required" id="cust_rcp_date" name="cust_rcp_date" type="text" value="<?= $cust_rcp_date ?>">
-												</div>
+												<label for="shi_ref">Reference</label>
+												<input type="text" class="form-control input-sm" id="shi_ref" name="shi_ref" placeholder="Ref." value="<?= session()->get('sage_shiref') ?>" readonly />
 											</div>
 										</div>
-										<div class='col-sm-6'>
+										<div class='col-sm-2'>
 											<div class='form-group'>
-												<label for="shi_number">DN Number</label>
-												<input type="text" class="form-control input-sm required" id="shi_number" name="shi_number" placeholder="DN Number" value="<?= $shi_number ?>" />
+												<label for="rcp_desc">Description</label>
+												<input type="text" class="form-control input-sm" id="shi_desc" name="shi_desc" placeholder="Description" value="<?= session()->get('sage_shidesc') ?>" readonly />
+											</div>
+										</div>
+									</div>
+
+
+
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group subtitle_head">
+												<label class="text-right"><strong>Item/Services :</strong></label>
 											</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class='col-sm-2'>
-											<div class='form-group'>
-												<label for="shi_itemno">Item No</label>
-												<input type="text" class="form-control input-sm required" id="shi_itemno" name="shi_itemno" placeholder="Item No" value="<?= $shi_itemno ?>" readonly />
-											</div>
-										</div>
-										<div class='col-sm-2'>
-											<div class='form-group'>
-												<label for="shi_materialno">Material No</label>
-												<input type="text" class="form-control input-sm required" id="shi_materialno" name="shi_materialno" placeholder="Material No" value="<?= $shi_materialno ?>" readonly />
-											</div>
-										</div>
-										<div class='col-sm-3'>
-											<div class='form-group'>
-												<label for="shi_itemdesc">Item Desc.</label>
-												<input type="text" class="form-control input-sm required" id="shi_itemdesc" name="shi_itemdesc" placeholder="Item Description" value="<?= $shi_itemdesc ?>" readonly />
-											</div>
-										</div>
-										<div class='col-sm-2'>
-											<div class='form-group'>
-												<label for="shi_qty">Qty Delivered</label>
-												<input type="text" class="form-control input-sm required" id="shi_qty" name="shi_qty" placeholder="Qty Shipment" value="<?= number_format($shi_qty, 0, ",", ".") ?>" />
+
+										<div class="col-sm-12">
+											<div class="table-responsive">
+												<table class="table table-bordered dataTable table-hover nowrap">
+													<thead class="bg-gray disabled color-palette">
+														<tr>
+
+															<th class="padat">No</th>
+
+															<th>Type</th>
+															<th>Inventory No.</th>
+															<th>Material No.</th>
+															<th>Item Desc.</th>
+															<th>P/O Number</th>
+															<th>Original <br>Qty</th>
+															<th>G/R Qty</th>
+															<th>D/N Qty <br>(Outstanding)</th>
+															<th>D/N Qty</th>
+															<th>Uom</th>
+															<th class="padat">Action</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														$no = 0;
+														$total_shi = 0;
+
+														foreach ($rcplforshi_data as $items) :
+															$total_shi += $items['options']['shi_qty'];
+														?>
+															<tr>
+
+																<td class="text-center"><?= ++$no ?></td>
+																<td><?= $items['options']['so_service']
+																	?></td>
+
+																<td><?= $items['id']
+																	?></td>
+																<td><?= $items['options']['material_no']
+																	?></td>
+																<td nowrap><?= $items['options']['itemdesc']
+																			?></td>
+																<td nowrap>
+																	<a href="<?= base_url("administration/popostedview/" . $items['options']['pouniq']) ?>" title="GR View" target="_blank">
+																		<?= $items['options']['ponumber'] ?>
+																	</a>
+																</td>
+																<td><?= number_format($items['options']['so_qty'], 0, ",", ".")
+																	?></td>
+																<td><?= number_format($items['options']['gr_qty'], 0, ",", ".")
+																	?></td>
+																<td><?= number_format($items['options']['shi_qty_outs'], 0, ",", ".")
+																	?></td>
+																<td><?= number_format($items['options']['shi_qty'], 0, ",", ".")
+																	?></td>
+																<td nowrap><?= $items['options']['so_uom']
+																			?></td>
+																<td nowrap>
+																	<a href="<?= base_url('deliveryorders/form_update_item/' . $csr_uniq . '/' . $post_stat . '/' . $items['rowid'] . '/' . $items['id'] . '/1') ?>" class="btn bg-orange btn-flat btn-sm" title="Update Item" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i></a>
+																	<a href="#" data-href="<?= base_url("deliveryorders/delete_item_cart/" . $csr_uniq . '/' . $post_stat . '/' . $items['rowid']  . '/1') ?>" class="btn bg-maroon btn-flat btn-sm" title="Delete Data" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+																</td>
+
+															</tr>
+
+														<?php
+
+														endforeach;
+
+														?>
+
+
+													</tbody>
+												</table>
 											</div>
 										</div>
 
-										<div class='col-sm-2'>
-											<div class='form-group'>
-												<label for="shi_qty_outs">Qty Del. Outstanding</label>
-												<input type="text" maxlength="10" size="10" class="form-control input-sm" name="shi_qty_outs" id="shi_qty_outs" placeholder="Qty Oustanding" value="<?= number_format($shi_qty_outs, 0, ",", ".") ?>" readonly>
-											</div>
-										</div>
-
-										<div class='col-sm-1'>
-											<div class='form-group'>
-												<label for="shi_unit">Uom</label>
-												<input type="text" class="form-control input-sm required" id="shi_unit" name="shi_unit" placeholder="Uom.." value="<?= $shi_unit ?>" readonly />
-											</div>
-										</div>
 									</div>
-
-
-
-
-
 								</div>
 							</div>
+
 						</div>
 
-
-
-						<div class="row">
-							<div class='col-sm-12'>
-								<?= validation_list_errors() ?>
-							</div>
-						</div>
 					</div>
-
-				</div>
-
-
-
-
-			</div>
-			<div class='box-footer'>
-				<div class='col-xs-12'>
-
-					<input type="hidden" id="csr_uniq" name="csr_uniq" value="<?= $csr_uniq ?>">
-					<input type="hidden" id="rcp_uniq" name="rcp_uniq" value="<?= $rcp_uniq ?>">
-					<input type="hidden" id="doc_uniq" name="doc_uniq" value="<?= $doc_uniq ?>">
-					<input type="hidden" id="shi_uniq" name="shi_uniq" value="<?= $shi_uniq ?>">
-					<input type="hidden" id="csr_qty" name="csr_qty" value="<?= $csr_qty ?>">
-					<input type="hidden" id="csr_contract" name="csr_contract" value="<?= $ct_no ?>">
-					<input type="hidden" id="csr_project" name="csr_project" value="<?= $prj_no ?>">
-					<input type="hidden" id="csr_custno" name="csr_custno" value="<?= $ct_custno ?>">
-
-					<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
-					<button type='submit' class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> Save</button>
 				</div>
 			</div>
+
+
+
+			<div class="row">
+				<div class='col-sm-12'>
+					<?= validation_list_errors() ?>
+				</div>
+			</div>
+</div>
+
+</div>
+
+
+
+
+</div>
+<div class='box-footer'>
+	<div class='col-xs-12'>
+		<input type="hidden" id="csr_uniq" name="csr_uniq" value="<?= $csr_uniq ?>">
+		<input type="hidden" id="cust_no" name="cust_no" value="<?= $ct_custno ?>">
+		<input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
+		<input type="hidden" id="delshiline" name="delshiline" value="<?= $delshiline ?>">
+		<input type="hidden" id="shi_total" name="shi_total" value="<?= $total_shi ?>">
+		<button type='reset' class='btn btn-social btn-flat btn-danger btn-sm'><i class='fa fa-times'></i> Cancel</button>
+		<button type='submit' id="posting" class='btn btn-social btn-flat btn-info btn-sm pull-right'><i class='fa fa-check'></i> <?= $button_text ?></button>
+	</div>
+</div>
 
 
 </div>
@@ -295,5 +317,5 @@
 </div>
 </section>
 </div>
-<?php //$this->load->view('global/confirm_delete');
+<?php echo view('settings/modalbox/modal_confirm_delete')
 ?>
