@@ -259,12 +259,13 @@
                                             <td width="1">:</td>
                                             <td><strong><?= $custrcpdate; ?></strong></td>
                                         </tr>
-                                        <tr>
-                                            <td width="300">e-Delivery Note</td>
-                                            <td width="1">:</td>
-                                            <td><strong><a href="<?= base_url($shiposted_data['EDNFILEPATH']) ?>" download><?= $shiposted_data['EDNFILENAME']; ?></a></strong></td>
-                                        </tr>
-
+                                        <?php if (!empty($shiposted_data['EDNFILEPATH'])) : ?>
+                                            <tr>
+                                                <td width="300">e-Delivery Note</td>
+                                                <td width="1">:</td>
+                                                <td><strong><a href="<?= base_url($shiposted_data['EDNFILEPATH']) ?>" download><?= $shiposted_data['EDNFILENAME']; ?></a></strong></td>
+                                            </tr>
+                                        <?php endif; ?>
                                         <tr>
                                             <td colspan="3" class="subtitle_head"><strong>SPAREPARTS / SERVICES</strong></td>
                                         </tr>

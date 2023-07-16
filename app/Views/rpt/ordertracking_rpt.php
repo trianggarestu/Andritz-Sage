@@ -90,8 +90,8 @@
 																<th class="bg-olive">Delivery Date</th>
 																<th class="bg-olive">DN Number</th>
 																<th class="bg-olive">Received Date</th>
-																<th class="bg-olive">Delivered</th>
-																<th class="bg-olive">Outstanding</th>
+																<th class="bg-olive">Qty Delivered</th>
+																<th class="bg-olive">Qty Outstanding</th>
 																<th class="bg-olive">PO Status</th>
 																<th class="bg-olive">DN Status</th>
 																<th style="background-color: white;"></th>

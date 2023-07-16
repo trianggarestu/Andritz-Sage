@@ -261,12 +261,11 @@ class Deliveryorders_model extends Model
 
     function get_shi_open_by_id($shiuniq, $csruniq)
     {
-        $query = $this->db->query("select  
-        b.CSRUNIQ,b.CSRLUNIQ,c.QTY,sum(b.QTY) as S_SHIQTY
+        $query = $this->db->query("select * from (select b.CSRUNIQ,b.CSRLUNIQ,c.QTY,sum(b.QTY) as S_SHIQTY
         from webot_SHIPMENTS a inner join webot_SHIL b on b.SHIUNIQ=a.SHIUNIQ
 		left join webot_CSRL c on c.CSRUNIQ=b.CSRUNIQ and c.CSRLUNIQ=b.CSRLUNIQ
-        where b.CSRUNIQ='$csruniq' and a.SHIUNIQ='$shiuniq'
-		group by b.CSRUNIQ,b.CSRLUNIQ,c.QTY");
+        where b.CSRUNIQ='$csruniq'
+		group by b.CSRUNIQ,b.CSRLUNIQ,c.QTY ) ot where ot.CSRLUNIQ in (select distinct CSRLUNIQ from webot_SHIL where SHIUNIQ='$shiuniq')");
         return $query->getResultArray();
     }
 
@@ -395,12 +394,12 @@ class Deliveryorders_model extends Model
 
 
 
-    function get_delivery_post($csruniq)
+    function get_delivery_post($csruniq, $shiuniq)
     {
         $query = $this->db->query("select top 1 a.*,c.CRMREQDATE,c.PODATECUST from webot_SHIPMENTS a 
         inner join webot_SHIL b on b.SHIUNIQ=a.SHIUNIQ
                 left join webot_CSR c on c.CSRUNIQ=a.CSRUNIQ
-        where a.POSTINGSTAT=1 and a.CSRUNIQ='$csruniq' 
+        where a.POSTINGSTAT=1 and a.CSRUNIQ='$csruniq' and b.SHIUNIQ='$shiuniq' 
         order by SHIDATE desc");
         return $query->getRowArray();
     }

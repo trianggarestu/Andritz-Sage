@@ -26,16 +26,13 @@ class Finance_model extends Model
 
     function get_shi_pending_to_finance()
     {
-        $query = $this->db->query("select a.SHIUNIQ,a.DOCNUMBER,a.SHINUMBER,a.SHIDATE,a.CUSTRCPDATE,a.SHIITEMNO,a.SHIQTY,a.SHIQTYOUTSTANDING,a.SHIUNIT,a.POCUSTSTATUS,
-        a.EDNFILENAME,a.EDNFILEPATH,a.POSTINGSTAT as SHIPOSTINGSTAT,a.DNSTATUS,a.DNPOSTINGSTAT,
-        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
+        $query = $this->db->query("select 
+        a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
+        a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
         c.FINUNIQ,c.IDINVC,c.INVOICEDATE,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
-        from webot_SHIPMENTS a 
-        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
-        left join webot_FINANCE c on c.SHIUNIQ=a.SHIUNIQ
-        where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and a.DNPOSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL)");
+        from webot_CSR a 
+        left join webot_FINANCE c on c.CSRUNIQ=a.CSRUNIQ
+        where (a.POSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL)");
 
         return $query->getResultArray();
     }

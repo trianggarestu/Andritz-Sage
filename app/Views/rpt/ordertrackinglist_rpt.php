@@ -111,8 +111,8 @@
 															<th class="bg-olive">Delivery Date</th>
 															<th class="bg-olive">DN Number</th>
 															<th class="bg-olive">Received Date</th>
-															<th class="bg-olive">Delivered</th>
-															<th class="bg-olive">Outstanding</th>
+															<th class="bg-olive">Qty Delivered</th>
+															<th class="bg-olive">Qty Outstanding</th>
 															<th class="bg-olive">PO Status</th>
 															<th class="bg-olive">DN Status</th>
 															<th style="background-color: white;"></th>
@@ -214,13 +214,10 @@
 																<td><?php $dnpostingstat = $ot_list['GRSTATUS'];
 																	switch ($dnpostingstat) {
 																		case "0":
-																			echo "Open";
+																			echo "Partial";
 																			break;
 																		case "1":
-																			echo "Posted";
-																			break;
-																		case "2":
-																			echo "Deleted";
+																			echo "Completed";
 																			break;
 																		default:
 																			echo "";
@@ -246,14 +243,12 @@
 																<td><?php $dnpostingstat = $ot_list['DNSTATUS'];
 																	switch ($dnpostingstat) {
 																		case "0":
-																			echo "Open";
+																			echo "";
 																			break;
 																		case "1":
-																			echo "Posted";
+																			echo "RECEIVED";
 																			break;
-																		case "2":
-																			echo "Deleted";
-																			break;
+
 																		default:
 																			echo "";
 																	} ?>

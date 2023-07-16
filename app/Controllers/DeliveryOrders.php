@@ -581,9 +581,9 @@ class DeliveryOrders extends BaseController
 
                         );
                         $shi_update = $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data);
+                        $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq, $shiuniq);
 
                         if ($shi_update) {
-                            $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq);
                             foreach ($shi_to_ot as $data_shil) :
                                 $csruniq = $data_shil['CSRUNIQ'];
                                 $csrluniq = $data_shil['CSRLUNIQ'];
@@ -785,7 +785,7 @@ class DeliveryOrders extends BaseController
     }
 
 
-    public function update_action()
+    /*public function update_action()
     {
         if (!$this->validate([
             'sage_shi_number' => 'required',
@@ -859,6 +859,7 @@ class DeliveryOrders extends BaseController
             }
         }
     }
+    */
 
 
     public function shipmentopenview($shiuniq)
@@ -922,7 +923,7 @@ class DeliveryOrders extends BaseController
         $shi_update = $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data);
 
         if ($shi_update) {
-            $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq);
+            $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq, $shiuniq);
             foreach ($shi_to_ot as $data_shil) :
                 $csruniq = $data_shil['CSRUNIQ'];
                 $csrluniq = $data_shil['CSRLUNIQ'];
