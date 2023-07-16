@@ -8,7 +8,7 @@
 </script>
 <div class='modal-header'>
     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-    <h4 class='modal-title' id='myModalLabel'> Fill A/R Invoice</h4>
+    <h4 class='modal-title' id='myModalLabel'> Confirm D/N Origin</h4>
 </div>
 
 <form action="<?= $form_action;
@@ -83,87 +83,49 @@
                             </div>
 
                         </div>
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered dataTable table-hover nowrap">
+                                    <thead class="bg-gray disabled color-palette">
+                                        <tr>
 
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="shiitemno">Item :</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">
-                                            Inventory No. :
-                                        </div>
-                                        <input type="text" class="form-control input-sm required" id="shiitemno" name="shiitemno" placeholder="" value="<?= $shiitemno ?>" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                            <th class="padat">No</th>
 
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="inventory_desc"></label>
-                                </div>
-                                <div class="col-sm-9">
+                                            <th>Type </th>
+                                            <th>Inventory No.</th>
+                                            <th>Item Desc</th>
+                                            <th>Qty.</th>
+                                            <th>Uom</th>
 
-                                    <input type="text" class="form-control input-sm required" id="inventory_desc" name="inventory_desc" placeholder="" value="<?= $inventory_desc ?>" readonly />
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $no = 0;
+                                        foreach ($shi_l as $items) :
+                                        ?>
+                                            <tr>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="shiqty"></label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">
-                                            Qty. :
-                                        </div>
-                                        <input type="text" class="form-control input-sm required" id="shiqty" name="shiqty" placeholder="" value="<?= number_format($shiqty, 0, ",", ".") ?> ( <?= $uom ?> )" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="shiqtyouts"></label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">
-                                            Qty. Outstanding :
-                                        </div>
-                                        <input type="text" class="form-control input-sm required" id="shiqtyouts" name="shiqtyouts" placeholder="" value="<?= number_format($shiqtyouts, 0, ",", ".") ?> ( <?= $uom ?> )" readonly />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
-                                    <label for="pocuststatus">PO Status</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <input type="text" style="width:100%;" class="form-control input-sm required" id="pocuststatus" name="pocuststatus" placeholder="" value="<?php
+                                                <td class="text-center"><?= ++$no ?></td>
+                                                <td><?= $items['SERVICETYPE']
+                                                    ?></td>
 
-                                                                                                                                                                                switch ($pocuststatus) {
-                                                                                                                                                                                    case "0":
-                                                                                                                                                                                        echo "Outstanding";
-                                                                                                                                                                                        break;
-                                                                                                                                                                                    case "1":
-                                                                                                                                                                                        echo "Completed";
-                                                                                                                                                                                        break;
-                                                                                                                                                                                    default:
-                                                                                                                                                                                        echo "";
-                                                                                                                                                                                }
+                                                <td><?= $items['ITEMNO']
+                                                    ?></td>
+                                                <td><?= $items['ITEMDESC']
+                                                    ?></td>
 
-                                                                                                                                                                                ?>" readonly />
+                                                <td style="text-align: center;"><?= number_format($items['QTY'], 0, ",", ".")
+                                                                                ?></td>
+                                                <td style="text-align: center;" nowrap><?= $items['STOCKUNIT']
+                                                                                        ?></td>
 
-                                </div>
+                                            </tr>
+                                        <?php endforeach;
+                                        ?>
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="form-group">

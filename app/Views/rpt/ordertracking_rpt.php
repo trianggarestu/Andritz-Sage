@@ -222,14 +222,12 @@
 																	<td><?php $dnpostingstat = $ot_list['DNSTATUS'];
 																		switch ($dnpostingstat) {
 																			case "0":
-																				echo "Open";
+																				echo "";
 																				break;
 																			case "1":
-																				echo "Posted";
+																				echo "RECEIVED";
 																				break;
-																			case "2":
-																				echo "Deleted";
-																				break;
+
 																			default:
 																				echo "";
 																		} ?>

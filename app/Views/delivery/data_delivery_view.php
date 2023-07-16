@@ -32,7 +32,7 @@
 						<a href="<?= base_url('deliveryorders') ?>" title="Back to Good Receipt List" class="btn btn-social btn-flat bg-aqua btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Delivery Orders List</a>
 						<?php if ($shiopen_data['POSTINGSTAT'] == 0 or $shiopen_data['OFFLINESTAT'] == 1) {
 						?>
-							<a href="<?= base_url($link_action . $shiopen_data['SHIUNIQ']) ?>" class="btn btn-social btn-flat <?= $btn_color ?> btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Posting"><i class="fa  fa-paper-plane-o"></i>
+							<a href="<?= base_url($link_action . $shiopen_data['SHIUNIQ'] . '/' . $shiopen_data['CSRUNIQ']) ?>" class="btn btn-social btn-flat <?= $btn_color ?> btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Posting"><i class="fa  fa-paper-plane-o"></i>
 								<?= $button;
 								?>
 							</a>
@@ -44,17 +44,99 @@
 					<div class="box-body">
 						<div class="row">
 							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="col-md-6">
+											<div class="box box-default">
+												<div class="box-header with-border">
+													<i class="fa fa-file-text"></i>
+
+													<h3 class="box-title">Contract</h3>
+												</div>
+												<!-- /.box-header -->
+												<div class="box-body">
+													<table class="table table-bordered table-striped table-hover">
+														<tr>
+															<td width=" 150">Contract / Project / CRM No.
+															</td>
+															<td width="1">:</td>
+															<td><strong><a href="<?= base_url("administration/csrpostedview/" . $shiopen_data['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $shiopen_data['CONTRACT'] ?></a><?= '/' . $shiopen_data['PROJECT'] . '/' . $shiopen_data['CRMNO'] ?></strong></td>
+														</tr>
+														<tr>
+															<td width="150">Contract Description </td>
+															<td width="1">:</td>
+															<td><strong><?= $shiopen_data['CTDESC'] ?></strong></td>
+														</tr>
+														<tr>
+															<td width="150">Customer </td>
+															<td width="1">:</td>
+															<td><strong>
+																	<?= $shiopen_data['NAMECUST'] ?>
+																</strong><br>
+																<small>(<?= $shiopen_data['EMAIL1CUST'] ?>)</small>
+
+
+															</td>
+														</tr>
+														<tr>
+															<td width="150">Sales Person </td>
+															<td width="1">:</td>
+															<td><strong><?= $shiopen_data['MANAGER'] . '(' . trim($shiopen_data['SALESNAME']) . ')'; ?></strong></td>
+														</tr>
+
+													</table>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="box box-default">
+												<div class="box-header with-border">
+													<i class="fa fa-file-text"></i>
+
+													<h3 class="box-title">Project</h3>
+												</div>
+												<!-- /.box-header -->
+												<div class="box-body">
+													<table class="table table-bordered table-striped table-hover">
+														<tr>
+															<td width="150">Project </td>
+															<td width="1">:</td>
+															<td><strong><?= $shiopen_data['PROJECT']; ?></strong></td>
+														</tr>
+														<tr>
+															<td width="150">Project Description </td>
+															<td width="1">:</td>
+															<td><strong><?= $shiopen_data['PRJDESC']; ?></strong></td>
+														</tr>
+														<tr>
+															<td width="150">PO Number Customer </td>
+															<td width="1">:</td>
+															<td><strong><?= $shiopen_data['PONUMBERCUST']; ?></strong></td>
+														</tr>
+														<tr>
+															<td width="150">PO Customer Date </td>
+															<td width="1">:</td>
+															<td><strong><?php
+
+																		$dd = substr($shiopen_data['PODATECUST'], 6, 2);
+																		$mm = substr($shiopen_data['PODATECUST'], 4, 2);
+																		$yyyy = substr($shiopen_data['PODATECUST'], 0, 4);
+																		$pocustdate = $mm . '/' . $dd . '/' . $yyyy;
+																		echo $pocustdate; ?></strong></td>
+														</tr>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-
-
 									<div class="row">
 										<div class="col-sm-12">
 											<div class="table-responsive">
 												<table class="table table-bordered table-striped table-hover">
 													<tbody>
-														<tr>
-															<th colspan="3" class="subtitle_head"><strong>CONTRACT</strong></th>
-														</tr>
 
 														<tr>
 															<th colspan="3" class="subtitle_head"><strong>Delivery Orders</strong></th>
@@ -118,32 +200,107 @@
 											</div>
 										</div>
 									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<form action="<?= base_url() . 'deliveryorders/edn_upload_action' ?>" method="post" enctype="multipart/form-data">
+												<div class="row">
+													<div class="col-sm-12">
 
-									<form action="<?= base_url() . 'deliveryorders/edn_upload_action' ?>" method="post" enctype="multipart/form-data">
-										<div class="row">
-											<div class="col-sm-12">
+														<div class="form-group">
+															<label for="catatan">Upload e-Delivery Note</label>
+															<div class="input-group input-group-sm">
+																<input type="text" class="form-control" id="file_path" name="edn_path" style="width: 100%;">
+																<input type="file" class="hidden" id="file" name="edn_file">
+																<input type="hidden" name="old_edn_fname" value="<? //=$pamong['foto']
+																													?>">
+																<input type="hidden" name="shiuniq" value="<?= $shiopen_data['SHIUNIQ'] ?>">
+																<input type="hidden" name="shidocnum" value="<?= $shiopen_data['DOCNUMBER'] ?>">
+																<input type="hidden" name="shidate" value="<?= $shiopen_data['SHIDATE'] ?>">
+																<span class="input-group-btn">
+																	<button type="button" class="btn btn-info btn-flat" id="file_browser"><i class="fa fa-search"></i> Browse</button>
+																</span>
+															</div>
+														</div>
 
-												<div class="form-group">
-													<label for="catatan">Upload e-Delivery Note</label>
-													<div class="input-group input-group-sm">
-														<input type="text" class="form-control" id="file_path" name="edn_path" style="width: 100%;">
-														<input type="file" class="hidden" id="file" name="edn_file">
-														<input type="hidden" name="old_edn_fname" value="<? //=$pamong['foto']
-																											?>">
-														<input type="hidden" name="shiuniq" value="<?= $shiopen_data['SHIUNIQ'] ?>">
-														<input type="hidden" name="shidocnum" value="<?= $shiopen_data['DOCNUMBER'] ?>">
-														<input type="hidden" name="shidate" value="<?= $shiopen_data['SHIDATE'] ?>">
-														<span class="input-group-btn">
-															<button type="button" class="btn btn-info btn-flat" id="file_browser"><i class="fa fa-search"></i> Browse</button>
-														</span>
+														<button type="submit" class="btn btn-social btn-flat btn-info btn-sm pull-right"><i class='fa fa-upload'></i>Upload File</button>
+
 													</div>
 												</div>
+											</form>
+										</div>
+									</div>
 
-												<button type="submit" class="btn btn-social btn-flat btn-info btn-sm pull-right"><i class='fa fa-upload'></i>Upload File</button>
-
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group subtitle_head">
+												<label class="text-right"><strong>Item/Services :</strong></label>
 											</div>
 										</div>
-									</form>
+
+
+										<div class="col-sm-12">
+											<div class="table-responsive">
+												<table class="table table-bordered dataTable table-hover nowrap">
+													<thead class="bg-gray disabled color-palette">
+														<tr>
+
+															<th class="padat">No</th>
+
+															<th>Type</th>
+															<th>Inventory No.</th>
+															<th>Material No.</th>
+															<th>Item Desc.</th>
+
+															<th>D/N Qty</th>
+															<th>D/N Qty <br>(Outstanding)</th>
+
+															<th>Uom</th>
+
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														$no = 0;
+
+														foreach ($shi_l_open_data as $items) :
+														?>
+															<tr>
+
+																<td class="text-center"><?= ++$no ?></td>
+																<td><?= $items['SERVICETYPE']
+																	?></td>
+
+																<td><?= $items['ITEMNO']
+																	?></td>
+																<td><?= $items['MATERIALNO']
+																	?></td>
+																<td nowrap><?= $items['ITEMDESC']
+																			?></td>
+
+																<td><?= number_format($items['QTY'], 0, ",", ".")
+																	?></td>
+																<td><?= number_format($items['SHIQTYOUTSTANDING'], 0, ",", ".")
+																	?></td>
+
+																<td nowrap><?= $items['STOCKUNIT']
+																			?></td>
+
+
+															</tr>
+
+														<?php
+
+														endforeach;
+
+														?>
+
+
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+									</div>
 								</div>
 							</div>
 						</div>

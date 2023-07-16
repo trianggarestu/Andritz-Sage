@@ -77,6 +77,7 @@
 															<?php
 															$no = 1;
 															foreach ($delivery_data as $shi_list) {
+																$pocust_date = substr($shi_list['PODATECUST'], 4, 2) . "/" . substr($shi_list['PODATECUST'], 6, 2) . "/" . substr($shi_list['PODATECUST'], 0, 4);
 																$crmreq_date = substr($shi_list['CRMREQDATE'], 4, 2) . "/" . substr($shi_list['CRMREQDATE'], 6, 2) . "/" . substr($shi_list['CRMREQDATE'], 0, 4);
 																if (null == $shi_list['SHIDATE']) {
 																	$shi_date = '';
@@ -94,10 +95,12 @@
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $shi_list['CSRCONTRACT'] ?></a></strong>
-																		<?php echo "/" . $shi_list['CSRPROJECT'] . "/" . $shi_list['CRMNO'] . "<br>
-																	<strong>" . $shi_list['CTDESC'] . "</strong><br>
-																	<small>( " . trim($shi_list['NAMECUST']) . " )</small>"; ?><br>
+																	<td style="vertical-align: top;" nowrap>
+																		<strong><a href="<?= base_url("administration/csrpostedview/" . $shi_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $shi_list['CSRCONTRACT'] ?></a></strong>
+																		<?= " / " . $shi_list['CSRPROJECT'] . " / " . $shi_list['CRMNO']; ?><br>
+																		<strong><?= $shi_list['CTDESC']; ?></strong><br>
+																		<strong><?= $shi_list['PONUMBERCUST'] . ' - ' . $pocust_date; ?></strong><br>
+																		<small>(<?= $shi_list['NAMECUST']; ?>)</small><br>
 
 																	</td>
 
@@ -106,7 +109,7 @@
 
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
-																		<strong><a href="#"><?= $shi_list['DOCNUMBER'] ?></a></strong><br>
+																		<strong><a href="<?= base_url("administration/shipostedview/" . $shi_list['SHIUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $shi_list['DOCNUMBER'] ?></a></strong><br>
 																		<?= $shi_list['SHINUMBER'] ?><br>
 
 																	</td>
@@ -114,16 +117,16 @@
 																	<td style="vertical-align: top;"><?php $postingstat = $shi_list['POSTINGSTAT'];
 																										switch ($postingstat) {
 																											case "0":
-																												echo "Open";
+																												echo "<span class='label label-default'>Open</span>";
 																												break;
 																											case "1":
-																												echo "Posted";
+																												echo "<span class='label label-success'>Posted</span>";
 																												break;
 																											case "2":
-																												echo "Deleted";
+																												echo "<span class='label label-danger'>Deleted</span>";
 																												break;
 																											default:
-																												echo "";
+																												echo "<span class='label label-default'>Open</span>";
 																										} ?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
@@ -155,21 +158,24 @@
 
 																	</td>
 
-																	<td style="vertical-align: top;" nowrap><?php
-																											$dnpostingstatus = $shi_list['DNPOSTINGSTAT'];
-																											switch ($dnpostingstatus) {
-																												case "0":
-																													echo "Open";
-																													break;
-																												case "1":
-																													echo "Posted";
-																													break;
-																												default:
-																													echo "";
-																											}
+																	<td nowrap><?php
+																				$dnpostingstatus = $shi_list['DNPOSTINGSTAT'];
+																				switch ($dnpostingstatus) {
+																					case "0":
+																						echo "<span class='label label-default'>Open</span>";
+																						break;
+																					case "1":
+																						echo "<span class='label label-success'>Posted</span>";
+																						break;
+																					case "2":
+																						echo "<span class='label label-danger'>Deleted</span>";
+																						break;
+																					default:
+																						echo "<span class='label label-default'>Open</span>";
+																				}
 
-																											?></td>
-																	<td style="vertical-align: top;" nowrap>
+																				?></td>
+																	<td nowrap>
 																		<?php
 																		$dnstatus = $shi_list['DNSTATUS'];
 																		switch ($dnstatus) {

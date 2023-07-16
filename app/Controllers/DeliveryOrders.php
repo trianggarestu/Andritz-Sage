@@ -157,8 +157,12 @@ class DeliveryOrders extends BaseController
         } else {
             $deliverydata = $this->DeliveryordersModel->get_gr_pending_to_dn_search($keyword);
         }
+        $shilist_data = $this->DeliveryordersModel->get_shilist_on_shiopen();
+        $csrl_to_ship_data = $this->DeliveryordersModel->get_csrl_list_to_ship_post();
         $data = array(
             'delivery_data' => $deliverydata,
+            'shilist_data' => $shilist_data,
+            'shi_l_data' => $csrl_to_ship_data,
             'keyword' => $keyword,
         );
 
@@ -473,6 +477,7 @@ class DeliveryOrders extends BaseController
                 'CUSTOMER' => $custno,
                 'SHIREFERENCE' => $shi_ref,
                 'SHIDESC' => $shi_desc,
+                'SHIATTACHED' => 0,
                 'OTPROCESS' => $groupuser,
                 'POSTINGSTAT' => 0,
                 'OFFLINESTAT' => 1,
@@ -565,7 +570,6 @@ class DeliveryOrders extends BaseController
                     if ($post_stat == 1) {
                         $shi_to_ot = $this->DeliveryordersModel->get_shi_open_by_id($shiuniq, $csruniq);
                         $sender = $this->AdministrationModel->get_mailsender();
-                        $groupuser = 6;
 
                         $data = array(
                             'AUDTDATE' => $this->audtuser['AUDTDATE'],
@@ -614,6 +618,161 @@ class DeliveryOrders extends BaseController
                                 );
                                 $this->DeliveryordersModel->ot_deliveryorders_update($csruniq, $csrluniq, $data2);
                             endforeach;
+
+                            if ($sender['OFFLINESTAT'] == 0) {
+
+                                $get_shi_data = $this->DeliveryordersModel->get_shijoincsr_by_shi($shiuniq);
+                                if (!empty($get_shi_data['EDNFILENAME'])) {
+                                    //Untuk Update Status Posting CSR
+                                    $data3 = array(
+                                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                                        'POSTINGSTAT' => 1,
+                                        'OFFLINESTAT' => 0,
+                                    );
+
+
+                                    $crmpodate = substr($get_shi_data['PODATECUST'], 4, 2) . "/" . substr($get_shi_data['PODATECUST'], 6, 2) . "/" .  substr($get_shi_data['PODATECUST'], 0, 4);
+                                    $crmreqdate = substr($get_shi_data['CRMREQDATE'], 4, 2) . '/' . substr($get_shi_data['CRMREQDATE'], 6, 2) . '/' . substr($get_shi_data['CRMREQDATE'], 0, 4);
+                                    $rqndate = substr($get_shi_data['RQNDATE'], 4, 2) . "/" . substr($get_shi_data['RQNDATE'], 6, 2) . "/" .  substr($get_shi_data['RQNDATE'], 0, 4);
+                                    $povendordate = substr($get_shi_data['PODATE'], 4, 2) . "/" . substr($get_shi_data['PODATE'], 6, 2) . "/" .  substr($get_shi_data['PODATE'], 0, 4);
+                                    $etddate = substr($get_shi_data['ETDDATE'], 4, 2) . "/" . substr($get_shi_data['ETDDATE'], 6, 2) . "/" .  substr($get_shi_data['ETDDATE'], 0, 4);
+                                    $cargoreadinessdate = substr($get_shi_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_shi_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_shi_data['CARGOREADINESSDATE'], 0, 4);
+                                    $etdorigindate = substr($get_shi_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_shi_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_shi_data['ETDORIGINDATE'], 0, 4);
+                                    $atdorigindate = substr($get_shi_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_shi_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_shi_data['ATDORIGINDATE'], 0, 4);
+                                    $etaportdate = substr($get_shi_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_shi_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_shi_data['ETAPORTDATE'], 0, 4);
+                                    $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
+                                    $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
+                                    $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+                                    if (!empty($get_shi_data['EDNFILENAME'])) {
+
+                                        $is_attachment = 1;
+                                    } else {
+                                        $is_attachment = 0;
+                                    }
+                                    // Khusus untuk PROSES Delivery Note Model nya berbeda karena harus kirim ke customer juga
+                                    $notiftouser_data = $this->NotifModel->get_edn_sendto_user($groupuser, $csruniq);
+                                    $mail_tmpl = $this->NotifModel->get_template($groupuser);
+
+                                    foreach ($notiftouser_data as $sendto_user) :
+                                        $var_email = array(
+                                            'TONAME' => $sendto_user['NAME'],
+                                            'FROMNAME' => $this->audtuser['NAMELGN'],
+                                            'CONTRACT' => $get_shi_data['CONTRACT'],
+                                            'CTDESC' => $get_shi_data['CTDESC'],
+                                            'PROJECT' => $get_shi_data['PROJECT'],
+                                            'PRJDESC' => $get_shi_data['PRJDESC'],
+                                            'CUSTOMER' => $get_shi_data['CUSTOMER'],
+                                            'NAMECUST' => $get_shi_data['NAMECUST'],
+                                            'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
+                                            'PODATECUST' => $crmpodate,
+                                            'CRMNO' => $get_shi_data['CRMNO'],
+                                            'REQDATE' => $crmreqdate,
+                                            'ORDERDESC' => $get_shi_data['ORDERDESC'],
+                                            'REMARKS' => $get_shi_data['CRMREMARKS'],
+                                            'SALESCODE' => $get_shi_data['MANAGER'],
+                                            'SALESPERSON' => $get_shi_data['SALESNAME'],
+                                            'RQNDATE' => $rqndate,
+                                            'RQNNUMBER' => $get_shi_data['RQNNUMBER'],
+                                            //DATA VARIABLE PO
+                                            'PODATE' => $povendordate,
+                                            'PONUMBER' => $get_shi_data['PONUMBER'],
+                                            'ETDDATE' => $etddate,
+                                            'CARGOREADINESSDATE' => $cargoreadinessdate,
+                                            'ORIGINCOUNTRY' => $get_shi_data['ORIGINCOUNTRY'],
+                                            'POREMARKS' => $get_shi_data['POREMARKS'],
+                                            //DATA VARIABLE LOGISTICS
+                                            'ETDORIGINDATE' => $etdorigindate,
+                                            'ATDORIGINDATE' => $atdorigindate,
+                                            'ETAPORTDATE' => $etaportdate,
+                                            'PIBDATE' => $pibdate,
+                                            'VENDSHISTATUS' => $get_shi_data['VENDSHISTATUS'],
+                                            //DATA VARIABLE RECEIPTS
+                                            //'RECPNUMBER' => $get_shi_data['RECPNUMBER'],
+                                            //'RECPDATE' => $rcpdate,
+                                            //'VDNAME' => $get_shi_data['VDNAME'],
+                                            //'DESCRIPTIO' => $get_shi_data['DESCRIPTIO'],
+                                            //DATA VARIABLE SHIPMENTS
+                                            'DOCNUMBER' => $get_shi_data['DOCNUMBER'],
+                                            'SHINUMBER' => $get_shi_data['SHINUMBER'],
+                                            'SHIDATE' => $shidate,
+                                            'CUSTRCPDATE' => $custrcpdate,
+
+                                        );
+                                        $subject = $mail_tmpl['SUBJECT_MAIL'];
+                                        $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
+                                        $data_email = array(
+                                            'hostname'       => $sender['HOSTNAME'],
+                                            'sendername'       => $sender['SENDERNAME'],
+                                            'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                            'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                            'smtpauth'       => $sender['SMTPAUTH'],
+                                            'ssl'       => $sender['SSL'],
+                                            'smtpport'       => $sender['SMTPPORT'],
+                                            'to_email' => $sendto_user['EMAIL'],
+                                            'subject' =>  $subject,
+                                            'message' => $message,
+                                            //TAMBAHAN EMAIL ATTACHMENT
+                                            'attachment_filepath' => $get_shi_data['EDNFILEPATH'],
+                                            'attachment_filename' => $get_shi_data['EDNFILENAME'],
+                                        );
+
+
+                                        $data_notif = array(
+                                            'MAILKEY' => $groupuser . '-' . $get_shi_data['SHIUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                                            'FROM_USER' => $this->header_data['usernamelgn'],
+                                            'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                            'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                            'TO_USER' => $sendto_user['USERNAME'],
+                                            'TO_EMAIL' => $sendto_user['EMAIL'],
+                                            'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                            'SUBJECT' => $subject,
+                                            'MESSAGE' => $message,
+                                            'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                            'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                            'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                            'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                            'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                            'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                            'IS_READ' => 0,
+                                            'IS_ARCHIVED' => 0,
+                                            'IS_TRASHED' => 0,
+                                            'IS_DELETED' => 0,
+                                            'IS_ATTACHED' => $is_attachment,
+                                            'IS_STAR' => 0,
+                                            'IS_READSENDER' => 1,
+                                            'IS_ARCHIVEDSENDER' => 0,
+                                            'IS_TRASHEDSENDER' => 0,
+                                            'IS_DELETEDSENDER' => 0,
+                                            'SENDING_STATUS' => 1,
+                                            //TAMBAHAN EMAIL ATTACHMENT
+                                            'ATTACHMENT_FILENAME' => $get_shi_data['EDNFILENAME'],
+                                            'ATTACHMENT_FILEPATH' => $get_shi_data['EDNFILEPATH'],
+                                            'OTPROCESS' => $groupuser,
+                                            'UNIQPROCESS' => $get_shi_data['SHIUNIQ'],
+                                        );
+
+                                        //Check Duplicate Entry & Sending Mail
+                                        $touser = trim($sendto_user['USERNAME']);
+                                        $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_shi_data['SHIUNIQ'], $touser);
+                                        if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_shi_data['SHIUNIQ'] . '-' . $touser) {
+                                            session()->set('success', '-1');
+                                            return redirect()->to(base_url('/deliveryorders'));
+                                            session()->remove('success');
+                                        } else if (empty($getmailuniq['MAILKEY'])) {
+                                            $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                                            if ($post_email) {
+                                                $sending_mail = $this->send($data_email);
+                                            }
+                                        }
+
+                                    endforeach;
+                                    $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data3);
+                                }
+                            }
                         }
                     }
                 }
@@ -707,26 +866,30 @@ class DeliveryOrders extends BaseController
         session()->remove('success');
         session()->set('success', '0');
         $getshiopen = $this->DeliveryordersModel->get_shipment_open($shiuniq);
+        $get_shi_l = $this->DeliveryordersModel->get_shi_l_by_id($shiuniq);
 
         /*if (empty($getshiopen['POSTINGSTAT']) and empty($getshiopen['EDNFILENAME'])) {
             return redirect()->to(base_url('/deliveryorders/'));
             session()->remove('success');
         } else 
         */
-        if ($getshiopen['POSTINGSTAT'] == 1 and empty($getshiopen['EDNFILENAME'])) {
-            $data = array(
-                'shiopen_data' =>  $getshiopen,
-                'link_action' => 'deliveryorders/posting/',
-                'btn_color' => 'bg-blue',
-                'button' => 'Posting',
-            );
-        } else if ($getshiopen['POSTINGSTAT'] == 1 and !empty($getshiopen['EDNFILENAME'])) {
+
+        if (!empty($getshiopen['EDNFILENAME']) and $getshiopen['POSTINGSTAT'] == 1 and $getshiopen['OFFLINESTAT'] == 1) {
 
             $data = array(
                 'shiopen_data' =>  $getshiopen,
+                'shi_l_open_data' =>  $get_shi_l,
                 'link_action' => 'deliveryorders/sendnotif/',
                 'btn_color' => 'bg-orange',
                 'button' => 'Send Notification Manually',
+            );
+        } else {
+            $data = array(
+                'shiopen_data' =>  $getshiopen,
+                'shi_l_open_data' =>  $get_shi_l,
+                'link_action' => 'deliveryorders/posting/',
+                'btn_color' => 'bg-blue',
+                'button' => 'Posting D/N',
             );
         }
 
@@ -745,7 +908,7 @@ class DeliveryOrders extends BaseController
     {
         $shi_to_ot = $this->DeliveryordersModel->get_shi_open_by_id($shiuniq, $csruniq);
         $sender = $this->AdministrationModel->get_mailsender();
-        $groupuser = 6;
+        $groupuser = 7;
 
         $data = array(
             'AUDTDATE' => $this->audtuser['AUDTDATE'],
@@ -797,136 +960,157 @@ class DeliveryOrders extends BaseController
 
 
             if ($sender['OFFLINESTAT'] == 0) {
-                //Untuk Update Status Posting CSR
-                $data3 = array(
-                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                    'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'POSTINGSTAT' => 1,
-                    'OFFLINESTAT' => 0,
-                );
-                //inisiasi proses kirim ke group
-                $get_rcp_data = $this->GoodreceiptModel->get_rcpjoincsr_by_rcp($rcpuniq);
-                $crmpodate = substr($get_rcp_data['PODATECUST'], 4, 2) . "/" . substr($get_rcp_data['PODATECUST'], 6, 2) . "/" .  substr($get_rcp_data['PODATECUST'], 0, 4);
-                $crmreqdate = substr($get_rcp_data['CRMREQDATE'], 4, 2) . '/' . substr($get_rcp_data['CRMREQDATE'], 6, 2) . '/' . substr($get_rcp_data['CRMREQDATE'], 0, 4);
-                $rqndate = substr($get_rcp_data['RQNDATE'], 4, 2) . "/" . substr($get_rcp_data['RQNDATE'], 6, 2) . "/" .  substr($get_rcp_data['RQNDATE'], 0, 4);
-                $povendordate = substr($get_rcp_data['PODATE'], 4, 2) . "/" . substr($get_rcp_data['PODATE'], 6, 2) . "/" .  substr($get_rcp_data['PODATE'], 0, 4);
-                $etddate = substr($get_rcp_data['ETDDATE'], 4, 2) . "/" . substr($get_rcp_data['ETDDATE'], 6, 2) . "/" .  substr($get_rcp_data['ETDDATE'], 0, 4);
-                $cargoreadinessdate = substr($get_rcp_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_rcp_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_rcp_data['CARGOREADINESSDATE'], 0, 4);
-                $etdorigindate = substr($get_rcp_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_rcp_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_rcp_data['ETDORIGINDATE'], 0, 4);
-                $atdorigindate = substr($get_rcp_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_rcp_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_rcp_data['ATDORIGINDATE'], 0, 4);
-                $etaportdate = substr($get_rcp_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_rcp_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_rcp_data['ETAPORTDATE'], 0, 4);
-                $pibdate = substr($get_rcp_data['PIBDATE'], 4, 2) . "/" . substr($get_rcp_data['PIBDATE'], 6, 2) . "/" .  substr($get_rcp_data['PIBDATE'], 0, 4);
-                $rcpdate = substr($get_rcp_data['RECPDATE'], 4, 2) . "/" . substr($get_rcp_data['RECPDATE'], 6, 2) . "/" .  substr($get_rcp_data['RECPDATE'], 0, 4);
-
-                $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-                $mail_tmpl = $this->NotifModel->get_template($groupuser);
-
-                foreach ($notiftouser_data as $sendto_user) :
-                    $var_email = array(
-                        'TONAME' => $sendto_user['NAME'],
-                        'FROMNAME' => $this->audtuser['NAMELGN'],
-                        'CONTRACT' => $get_rcp_data['CONTRACT'],
-                        'CTDESC' => $get_rcp_data['CTDESC'],
-                        'PROJECT' => $get_rcp_data['PROJECT'],
-                        'PRJDESC' => $get_rcp_data['PRJDESC'],
-                        'CUSTOMER' => $get_rcp_data['CUSTOMER'],
-                        'NAMECUST' => $get_rcp_data['NAMECUST'],
-                        'PONUMBERCUST' => $get_rcp_data['PONUMBERCUST'],
-                        'PODATECUST' => $crmpodate,
-                        'CRMNO' => $get_rcp_data['CRMNO'],
-                        'REQDATE' => $crmreqdate,
-                        'ORDERDESC' => $get_rcp_data['ORDERDESC'],
-                        'REMARKS' => $get_rcp_data['CRMREMARKS'],
-                        'SALESCODE' => $get_rcp_data['MANAGER'],
-                        'SALESPERSON' => $get_rcp_data['SALESNAME'],
-                        'RQNDATE' => $rqndate,
-                        'RQNNUMBER' => $get_rcp_data['RQNNUMBER'],
-                        //DATA VARIABLE PO
-                        'PODATE' => $povendordate,
-                        'PONUMBER' => $get_rcp_data['PONUMBER'],
-                        'ETDDATE' => $etddate,
-                        'CARGOREADINESSDATE' => $cargoreadinessdate,
-                        'ORIGINCOUNTRY' => $get_rcp_data['ORIGINCOUNTRY'],
-                        'POREMARKS' => $get_rcp_data['POREMARKS'],
-                        //DATA VARIABLE LOGISTICS
-                        'ETDORIGINDATE' => $etdorigindate,
-                        'ATDORIGINDATE' => $atdorigindate,
-                        'ETAPORTDATE' => $etaportdate,
-                        'PIBDATE' => $pibdate,
-                        'VENDSHISTATUS' => $get_rcp_data['VENDSHISTATUS'],
-                        //DATA VARIABLE RECEIPTS
-                        'RECPNUMBER' => $get_rcp_data['RECPNUMBER'],
-                        'RECPDATE' => $rcpdate,
-                        'VDNAME' => $get_rcp_data['VDNAME'],
-                        'DESCRIPTIO' => $get_rcp_data['DESCRIPTIO'],
-
-                    );
-                    $subject = $mail_tmpl['SUBJECT_MAIL'];
-                    $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
-
-                    $data_email = array(
-                        'hostname'       => $sender['HOSTNAME'],
-                        'sendername'       => $sender['SENDERNAME'],
-                        'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                        'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                        'smtpauth'       => $sender['SMTPAUTH'],
-                        'ssl'       => $sender['SSL'],
-                        'smtpport'       => $sender['SMTPPORT'],
-                        'to_email' => $sendto_user['EMAIL'],
-                        'subject' =>  $subject,
-                        'message' => $message,
+                $get_shi_data = $this->DeliveryordersModel->get_shijoincsr_by_shi($shiuniq);
+                if (!empty($get_shi_data['EDNFILENAME'])) {
+                    //Untuk Update Status Posting CSR
+                    $data3 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'POSTINGSTAT' => 1,
+                        'OFFLINESTAT' => 0,
                     );
 
 
-                    $data_notif = array(
-                        'MAILKEY' => $groupuser . '-' . $get_rcp_data['RCPUNIQ'] . '-' . trim($sendto_user['USERNAME']),
-                        'FROM_USER' => $this->header_data['usernamelgn'],
-                        'FROM_EMAIL' => $this->header_data['emaillgn'],
-                        'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                        'TO_USER' => $sendto_user['USERNAME'],
-                        'TO_EMAIL' => $sendto_user['EMAIL'],
-                        'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                        'SUBJECT' => $subject,
-                        'MESSAGE' => $message,
-                        'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                        'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                        'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                        'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                        'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                        'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                        'IS_READ' => 0,
-                        'IS_ARCHIVED' => 0,
-                        'IS_TRASHED' => 0,
-                        'IS_DELETED' => 0,
-                        'IS_ATTACHED' => 0,
-                        'IS_STAR' => 0,
-                        'IS_READSENDER' => 1,
-                        'IS_ARCHIVEDSENDER' => 0,
-                        'IS_TRASHEDSENDER' => 0,
-                        'IS_DELETEDSENDER' => 0,
-                        'SENDING_STATUS' => 1,
-                        'OTPROCESS' => $groupuser,
-                        'UNIQPROCESS' => $get_rcp_data['RCPUNIQ'],
-                    );
+                    $crmpodate = substr($get_shi_data['PODATECUST'], 4, 2) . "/" . substr($get_shi_data['PODATECUST'], 6, 2) . "/" .  substr($get_shi_data['PODATECUST'], 0, 4);
+                    $crmreqdate = substr($get_shi_data['CRMREQDATE'], 4, 2) . '/' . substr($get_shi_data['CRMREQDATE'], 6, 2) . '/' . substr($get_shi_data['CRMREQDATE'], 0, 4);
+                    $rqndate = substr($get_shi_data['RQNDATE'], 4, 2) . "/" . substr($get_shi_data['RQNDATE'], 6, 2) . "/" .  substr($get_shi_data['RQNDATE'], 0, 4);
+                    $povendordate = substr($get_shi_data['PODATE'], 4, 2) . "/" . substr($get_shi_data['PODATE'], 6, 2) . "/" .  substr($get_shi_data['PODATE'], 0, 4);
+                    $etddate = substr($get_shi_data['ETDDATE'], 4, 2) . "/" . substr($get_shi_data['ETDDATE'], 6, 2) . "/" .  substr($get_shi_data['ETDDATE'], 0, 4);
+                    $cargoreadinessdate = substr($get_shi_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_shi_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_shi_data['CARGOREADINESSDATE'], 0, 4);
+                    $etdorigindate = substr($get_shi_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_shi_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_shi_data['ETDORIGINDATE'], 0, 4);
+                    $atdorigindate = substr($get_shi_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_shi_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_shi_data['ATDORIGINDATE'], 0, 4);
+                    $etaportdate = substr($get_shi_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_shi_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_shi_data['ETAPORTDATE'], 0, 4);
+                    $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
+                    $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
+                    $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+                    if (!empty($get_shi_data['EDNFILENAME'])) {
 
-                    //Check Duplicate Entry & Sending Mail
-                    $touser = trim($sendto_user['USERNAME']);
-                    $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_rcp_data['RCPUNIQ'], $touser);
-                    if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_rcp_data['RCPUNIQ'] . '-' . $touser) {
-                        session()->set('success', '-1');
-                        return redirect()->to(base_url('/goodreceipt'));
-                        session()->remove('success');
-                    } else if (empty($getmailuniq['MAILKEY'])) {
-                        $post_email = $this->NotifModel->mailbox_insert($data_notif);
-                        if ($post_email) {
-                            $sending_mail = $this->send($data_email);
-                        }
+                        $is_attachment = 1;
+                    } else {
+                        $is_attachment = 0;
                     }
+                    // Khusus untuk PROSES Delivery Note Model nya berbeda karena harus kirim ke customer juga
+                    $notiftouser_data = $this->NotifModel->get_edn_sendto_user($groupuser, $csruniq);
+                    $mail_tmpl = $this->NotifModel->get_template($groupuser);
 
-                endforeach;
-                $this->GoodreceiptModel->goodreceipt_update($get_rcp_data['RCPUNIQ'], $data3);
+                    foreach ($notiftouser_data as $sendto_user) :
+                        $var_email = array(
+                            'TONAME' => $sendto_user['NAME'],
+                            'FROMNAME' => $this->audtuser['NAMELGN'],
+                            'CONTRACT' => $get_shi_data['CONTRACT'],
+                            'CTDESC' => $get_shi_data['CTDESC'],
+                            'PROJECT' => $get_shi_data['PROJECT'],
+                            'PRJDESC' => $get_shi_data['PRJDESC'],
+                            'CUSTOMER' => $get_shi_data['CUSTOMER'],
+                            'NAMECUST' => $get_shi_data['NAMECUST'],
+                            'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
+                            'PODATECUST' => $crmpodate,
+                            'CRMNO' => $get_shi_data['CRMNO'],
+                            'REQDATE' => $crmreqdate,
+                            'ORDERDESC' => $get_shi_data['ORDERDESC'],
+                            'REMARKS' => $get_shi_data['CRMREMARKS'],
+                            'SALESCODE' => $get_shi_data['MANAGER'],
+                            'SALESPERSON' => $get_shi_data['SALESNAME'],
+                            'RQNDATE' => $rqndate,
+                            'RQNNUMBER' => $get_shi_data['RQNNUMBER'],
+                            //DATA VARIABLE PO
+                            'PODATE' => $povendordate,
+                            'PONUMBER' => $get_shi_data['PONUMBER'],
+                            'ETDDATE' => $etddate,
+                            'CARGOREADINESSDATE' => $cargoreadinessdate,
+                            'ORIGINCOUNTRY' => $get_shi_data['ORIGINCOUNTRY'],
+                            'POREMARKS' => $get_shi_data['POREMARKS'],
+                            //DATA VARIABLE LOGISTICS
+                            'ETDORIGINDATE' => $etdorigindate,
+                            'ATDORIGINDATE' => $atdorigindate,
+                            'ETAPORTDATE' => $etaportdate,
+                            'PIBDATE' => $pibdate,
+                            'VENDSHISTATUS' => $get_shi_data['VENDSHISTATUS'],
+                            //DATA VARIABLE RECEIPTS
+                            //'RECPNUMBER' => $get_shi_data['RECPNUMBER'],
+                            //'RECPDATE' => $rcpdate,
+                            //'VDNAME' => $get_shi_data['VDNAME'],
+                            //'DESCRIPTIO' => $get_shi_data['DESCRIPTIO'],
+                            //DATA VARIABLE SHIPMENTS
+                            'DOCNUMBER' => $get_shi_data['DOCNUMBER'],
+                            'SHINUMBER' => $get_shi_data['SHINUMBER'],
+                            'SHIDATE' => $shidate,
+                            'CUSTRCPDATE' => $custrcpdate,
+
+                        );
+                        $subject = $mail_tmpl['SUBJECT_MAIL'];
+                        $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
+                        $data_email = array(
+                            'hostname'       => $sender['HOSTNAME'],
+                            'sendername'       => $sender['SENDERNAME'],
+                            'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                            'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                            'smtpauth'       => $sender['SMTPAUTH'],
+                            'ssl'       => $sender['SSL'],
+                            'smtpport'       => $sender['SMTPPORT'],
+                            'to_email' => $sendto_user['EMAIL'],
+                            'subject' =>  $subject,
+                            'message' => $message,
+                            //TAMBAHAN EMAIL ATTACHMENT
+                            'attachment_filepath' => $get_shi_data['EDNFILEPATH'],
+                            'attachment_filename' => $get_shi_data['EDNFILENAME'],
+                        );
+
+
+                        $data_notif = array(
+                            'MAILKEY' => $groupuser . '-' . $get_shi_data['SHIUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                            'FROM_USER' => $this->header_data['usernamelgn'],
+                            'FROM_EMAIL' => $this->header_data['emaillgn'],
+                            'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                            'TO_USER' => $sendto_user['USERNAME'],
+                            'TO_EMAIL' => $sendto_user['EMAIL'],
+                            'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                            'SUBJECT' => $subject,
+                            'MESSAGE' => $message,
+                            'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                            'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                            'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                            'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                            'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                            'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                            'IS_READ' => 0,
+                            'IS_ARCHIVED' => 0,
+                            'IS_TRASHED' => 0,
+                            'IS_DELETED' => 0,
+                            'IS_ATTACHED' => $is_attachment,
+                            'IS_STAR' => 0,
+                            'IS_READSENDER' => 1,
+                            'IS_ARCHIVEDSENDER' => 0,
+                            'IS_TRASHEDSENDER' => 0,
+                            'IS_DELETEDSENDER' => 0,
+                            'SENDING_STATUS' => 1,
+                            //TAMBAHAN EMAIL ATTACHMENT
+                            'ATTACHMENT_FILENAME' => $get_shi_data['EDNFILENAME'],
+                            'ATTACHMENT_FILEPATH' => $get_shi_data['EDNFILEPATH'],
+                            'OTPROCESS' => $groupuser,
+                            'UNIQPROCESS' => $get_shi_data['SHIUNIQ'],
+                        );
+
+                        //Check Duplicate Entry & Sending Mail
+                        $touser = trim($sendto_user['USERNAME']);
+                        $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_shi_data['SHIUNIQ'], $touser);
+                        if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_shi_data['SHIUNIQ'] . '-' . $touser) {
+                            session()->set('success', '-1');
+                            return redirect()->to(base_url('/deliveryorders'));
+                            session()->remove('success');
+                        } else if (empty($getmailuniq['MAILKEY'])) {
+                            $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                            if ($post_email) {
+                                $sending_mail = $this->send($data_email);
+                            }
+                        }
+
+                    endforeach;
+                    $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data3);
+                }
             }
         }
 
@@ -960,6 +1144,7 @@ class DeliveryOrders extends BaseController
                 'AUDTTIME' => $this->audtuser['AUDTTIME'],
                 'AUDTUSER' => $this->audtuser['AUDTUSER'],
                 'AUDTORG' => $this->audtuser['AUDTORG'],
+                'SHIATTACHED' => 1,
                 'EDNFILENAME' => $filename,
                 'EDNFILEPATH' => 'assets/files/edn_attached/' . $filename,
 
@@ -978,206 +1163,166 @@ class DeliveryOrders extends BaseController
 
     public function sendnotif($shiuniq)
     {
-        //check dari sini
-        $get_shi = $this->DeliveryordersModel->get_shipment_post($shiuniq);
-        $sender = $this->AdministrationModel->get_mailsender();
-        $id_so = $get_shi['CSRUNIQ'];
-        $rcpuniq = $get_shi['RCPUNIQ'];
-        $shiuniq = $get_shi['SHIUNIQ'];
-        $shi_date = substr($get_shi['SHIDATE'], 4, 2) . '/' . substr($get_shi['SHIDATE'], 6, 2) . '/' . substr($get_shi['SHIDATE'], 0, 4);
-        $pocuststatus = $get_shi['POCUSTSTATUS'];
-        switch ($pocuststatus) {
-            case "0":
-                $pocuststatus = "Outstanding";
-                break;
-            case "1":
-                $pocuststatus = "Completed";
-                break;
-            default:
-                $pocuststatus = "";
-        }
 
-        if (!empty($get_shi['EDNFILENAME'])) {
+        //Untuk Update Status Posting CSR
+        $data3 = array(
+            'AUDTDATE' => $this->audtuser['AUDTDATE'],
+            'AUDTTIME' => $this->audtuser['AUDTTIME'],
+            'AUDTUSER' => $this->audtuser['AUDTUSER'],
+            'AUDTORG' => $this->audtuser['AUDTORG'],
+            'POSTINGSTAT' => 1,
+            'OFFLINESTAT' => 0,
+        );
+        $sender = $this->AdministrationModel->get_mailsender();
+        $groupuser = 7;
+        $get_shi_data = $this->DeliveryordersModel->get_shijoincsr_by_shi($shiuniq);
+        $csruniq = $get_shi_data['CSRUNIQ'];
+        $crmpodate = substr($get_shi_data['PODATECUST'], 4, 2) . "/" . substr($get_shi_data['PODATECUST'], 6, 2) . "/" .  substr($get_shi_data['PODATECUST'], 0, 4);
+        $crmreqdate = substr($get_shi_data['CRMREQDATE'], 4, 2) . '/' . substr($get_shi_data['CRMREQDATE'], 6, 2) . '/' . substr($get_shi_data['CRMREQDATE'], 0, 4);
+        $rqndate = substr($get_shi_data['RQNDATE'], 4, 2) . "/" . substr($get_shi_data['RQNDATE'], 6, 2) . "/" .  substr($get_shi_data['RQNDATE'], 0, 4);
+        $povendordate = substr($get_shi_data['PODATE'], 4, 2) . "/" . substr($get_shi_data['PODATE'], 6, 2) . "/" .  substr($get_shi_data['PODATE'], 0, 4);
+        $etddate = substr($get_shi_data['ETDDATE'], 4, 2) . "/" . substr($get_shi_data['ETDDATE'], 6, 2) . "/" .  substr($get_shi_data['ETDDATE'], 0, 4);
+        $cargoreadinessdate = substr($get_shi_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_shi_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_shi_data['CARGOREADINESSDATE'], 0, 4);
+        $etdorigindate = substr($get_shi_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_shi_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_shi_data['ETDORIGINDATE'], 0, 4);
+        $atdorigindate = substr($get_shi_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_shi_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_shi_data['ATDORIGINDATE'], 0, 4);
+        $etaportdate = substr($get_shi_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_shi_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_shi_data['ETAPORTDATE'], 0, 4);
+        $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
+        $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
+        $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+        if (!empty($get_shi_data['EDNFILENAME'])) {
 
             $is_attachment = 1;
         } else {
             $is_attachment = 0;
         }
-
-
-
-        $groupuser = 7;
-        //inisiasi proses kirim ke group
-        $data2 = array(
-            'AUDTDATE' => $this->audtuser['AUDTDATE'],
-            'AUDTTIME' => $this->audtuser['AUDTTIME'],
-            'AUDTUSER' => $this->audtuser['AUDTUSER'],
-            'AUDTORG' => $this->audtuser['AUDTORG'],
-            'OFFLINESTAT' => 0,
-        );
-
         // Khusus untuk PROSES Delivery Note Model nya berbeda karena harus kirim ke customer juga
-        $notiftouser_data = $this->NotifModel->get_edn_sendto_user($groupuser, $id_so);
+        $notiftouser_data = $this->NotifModel->get_edn_sendto_user($groupuser, $csruniq);
+        $mail_tmpl = $this->NotifModel->get_template($groupuser);
 
-        foreach ($notiftouser_data as $sendto_user) {
+        foreach ($notiftouser_data as $sendto_user) :
+            $var_email = array(
+                'TONAME' => $sendto_user['NAME'],
+                'FROMNAME' => $this->audtuser['NAMELGN'],
+                'CONTRACT' => $get_shi_data['CONTRACT'],
+                'CTDESC' => $get_shi_data['CTDESC'],
+                'PROJECT' => $get_shi_data['PROJECT'],
+                'PRJDESC' => $get_shi_data['PRJDESC'],
+                'CUSTOMER' => $get_shi_data['CUSTOMER'],
+                'NAMECUST' => $get_shi_data['NAMECUST'],
+                'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
+                'PODATECUST' => $crmpodate,
+                'CRMNO' => $get_shi_data['CRMNO'],
+                'REQDATE' => $crmreqdate,
+                'ORDERDESC' => $get_shi_data['ORDERDESC'],
+                'REMARKS' => $get_shi_data['CRMREMARKS'],
+                'SALESCODE' => $get_shi_data['MANAGER'],
+                'SALESPERSON' => $get_shi_data['SALESNAME'],
+                'RQNDATE' => $rqndate,
+                'RQNNUMBER' => $get_shi_data['RQNNUMBER'],
+                //DATA VARIABLE PO
+                'PODATE' => $povendordate,
+                'PONUMBER' => $get_shi_data['PONUMBER'],
+                'ETDDATE' => $etddate,
+                'CARGOREADINESSDATE' => $cargoreadinessdate,
+                'ORIGINCOUNTRY' => $get_shi_data['ORIGINCOUNTRY'],
+                'POREMARKS' => $get_shi_data['POREMARKS'],
+                //DATA VARIABLE LOGISTICS
+                'ETDORIGINDATE' => $etdorigindate,
+                'ATDORIGINDATE' => $atdorigindate,
+                'ETAPORTDATE' => $etaportdate,
+                'PIBDATE' => $pibdate,
+                'VENDSHISTATUS' => $get_shi_data['VENDSHISTATUS'],
+                //DATA VARIABLE RECEIPTS
+                //'RECPNUMBER' => $get_shi_data['RECPNUMBER'],
+                //'RECPDATE' => $rcpdate,
+                //'VDNAME' => $get_shi_data['VDNAME'],
+                //'DESCRIPTIO' => $get_shi_data['DESCRIPTIO'],
+                //DATA VARIABLE SHIPMENTS
+                'DOCNUMBER' => $get_shi_data['DOCNUMBER'],
+                'SHINUMBER' => $get_shi_data['SHINUMBER'],
+                'SHIDATE' => $shidate,
+                'CUSTRCPDATE' => $custrcpdate,
+
+            );
+            $subject = $mail_tmpl['SUBJECT_MAIL'];
+            $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
             $data_email = array(
                 'hostname'       => $sender['HOSTNAME'],
                 'sendername'       => $sender['SENDERNAME'],
                 'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
                 'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                'smtpauth'       => $sender['SMTPAUTH'],
                 'ssl'       => $sender['SSL'],
                 'smtpport'       => $sender['SMTPPORT'],
                 'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending Good Receipts Allert. Delivery Note :' . $get_shi['DOCNUMBER'] . '/' . $get_shi['SHINUMBER'],
-                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-
-                Please to follow up Delivery Note Number :' . $get_shi['SHINUMBER'] . 'is pending for you to process Sales Admin Team.
-    <br><br>
-    Delivery Number :' . $get_shi['DOCNUMBER'] . '<br>
-    Shipment Number :' . $get_shi['SHINUMBER'] . '<br>
-    Shipment Date :' . $shi_date . '<br>
-    PO Customer Status :' . $pocuststatus . '<br>
-    <hr>
-    You can access Order Tracking System Portal via the URL below:
-    <br>
-    Http://jktsms025:...
-    <br>
-    Thanks for your cooperation. 
-    <br><br>
-    Order Tracking Administrator',
-
+                'subject' =>  $subject,
+                'message' => $message,
                 //TAMBAHAN EMAIL ATTACHMENT
-                'attachment_filepath' => $get_shi['EDNFILEPATH'],
-                'attachment_filename' => $get_shi['EDNFILENAME'],
+                'attachment_filepath' => $get_shi_data['EDNFILEPATH'],
+                'attachment_filename' => $get_shi_data['EDNFILENAME'],
             );
 
-            $sending_mail = $this->send($data_email);
 
-            if ($sending_mail) {
-                $data_notif = array(
-                    'FROM_USER' => $this->header_data['usernamelgn'],
-                    'FROM_EMAIL' => $this->header_data['emaillgn'],
-                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'TO_USER' => $sendto_user['USERNAME'],
-                    'TO_EMAIL' => $sendto_user['EMAIL'],
-                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                    'SUBJECT' => 'Pending Good Receipts Allert. Delivery Note :' . $get_shi['DOCNUMBER'] . '/' . $get_shi['SHINUMBER'],
-                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
+            $data_notif = array(
+                'MAILKEY' => $groupuser . '-' . $get_shi_data['SHIUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                'FROM_USER' => $this->header_data['usernamelgn'],
+                'FROM_EMAIL' => $this->header_data['emaillgn'],
+                'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                'TO_USER' => $sendto_user['USERNAME'],
+                'TO_EMAIL' => $sendto_user['EMAIL'],
+                'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                'SUBJECT' => $subject,
+                'MESSAGE' => $message,
+                'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                'IS_READ' => 0,
+                'IS_ARCHIVED' => 0,
+                'IS_TRASHED' => 0,
+                'IS_DELETED' => 0,
+                'IS_ATTACHED' => $is_attachment,
+                'IS_STAR' => 0,
+                'IS_READSENDER' => 1,
+                'IS_ARCHIVEDSENDER' => 0,
+                'IS_TRASHEDSENDER' => 0,
+                'IS_DELETEDSENDER' => 0,
+                'SENDING_STATUS' => 1,
+                //TAMBAHAN EMAIL ATTACHMENT
+                'ATTACHMENT_FILENAME' => $get_shi_data['EDNFILENAME'],
+                'ATTACHMENT_FILEPATH' => $get_shi_data['EDNFILEPATH'],
+                'OTPROCESS' => $groupuser,
+                'UNIQPROCESS' => $get_shi_data['SHIUNIQ'],
+            );
 
-                    Please to follow up Delivery Note Number :' . $get_shi['SHINUMBER'] . 'is pending for you to process Sales Admin Team.
-        <br><br>
-        Delivery Number :' . $get_shi['DOCNUMBER'] . '<br>
-        Shipment Number :' . $get_shi['SHINUMBER'] . '<br>
-        Shipment Date :' . $shi_date . '<br>
-        PO Customer Status :' . $pocuststatus . '<br>
-        <hr>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-
-                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'IS_READ' => 0,
-                    'IS_ARCHIVED' => 0,
-                    'IS_TRASHED' => 0,
-                    'IS_DELETED' => 0,
-                    'IS_ATTACHED' => $is_attachment,
-                    'IS_STAR' => 0,
-                    'IS_READSENDER' => 1,
-                    'IS_ARCHIVEDSENDER' => 0,
-                    'IS_TRASHEDSENDER' => 0,
-                    'IS_DELETEDSENDER' => 0,
-                    'SENDING_STATUS' => 1,
-                    //TAMBAHAN EMAIL ATTACHMENT
-                    'ATTACHMENT_FILENAME' => $get_shi['EDNFILENAME'],
-                    'ATTACHMENT_FILEPATH' => $get_shi['EDNFILEPATH'],
-                    'OTPROCESS' => $groupuser,
-                    'UNIQPROCESS' => $id_so,
-                );
-
-                $this->NotifModel->mailbox_insert($data_notif);
-                $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data2);
+            //Check Duplicate Entry & Sending Mail
+            $touser = trim($sendto_user['USERNAME']);
+            $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_shi_data['SHIUNIQ'], $touser);
+            if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_shi_data['SHIUNIQ'] . '-' . $touser) {
+                session()->set('success', '-1');
+                return redirect()->to(base_url('/deliveryorders'));
+                session()->remove('success');
+            } else if (empty($getmailuniq['MAILKEY'])) {
+                $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                if ($post_email) {
+                    $sending_mail = $this->send($data_email);
+                }
             }
-        }
+
+        endforeach;
+        $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data3);
+
+
         session()->set('success', '1');
         return redirect()->to(base_url('/deliveryorders'));
         session()->remove('success');
     }
 
 
-    public function export_excel()
-    {
-        //$peoples = $this->builder->get()->getResultArray();
-        $PurchaseOrderdata = $this->PurchaseOrderModel->get_PurchaseOrder_open();
-        $spreadsheet = new Spreadsheet();
-        // tulis header/nama kolom 
-        $spreadsheet->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'No')
-            ->setCellValue('B1', 'ContractNo')
-            ->setCellValue('C1', 'ProjectNo')
-            ->setCellValue('D1', 'CustomerName')
-            ->setCellValue('E1', 'CustomerEmail')
-            ->setCellValue('F1', 'CrmNo')
-            ->setCellValue('G1', 'PoCustomer')
-            ->setCellValue('H1', 'InventoryNo')
-            ->setCellValue('I1', 'MaterialNo')
-            ->setCellValue('J1', 'PoDate')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'OrderDescription')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', '')
-            ->setCellValue('Q1', 'Pr Date')
-            ->setCellValue('R1', 'PR Number')
-            ->setCellValue('S1', '');
 
-        $rows = 2;
-        // tulis data mobil ke cell
-        $no = 1;
-        foreach ($PurchaseOrderdata as $data) {
-            $spreadsheet->setActiveSheetIndex(0)
-                ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['ContractNo'])
-                ->setCellValue('C' . $rows, $data['ProjectNo'])
-                ->setCellValue('D' . $rows, $data['CustomerName'])
-                ->setCellValue('E' . $rows, $data['CustomerEmail'])
-                ->setCellValue('F' . $rows, $data['CrmNo'])
-                ->setCellValue('G' . $rows, $data['PoCustomer'])
-                ->setCellValue('H' . $rows, $data['InventoryNo'])
-                ->setCellValue('I' . $rows, $data['MaterialNo'])
-                ->setCellValue('J' . $rows, $data['PoDate'])
-                ->setCellValue('K' . $rows, $data['ReqDate'])
-                ->setCellValue('L' . $rows, $data['SalesPerson'])
-                ->setCellValue('M' . $rows, $data['OrderDesc'])
-                ->setCellValue('N' . $rows, $data['Qty'])
-                ->setCellValue('O' . $rows, $data['Uom'])
-                ->setCellValue('P' . $rows, '')
-                ->setCellValue('Q' . $rows, $data['PrDate'])
-                ->setCellValue('R' . $rows, $data['PrNumber'])
-                ->setCellValue('S' . $rows, '');
-            $rows++;
-        }
-        // tulis dalam format .xlsx
-        $writer = new Xlsx($spreadsheet);
-        $fileName = 'Ordertracking_data';
-
-        // Redirect hasil generate xlsx ke web client
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
-        exit();
-    }
 
     private function send($data_email)
     {

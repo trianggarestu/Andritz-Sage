@@ -174,8 +174,18 @@
 																									<td style="width: 32%;"><?= trim($shiheader['DOCNUMBER']) ?> <small>(<?= $shi_date ?>)</small></td>
 
 																									<td>
-																										<a href="<?= base_url("deliveryorders/shipmentopenview/" . $shiheader['SHIUNIQ']) ?>" class="btn btn-social btn-flat bg-blue btn-sm"><i class="fa fa-upload"></i> Upload e-DN & Send Notif</a>
-
+																										<?php if ($shiheader['SHIPOSTINGSTAT'] == 1 and $shiheader['SHIATTACHED'] == 0) :
+																										?>
+																											<a href="<?= base_url("deliveryorders/shipmentopenview/" . $shiheader['SHIUNIQ']) ?>" class="btn btn-social btn-flat bg-blue btn-sm"><i class="fa fa-upload"></i> Upload e-DN & Send Notif</a>
+																										<?php
+																										endif;
+																										?>
+																										<?php if ($shiheader['SHIOFFLINESTAT'] == 1 and $shiheader['SHIATTACHED'] == 1) :
+																										?>
+																											<a href="<?= base_url("deliveryorders/sendnotif/" . $shiheader['SHIUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm"><i class="fa fa-send-o"></i>Send Notif</a>
+																										<?php
+																										endif;
+																										?>
 																										<?php if ($shiheader['SHIPOSTINGSTAT'] == 1) :
 																										?>
 																											<a href="<?= base_url("administration/shipostedview/" . $shiheader['SHIUNIQ']) ?>" class="btn btn-default btn-sm" title="DN View" target="_blank">

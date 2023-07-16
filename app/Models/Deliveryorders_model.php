@@ -28,17 +28,17 @@ class Deliveryorders_model extends Model
         $query = $this->db->query("select a.CSRUNIQ as RCPCSRUNIQ,a.POSTINGSTAT,
         b.CSRUNIQ as CRMCSRUNIQ,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . "  as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,
 		b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC, 
-		grcpl.RCPQTY,gshil.SHIQTY,gshil.SHIPOSTINGSTAT,gshil.SHIOFFLINESTAT
+		grcpl.RCPQTY,gshil.SHIQTY,gshil.SHIATTACHED,gshil.SHIPOSTINGSTAT,gshil.SHIOFFLINESTAT
         from (select DISTINCT CSRUNIQ,POSTINGSTAT from webot_RECEIPTS where POSTINGSTAT=1) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
 		left join (	select CSRUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as RCPQTY from webot_RCPL
 		group by CSRUNIQ) grcpl on grcpl.CSRUNIQ=a.CSRUNIQ
-		left join (select x.CSRUNIQ,COUNT(ITEMNO) as ROWITEMSHI,sum(QTY) as SHIQTY,MIN(y.POSTINGSTAT) as SHIPOSTINGSTAT,MAX(y.OFFLINESTAT) as SHIOFFLINESTAT,COUNT( DISTINCT y.POSTINGSTAT) as CTPOSTINGSTATSHIPOST 
+		left join (select x.CSRUNIQ,COUNT(ITEMNO) as ROWITEMSHI,sum(QTY) as SHIQTY,MIN(y.SHIATTACHED) as SHIATTACHED,MIN(y.POSTINGSTAT) as SHIPOSTINGSTAT,MAX(y.OFFLINESTAT) as SHIOFFLINESTAT,COUNT( DISTINCT y.POSTINGSTAT) as CTPOSTINGSTATSHIPOST 
 		from webot_SHIL x inner join webot_SHIPMENTS y on y.SHIUNIQ=x.SHIUNIQ
 		group by x.CSRUNIQ) gshil on gshil.CSRUNIQ=b.CSRUNIQ
         where (a.CSRUNIQ IS NOT NULL and gshil.SHIPOSTINGSTAT IS NULL) or (a.CSRUNIQ IS NOT NULL and gshil.SHIPOSTINGSTAT=0) 
         or (a.CSRUNIQ IS NOT NULL and gshil.SHIPOSTINGSTAT=0) 
-        or (gshil.SHIPOSTINGSTAT=1 and gshil.SHIOFFLINESTAT=1) or (gshil.SHIPOSTINGSTAT=1 and gshil.SHIOFFLINESTAT=0)");
+        or (gshil.SHIPOSTINGSTAT=1 and gshil.SHIOFFLINESTAT=1) or (grcpl.RCPQTY<>gshil.SHIQTY) or (gshil.SHIPOSTINGSTAT=1 and gshil.SHIOFFLINESTAT=0 and gshil.SHIATTACHED=0)");
 
         return $query->getResultArray();
     }
@@ -73,7 +73,7 @@ class Deliveryorders_model extends Model
 
     function get_shilist_on_shiopen()
     {
-        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT
+        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.SHIATTACHED,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT
         from webot_CSR a
         inner join webot_SHIPMENTS c on c.CSRUNIQ=a.CSRUNIQ 
         where (a.POSTINGSTAT=1 and c.RCPUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1)
@@ -85,18 +85,23 @@ class Deliveryorders_model extends Model
 
     function get_gr_pending_to_dn_search($keyword)
     {
-        $query = $this->db->query("select a.RCPUNIQ as RCPRCPUNIQ,a.RECPNUMBER,a.RECPDATE,a.DESCRIPTIO,a.RECPQTY,a.RECPUNIT,a.GRSTATUS,
-        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.*
-        from webot_RECEIPTS a 
+        $query = $this->db->query("select a.CSRUNIQ as RCPCSRUNIQ,a.POSTINGSTAT,
+        b.CSRUNIQ as CRMCSRUNIQ,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . "  as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,
+		b.CRMNO,b.CRMREQDATE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC, 
+		grcpl.RCPQTY,gshil.SHIQTY,gshil.SHIATTACHED,gshil.SHIPOSTINGSTAT,gshil.SHIOFFLINESTAT
+        from (select DISTINCT CSRUNIQ,POSTINGSTAT from webot_RECEIPTS where POSTINGSTAT=1) a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
-		left join webot_SHIPMENTS c on c.RCPUNIQ=a.RCPUNIQ
-        where ((a.POSTINGSTAT=1 and c.POSTINGSTAT IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (c.POSTINGSTAT=1 and c.OFFLINESTAT=1))
-        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.RECPNUMBER like '%$keyword%'
-        or a.DESCRIPTIO like '%$keyword%' or c.DOCNUMBER like '%$keyword%' or c.SHINUMBER like '%$keyword%' or c.EDNFILENAME like '%$keyword%')");
+		left join (	select CSRUNIQ,count(ITEMNO) as ROWITEMPO,sum(QTY) as RCPQTY from webot_RCPL
+		group by CSRUNIQ) grcpl on grcpl.CSRUNIQ=a.CSRUNIQ
+		left join (select x.CSRUNIQ,COUNT(ITEMNO) as ROWITEMSHI,sum(QTY) as SHIQTY,MIN(y.SHIATTACHED) as SHIATTACHED,MIN(y.POSTINGSTAT) as SHIPOSTINGSTAT,MAX(y.OFFLINESTAT) as SHIOFFLINESTAT,COUNT( DISTINCT y.POSTINGSTAT) as CTPOSTINGSTATSHIPOST 
+		from webot_SHIL x inner join webot_SHIPMENTS y on y.SHIUNIQ=x.SHIUNIQ
+		group by x.CSRUNIQ) gshil on gshil.CSRUNIQ=b.CSRUNIQ
+
+        where ((a.CSRUNIQ IS NOT NULL and gshil.SHIPOSTINGSTAT IS NULL) or (a.CSRUNIQ IS NOT NULL and gshil.SHIPOSTINGSTAT=0) 
+        or (a.CSRUNIQ IS NOT NULL and gshil.SHIPOSTINGSTAT=0) 
+        or (gshil.SHIPOSTINGSTAT=1 and gshil.SHIOFFLINESTAT=1) or (grcpl.RCPQTY<>gshil.SHIQTY) or (gshil.SHIPOSTINGSTAT=1 and gshil.SHIOFFLINESTAT=0 and gshil.SHIATTACHED=0))
+        and (b.CONTRACT like '%$keyword%' or b.PROJECT like '%$keyword%' or b.CRMNO like '%$keyword%' or b.CTDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        )");
 
         return $query->getResultArray();
     }
@@ -130,14 +135,12 @@ class Deliveryorders_model extends Model
     {
         $query = $this->db->query("select a.*,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC
         from webot_SHIPMENTS a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
         where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and (a.DNPOSTINGSTAT is NULL or a.DNPOSTINGSTAT=0 or a.DNOFFLINESTAT=1))
-        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.DOCNUMBER like '%$keyword%' 
-        or a.SHINUMBER like '%$keyword%' or a.EDNFILENAME like '%$keyword%')");
+        and (b.CONTRACT like '%$keyword%' or b.PROJECT like '%$keyword%' or b.CRMNO like '%$keyword%' or b.CTDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.NAMECUST like '%$keyword%'
+        or a.DOCNUMBER like '%$keyword%' or a.SHINUMBER like '%$keyword%')");
 
         return $query->getResultArray();
     }
@@ -208,10 +211,19 @@ class Deliveryorders_model extends Model
 
     function get_shipment_open($shiuniq)
     {
-        $query = $this->db->query("select a.*,b.CRMREQDATE,b.PODATECUST from webot_SHIPMENTS a 
-        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ where a.POSTINGSTAT <>2 and a.SHIUNIQ='$shiuniq'");
+        $query = $this->db->query("select a.*,b.CSRUNIQ," . 'b."CONTRACT"' . " as CONTRACT,b.PROJECT,b.CRMNO,b.CTDESC,b.PRJDESC,b.NAMECUST,b.EMAIL1CUST,b.MANAGER,b.SALESNAME,b.PONUMBERCUST,b.PODATECUST,
+        b.CRMREQDATE,b.PODATECUST from webot_SHIPMENTS a 
+                left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ where a.POSTINGSTAT <>2 and a.SHIUNIQ='$shiuniq'");
         return $query->getRowArray();
     }
+
+    function get_shi_l_by_id($shiuniq)
+    {
+        $query = $this->db->query("select a.* from webot_SHIL a 
+        where a.SHIUNIQ='$shiuniq'");
+        return $query->getResultArray();
+    }
+
 
     function get_csr_uniq($csr_uniq)
     {
@@ -259,6 +271,19 @@ class Deliveryorders_model extends Model
     }
 
 
+    function get_shijoincsr_by_shi($shiuniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.*,d.*,e.*
+        from webot_SHIPMENTS a
+		left join webot_PO b on b.CSRUNIQ=a.CSRUNIQ
+		left join webot_LOGISTICS c on c.POUNIQ=b.POUNIQ
+		left join webot_REQUISITION d on d.RQNNUMBER=b.RQNNUMBER
+        left join webot_CSR e on e.CSRUNIQ=a.CSRUNIQ and e.CSRUNIQ=a.CSRUNIQ
+        where a.POSTINGSTAT=1 and a.SHIUNIQ='$shiuniq' ");
+        return $query->getRowArray();
+    }
+
+
     function deliveryorders_insert($data)
     {
         $query = $this->db->table('webot_SHIPMENTS')->insert($data);
@@ -299,9 +324,8 @@ class Deliveryorders_model extends Model
 
     function get_dn_by_id($shiuniq)
     {
-        $query = $this->db->query("select a.*,b.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC from webot_SHIPMENTS a
-        left join ARCUS b on b.IDCUST=a.CUSTOMER
-        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
+        $query = $this->db->query("select a.*,b.NAMECUST from webot_SHIPMENTS a
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
         where a.POSTINGSTAT=1 and a.SHIUNIQ='$shiuniq' ");
         return $query->getRowArray();
     }

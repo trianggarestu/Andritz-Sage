@@ -262,7 +262,7 @@
                                         <tr>
                                             <td width="300">e-Delivery Note</td>
                                             <td width="1">:</td>
-                                            <td><strong><?= $shiposted_data['EDNFILENAME']; ?></strong></td>
+                                            <td><strong><a href="<?= base_url($shiposted_data['EDNFILEPATH']) ?>" download><?= $shiposted_data['EDNFILENAME']; ?></a></strong></td>
                                         </tr>
 
                                         <tr>
