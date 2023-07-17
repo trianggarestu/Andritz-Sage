@@ -76,10 +76,10 @@
 															$no = 1;
 															foreach ($finance_data as $fin_list) {
 																$crmreq_date = substr($fin_list['CRMREQDATE'], 4, 2) . "/" . substr($fin_list['CRMREQDATE'], 6, 2) . "/" . substr($fin_list['CRMREQDATE'], 0, 4);
-																if (null == $fin_list['INVOICEDATE']) {
+																if (null == $fin_list['DATEINVC']) {
 																	$inv_date = '';
 																} else {
-																	$inv_date = substr($fin_list['INVOICEDATE'], 4, 2) . "/" . substr($fin_list['INVOICEDATE'], 6, 2) . "/" . substr($fin_list['INVOICEDATE'], 0, 4);
+																	$inv_date = substr($fin_list['DATEINVC'], 4, 2) . "/" . substr($fin_list['DATEINVC'], 6, 2) . "/" . substr($fin_list['DATEINVC'], 0, 4);
 																}
 
 
@@ -92,35 +92,7 @@
 																		<?php echo "/" . $fin_list['CSRPROJECT'] . "/" . $fin_list['CRMNO'] . "<br>
 																	<strong>" . $fin_list['CTDESC'] . "</strong><br>
 																	<small>( " . trim($fin_list['NAMECUST']) . " )</small>"; ?><br>
-																		<table class="table table-bordered table-striped dataTable">
-																			<thead class="bg-gray disabled">
-																				<tr>
-																					<th colspan="3"><small>Inventory Info</small>
-																					</th>
-																				</tr>
-																			</thead>
-																			<tr>
-																				<td><small>Item No./Material No.</small></td>
-																				<td>:</td>
-																				<td><small><?= $fin_list['ITEMNO'] . " / " . $fin_list['MATERIALNO'];
-																							?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Item Description</small></td>
-																				<td>:</td>
-																				<td><?= "<strong><small>" . $fin_list['ITEMDESC'] . "</small></strong><br>"; ?></td>
-																			</tr>
-																			<tr>
-																				<td><small>Type</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= $fin_list['SERVICETYPE']; ?></small></td>
-																			</tr>
-																			<tr>
-																				<td><small>Qty</small></td>
-																				<td><small>:</small></td>
-																				<td><small><?= number_format($fin_list['QTY'], 0, ",", ".") . ' (' . trim($fin_list['STOCKUNIT']) . ')' ?></small></td>
-																			</tr>
-																		</table>
+
 																	</td>
 
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;

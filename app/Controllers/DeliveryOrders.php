@@ -397,7 +397,7 @@ class DeliveryOrders extends BaseController
     }
 
 
-    // delete rcp open
+    // delete Shi open
     public function delete($shiuniq)
     {
         $chk_shi = $this->DeliveryordersModel->get_shipment_open($shiuniq);

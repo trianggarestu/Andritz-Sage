@@ -41,10 +41,13 @@ class Finance_model extends Model
 
     function get_shilist_on_shiopen()
     {
-        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.CUSTRCPDATE,c.SHIATTACHED,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT,c.DNSTATUS
-        from webot_SHIPMENTS c
-        where (c.POSTINGSTAT=1 and c.DNPOSTINGSTAT=1)
-        order by c.SHIDATE asc,c.DOCNUMBER asc");
+        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.CUSTRCPDATE,c.SHIATTACHED,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT,
+        c.DNSTATUS,a.IDINVC,a.DATEINVC,a.FINSTATUS,a.POSTINGSTAT as FINPOSTINGSTAT
+                from webot_SHIPMENTS c
+                left join webot_FINMULTISHI b on b.SHIUNIQ=c.SHIUNIQ
+                left join webot_FINANCE a on a.FINUNIQ=b.FINUNIQ
+                where (c.POSTINGSTAT=1 and c.DNPOSTINGSTAT=1)
+                order by c.SHIDATE asc,c.DOCNUMBER asc");
 
         return $query->getResultArray();
     }
@@ -62,19 +65,17 @@ class Finance_model extends Model
 
     function get_shi_pending_to_finance_search($keyword)
     {
-        $query = $this->db->query("select a.SHIUNIQ,a.DOCNUMBER,a.SHINUMBER,a.SHIDATE,a.CUSTRCPDATE,a.SHIITEMNO,a.SHIQTY,a.SHIQTYOUTSTANDING,a.SHIUNIT,a.POCUSTSTATUS,
-        a.EDNFILENAME,a.EDNFILEPATH,a.POSTINGSTAT as SHIPOSTINGSTAT,a.DNSTATUS,a.DNPOSTINGSTAT,
-        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.FINUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
-        from webot_SHIPMENTS a 
-        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
-        left join webot_FINANCE c on c.SHIUNIQ=a.SHIUNIQ
-        where ((a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and a.DNPOSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL))
-        and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' or a.DOCNUMBER like '%$keyword%' 
-        or a.SHINUMBER like '%$keyword%' or a.EDNFILENAME like '%$keyword%' or c.IDINVC like '%$keyword%')");
+        $query = $this->db->query("select 
+        a.CSRUNIQ,a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
+        a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
+        c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
+        from webot_CSR a 
+        left join (select x.CSRUNIQ,COUNT(x.FINUNIQ) as ROWARINV,MIN(x.POSTINGSTAT) as ARPOSTINGSTAT,MAX(x.OFFLINESTAT) as AROFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATARPOST 
+		from webot_FINANCE x
+		group by x.CSRUNIQ)  c on c.CSRUNIQ=a.CSRUNIQ
+        where (a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL)
+        and (a.CONTRACT like '%$keyword%' or a.PROJECT like '%$keyword%' or a.CRMNO like '%$keyword%' or a.CTDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' 
+        or a.NAMECUST like '%$keyword%')");
 
         return $query->getResultArray();
     }
@@ -85,10 +86,9 @@ class Finance_model extends Model
     {
         $query = $this->db->query("select a.*,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,a.IDINVC,a.DATEINVC
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
         where a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0");
 
         return $query->getResultArray();
@@ -133,7 +133,7 @@ class Finance_model extends Model
         left join ARIBC b on b.CNTBTCH=a.CNTBTCH
         inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
         where b.BTCHSTTS=3 and
-        c.CONTRACT='$ct_no' and a.IDINVC not in (select distinct IDINVC from webot_FINANCE where POSTINGSTAT=1)");
+        c.CONTRACT='$ct_no' and a.IDINVC not in (select distinct IDINVC from webot_FINANCE where POSTINGSTAT<>2)");
         return $query->getResultArray();
     }
 
@@ -161,6 +161,12 @@ class Finance_model extends Model
         left join webot_FINMULTISHI b on b.FINUNIQ=a.FINUNIQ
         where a.CSRUNIQ='$csruniq' and a.IDINVC='$idinvc'
         group by a.FINUNIQ,a.IDINVC,a.FINKEY");
+        return $query->getRowArray();
+    }
+
+    function get_finance_open($finuniq)
+    {
+        $query = $this->db->query("select * from webot_FINANCE where POSTINGSTAT <>2 and FINUNIQ='$finuniq'");
         return $query->getRowArray();
     }
 
@@ -193,9 +199,9 @@ class Finance_model extends Model
     }
 
 
-    function finance_update($finuniq, $data1)
+    function finance_update($finuniq, $data)
     {
-        $query = $this->db->table('webot_FINANCE')->update($data1, array('FINUNIQ' => $finuniq));
+        $query = $this->db->table('webot_FINANCE')->update($data, array('FINUNIQ' => $finuniq));
         //Tanpa return juga bisa jalan
         return $query;
     }
@@ -206,6 +212,18 @@ class Finance_model extends Model
         //Tanpa return juga bisa jalan
         return $query;
     }
+
+    function delete_fin_open($finuniq)
+    {
+        return $this->db->table('webot_FINANCE')->delete(['FINUNIQ' => $finuniq, 'POSTINGSTAT' => 0]);
+    }
+
+    function delete_fin_shi_open($finuniq)
+    {
+        return $this->db->table('webot_FINMULTISHI')->delete(['FINUNIQ' => $finuniq]);
+    }
+
+
     // Untuk Fill Invoice List
     function count_fin_posting()
     {

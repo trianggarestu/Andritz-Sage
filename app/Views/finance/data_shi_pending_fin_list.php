@@ -114,13 +114,7 @@
 																				<?php //endif;
 																				?>
 
-																				<?php //if ($shi_list['POSTINGSTAT'] == 1) :
-																				?>
-																				<li>
-																					<a href="<?= base_url("fillinvoice/viewinvoiceposted/") ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-file-o"></i> View A/R Invoice</a>
-																				</li>
-																				<?php //endif;
-																				?>
+
 
 																			</ul>
 																		</div>
@@ -140,7 +134,11 @@
 
 																						foreach ($finlist_data as $finheader) :
 																							if ($shi_list['CSRUNIQ'] == $finheader['CSRUNIQ']) :
-																								//$shi_date = substr($shiheader['SHIDATE'], 4, 2) . "/" . substr($shiheader['SHIDATE'], 6, 2) . "/" . substr($shiheader['SHIDATE'], 0, 4);
+																								if (empty($finheader['DATEINVC'])) {
+																									$h_invc_date = '';
+																								} else {
+																									$h_invc_date = substr($finheader['DATEINVC'], 4, 2) . "/" . substr($finheader['DATEINVC'], 6, 2) . "/" . substr($finheader['DATEINVC'], 0, 4);
+																								}
 
 																						?>
 																								<tr>
@@ -161,10 +159,21 @@
 																												echo "<span class='label label-default'>Open</span>";
 																										}
 																										?></td>
-																									<td style="width: 32%;"><?= trim($finheader['IDINVC']) ?> <small>()</small></td>
+																									<td style="width: 32%;"><?= trim($finheader['IDINVC']) ?> <small>(<?= $h_invc_date ?>)</small></td>
 
-																									<td>
+																									<td nowrap>
+																										<?php if ($finheader['POSTINGSTAT'] == 0) :
+																										?>
 
+																											<a href="<?= base_url("fillinvoice/posting/" . $finheader['FINUNIQ'] . '/' . $finheader['CSRUNIQ']) ?>" class="btn btn-social btn-flat bg-blue btn-sm">
+																												<i class="fa fa-check-square-o"></i> Posting
+																											</a>
+
+
+																											<a href="" data-href="<?= base_url("fillinvoice/delete/" . $finheader['FINUNIQ']) ?>" class="btn bg-red btn-flat btn-sm" title="Delete Data" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+																										<?php
+																										endif;
+																										?>
 																									</td>
 																								</tr>
 
@@ -263,13 +272,42 @@
 																			<table class="table table-bordered dataTable table-hover nowrap">
 																				<thead class="bg-gray disabled color-palette">
 																					<tr>
-																						<th>X </th>
-																						<th>X</th>
-																						<th>X</th>
+																						<th>Invoice <br>Number </th>
+																						<th>Inv. Date</th>
+																						<th>Status</th>
 
 																					</tr>
 																				</thead>
+																				<tbody>
+																					<?php
+																					foreach ($shilist_data as $shi_data) :
 
+																						if ($shi_list['CSRUNIQ'] == $shi_data['CSRUNIQ']) :
+																							if (empty($shi_data['DATEINVC'])) {
+																								$invc_date = '';
+																							} else {
+																								$invc_date = substr($shi_data['DATEINVC'], 4, 2) . "/" . substr($shi_data['DATEINVC'], 6, 2) . "/" . substr($shi_data['DATEINVC'], 0, 4);
+																							}
+																					?>
+																							<tr>
+																								<td><?= $shi_data['IDINVC'] ?></td>
+																								<td><?= $invc_date ?></td>
+																								<td><?php $invstat = $shi_data['FINSTATUS'];
+																									switch ($invstat) {
+																										case "1":
+																											echo "Partial";
+																											break;
+																										case "2":
+																											echo "Completed";
+																										default:
+																											echo "";
+																									} ?></td>
+																							</tr>
+																					<?php
+																						endif;
+																					endforeach;
+																					?>
+																				</tbody>
 																			</table>
 																		</div>
 

@@ -170,7 +170,7 @@
                                                 <td class="text-center"><?= ++$no ?></td>
                                                 <td style="text-align: center;">
                                                     <input type="hidden" name="shichecked[<?php echo $shi_list['SHIUNIQ']; ?>]" value="0" />
-                                                    <input type="checkbox" name="shichecked[<?php echo $shi_list['SHIUNIQ']; ?>]" value="1" checked />
+                                                    <input type="checkbox" name="shichecked[<?php echo $shi_list['SHIUNIQ']; ?>]" value="1" class="required" checked />
                                                 </td>
 
                                                 <td nowrap><?= $shi_list['DOCNUMBER']

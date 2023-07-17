@@ -148,8 +148,13 @@ class FillInvoice extends BaseController
         } else {
             $deliverydata = $this->FinanceModel->get_shi_pending_to_finance_search($keyword);
         }
+        $shilist_data = $this->FinanceModel->get_shilist_on_shiopen();
+        $finlist_data = $this->FinanceModel->get_finlist_on_csr();
+
         $data = array(
             'delivery_data' => $deliverydata,
+            'finlist_data' => $finlist_data,
+            'shilist_data' => $shilist_data,
             'keyword' => $keyword,
         );
 
@@ -243,8 +248,9 @@ class FillInvoice extends BaseController
                 session()->remove('success');
             } else if (empty($getfinuniq['FINKEY'])) {
                 // Insert Finance Header
-                $add_fin = $this->FinanceModel->finance_insert($data1);
-
+                if (isset($_POST["shichecked"])) {
+                    $add_fin = $this->FinanceModel->finance_insert($data1);
+                }
                 if ($add_fin) {
                     $getfinuniq = $this->FinanceModel->get_finuniq_open($csruniq, $idinvc);
                     $finuniq = $getfinuniq['FINUNIQ'];
@@ -272,6 +278,16 @@ class FillInvoice extends BaseController
             }
             // Ini jika Posting
             if ($post_stat == 1) {
+                $data = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'POSTINGSTAT' => 1,
+                    'OFFLINESTAT' => 1,
+
+                );
+
                 $fin_to_ot = $this->FinanceModel->get_fin_open_by_id($finuniq, $csruniq);
                 foreach ($fin_to_ot as $ot_fin) :
                     $csruniq = $ot_fin['CSRUNIQ'];
@@ -289,6 +305,7 @@ class FillInvoice extends BaseController
                     $this->FinanceModel->ot_finance_update($csruniq, $csrluniq, $data2);
 
                 endforeach;
+                $fin_update = $this->FinanceModel->finance_update($finuniq, $data);
             }
         }
         session()->set('success', '1');
@@ -296,6 +313,42 @@ class FillInvoice extends BaseController
         session()->remove('success');
     }
 
+    public function posting($finuniq, $csruniq)
+    {
+        $data = array(
+            'AUDTDATE' => $this->audtuser['AUDTDATE'],
+            'AUDTTIME' => $this->audtuser['AUDTTIME'],
+            'AUDTUSER' => $this->audtuser['AUDTUSER'],
+            'AUDTORG' => $this->audtuser['AUDTORG'],
+            'POSTINGSTAT' => 1,
+            'OFFLINESTAT' => 1,
+
+        );
+
+        $fin_to_ot = $this->FinanceModel->get_fin_open_by_id($finuniq, $csruniq);
+        foreach ($fin_to_ot as $ot_fin) :
+            $csruniq = $ot_fin['CSRUNIQ'];
+            $csrluniq = $ot_fin['CSRLUNIQ'];
+            $data2 = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'IDINVC' => $ot_fin["IDINVC"],
+                'DATEINVC' => $ot_fin["DATEINVC"],
+                'FINSTATUS' => $ot_fin["FINSTATUS"],
+            );
+
+            $this->FinanceModel->ot_finance_update($csruniq, $csrluniq, $data2);
+
+        endforeach;
+
+        $fin_update = $this->FinanceModel->finance_update($finuniq, $data);
+
+        session()->set('success', '1');
+        return redirect()->to(base_url('/fillinvoice'));
+        session()->remove('success');
+    }
 
     /*public function update_action()
     {
@@ -360,6 +413,27 @@ class FillInvoice extends BaseController
     */
 
 
+
+    // delete rcp open
+    public function delete($finuniq)
+    {
+        $chk_fin = $this->FinanceModel->get_finance_open($finuniq);
+        if ($chk_fin['POSTINGSTAT'] == 1) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('fillinvoice'));
+            session()->remove('success');
+        } else {
+            // Remove an PO Open
+            $del_fin_open = $this->FinanceModel->delete_fin_open($finuniq);
+            if ($del_fin_open) {
+                $this->FinanceModel->delete_fin_shi_open($finuniq);
+            }
+
+            session()->set('success', '1');
+            return redirect()->to(base_url('fillinvoice'));
+            session()->remove('success');
+        }
+    }
 
 
 
