@@ -1,0 +1,68 @@
+CRITICAL - 2023-07-18 04:57:43 --> Undefined index: INVOICEDATE
+in APPPATH\Controllers\FillrrStatus.php on line 180.
+ 1 APPPATH\Controllers\FillrrStatus.php(180): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: INVOICEDATE', 'APPPATH\\Controllers\\FillrrStatus.php', 180, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillrrStatus->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillrrStatus))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-07-18 04:57:47 --> Undefined index: INVOICEDATE
+in APPPATH\Controllers\FillrrStatus.php on line 180.
+ 1 APPPATH\Controllers\FillrrStatus.php(180): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined index: INVOICEDATE', 'APPPATH\\Controllers\\FillrrStatus.php', 180, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillrrStatus->update(1, '0')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillrrStatus))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-07-18 05:02:35 --> Too few arguments to function App\Models\Finance_model::ot_finance_update(), 2 passed in D:\xampp\htdocs\Andritz-Sage\app\Controllers\FillrrStatus.php on line 226 and exactly 3 expected
+in APPPATH\Models\Finance_model.php on line 209.
+ 1 APPPATH\Controllers\FillrrStatus.php(226): App\Models\Finance_model->ot_finance_update('1', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillrrStatus->update_action()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillrrStatus))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-07-18 05:14:50 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name 'SHIREFERENCE'.
+CRITICAL - 2023-07-18 05:14:50 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name 'SHIREFERENCE'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Ordertracking_model.php(68): CodeIgniter\Database\BaseConnection->query('select * from webot_ORDERTRACKING
+                where (RRSTATUS is NULL or RRSTATUS<>2) and 
+        (CONTRACT like \'%%\' or CTDESC like \'%%\' or MANAGER like \'%%\' or SALESNAME like \'%%\'
+        or PROJECT like \'%%\' or PRJDESC like \'%%\' or PONUMBERCUST like \'%%\' or CUSTOMER like \'%%\'
+        or NAMECUST like \'%%\' or EMAIL1CUST like \'%%\' or CRMNO like \'%%\' or ORDERDESC like \'%%\'
+        or SERVICETYPE like \'%%\' or CRMREMARKS like \'%%\' or ITEMNO like \'%%\' or MATERIALNO like \'%%\'
+        or STOCKUNIT like \'%%\' or IDINVC like \'%%\' or RQNNUMBER like \'%%\' or PONUMBER like \'%%\' 
+        or SHINUMBER like \'%%\' or RECPNUMBER like \'%%\' or SHIDOCNUMBER like \'%%\'  or SHIREFERENCE like \'%%\' ) and
+        (PODATECUST>=20220101 and PODATECUST<=20230731)
+        order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc')
+ 2 APPPATH\Controllers\OrdertrackingList.php(252): App\Models\Ordertracking_model->get_inv_preview_filter(null, '20220101', '20230731')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\OrdertrackingList->preview()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\OrdertrackingList))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-07-18 05:40:51 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name 'ITEMNO'.
+CRITICAL - 2023-07-18 05:40:51 --> [Microsoft][ODBC Driver 13 for SQL Server][SQL Server]Invalid column name 'ITEMNO'.
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 APPPATH\Models\Finance_model.php(109): CodeIgniter\Database\BaseConnection->query('select a.*,
+        b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,b."CONTRACT" as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
+        b.ITEMNO,b.MATERIALNO,it."DESC" as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        from webot_FINANCE a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+        left join ICITEM it on it.ITEMNO=b.ITEMNO
+        where (a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0)
+        and (b.CONTRACT like \'%test%\' or b.CTDESC like \'%test%\' or b.CRMNO like \'%test%\' or b.NAMECUST like \'%test%\'
+        or b.ITEMNO like \'%test%\' or b.MATERIALNO like \'%test%\' or it."DESC" like \'%test%\' 
+        or a.IDINVC like \'%test%\')')
+ 2 APPPATH\Controllers\FillrrStatus.php(145): App\Models\Finance_model->get_fin_pending_to_rrstatus_search('test')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillrrStatus->filter()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillrrStatus))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2023-07-18 06:10:50 --> Undefined variable: shi_list
+in APPPATH\Views\finance\data_fin_pending_list.php on line 94.
+ 1 APPPATH\Views\finance\data_fin_pending_list.php(94): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: shi_list', 'APPPATH\\Views\\finance\\data_fin_pending_list.php', 94, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\finance\\data_fin_pending_list.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('finance/data_fin_pending_list', [], true)
+ 5 APPPATH\Controllers\FillrrStatus.php(154): view('finance/data_fin_pending_list', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\FillrrStatus->filter()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FillrrStatus))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

@@ -173,11 +173,12 @@ class FillrrStatus extends BaseController
             }
 
             $finuniq = $get_fin['FINUNIQ'];
+            $inv_date = substr($get_fin['DATEINVC'], 4, 2) . "/" . substr($get_fin['DATEINVC'], 6, 2) . "/" . substr($get_fin['DATEINVC'], 0, 4);
             $data = array(
                 'csruniq' => trim($get_fin['CSRUNIQ']),
                 'finuniq' => trim($get_fin['FINUNIQ']),
                 'idinvc' => trim($get_fin['IDINVC']),
-                'invdate' => trim($get_fin['INVOICEDATE']),
+                'invdate' => $inv_date,
                 'finstatus' => trim($get_fin['FINSTATUS']),
                 'rrstatus' => trim($get_fin['RRSTATUS']),
                 'form_action' => base_url($act),
@@ -214,15 +215,31 @@ class FillrrStatus extends BaseController
 
             if ($post_stat == 1) {
 
-                $data2 = array(
+                $data = array(
                     'AUDTDATE' => $this->audtuser['AUDTDATE'],
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'RRSTATUS' => $this->request->getPost('rrstatus'),
+                    'POSTINGSTAT' => 1,
+                    'OFFLINESTAT' => 1,
                 );
 
-                $this->FinanceModel->ot_finance_update($csruniq, $data2);
+                $fin_to_ot = $this->FinanceModel->get_fin_open_by_id($finuniq, $csruniq);
+                foreach ($fin_to_ot as $ot_fin) :
+                    $csruniq = $ot_fin['CSRUNIQ'];
+                    $csrluniq = $ot_fin['CSRLUNIQ'];
+                    $data2 = array(
+                        'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                        'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                        'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                        'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'RRSTATUS' => $this->request->getPost('rrstatus'),
+                    );
+
+                    $this->FinanceModel->ot_finance_update($csruniq, $csrluniq, $data2);
+
+                endforeach;
+                $fin_update = $this->FinanceModel->finance_update($finuniq, $data);
             }
             session()->set('success', '1');
             return redirect()->to(base_url('/fillrrstatus'));
@@ -231,169 +248,7 @@ class FillrrStatus extends BaseController
     }
 
 
-    public function sendnotif($shiuniq)
-    {
-        //check dari sini
-        $sender = $this->AdministrationModel->get_mailsender();
-        $choose_shi = $this->DeliveryordersModel->get_dn_by_id($shiuniq);
-        $shidate = substr($choose_shi["SHIDATE"], 6, 2) . "/" . substr($choose_shi["SHIDATE"], 4, 2) . "/" . substr($choose_shi["SHIDATE"], 0, 4);
-        $groupuser = 8;
 
-        //inisiasi proses kirim ke group
-        $data2 = array(
-            'AUDTDATE' => $this->audtuser['AUDTDATE'],
-            'AUDTTIME' => $this->audtuser['AUDTTIME'],
-            'AUDTUSER' => $this->audtuser['AUDTUSER'],
-            'AUDTORG' => $this->audtuser['AUDTORG'],
-            'OFFLINESTAT' => 0,
-        );
-
-        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-
-        foreach ($notiftouser_data as $sendto_user) {
-            $data_email = array(
-                'hostname'       => $sender['HOSTNAME'],
-                'sendername'       => $sender['SENDERNAME'],
-                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                'ssl'       => $sender['SSL'],
-                'smtpport'       => $sender['SMTPPORT'],
-                'to_email' => $sendto_user['EMAIL'],
-                'subject' => 'Pending Requisition Allert. DN Number : ' . $choose_shi["SHINUMBER"],
-                'message' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                    Please to follow up DN Origin :' . $choose_shi["SHINUMBER"] . '(' . $shidate . ') is pending for you to process Finance.
-        <br><br>
-        You can access Order Tracking System Portal via the URL below:
-        <br>
-        Http://jktsms025:...
-        <br>
-        Thanks for your cooperation. 
-        <br><br>
-        Order Tracking Administrator',
-            );
-
-            $sending_mail = $this->send($data_email);
-
-            if ($sending_mail) {
-                $data_notif = array(
-                    'FROM_USER' => $this->header_data['usernamelgn'],
-                    'FROM_EMAIL' => $this->header_data['emaillgn'],
-                    'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                    'TO_USER' => $sendto_user['USERNAME'],
-                    'TO_EMAIL' => $sendto_user['EMAIL'],
-                    'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                    'SUBJECT' => 'Pending Requisition Allert. DN Number : ' . $choose_shi["SHINUMBER"],
-                    'MESSAGE' => ' Hello ' . ucwords(strtolower($sendto_user['NAME'])) . ',<br><br>
-    
-                                    Please to follow up DN Origin :' . $choose_rqn["SHINUMBER"] . '(' . $shidate . ') is pending for you to process Finance.
-                        <br><br>
-                        You can access Order Tracking System Portal via the URL below:
-                        <br>
-                        Http://jktsms025:...
-                        <br>
-                        Thanks for your cooperation. 
-                        <br><br>
-                        Order Tracking Administrator',
-
-                    'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                    'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                    'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                    'IS_READ' => 0,
-                    'IS_ARCHIVED' => 0,
-                    'IS_TRASHED' => 0,
-                    'IS_DELETED' => 0,
-                    'IS_ATTACHED' => 0,
-                    'IS_STAR' => 0,
-                    'IS_READSENDER' => 1,
-                    'IS_ARCHIVEDSENDER' => 0,
-                    'IS_TRASHEDSENDER' => 0,
-                    'IS_DELETEDSENDER' => 0,
-                    'SENDING_STATUS' => 1,
-                    'OTPROCESS' => $groupuser,
-                    'UNIQPROCESS' => $choose_shi['CSRUNIQ'],
-                );
-
-                $this->NotifModel->mailbox_insert($data_notif);
-                $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data2);
-            }
-        }
-
-
-        session()->set('success', '1');
-        return redirect()->to(base_url('/confirmdnorigin'));
-        session()->remove('success');
-    }
-
-
-    public function export_excel()
-    {
-        //$peoples = $this->builder->get()->getResultArray();
-        $PurchaseOrderdata = $this->PurchaseOrderModel->get_PurchaseOrder_open();
-        $spreadsheet = new Spreadsheet();
-        // tulis header/nama kolom 
-        $spreadsheet->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'No')
-            ->setCellValue('B1', 'ContractNo')
-            ->setCellValue('C1', 'ProjectNo')
-            ->setCellValue('D1', 'CustomerName')
-            ->setCellValue('E1', 'CustomerEmail')
-            ->setCellValue('F1', 'CrmNo')
-            ->setCellValue('G1', 'PoCustomer')
-            ->setCellValue('H1', 'InventoryNo')
-            ->setCellValue('I1', 'MaterialNo')
-            ->setCellValue('J1', 'PoDate')
-            ->setCellValue('K1', 'ReqDate')
-            ->setCellValue('L1', 'SalesPerson')
-            ->setCellValue('M1', 'OrderDescription')
-            ->setCellValue('N1', 'Qty')
-            ->setCellValue('O1', 'Uom')
-            ->setCellValue('P1', '')
-            ->setCellValue('Q1', 'Pr Date')
-            ->setCellValue('R1', 'PR Number')
-            ->setCellValue('S1', '');
-
-        $rows = 2;
-        // tulis data mobil ke cell
-        $no = 1;
-        foreach ($PurchaseOrderdata as $data) {
-            $spreadsheet->setActiveSheetIndex(0)
-                ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['ContractNo'])
-                ->setCellValue('C' . $rows, $data['ProjectNo'])
-                ->setCellValue('D' . $rows, $data['CustomerName'])
-                ->setCellValue('E' . $rows, $data['CustomerEmail'])
-                ->setCellValue('F' . $rows, $data['CrmNo'])
-                ->setCellValue('G' . $rows, $data['PoCustomer'])
-                ->setCellValue('H' . $rows, $data['InventoryNo'])
-                ->setCellValue('I' . $rows, $data['MaterialNo'])
-                ->setCellValue('J' . $rows, $data['PoDate'])
-                ->setCellValue('K' . $rows, $data['ReqDate'])
-                ->setCellValue('L' . $rows, $data['SalesPerson'])
-                ->setCellValue('M' . $rows, $data['OrderDesc'])
-                ->setCellValue('N' . $rows, $data['Qty'])
-                ->setCellValue('O' . $rows, $data['Uom'])
-                ->setCellValue('P' . $rows, '')
-                ->setCellValue('Q' . $rows, $data['PrDate'])
-                ->setCellValue('R' . $rows, $data['PrNumber'])
-                ->setCellValue('S' . $rows, '');
-            $rows++;
-        }
-        // tulis dalam format .xlsx
-        $writer = new Xlsx($spreadsheet);
-        $fileName = 'Ordertracking_data';
-
-        // Redirect hasil generate xlsx ke web client
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
-        exit();
-    }
 
     private function send($data_email)
     {

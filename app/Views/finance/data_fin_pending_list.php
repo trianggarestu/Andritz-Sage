@@ -61,6 +61,8 @@
 																<th style="vertical-align: top;">No.</th>
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
 																<th style="vertical-align: top;">Req. Date</th>
+																<th style="vertical-align: top;">Est. Cost</th>
+																<th style="vertical-align: top;">Act. Cost</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Invoice. Number</th>
 																<th style="vertical-align: top;">Status</th>
@@ -76,6 +78,7 @@
 															$no = 1;
 															foreach ($finance_data as $fin_list) {
 																$crmreq_date = substr($fin_list['CRMREQDATE'], 4, 2) . "/" . substr($fin_list['CRMREQDATE'], 6, 2) . "/" . substr($fin_list['CRMREQDATE'], 0, 4);
+																$pocust_date = substr($fin_list['PODATECUST'], 4, 2) . "/" . substr($fin_list['PODATECUST'], 6, 2) . "/" . substr($fin_list['PODATECUST'], 0, 4);
 																if (null == $fin_list['DATEINVC']) {
 																	$inv_date = '';
 																} else {
@@ -88,16 +91,20 @@
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $fin_list['CSRCONTRACT'] ?></a></strong>
-																		<?php echo "/" . $fin_list['CSRPROJECT'] . "/" . $fin_list['CRMNO'] . "<br>
-																	<strong>" . $fin_list['CTDESC'] . "</strong><br>
-																	<small>( " . trim($fin_list['NAMECUST']) . " )</small>"; ?><br>
-
+																	<td style="vertical-align: top;" nowrap>
+																		<strong><a href="<?= base_url("administration/csrpostedview/" . $fin_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $fin_list['CSRCONTRACT'] ?></a></strong>
+																		<?= " / " . $fin_list['CSRPROJECT'] . " / " . $fin_list['CRMNO']; ?><br>
+																		<strong><?= $fin_list['CTDESC']; ?></strong><br>
+																		<strong><?= $fin_list['PONUMBERCUST'] . ' - ' . $pocust_date; ?></strong><br>
+																		<small>(<?= $fin_list['NAMECUST']; ?>)</small><br>
 																	</td>
 
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
-
+																	<td style="vertical-align: top;" nowrap><?= number_format($fin_list['CURMATECHM'], 0, ",", ".");
+																											?></td>
+																	<td style="vertical-align: top;" nowrap><?= number_format($fin_list['ACTMATECHM'], 0, ",", ".");
+																											?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
 																		<strong><a href="#"><?= $fin_list['IDINVC'] ?></a></strong><br>

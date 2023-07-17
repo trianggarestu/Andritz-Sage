@@ -51,7 +51,7 @@
                                     <select class="form-control input-sm select2 required" id="idinvc" name="idinvc" style="width:100%;">
                                         <option option value="">___ Invoice Number - Inv. Date - Description ___</option>
                                         <?php foreach ($arinvoice_list as $data) :
-                                            $inv_date = substr($data['DATEINVC'], 6, 2) . "/" . substr($data['DATEINVC'], 4, 2) . "/" . substr($data['DATEINVC'], 0, 4);
+                                            $inv_date = substr($data['DATEINVC'], 4, 2) . "/" . substr($data['DATEINVC'], 6, 2) . "/" . substr($data['DATEINVC'], 0, 4);
                                         ?>
                                             <option value="<?= trim($data['IDINVC'])
                                                             ?>" data-idinvc="<?= $data['IDINVC']; ?>" data-dateinvc="<?= $inv_date; ?>" data-invcdesc="<?= $data['INVCDESC']; ?>" data-dppamt="<?= number_format($data['AMTINVCTOT'], 0, ",", "."); ?>"><?= trim($data['IDINVC'])

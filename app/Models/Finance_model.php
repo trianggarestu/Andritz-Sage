@@ -86,9 +86,10 @@ class Finance_model extends Model
     {
         $query = $this->db->query("select a.*,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,a.IDINVC,a.DATEINVC
+        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,c.CURMATECHM,c.ACTMATECHM,a.IDINVC,a.DATEINVC
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+		left join (select CONTRACT,PROJECT,CURMATECHM,ACTMATECHM,ORJMATEBHM from PMPROJS) c on c.CONTRACT=b.CONTRACT and c.PROJECT=b.PROJECT
         where a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0");
 
         return $query->getResultArray();
@@ -99,13 +100,12 @@ class Finance_model extends Model
     {
         $query = $this->db->query("select a.*,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC
+        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,c.CURMATECHM,c.ACTMATECHM,a.IDINVC,a.DATEINVC
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        left join ICITEM it on it.ITEMNO=b.ITEMNO
+		left join (select CONTRACT,PROJECT,CURMATECHM,ACTMATECHM,ORJMATEBHM from PMPROJS) c on c.CONTRACT=b.CONTRACT and c.PROJECT=b.PROJECT
         where (a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0)
         and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
-        or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%' or " . 'it."DESC"' . " like '%$keyword%' 
         or a.IDINVC like '%$keyword%')");
 
         return $query->getResultArray();

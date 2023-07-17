@@ -25,20 +25,21 @@ class Ordertracking_model extends Model
 
     function get_ordertracking()
     {
-        $query = $this->db->query('select * from webot_ORDERTRACKING order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc');
+        $query = $this->db->query('select * from webot_ORDERTRACKING where (RRSTATUS is NULL or RRSTATUS<>2) order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc');
         return $query->getResultArray();
     }
 
 
     function get_ordertracking_search($keyword)
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where CONTRACT like '%$keyword%' or CTDESC like '%$keyword%'
+        $query = $this->db->query("select * from webot_ORDERTRACKING where (RRSTATUS is NULL or RRSTATUS<>2) and 
+        (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%'
         or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%' or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%'
         or CUSTOMER like '%$keyword%' or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
         or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
         or STOCKUNIT like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' or ORIGINCOUNTRY like '%$keyword%' or POREMARKS like '%$keyword%'
         or VENDSHISTATUS like '%$keyword%' or LOGREMARKS like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'
-        or SHINUMBER like '%$keyword%' or IDINVC like '%$keyword%'
+        or SHINUMBER like '%$keyword%' or IDINVC like '%$keyword%')
         order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc");
         return $query->getResultArray();
     }
@@ -57,7 +58,7 @@ class Ordertracking_model extends Model
     function get_inv_preview_filter($keyword, $nfromdate, $ntodate)
     {
         $query = $this->db->query("select * from webot_ORDERTRACKING
-                where 
+                where (RRSTATUS is NULL or RRSTATUS<>2) and 
         (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%' or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%'
         or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%' or CUSTOMER like '%$keyword%'
         or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
@@ -65,7 +66,7 @@ class Ordertracking_model extends Model
         or STOCKUNIT like '%$keyword%' or IDINVC like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' 
         or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'  or SHIREFERENCE like '%$keyword%' ) and
         (PODATECUST>=$nfromdate and PODATECUST<=$ntodate)
-        order by PODATECUST asc");
+        order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc");
         return $query->getResultArray();
     }
 
