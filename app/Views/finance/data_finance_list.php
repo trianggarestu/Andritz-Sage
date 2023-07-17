@@ -31,7 +31,7 @@
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
 											<div class="col-sm-9">
-												<label for="daterange">Filter by P/O Date : </label>
+												<label for="daterange">Filter by Invoice Date : </label>
 												<div class="input-group input-group-sm date">
 													<div class="input-group-addon">From Date :
 														<i class="fa fa-calendar"></i>
@@ -88,7 +88,7 @@
 														$no = 0;
 														?>
 														<?php foreach ($fin_data as $data_list) {
-															$invdate = substr($data_list['INVOICEDATE'], 4, 2) . "/" . substr($data_list['INVOICEDATE'], 6, 2) . "/" .  substr($data_list['INVOICEDATE'], 0, 4);
+															$invdate = substr($data_list['DATEINVC'], 4, 2) . "/" . substr($data_list['DATEINVC'], 6, 2) . "/" .  substr($data_list['DATEINVC'], 0, 4);
 
 
 														?>

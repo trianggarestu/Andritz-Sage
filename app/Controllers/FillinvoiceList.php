@@ -112,10 +112,10 @@ class FillinvoiceList extends BaseController
             ->where('POSTINGSTAT =', 1)
             ->groupEnd()
             ->groupStart()
-            ->where('webot_FINANCE.INVOICEDATE >=', $fr_date)
-            ->where('webot_FINANCE.INVOICEDATE <=', $to_date)
+            ->where('webot_FINANCE.DATEINVC >=', $fr_date)
+            ->where('webot_FINANCE.DATEINVC <=', $to_date)
             ->groupEnd()
-            ->orderBy('webot_FINANCE.INVOICEDATE', 'ASC');
+            ->orderBy('webot_FINANCE.DATEINVC', 'ASC');
         $perpage = 20;
         $data = array(
             'keyword' => '',
@@ -185,10 +185,10 @@ class FillinvoiceList extends BaseController
                 ->where('webot_FINANCE.POSTINGSTAT =', 1)
                 ->groupEnd()
                 ->groupStart()
-                ->where('webot_FINANCE.INVOICEDATE >=', $nfromdate)
-                ->where('webot_FINANCE.INVOICEDATE <=', $ntodate)
+                ->where('webot_FINANCE.DATEINVC >=', $nfromdate)
+                ->where('webot_FINANCE.DATEINVC <=', $ntodate)
                 ->groupEnd()
-                ->orderBy('webot_FINANCE.INVOICEDATE', 'ASC');
+                ->orderBy('webot_FINANCE.DATEINVC', 'ASC');
         } else {
             $fin_data = $this->FinanceModel->select('webot_FINANCE.*,csr.*,shi.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_FINANCE.CSRUNIQ', 'left')
@@ -197,8 +197,8 @@ class FillinvoiceList extends BaseController
                 ->where('webot_FINANCE.POSTINGSTAT =', 1)
                 ->groupEnd()
                 ->groupStart()
-                ->where('webot_FINANCE.INVOICEDATE >=', $nfromdate)
-                ->where('webot_FINANCE.INVOICEDATE <=', $ntodate)
+                ->where('webot_FINANCE.DATEINVC >=', $nfromdate)
+                ->where('webot_FINANCE.DATEINVC <=', $ntodate)
                 ->groupEnd()
                 ->groupStart()
 
@@ -214,12 +214,9 @@ class FillinvoiceList extends BaseController
                 ->orlike('csr.EMAIL1CUST', $keyword)
                 ->orlike('csr.CRMNO', $keyword)
                 ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.SERVICETYPE', $keyword)
+
                 ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('csr.ITEMNO', $keyword)
-                ->orlike('csr.MATERIALNO', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
+
                 ->orlike('webot_FINANCE.IDINVC', $keyword)
                 ->orlike('webot_FINANCE.DOCNUMBER', $keyword)
                 ->orlike('shi.SHINUMBER', $keyword)
@@ -346,9 +343,9 @@ class FillinvoiceList extends BaseController
                 default:
                     $postingstatus = "Done";
             }
-            $dd = substr($data['INVOICEDATE'], 6, 2);
-            $mm = substr($data['INVOICEDATE'], 4, 2);
-            $yyyy = substr($data['INVOICEDATE'], 0, 4);
+            $dd = substr($data['DATEINVC'], 6, 2);
+            $mm = substr($data['DATEINVC'], 4, 2);
+            $yyyy = substr($data['DATEINVC'], 0, 4);
             $invdate = $mm . '/' . $dd . '/' . $yyyy;
 
             // $dd = substr($data['CUSTRCPDATE'], 6, 2);
@@ -407,7 +404,7 @@ class FillinvoiceList extends BaseController
         }
         // tulis dalam format .xlsx
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'Delivery_Order_data';
+        $fileName = 'Finance_data';
 
         // Redirect hasil generate xlsx ke web client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

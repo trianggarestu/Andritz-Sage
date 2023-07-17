@@ -31,7 +31,7 @@
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
 											<div class="col-sm-9">
-												<label for="daterange">Filter by P/O Date : </label>
+												<label for="daterange">Filter by Delivery Date : </label>
 												<div class="input-group input-group-sm date">
 													<div class="input-group-addon">From Date :
 														<i class="fa fa-calendar"></i>

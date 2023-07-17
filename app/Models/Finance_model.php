@@ -29,7 +29,7 @@ class Finance_model extends Model
         $query = $this->db->query("select 
         a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
         a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
-        c.FINUNIQ,c.IDINVC,c.INVOICEDATE,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
+        c.FINUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
         from webot_CSR a 
         left join webot_FINANCE c on c.CSRUNIQ=a.CSRUNIQ
         where (a.POSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL)");
@@ -44,7 +44,7 @@ class Finance_model extends Model
         a.EDNFILENAME,a.EDNFILEPATH,a.POSTINGSTAT as SHIPOSTINGSTAT,a.DNSTATUS,a.DNPOSTINGSTAT,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
         b.ITEMNO,b.MATERIALNO,it." . '"DESC"' . " as ITEMDESC,b.SERVICETYPE,b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.STOCKUNIT,b.QTY,b.ORDERDESC,
-        c.FINUNIQ,c.IDINVC,c.INVOICEDATE,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
+        c.FINUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
         from webot_SHIPMENTS a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
         left join ICITEM it on it.ITEMNO=b.ITEMNO
@@ -175,10 +175,10 @@ class Finance_model extends Model
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or a.IDINVC like '%$keyword%' or c.SHIDATE like '%$keyword%') and
-        (a.INVOICEDATE>=$nfromdate and a.INVOICEDATE<=$ntodate)
-        order by a.INVOICEDATE asc");
+       or b.CRMREMARKS like '%$keyword%' 
+        or a.IDINVC like '%$keyword%' or c.SHIDATE like '%$keyword%') and
+        (a.DATEINVC>=$nfromdate and a.DATEINVC<=$ntodate)
+        order by a.DATEINVC asc");
         return $query->getResultArray();
     }
 }

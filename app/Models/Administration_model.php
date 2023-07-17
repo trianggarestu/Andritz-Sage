@@ -101,9 +101,9 @@ class Administration_model extends Model
 
     function get_latest_finance()
     {
-        $query = $this->db->query("select TOP 6 a.INVOICEDATE,a.IDINVC,a.FINSTATUS,a.RRSTATUS,a.POSTINGSTAT,a.OFFLINESTAT 
+        $query = $this->db->query("select TOP 6 a.DATEINVC,a.IDINVC,a.FINSTATUS,a.RRSTATUS,a.POSTINGSTAT,a.OFFLINESTAT 
         from webot_FINANCE a
-        order by a.INVOICEDATE desc, a.FINUNIQ desc");
+        order by a.DATEINVC desc, a.FINUNIQ desc");
         return $query->getResultArray();
     }
 
@@ -123,6 +123,25 @@ class Administration_model extends Model
         $query = $this->db->query("select a.* from webot_CSR a where a.POSTINGSTAT=1 and a.CSRUNIQ='$csruniq'");
         return $query->getRowArray();
     }
+
+    function get_csr_open($csruniq)
+    {
+        $query = $this->db->query("select a.*,b.* from webot_REQUISITION a 
+        left join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+         where a.POSTINGSTAT <>2 and a.CSRUNIQ='$csruniq'");
+        return $query->getRowArray();
+    }
+
+    function get_csrl_open($csruniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.* from webot_REQUISITION a
+        left Join webot_CSR b on a.CSRUNIQ = b.CSRUNIQ
+        left join webot_CSRL c on b.CSRUNIQ = c.CSRUNIQ 
+        where a.POSTINGSTAT <> 2  and a.CSRUNIQ='$csruniq'");
+        return $query->getResultArray();
+    }
+
+
 
     function get_csrl_post($csruniq)
     {

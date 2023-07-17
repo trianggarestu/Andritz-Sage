@@ -503,7 +503,7 @@
 									</thead>
 									<tbody>
 										<?php foreach ($fin_data as $data) :
-											$invdate = substr($data['INVOICEDATE'], 4, 2) . "/" . substr($data['INVOICEDATE'], 6, 2) . "/" .  substr($data['INVOICEDATE'], 0, 4); ?>
+											$invdate = substr($data['DATEINVC'], 4, 2) . "/" . substr($data['DATEINVC'], 6, 2) . "/" .  substr($data['DATEINVC'], 0, 4); ?>
 											<tr>
 
 												<td><?= $invdate ?></td>

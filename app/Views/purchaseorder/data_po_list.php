@@ -70,13 +70,14 @@
 													<thead class="bg-gray disabled color-palette">
 														<tr>
 															<th>No.</th>
+															<th>Status</th>
 															<th>PO. Number</th>
 															<th>PO. Date</th>
 															<th>ETD (Date)</th>
 															<th>Cargo<br>Readiness (Date)</th>
 															<th>Origin Country</th>
 															<th>Remarks</th>
-															<th>Status</th>
+
 															<th style="background-color: white;"></th>
 															<th>PR. Number</th>
 															<th>PR. Date</th>
@@ -101,12 +102,6 @@
 
 															<tr>
 																<td><?= ++$no ?></td>
-																<td><strong><a href="<?= base_url("administration/popostedview/" . $po_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $po_list['PONUMBER']; ?></a></strong></td>
-																<td><?= $povendate ?></td>
-																<td><?= $etddate ?></td>
-																<td><?= $creadinessdate ?></td>
-																<td><?= $po_list['ORIGINCOUNTRY'] ?></td>
-																<td><?= $po_list['POREMARKS'] ?></td>
 																<td><?php $postingstat = $po_list['POSTINGSTAT'];
 																	switch ($postingstat) {
 																		case "0":
@@ -121,6 +116,13 @@
 																		default:
 																			echo "Posted";
 																	} ?></td>
+																<td><strong><a href="<?= base_url("administration/popostedview/" . $po_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $po_list['PONUMBER']; ?></a></strong></td>
+																<td><?= $povendate ?></td>
+																<td><?= $etddate ?></td>
+																<td><?= $creadinessdate ?></td>
+																<td><?= $po_list['ORIGINCOUNTRY'] ?></td>
+																<td><?= $po_list['POREMARKS'] ?></td>
+
 																<td style="background-color: white;"></td>
 																<td><strong><?= $po_list['RQNNUMBER'] ?></strong></td>
 																<td><?= $rqndate ?></td>

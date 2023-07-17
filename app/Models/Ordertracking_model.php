@@ -63,7 +63,7 @@ class Ordertracking_model extends Model
         or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
         or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
         or STOCKUNIT like '%$keyword%' or IDINVC like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' 
-        or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%') and
+        or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'  or SHIREFERENCE like '%$keyword%' ) and
         (PODATECUST>=$nfromdate and PODATECUST<=$ntodate)
         order by PODATECUST asc");
         return $query->getResultArray();

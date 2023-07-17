@@ -64,7 +64,7 @@
 
                                 <?php foreach ($fin_data as $data_list) {
                                     $shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);
-                                    $invdate = substr($data_list['INVOICEDATE'], 4, 2) . "/" . substr($data_list['INVOICEDATE'], 6, 2) . "/" .  substr($data_list['INVOICEDATE'], 0, 4);
+                                    $invdate = substr($data_list['DATEINVC'], 4, 2) . "/" . substr($data_list['DATEINVC'], 6, 2) . "/" .  substr($data_list['DATEINVC'], 0, 4);
                                     $cusdate = substr($data_list['CUSTRCPDATE'], 4, 2) . "/" . substr($data_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($data_list['CUSTRCPDATE'], 0, 4);
                                     // $creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
                                     // $etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);

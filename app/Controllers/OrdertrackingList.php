@@ -200,15 +200,14 @@ class OrdertrackingList extends BaseController
                 ->orlike('EMAIL1CUST', $keyword)
                 ->orlike('CRMNO', $keyword)
                 ->orlike('ORDERDESC', $keyword)
-                ->orlike('SERVICETYPE', $keyword)
                 ->orlike('CRMREMARKS', $keyword)
-                ->orlike('ITEMNO', $keyword)
-                ->orlike('MATERIALNO', $keyword)
-                ->orlike('STOCKUNIT', $keyword)
-                ->orlike('STOCKUNIT', $keyword)
-                ->orlike('webot_FINANCE.IDINVC', $keyword)
-                ->orlike('webot_FINANCE.DOCNUMBER', $keyword)
-                ->orlike('shi.SHINUMBER', $keyword)
+                ->orlike('RQNUMBER', $keyword)
+                ->orlike('PONUMBER', $keyword)
+                ->orlike('COUNTRYORIGIN', $keyword)
+                ->orlike('POREMARKS', $keyword)
+                ->orlike('VENDSHISTATUS', $keyword)
+                ->orlike('SHINUMBER', $keyword)
+
                 ->groupEnd()
                 ->orderBy('webot_FINANCE.FINUNIQ', 'ASC');
             //$so_data = $this->OrdertrackingModel ->get_csr_list_post_search($keyword);
