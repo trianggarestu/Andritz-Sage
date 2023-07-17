@@ -234,7 +234,7 @@ class ConfirmdnOrigin extends BaseController
 
                 $dnorigin_update = $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data1);
                 if ($dnorigin_update) {
-                    $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq);
+                    $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq, $shiuniq);
                     foreach ($shi_to_ot as $data_shil) :
                         $csruniq = $data_shil['CSRUNIQ'];
                         $csrluniq = $data_shil['CSRLUNIQ'];
@@ -633,11 +633,17 @@ class ConfirmdnOrigin extends BaseController
         $sendername         = $data_email['sendername'];
         $senderemail        = $data_email['senderemail'];
         $passwordemail      = $data_email['passwordemail'];
+        $chksmtpauth           = $data_email['smtpauth'];
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
+        if ($data_email['smtpauth'] == 1) {
+            $smtpauth = 'TRUE';
+        } else {
+            $smtpauth = 'FALSE';
+        }
         $attachment_filepath = '';
         $attachment_filename = '';
 
@@ -649,7 +655,9 @@ class ConfirmdnOrigin extends BaseController
             $mail->Host       = $hostname;
             $mail->SMTPAuth   = true;
             $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            if ($chksmtpauth == TRUE) :
+                $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            endif;
             $mail->SMTPSecure = $ssl;
             $mail->Port       = $smtpport;
 
@@ -665,10 +673,10 @@ class ConfirmdnOrigin extends BaseController
             }
             $mail->send();
             session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/Deliveryorders'));
+            return redirect()->to(base_url('/confirmdnorigin'));
         } catch (Exception $e) {
             session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/Deliveryorders'));
+            return redirect()->to(base_url('/confirmdnorigin'));
         }
     }
 }

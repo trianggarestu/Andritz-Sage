@@ -27,12 +27,34 @@ class Finance_model extends Model
     function get_shi_pending_to_finance()
     {
         $query = $this->db->query("select 
-        a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
+        a.CSRUNIQ,a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
         a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
-        c.FINUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS,c.RRSTATUS,c.POSTINGSTAT,c.OFFLINESTAT
+        c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
         from webot_CSR a 
-        left join webot_FINANCE c on c.CSRUNIQ=a.CSRUNIQ
-        where (a.POSTINGSTAT=1) and (c.POSTINGSTAT=0 or c.POSTINGSTAT IS NULL)");
+        left join (select x.CSRUNIQ,COUNT(x.FINUNIQ) as ROWARINV,MIN(x.POSTINGSTAT) as ARPOSTINGSTAT,MAX(x.OFFLINESTAT) as AROFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATARPOST 
+		from webot_FINANCE x
+		group by x.CSRUNIQ)  c on c.CSRUNIQ=a.CSRUNIQ
+        where (a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL)");
+
+        return $query->getResultArray();
+    }
+
+    function get_shilist_on_shiopen()
+    {
+        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.CUSTRCPDATE,c.SHIATTACHED,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT,c.DNSTATUS
+        from webot_SHIPMENTS c
+        where (c.POSTINGSTAT=1 and c.DNPOSTINGSTAT=1)
+        order by c.SHIDATE asc,c.DOCNUMBER asc");
+
+        return $query->getResultArray();
+    }
+
+    function get_finlist_on_csr()
+    {
+        $query = $this->db->query("select a.*
+        from webot_FINANCE a
+        where a.POSTINGSTAT<>2
+        order by a.DATEINVC asc,a.IDINVC asc");
 
         return $query->getResultArray();
     }
@@ -90,14 +112,10 @@ class Finance_model extends Model
     }
 
 
-    function get_shi_by_id($shiuniq)
+    function get_csr_by_id($csruniq)
     {
-        $query = $this->db->query("select a.*,b.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC,
-        c.FINUNIQ,c.IDINVC,c.FINSTATUS,c.POSTINGSTAT as FINPOSTINGSTAT from webot_SHIPMENTS a
-        left join ARCUS b on b.IDCUST=a.CUSTOMER
-        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
-        left join webot_FINANCE c on c.SHIUNIQ=a.SHIUNIQ
-        where a.POSTINGSTAT=1 and a.SHIUNIQ='$shiuniq' ");
+        $query = $this->db->query("select a.* from webot_CSR a
+        where a.POSTINGSTAT=1 and a.CSRUNIQ='$csruniq' ");
         return $query->getRowArray();
     }
 
@@ -111,7 +129,7 @@ class Finance_model extends Model
 
     function list_sage_ar_by_contract($ct_no)
     {
-        $query = $this->db->query("select a.IDCUST,a.IDINVC,a.DATEINVC,a.INVCDESC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        $query = $this->db->query("select DISTINCT a.IDCUST,a.IDINVC,a.DATEINVC,a.INVCDESC,a.AMTINVCTOT from ARIBH a
         left join ARIBC b on b.CNTBTCH=a.CNTBTCH
         inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
         where b.BTCHSTTS=3 and
@@ -120,19 +138,58 @@ class Finance_model extends Model
     }
 
 
+    function list_shipments_by_contract($csruniq)
+    {
+        $query = $this->db->query("select a.* from webot_SHIPMENTS a where a.DNPOSTINGSTAT=1 and
+        a.CSRUNIQ='$csruniq' and a.DOCNUMBER not in (select distinct SHIDOCNUMBER from webot_FINMULTISHI)");
+        return $query->getResultArray();
+    }
+
+
     function get_arinvoice_by_id($idinvc)
     {
-        $query = $this->db->query("select a.IDCUST,a.IDINVC,a.DATEINVC,a.INVCDESC,c.CONTRACT,c.PROJECT,c.CATEGORY,c.TEXTDESC from ARIBH a
+        $query = $this->db->query("select distinct a.IDCUST,a.IDINVC,a.DATEINVC,a.INVCDESC,a.AMTINVCTOT from ARIBH a
         left join ARIBC b on b.CNTBTCH=a.CNTBTCH
         inner join ARIBD c on c.CNTBTCH=a.CNTBTCH and c.CNTITEM=a.CNTITEM
         where b.BTCHSTTS=3 and a.IDINVC='$idinvc' ");
         return $query->getRowArray();
     }
 
+    function get_finuniq_open($csruniq, $idinvc)
+    {
+        $query = $this->db->query("select DISTINCT a.FINUNIQ,a.IDINVC,a.FINKEY,COUNT(b.SHIUNIQ) as COUNTFSHI from webot_FINANCE a
+        left join webot_FINMULTISHI b on b.FINUNIQ=a.FINUNIQ
+        where a.CSRUNIQ='$csruniq' and a.IDINVC='$idinvc'
+        group by a.FINUNIQ,a.IDINVC,a.FINKEY");
+        return $query->getRowArray();
+    }
+
+
+    function get_fin_open_by_id($finuniq, $csruniq)
+    {
+        $query = $this->db->query("select b.CSRUNIQ,b.CSRLUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS
+        from webot_FINMULTISHI a inner join webot_SHIL b on b.SHIUNIQ=a.SHIUNIQ
+		left join webot_FINANCE c on c.FINUNIQ=a.FINUNIQ
+        where b.CSRUNIQ='$csruniq' and c.FINUNIQ='$finuniq'
+		group by b.CSRUNIQ,b.CSRLUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS");
+        return $query->getResultArray();
+    }
+
+
     function finance_insert($data)
     {
         $query = $this->db->table('webot_FINANCE')->insert($data);
         return $query;
+    }
+
+    function fin_m_line_insert($result)
+    {
+        $process = $this->db->table('webot_FINMULTISHI')->insertBatch($result);
+        if ($process) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -143,9 +200,9 @@ class Finance_model extends Model
         return $query;
     }
 
-    function ot_finance_update($id_so, $data2)
+    function ot_finance_update($csruniq, $csrluniq, $data2)
     {
-        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $id_so));
+        $query = $this->db->table('webot_ORDERTRACKING')->update($data2, array('CSRUNIQ' => $csruniq, 'CSRLUNIQ' => $csrluniq));
         //Tanpa return juga bisa jalan
         return $query;
     }

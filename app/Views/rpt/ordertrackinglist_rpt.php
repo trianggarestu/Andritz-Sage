@@ -172,7 +172,7 @@
 															$shidate = substr($ot_list['SHIDATE'], 4, 2) . "/" . substr($ot_list['SHIDATE'], 6, 2) . "/" .  substr($ot_list['SHIDATE'], 0, 4);
 															$grdate = substr($ot_list['RECPDATE'], 4, 2) . "/" . substr($ot_list['RECPDATE'], 6, 2) . "/" .  substr($ot_list['RECPDATE'], 0, 4);
 															$cusdate = substr($ot_list['CUSTRCPDATE'], 4, 2) . "/" . substr($ot_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($ot_list['CUSTRCPDATE'], 0, 4);
-															$invdate = substr($ot_list['INVOICEDATE'], 4, 2) . "/" . substr($ot_list['INVOICEDATE'], 6, 2) . "/" .  substr($ot_list['INVOICEDATE'], 0, 4);
+															$invdate = substr($ot_list['DATEINVC'], 4, 2) . "/" . substr($ot_list['DATEINVC'], 6, 2) . "/" .  substr($ot_list['DATEINVC'], 0, 4);
 
 														?>
 															<tr>

@@ -58,14 +58,12 @@
 													<table class="table table-bordered table-striped dataTable table-hover">
 														<thead class="bg-gray disabled">
 															<tr>
-																<th style="vertical-align: top;">No.</th>
-																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
-																<th style="vertical-align: top;">Req. Date</th>
-																<th style="background-color: white;"></th>
+																<td style="vertical-align: top;">No.</td>
+																<td style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>Customer</td>
+																<td style="vertical-align: top;">Req. Date</td>
+																<td style="background-color: white;"></td>
 
-																<th style="vertical-align: top;">Action</th>
-																<th style="vertical-align: top;" nowrap>Status </th>
-																<th style="vertical-align: top;" nowrap>A/R Invoice </th>
+																<td style="vertical-align: top;">Action</td>
 
 															</tr>
 														</thead>
@@ -75,24 +73,22 @@
 															$no = 1;
 															foreach ($delivery_data as $shi_list) {
 																$crmreq_date = substr($shi_list['CRMREQDATE'], 4, 2) . "/" . substr($shi_list['CRMREQDATE'], 6, 2) . "/" . substr($shi_list['CRMREQDATE'], 0, 4);
+																$pocust_date = substr($shi_list['PODATECUST'], 4, 2) . "/" . substr($shi_list['PODATECUST'], 6, 2) . "/" . substr($shi_list['PODATECUST'], 0, 4);
 
 
 
-																if (null == $shi_list['INVOICEDATE']) {
-																	$inv_date = '';
-																} else {
-																	$inv_date = substr($shi_list['INVOICEDATE'], 4, 2) . "/" . substr($shi_list['INVOICEDATE'], 6, 2) . "/" . substr($shi_list['INVOICEDATE'], 0, 4);
-																}
 
 
 															?>
 
 																<tr>
 																	<td style="vertical-align: top;"><?= $no++; ?></td>
-																	<td style="vertical-align: top;" nowrap><strong><a href="#"><?= $shi_list['CSRCONTRACT'] ?></a></strong>
-																		<?php echo "/" . $shi_list['CSRPROJECT'] . "/" . $shi_list['CRMNO'] . "<br>
-																	<strong>" . $shi_list['CTDESC'] . "</strong><br>
-																	<small>( " . trim($shi_list['NAMECUST']) . " )</small>"; ?><br>
+																	<td style="vertical-align: top;" nowrap>
+																		<strong><a href="<?= base_url("administration/csrpostedview/" . $shi_list['CSRUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $shi_list['CSRCONTRACT'] ?></a></strong>
+																		<?= " / " . $shi_list['CSRPROJECT'] . " / " . $shi_list['CRMNO']; ?><br>
+																		<strong><?= $shi_list['CTDESC']; ?></strong><br>
+																		<strong><?= $shi_list['PONUMBERCUST'] . ' - ' . $pocust_date; ?></strong><br>
+																		<small>(<?= $shi_list['NAMECUST']; ?>)</small><br>
 
 																	</td>
 
@@ -109,92 +105,175 @@
 																				<?php //if (($shi_list['SHIPOSTINGSTAT'] == 1) and $shi_list['DNPOSTINGSTAT'] == 1 and (empty($shi_list['POSTINGSTAT']) or ($shi_list['POSTINGSTAT'] == 0))) :
 																				?>
 																				<li>
-																					<a href="<?= base_url("fillinvoice/update/" . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Fill Invoice & Post</a>
+																					<a href="<?= base_url("fillinvoice/update/" . $shi_list['CSRUNIQ'] . '/1') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-check-square-o"></i> Fill Invoice & Post</a>
 																				</li>
 
 																				<li>
-																					<a href="<?= base_url("fillinvoice/update/" . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Fill Invoice & Save</a>
+																					<a href="<?= base_url("fillinvoice/update/" . $shi_list['CSRUNIQ'] . '/0') ?>" class="btn btn-social btn-flat btn-block btn-sm" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-edit"></i> Fill Invoice & Save</a>
 																				</li>
 																				<?php //endif;
 																				?>
 
-																				<?php if ($shi_list['POSTINGSTAT'] == 1) :
+																				<?php //if ($shi_list['POSTINGSTAT'] == 1) :
 																				?>
-																					<li>
-																						<a href="<?= base_url("fillinvoice/viewinvoiceposted/" . $shi_list['FINUNIQ']) ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-file-o"></i> View A/R Invoice</a>
-																					</li>
-																				<?php endif;
+																				<li>
+																					<a href="<?= base_url("fillinvoice/viewinvoiceposted/") ?>" class="btn btn-social btn-flat btn-block btn-sm"><i class="fa fa-file-o"></i> View A/R Invoice</a>
+																				</li>
+																				<?php //endif;
 																				?>
 
 																			</ul>
 																		</div>
 
-																	</td>
+																		<?php if (is_array($finlist_data)) { ?>
+																			<div class="table-responsive">
+																				<table class="table table-bordered dataTable table-hover nowrap">
+																					<thead class="bg-gray disabled">
+																						<tr>
+																							<td>Status</td>
+																							<td colspan="2">A/R Info.</td>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<?php
+																						$no_l = 0;
 
-																	<td style="vertical-align: top;" nowrap>
-																		<?php
+																						foreach ($finlist_data as $finheader) :
+																							if ($shi_list['CSRUNIQ'] == $finheader['CSRUNIQ']) :
+																								//$shi_date = substr($shiheader['SHIDATE'], 4, 2) . "/" . substr($shiheader['SHIDATE'], 6, 2) . "/" . substr($shiheader['SHIDATE'], 0, 4);
 
-																		switch ($shi_list['POSTINGSTAT']) {
-																			case "0":
-																				echo "Open";
-																				break;
-																			case "1":
-																				echo "Posted";
-																				break;
-																			case "2":
-																				echo "Deleted";
-																				break;
-																			default:
-																				echo "";
-																		}
+																						?>
+																								<tr>
+																									<td><?php
 
-																		?></td>
-																	<td style="vertical-align: top;" nowrap><strong>
-																			<a href="">
-																				<?= $shi_list['IDINVC'] ?></a></strong><br>
-																		<?php if (!empty($shi_list['FINUNIQ'])) : ?>
-																			<table class="table table-bordered table-striped dataTable">
-																				<thead class="bg-gray disabled">
-																					<tr>
-																						<th colspan="3"><small>A/R Invoice Info</small>
-																						</th>
-																					</tr>
-																				</thead>
-																				<tr>
-																					<td><small>Invoice Number</small></td>
-																					<td><small>:</small></td>
-																					<td><small></small><?= $shi_list['IDINVC'] ?></td>
-																				</tr>
-																				<tr>
-																					<td><small>Invoice Date</small></td>
-																					<td><small>:</small></td>
-																					<td><small></small><?= $inv_date ?></td>
-																				</tr>
-																				<tr>
-																					<td><small>Status</small></td>
-																					<td><small>:</small></td>
-																					<td><strong><small><?php
-																										$finstatus = $shi_list['FINSTATUS'];
-																										switch ($finstatus) {
+																										$postingstat = $finheader['POSTINGSTAT'];
+																										switch ($postingstat) {
+																											case "0":
+																												echo "<span class='label label-default'>Open</span>";
+																												break;
 																											case "1":
-																												echo "Partial";
+																												echo "<span class='label label-success'>Posted</span>";
 																												break;
 																											case "2":
-																												echo "Completed";
+																												echo "<span class='label label-danger'>Deleted</span>";
 																												break;
 																											default:
-																												echo "";
+																												echo "<span class='label label-default'>Open</span>";
 																										}
+																										?></td>
+																									<td style="width: 32%;"><?= trim($finheader['IDINVC']) ?> <small>()</small></td>
 
-																										?></small></strong></td>
-																				</tr>
+																									<td>
 
+																									</td>
+																								</tr>
 
-																			</table>
-																		<?php endif; ?>
+																						<?php
+																							endif;
+																						endforeach;
+
+																						?>
+																					</tbody>
+																				</table>
+																			</div>
+																		<?php } ?>
+
 																	</td>
 
 
+
+
+																</tr>
+																<tr>
+																	<td style="vertical-align: top;" colspan="3" nowrap>
+																		<?php if (is_array($shilist_data)) : ?>
+																			<div class="table-responsive">
+																				<table class="table table-bordered dataTable table-hover nowrap">
+																					<thead class="bg-gray disabled color-palette">
+																						<tr>
+
+																							<th class="padat">No</th>
+																							<th>Doc. Number</th>
+																							<th>Shi. Number</th>
+																							<th>D/N Date</th>
+																							<th>Customer<br>Received Date</th>
+																							<th>D/N Status</th>
+																						</tr>
+																					</thead>
+																					<tbody>
+																						<?php
+																						$no_l = 0;
+																						foreach ($shilist_data as $shi_data) :
+																							$shi_date = substr($shi_data['SHIDATE'], 4, 2) . "/" . substr($shi_data['SHIDATE'], 6, 2) . "/" . substr($shi_data['SHIDATE'], 0, 4);
+																							$custrcp_date = substr($shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($shi_data['CUSTRCPDATE'], 6, 2) . "/" . substr($shi_data['CUSTRCPDATE'], 0, 4);
+																							if ($shi_list['CSRUNIQ'] == $shi_data['CSRUNIQ']) :
+
+																						?>
+																								<tr>
+
+																									<td class="text-center" style="width: 5%;"><?= ++$no_l ?></td>
+																									<td style="width: 10%;">
+																										<strong>
+																											<a href="<?= base_url("administration/shipostedview/" . $shi_data['SHIUNIQ']) ?>" title="D/N View" target="_blank">
+																												<?= $shi_data['DOCNUMBER']
+																												?>
+																											</a>
+																										</strong>
+																									</td>
+
+																									<td style="width: 12%;"><?= $shi_data['SHINUMBER']
+																															?></td>
+																									<td style="width: 12%;"><?= $shi_date
+																															?></td>
+																									<td nowrap><?= $custrcp_date
+																												?></td>
+
+																									<td nowrap style="width: 10%;">
+																										<?php $dnstatus = $shi_data['DNSTATUS'];
+																										switch ($dnstatus) {
+																											case "0":
+																												echo "";
+																												break;
+																											case "1":
+																												echo "RECEIVED";
+																												break;
+
+																											default:
+																												echo "";
+																										} ?>
+																									</td>
+
+
+
+																								</tr>
+
+																						<?php
+																							endif;
+																						endforeach;
+																						?>
+																					</tbody>
+																				</table>
+																			</div>
+																		<?php endif; ?>
+
+																	</td>
+																	<td style="background-color: white;"></td>
+																	<td style="vertical-align: top;">
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<thead class="bg-gray disabled color-palette">
+																					<tr>
+																						<th>X </th>
+																						<th>X</th>
+																						<th>X</th>
+
+																					</tr>
+																				</thead>
+
+																			</table>
+																		</div>
+
+																	</td>
 																</tr>
 
 															<?php } ?>

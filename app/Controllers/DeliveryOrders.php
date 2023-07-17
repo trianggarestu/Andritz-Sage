@@ -607,8 +607,9 @@ class DeliveryOrders extends BaseController
                                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                                    'SHIDATE' => $get_shi['SHIDATE'],
+                                    'SHIDOCNUMBER' => $get_shi['DOCNUMBER'],
                                     'SHINUMBER' => $get_shi['SHINUMBER'],
+                                    'SHIDATE' => $get_shi['SHIDATE'],
                                     'CUSTRCPDATE' => $get_shi['CUSTRCPDATE'],
                                     'SHIQTY' => $data_shil['S_SHIQTY'],
                                     'SHIQTYOUTSTANDING' => ($data_shil['QTY'] - $data_shil['S_SHIQTY']),
@@ -947,8 +948,9 @@ class DeliveryOrders extends BaseController
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'SHIDATE' => $get_shi['SHIDATE'],
+                    'SHIDOCNUMBER' => $get_shi['DOCNUMBER'],
                     'SHINUMBER' => $get_shi['SHINUMBER'],
+                    'SHIDATE' => $get_shi['SHIDATE'],
                     'CUSTRCPDATE' => $get_shi['CUSTRCPDATE'],
                     'SHIQTY' => $data_shil['S_SHIQTY'],
                     'SHIQTYOUTSTANDING' => ($data_shil['QTY'] - $data_shil['S_SHIQTY']),
@@ -1331,13 +1333,20 @@ class DeliveryOrders extends BaseController
         $sendername         = $data_email['sendername'];
         $senderemail        = $data_email['senderemail'];
         $passwordemail      = $data_email['passwordemail'];
+        $chksmtpauth           = $data_email['smtpauth'];
         $ssl                = $data_email['ssl'];
         $smtpport           = $data_email['smtpport'];
         $to                 = $data_email['to_email'];
         $subject             = $data_email['subject'];
         $message             = $data_email['message'];
+        if ($data_email['smtpauth'] == 1) {
+            $smtpauth = 'TRUE';
+        } else {
+            $smtpauth = 'FALSE';
+        }
         $attachment_filepath = $data_email['attachment_filepath'];
         $attachment_filename = $data_email['attachment_filename'];
+
 
         $mail = new PHPMailer(true);
 
@@ -1345,9 +1354,11 @@ class DeliveryOrders extends BaseController
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
             $mail->Host       = $hostname;
-            $mail->SMTPAuth   = true;
+            $mail->SMTPAuth   = $smtpauth;
             $mail->Username   = $senderemail; // silahkan ganti dengan alamat email Anda
-            $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            if ($chksmtpauth == TRUE) :
+                $mail->Password   = $passwordemail; // silahkan ganti dengan password email Anda
+            endif;
             $mail->SMTPSecure = $ssl;
             $mail->Port       = $smtpport;
 
@@ -1361,12 +1372,13 @@ class DeliveryOrders extends BaseController
             if (!empty($attachment_filename)) {
                 $mail->AddAttachment($attachment_filepath, $attachment_filename);   // I took this from the phpmailer example on github but I'm not sure if I have it right.      
             }
+
             $mail->send();
             session()->setFlashdata('success', 'Send Email successfully');
-            return redirect()->to(base_url('/Deliveryorders'));
+            return redirect()->to(base_url('/deliveryorders'));
         } catch (Exception $e) {
             session()->setFlashdata('error', "Send Email failed. Error: " . $mail->ErrorInfo);
-            return redirect()->to(base_url('/Deliveryorders'));
+            return redirect()->to(base_url('/deliveryorders'));
         }
     }
 }
