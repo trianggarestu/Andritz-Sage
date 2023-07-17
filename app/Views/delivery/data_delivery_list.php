@@ -31,24 +31,24 @@
 									<form id="mainform" name="mainform" action="" method="post">
 										<div class="row">
 											<div class="col-sm-9">
-												< <label for="daterange">Filter by P/O Date : </label>
-													<div class="input-group input-group-sm date">
-														<div class="input-group-addon">From Date :
-															<i class="fa fa-calendar"></i>
-														</div>
-														<input class="datepicker form-control input-sm required" id="from_date" name="from_date" type="text" value="<?= $def_fr_date ?>" readonly>
+												<label for="daterange">Filter by P/O Date : </label>
+												<div class="input-group input-group-sm date">
+													<div class="input-group-addon">From Date :
+														<i class="fa fa-calendar"></i>
 													</div>
-													<div class="input-group input-group-sm date">
-														<div class="input-group-addon">To Date :
-															<i class="fa fa-calendar"></i>
-														</div>
-														<input class="datepicker form-control input-sm required" id="to_date" name="to_date" type="text" value="<?= $def_to_date ?>" readonly>
-
-														<div class="input-group-btn">
-															<button type="submit" class="btn btn-default bg-maroon" onclick="$('#'+'mainform').attr('action', '<?= base_url('deliveryorderslist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-filter"></i>Go!</button>
-
-														</div>
+													<input class="datepicker form-control input-sm required" id="from_date" name="from_date" type="text" value="<?= $def_fr_date ?>" readonly>
+												</div>
+												<div class="input-group input-group-sm date">
+													<div class="input-group-addon">To Date :
+														<i class="fa fa-calendar"></i>
 													</div>
+													<input class="datepicker form-control input-sm required" id="to_date" name="to_date" type="text" value="<?= $def_to_date ?>" readonly>
+
+													<div class="input-group-btn">
+														<button type="submit" class="btn btn-default bg-maroon" onclick="$('#'+'mainform').attr('action', '<?= base_url('deliveryorderslist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-filter"></i>Go!</button>
+
+													</div>
+												</div>
 											</div>
 
 											<div class="col-sm-3">
@@ -70,20 +70,24 @@
 													<thead class="bg-gray disabled color-palette">
 														<tr>
 															<th>No.</th>
+															<th>D/N Posting Status</th>
 															<th>Shipment No</th>
 															<th>Shipment Date</th>
 															<th>Document No</th>
 															<th>Customer Name</th>
 															<th>Receipts Customer(Date)</th>
-															<th>Item</th>
-															<th>Item Desc</th>
-															<th>Qty Delivery</th>
-															<th>QTY Outstanding</th>
+															<th>Shipment Reference</th>
+
+
 															<th style="background-color: white;"></th>
 															<th>Contract</th>
 															<th>Project</th>
-															<th>D/N Status</th>
-															<th>D/N Posting Status</th>
+															<th>PO Customer</th>
+															<th>PR No</th>
+															<th>PO Number</th>
+
+
+
 
 
 														</tr>
@@ -107,30 +111,6 @@
 
 															<tr>
 																<td><?= ++$no ?></td>
-																<td><?= $data_list['SHINUMBER'] ?></td>
-																<td><?= $shidate; ?></td>
-																<td><?= $data_list['DOCNUMBER']; ?></td>
-																<td><?= $data_list['NAMECUST']; ?></td>
-																<td><?= $cusdate; ?></td>
-																<td><?= $data_list['SHIITEMNO']; ?></td>
-																<td><?= $data_list['ITEMDESC']; ?></td>
-																<td><?= $data_list['SHIQTY']; ?></td>
-																<td><?= $data_list['SHIQTYOUTSTANDING']; ?></td>
-																<td style="background-color: white;"></td>
-																<td><?= $data_list['CONTRACT']; ?></td>
-																<td><?= $data_list['PROJECT']; ?></td>
-																<td><?php $postatus = $data_list['POCUSTSTATUS'];
-																	switch ($postatus) {
-																		case "0":
-																			echo "Partial";
-																			break;
-																		case "1":
-																			echo "Completed";
-																			break;
-																		default:
-																			echo "";
-																	} ?>
-																</td>
 																<td><?php $dnpostingstat = $data_list['DNPOSTINGSTAT'];
 																	switch ($dnpostingstat) {
 																		case "0":
@@ -146,6 +126,23 @@
 																			echo "Posted";
 																	} ?>
 																</td>
+
+																<td><strong><a href="<?= base_url('administration/shipostedview/' . $data_list['SHIUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['SHINUMBER'] ?></a></strong></td>
+																<td><?= $shidate; ?></td>
+																<td><?= $data_list['DOCNUMBER']; ?></td>
+																<td><?= $data_list['NAMECUST']; ?></td>
+																<td><?= $cusdate; ?></td>
+
+
+																<td><?= $data_list['SHIREFERENCE']; ?></td>
+																<td style="background-color: white;"></td>
+																<td><?= $data_list['CONTRACT']; ?></td>
+																<td><?= $data_list['PROJECT']; ?></td>
+																<td><?= $data_list['PONUMBERCUST'] ?></td>
+																<td><?= $data_list['RQNNUMBER'] ?></a></td>
+																<td><?= $data_list['PONUMBER'] ?></td>
+
+
 
 
 

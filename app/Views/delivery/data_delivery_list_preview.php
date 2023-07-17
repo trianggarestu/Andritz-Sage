@@ -40,20 +40,20 @@
                             <thead>
                                 <tr class="border thick">
                                     <th>No.</th>
+                                    <th>D/N Posting Status</th>
                                     <th>Shipment No</th>
                                     <th>Shipment Date</th>
                                     <th>Document No</th>
                                     <th>Customer Name</th>
                                     <th>Receipts Customer(Date)</th>
-                                    <th>Item</th>
-                                    <th>Item Desc</th>
-                                    <th>Qty Delivery</th>
-                                    <th>QTY Outstanding</th>
+                                    <th>Shipment Reference</th>
                                     <th style="background-color: white;"></th>
                                     <th>Contract</th>
                                     <th>Project</th>
-                                    <th>D/N Status</th>
-                                    <th>D/N Posting Status</th>
+                                    <th>PO Customer</th>
+                                    <th>PR No</th>
+                                    <th>PO Number</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,29 +79,6 @@
 
                                     <tr>
                                         <td><?= ++$no ?></td>
-                                        <td><?= $data_list['SHINUMBER'] ?></td>
-                                        <td><?= $shidate; ?></td>
-                                        <td><?= $data_list['DOCNUMBER']; ?></td>
-                                        <td><?= $data_list['NAMECUST']; ?></td>
-                                        <td><?= $cusdate; ?></td>
-                                        <td><?= $data_list['SHIITEMNO']; ?></td>
-                                        <td><?= $data_list['SHIITEMDESC']; ?></td>
-                                        <td><?= $data_list['SHIQTY']; ?></td>
-                                        <td><?= $data_list['SHIQTYOUTSTANDING']; ?></td>
-                                        <td style="background-color: white;"></td>
-                                        <td><?= $data_list['CONTRACT']; ?></td>
-                                        <td><?= $data_list['PROJECT']; ?></td>
-                                        <td><?php $postatus = $data_list['POCUSTSTATUS'];
-                                            switch ($postatus) {
-                                                case "0":
-                                                    echo "Partial";
-                                                    break;
-                                                case "1":
-                                                    echo "Completed";
-                                                    break;
-                                                default:
-                                                    echo "";
-                                            } ?>
                                         <td><?php $dnpostingstat = $data_list['DNPOSTINGSTAT'];
                                             switch ($dnpostingstat) {
                                                 case "0":
@@ -117,6 +94,20 @@
                                                     echo "Posted";
                                             } ?>
                                         </td>
+                                        <td><strong><a href="<?= base_url('administration/shipostedview/' . $data_list['SHIUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['SHINUMBER'] ?></a></strong></td>
+                                        <td><?= $shidate; ?></td>
+                                        <td><?= $data_list['DOCNUMBER']; ?></td>
+                                        <td><?= $data_list['NAMECUST']; ?></td>
+                                        <td><?= $cusdate; ?></td>
+                                        <td><?= $data_list['SHIREFERENCE']; ?></td>
+                                        <td style="background-color: white;"></td>
+                                        <td><?= $data_list['CONTRACT']; ?></td>
+                                        <td><?= $data_list['PROJECT']; ?></td>
+                                        <td><?= $data_list['PONUMBERCUST'] ?></td>
+                                        <td><?= $data_list['RQNNUMBER'] ?></td>
+                                        <td><strong><a href="<?= base_url('administration/popostedview/' . $data_list['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= $data_list['PONUMBER'] ?></a></strong></td>
+
+
 
 
 

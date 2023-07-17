@@ -422,27 +422,28 @@ class Deliveryorders_model extends Model
 
     function get_delivery_preview($nfromdate, $ntodate)
     {
-        $query = $this->db->query("select a.*,c.*,b.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC from webot_SHIPMENTS a
+        $query = $this->db->query("select a.*,c.*,b.NAMECUST,d.* from webot_SHIPMENTS a
         left join ARCUS b on b.IDCUST=a.CUSTOMER
-        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
         left join webot_CSR c on a.CSRUNIQ =c.CSRUNIQ
+        left join webot_REQUISITION d on c.CSRUNIQ =d.CSRUNIQ
 
         where a.POSTINGSTAT=1 and (a.SHIDATE>=$nfromdate and a.SHIDATE<=$ntodate)");
         return $query->getResultArray();
     }
     function get_delivery_preview_filter($keyword, $nfromdate, $ntodate)
     {
-        $query = $this->db->query("select a.*,b.*,c.NAMECUST," . 'it."DESC"' . " as SHIITEMDESC from webot_SHIPMENTS a
+        $query = $this->db->query("select a.*,b.*,c.NAMECUST,e.*,f.* from webot_SHIPMENTS a
         left join ARCUS c on c.IDCUST=a.CUSTOMER
-        left join ICITEM it on it.ITEMNO=a.SHIITEMNO
         left join webot_CSR b on a.CSRUNIQ =b.CSRUNIQ
         left join webot_RECEIPTS d on d.RCPUNIQ = a.RCPUNIQ
+        left join webot_REQUISITION e on b.CSRUNIQ =e.CSRUNIQ
+        left join webot_PO f on b.CSRUNIQ = f.CSRUNIQ
         where (a.POSTINGSTAT = '1') and 
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-        or b.SERVICETYPE like '%$keyword%' or b.CRMREMARKS like '%$keyword%' or b.ITEMNO like '%$keyword%' or b.MATERIALNO like '%$keyword%'
-        or b.STOCKUNIT like '%$keyword%' or a.SHINUMBER like '%$keyword%' or a.DOCNUMBER like '%$keyword%' or  d.ITEMDESC like '%$keyword%' ) and
+      or b.CRMREMARKS like '%$keyword%'
+       or a.SHINUMBER like '%$keyword%' or a.DOCNUMBER like '%$keyword%' or a.SHIREFERENCE like '%$keyword') and
         (a.SHIDATE>=$nfromdate and a.SHIDATE<=$ntodate)
         order by a.SHIDATE asc");
         return $query->getResultArray();

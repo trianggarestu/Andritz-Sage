@@ -104,11 +104,11 @@ class DeliveryOrdersList extends BaseController
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
         $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
-        $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,' . 'it."DESC"' . ' as ITEMDESC')
+        $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,d.*')
             ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_SHIPMENTS.CSRUNIQ', 'left')
             ->join('webot_PO po', 'csr.CSRUNIQ = po.CSRUNIQ', 'po.POUNIQ = webot_SHIPMENTS.POUNIQ', 'left')
             ->join('ARCUS b', 'b.IDCUST=webot_SHIPMENTS.CUSTOMER', 'left')
-            ->join('ICITEM it', 'it.ITEMNO=csr.ITEMNO', 'left')
+            ->join('webot_REQUISITION d', 'd.CSRUNIQ = csr.CSRUNIQ')
 
             ->groupStart()
             ->where('webot_SHIPMENTS.POSTINGSTAT =', 1)
@@ -180,11 +180,11 @@ class DeliveryOrdersList extends BaseController
         $todate = session()->get('to_date');
         $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
         if (empty($keyword)) {
-            $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,' . 'it."DESC"' . ' as ITEMDESC')
+            $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,d.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_SHIPMENTS.CSRUNIQ', 'left')
                 ->join('webot_PO po', 'csr.CSRUNIQ = po.CSRUNIQ', 'po.POUNIQ = webot_SHIPMENTS.POUNIQ', 'left')
                 ->join('ARCUS b', 'b.IDCUST=webot_SHIPMENTS.CUSTOMER', 'left')
-                ->join('ICITEM it', 'it.ITEMNO=csr.ITEMNO', 'left')
+                ->join('webot_REQUISITION d', ' d.CSRUNIQ = csr.CSRUNIQ')
 
                 ->groupStart()
                 ->where('webot_SHIPMENTS.POSTINGSTAT =', 1)
@@ -195,11 +195,13 @@ class DeliveryOrdersList extends BaseController
                 ->groupEnd()
                 ->orderBy('webot_SHIPMENTS.SHIDATE', 'ASC');
         } else {
-            $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,' . 'it."DESC"' . ' as ITEMDESC')
+            $deli_data = $this->DeliveryordersModel->select('webot_SHIPMENTS.*,po.*,csr.*,b.NAMECUST,d.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_SHIPMENTS.CSRUNIQ', 'left')
                 ->join('webot_PO po', 'csr.CSRUNIQ = po.CSRUNIQ', 'po.POUNIQ = webot_SHIPMENTS.POUNIQ', 'left')
                 ->join('ARCUS b', 'b.IDCUST=webot_SHIPMENTS.CUSTOMER', 'left')
-                ->join('ICITEM it', 'it.ITEMNO=csr.ITEMNO', 'left')
+                ->join('webot_REQUISITION d', ' d.CSRUNIQ = csr.CSRUNIQ')
+
+
 
                 ->groupStart()
                 ->where('webot_SHIPMENTS.POSTINGSTAT =', 1)
@@ -223,15 +225,13 @@ class DeliveryOrdersList extends BaseController
                 ->orlike('csr.EMAIL1CUST', $keyword)
                 ->orlike('csr.CRMNO', $keyword)
                 ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.SERVICETYPE', $keyword)
                 ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('csr.ITEMNO', $keyword)
-                ->orlike('csr.MATERIALNO', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
-                ->orlike('csr.STOCKUNIT', $keyword)
                 ->orlike('webot_SHIPMENTS.SHINUMBER', $keyword)
                 ->orlike('webot_SHIPMENTS.DOCNUMBER', $keyword)
-                ->orlike('it.DESC', $keyword)
+                ->orlike('webot_SHIPMENTS.SHIREFERENCE', $keyword)
+                ->orlike('d.RQNNUMBER', $keyword)
+
+
 
 
                 ->groupEnd()
@@ -319,19 +319,20 @@ class DeliveryOrdersList extends BaseController
         $spreadsheet->setActiveSheetIndex(0)
 
             ->setCellValue('A1', 'NO')
-            ->setCellValue('B1', 'SHIPMENTNO')
-            ->setCellValue('C1', 'SHIPMENTDATE')
-            ->setCellValue('D1', 'DOCUMENTNO')
-            ->setCellValue('E1', 'CUSTOMERNAME')
-            ->setCellValue('F1', 'RECEIPT CUSTOMER(DATE)')
-            ->setCellValue('G1', 'ITEMNO')
-            ->setCellValue('H1', 'ITEMDESC')
-            ->setCellValue('I1', 'QTY DELIVERY')
-            ->setCellValue('J1', 'QTT OUTSTANDING')
-            ->setCellValue('K1', 'CONTRACT')
-            ->setCellValue('L1', 'PROJECT')
-            ->setCellValue('M1', 'D/N STATUS')
-            ->setCellValue('N1', 'POSTING STATUS');
+            ->setCellValue('B1', 'POSTING STATUS')
+            ->setCellValue('C1', 'SHIPMENTNO')
+            ->setCellValue('D1', 'SHIPMENTDATE')
+            ->setCellValue('E1', 'DOCUMENTNO')
+            ->setCellValue('F1', 'CUSTOMERNAME')
+            ->setCellValue('G1', 'RECEIPT CUSTOMER(DATE)')
+            ->setCellValue('H1', 'SHIPMENT REFERENCE)')
+            ->setCellValue('I1', 'CONTRACT')
+            ->setCellValue('J1', 'PROJECT')
+            ->setCellValue('K1', 'PONUMBERCUSTOMER')
+            ->setCellValue('L1', 'PR NO')
+            ->setCellValue('M1', 'PO NO');
+
+
 
         $rows = 2;
         // tulis data mobil ke cell
@@ -399,21 +400,22 @@ class DeliveryOrdersList extends BaseController
 
             $spreadsheet->setActiveSheetIndex(0)
                 ->setCellValue('A' . $rows, $no++)
-                ->setCellValue('B' . $rows, $data['SHINUMBER'])
-                ->setCellValue('C' . $rows, $podate)
-                ->setCellValue('D' . $rows, $data['DOCNUMBER'])
-                ->setCellValue('E' . $rows, $data['NAMECUST'])
-                ->setCellValue('F' . $rows, $grdate)
-                ->setCellValue('G' . $rows, $data['SHIITEMNO'])
-                ->setCellValue('H' . $rows, $data['SHIITEMDESC'])
-                ->setCellValue('I' . $rows, $data['SHIQTY'])
-                ->setCellValue('J' . $rows, $data['SHIQTYOUTSTANDING'])
-                ->setCellValue('K' . $rows, $data['CONTRACT'])
-                ->setCellValue('L' . $rows, $data['PROJECT'])
-                ->setCellValue('M' . $rows, $data['POCUSTSTATUS'])
-                ->setCellValue('N' . $rows, $postingstatus)
+                ->setCellValue('B' . $rows, $postingstatus)
+                ->setCellValue('C' . $rows, $data['SHINUMBER'])
+                ->setCellValue('D' . $rows, $podate)
+                ->setCellValue('E' . $rows, $data['DOCNUMBER'])
+                ->setCellValue('F' . $rows, $data['NAMECUST'])
+                ->setCellValue('G' . $rows, $grdate)
+                ->setCellValue('H' . $rows, $data['SHIREFERENCE'])
 
-                ->setCellValue('K' . $rows, '');
+                ->setCellValue('I' . $rows, $data['CONTRACT'])
+                ->setCellValue('J' . $rows, $data['PROJECT'])
+                ->setCellValue('K' . $rows, $data['PONUMBERCUST'])
+                ->setCellValue('L' . $rows, $data['RQNNUMBER'])
+                ->setCellValue('M' . $rows, $data['PONUMBER'])
+
+
+                ->setCellValue('N' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
