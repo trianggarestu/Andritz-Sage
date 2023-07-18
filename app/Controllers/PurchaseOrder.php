@@ -361,7 +361,7 @@ class PurchaseOrder extends BaseController
             if (!empty($get_po['RQNUNIQ']) and $get_po['POSTINGSTAT'] == 0) {
                 $act = 'purchaseorder/update_action';
                 $id_po = $get_po['POUNIQ'];
-                $rqnnumber = trim($get_pr['RQNNUMBER']);
+                $rqnnumber = trim($get_po['RQNNUMBER']);
                 $ponumber = trim($get_po['PONUMBER']);
                 $origincountry = trim($get_po['ORIGINCOUNTRY']);
                 $poremarks = trim($get_po['POREMARKS']);
@@ -385,6 +385,7 @@ class PurchaseOrder extends BaseController
             $data = array(
                 'csruniq' => trim($get_po['CSRUNIQ']),
                 'rqnuniq' => trim($get_po['RQNUNIQ']),
+                'rqn_number' => $rqnnumber,
                 'po_number' => $ponumber,
                 'etd_date' => $etddate,
                 'cargoreadiness_date' => $cargoreadinessdate,

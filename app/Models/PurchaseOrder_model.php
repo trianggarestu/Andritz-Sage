@@ -244,7 +244,7 @@ class Purchaseorder_model extends Model
     {
         $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE 
         from POPORH1 
-        where PONUMBER not in (select DISTINCT PONUMBER from webot_PO) and RQNNUMBER='$rqnnumber'");
+        where PONUMBER not in (select DISTINCT PONUMBER from webot_PO where POSTINGSTAT=1) and RQNNUMBER='$rqnnumber'");
         return $query->getResultArray();
     }
 
