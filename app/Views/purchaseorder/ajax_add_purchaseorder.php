@@ -40,7 +40,10 @@
                                             </option>
 
                                         <?php endforeach;
+                                        if (!empty($po_number)) :
                                         ?>
+                                            <option option value="<?= $po_number ?>" selected><?= $po_number ?></option>
+                                        <?php endif; ?>
                                     </select>
                                 </div>
                             </div>
