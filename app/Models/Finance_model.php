@@ -173,11 +173,11 @@ class Finance_model extends Model
 
     function get_fin_open_by_id($finuniq, $csruniq)
     {
-        $query = $this->db->query("select b.CSRUNIQ,b.CSRLUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS
+        $query = $this->db->query("select b.CSRUNIQ,b.CSRLUNIQ,c.IDINVC,c.DATEINVC,c.ORIGDNRCPFINDATE,c.FINSTATUS
         from webot_FINMULTISHI a inner join webot_SHIL b on b.SHIUNIQ=a.SHIUNIQ
 		left join webot_FINANCE c on c.FINUNIQ=a.FINUNIQ
         where b.CSRUNIQ='$csruniq' and c.FINUNIQ='$finuniq'
-		group by b.CSRUNIQ,b.CSRLUNIQ,c.IDINVC,c.DATEINVC,c.FINSTATUS");
+		group by b.CSRUNIQ,b.CSRLUNIQ,c.IDINVC,c.DATEINVC,c.ORIGDNRCPFINDATE,c.FINSTATUS");
         return $query->getResultArray();
     }
 

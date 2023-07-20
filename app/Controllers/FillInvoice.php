@@ -232,7 +232,7 @@ class FillInvoice extends BaseController
                 'DATEINVC' => $choose_arinv["DATEINVC"],
                 'INVCDESC' => $choose_arinv["INVCDESC"],
                 'AMTINVCTOT' => $choose_arinv["AMTINVCTOT"],
-                'RCPORIGINALDNDATE' => $n_rcporigdn_date,
+                'ORIGDNRCPFINDATE' => $n_rcporigdn_date,
                 'FINSTATUS' => $this->request->getPost('finstatus'),
                 'RRSTATUS' => 0,
                 'OTPROCESS' => $groupuser,
@@ -301,6 +301,7 @@ class FillInvoice extends BaseController
                         'AUDTORG' => $this->audtuser['AUDTORG'],
                         'IDINVC' => $ot_fin["IDINVC"],
                         'DATEINVC' => $ot_fin["DATEINVC"],
+                        'ORIGDNRCPFINDATE' => $ot_fin["ORIGDNRCPFINDATE"],
                         'FINSTATUS' => $ot_fin["FINSTATUS"],
                     );
 
@@ -338,6 +339,7 @@ class FillInvoice extends BaseController
                 'AUDTORG' => $this->audtuser['AUDTORG'],
                 'IDINVC' => $ot_fin["IDINVC"],
                 'DATEINVC' => $ot_fin["DATEINVC"],
+                'ORIGDNRCPFINDATE' => $ot_fin["ORIGDNRCPFINDATE"],
                 'FINSTATUS' => $ot_fin["FINSTATUS"],
             );
 

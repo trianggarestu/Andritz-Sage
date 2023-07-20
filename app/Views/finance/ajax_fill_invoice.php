@@ -170,7 +170,7 @@
                                                 <td class="text-center"><?= ++$no ?></td>
                                                 <td style="text-align: center;">
                                                     <input type="hidden" name="shichecked[<?php echo $shi_list['SHIUNIQ']; ?>]" value="0" />
-                                                    <input type="checkbox" name="shichecked[<?php echo $shi_list['SHIUNIQ']; ?>]" value="1" class="required" checked />
+                                                    <input type="checkbox" name="shichecked[<?php echo $shi_list['SHIUNIQ']; ?>]" value="1" class="cbox" />
                                                 </td>
 
                                                 <td nowrap><?= $shi_list['DOCNUMBER']
@@ -204,7 +204,7 @@
             <input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
             <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
             <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
-            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm post-terpilih" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>
+            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm post-terpilih" id="bt_submit"><i class='fa fa-check'></i> <?= $button ?></button>
         </div>
     </div>
 </form>
@@ -219,6 +219,11 @@
             $('#dppamt').val($(this).find('option:selected').data('dppamt'));
         });
 
+        $('#bt_submit').attr("disabled", true);
+
+        $('.cbox').change(function() {
+            $('#bt_submit').attr('disabled', $('.cbox:checked').length == 0);
+        });
 
     });
 </script>
