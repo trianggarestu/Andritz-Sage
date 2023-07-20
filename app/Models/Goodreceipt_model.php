@@ -110,6 +110,19 @@ class Goodreceipt_model extends Model
         return $query->getResultArray();
     }
 
+
+    function get_grlist_posting($pouniq, $itemno)
+    {
+        $query = $this->db->query("select a.POUNIQ,a.RCPUNIQ,a.RECPNUMBER,a.RECPDATE,b.ITEMNO,b.QTY,a.POSTINGSTAT as RCPPOSTINGSTAT,a.OFFLINESTAT as RCPOFFLINESTAT
+        from webot_RECEIPTS a
+		inner join webot_RCPL b on b.RCPUNIQ=a.RCPUNIQ
+        where a.POUNIQ='$pouniq' and b.ITEMNO='$itemno'
+        order by RECPDATE asc,RECPNUMBER asc");
+
+        return $query->getResultArray();
+    }
+
+
     function get_po_pending_by_pouniq($pouniq)
     {
         $query = $this->db->query("select a.*,b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST,b.EMAIL1CUST,
@@ -209,12 +222,14 @@ class Goodreceipt_model extends Model
 
     function get_rcp_open_by_id($rcpuniq, $csruniq)
     {
-        $query = $this->db->query("select  
-        b.CSRUNIQ,b.CSRLUNIQ,c.QTY,sum(b.QTY) as S_QTYRCP
-        from webot_RECEIPTS a inner join webot_RCPL b on b.RCPUNIQ=a.RCPUNIQ
-		left join webot_CSRL c on c.CSRUNIQ=b.CSRUNIQ and c.CSRLUNIQ=b.CSRLUNIQ
-        where b.CSRUNIQ='$csruniq'
-		group by b.CSRUNIQ,b.CSRLUNIQ,c.QTY");
+        $query = $this->db->query("select * from (
+            select  
+            b.CSRUNIQ,b.CSRLUNIQ,c.QTY,sum(b.QTY) as S_QTYRCP
+            from webot_RECEIPTS a inner join webot_RCPL b on b.RCPUNIQ=a.RCPUNIQ
+            left join webot_CSRL c on c.CSRUNIQ=b.CSRUNIQ and c.CSRLUNIQ=b.CSRLUNIQ
+            where b.CSRUNIQ='$csruniq'
+            group by b.CSRUNIQ,b.CSRLUNIQ,c.QTY) ot 
+            where ot.CSRLUNIQ in (select distinct CSRLUNIQ from webot_RCPL where RCPUNIQ='$rcpuniq')");
         return $query->getResultArray();
     }
 

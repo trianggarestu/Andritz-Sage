@@ -166,6 +166,15 @@ class GoodReceipt extends BaseController
         echo view('view_footer', $this->footer_data);
     }
 
+    public function view_gr_number($pouniq, $itemno)
+    {
+        $data = array(
+            'grlist_by_po_data' => $this->GoodreceiptModel->get_grlist_posting($pouniq, $itemno),
+
+        );
+        echo view('goodreceipt/ajax_view_grlist', $data);
+    }
+
 
     public function add($pouniq, $post_stat, $delgrline)
     {

@@ -334,6 +334,7 @@
 																					<tr>
 																						<th class="padat">Status</th>
 																						<th>Last <br>G/R Date</th>
+																						<th>G/R No.</th>
 																						<th>G/R Qty<br>(Sum)</th>
 																						<th>G/R Status</th>
 																					</tr>
@@ -378,7 +379,11 @@
 																								</td>
 																								<td><?= $l_rcpdate
 																									?></td>
-
+																								<td>
+																									<a href="<?= base_url('goodreceipt/view_gr_number/' . $items['POUNIQ'] . '/' . $items['ITEMNO']) ?>" title="View G/R Number" data-toggle="modal" data-target="#modalBox">
+																										View
+																									</a>
+																								</td>
 																								<td><?= number_format($items['S_QTYRCP'], 0, ",", ".")
 																									?></td>
 																								<td>
