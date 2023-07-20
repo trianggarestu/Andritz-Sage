@@ -150,7 +150,7 @@
 
                                             <th class="padat">No</th>
 
-                                            <th>Checklist </th>
+                                            <th style="text-align: center;"><input type="checkbox" id="checkall" /></th>
                                             <th>Shi. Doc. Number</th>
                                             <th>Shi. Number</th>
                                             <th>Shi. Date</th>
@@ -204,7 +204,7 @@
             <input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
             <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
             <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
-            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>
+            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm post-terpilih" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>
         </div>
     </div>
 </form>
@@ -218,6 +218,8 @@
             $('#invcdesc').val($(this).find('option:selected').data('invcdesc'));
             $('#dppamt').val($(this).find('option:selected').data('dppamt'));
         });
+
+
     });
 </script>
 

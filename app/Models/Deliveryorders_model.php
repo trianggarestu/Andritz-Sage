@@ -117,6 +117,17 @@ class Deliveryorders_model extends Model
         return $query->getResultArray();
     }
 
+    function get_shilist_posting($pouniq, $itemno)
+    {
+        $query = $this->db->query("select b.POUNIQ,a.SHIUNIQ,a.DOCNUMBER,a.SHINUMBER,a.SHIDATE,b.ITEMNO,b.QTY,a.POSTINGSTAT as SHIPOSTINGSTAT,a.OFFLINESTAT as SHIOFFLINESTAT
+        from webot_SHIPMENTS a
+		inner join webot_SHIL b on b.SHIUNIQ=a.SHIUNIQ
+        where b.POUNIQ='$pouniq' and b.ITEMNO='$itemno'
+        order by SHIDATE asc,DOCNUMBER asc");
+
+        return $query->getResultArray();
+    }
+
 
     function get_shi_pending_to_dnorigin()
     {
@@ -125,7 +136,7 @@ class Deliveryorders_model extends Model
         b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC
         from webot_SHIPMENTS a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-        where (a.POSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and (a.DNPOSTINGSTAT is NULL or a.DNPOSTINGSTAT=0 or a.DNOFFLINESTAT=1))");
+        where (a.EDNPOSTINGSTAT=1 and a.EDNFILENAME IS NOT NULL and (a.DNPOSTINGSTAT is NULL or a.DNPOSTINGSTAT=0 or a.DNOFFLINESTAT=1))");
 
         return $query->getResultArray();
     }

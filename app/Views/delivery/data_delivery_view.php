@@ -30,7 +30,7 @@
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<a href="<?= base_url('deliveryorders') ?>" title="Back to Good Receipt List" class="btn btn-social btn-flat bg-aqua btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Back to Delivery Orders List</a>
-						<?php if ($shiopen_data['POSTINGSTAT'] == 0 or $shiopen_data['OFFLINESTAT'] == 1) {
+						<?php if ($shiopen_data['EDNPOSTINGSTAT'] == 0 or $shiopen_data['OFFLINESTAT'] == 1) {
 						?>
 							<a href="<?= base_url($link_action . $shiopen_data['SHIUNIQ'] . '/' . $shiopen_data['CSRUNIQ']) ?>" class="btn btn-social btn-flat <?= $btn_color ?> btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Posting"><i class="fa  fa-paper-plane-o"></i>
 								<?= $button;
@@ -139,7 +139,27 @@
 													<tbody>
 
 														<tr>
-															<th colspan="3" class="subtitle_head"><strong>Delivery Orders</strong></th>
+															<td colspan="3" class="subtitle_head"><strong>Delivery Orders</strong></td>
+														</tr>
+														<tr>
+															<td width="250">Shipment Status </td>
+															<td width="1">:</td>
+															<td><strong><?php
+																		$postingstat = $shiopen_data['POSTINGSTAT'];
+																		switch ($postingstat) {
+																			case "0":
+																				echo "<span class='label label-default'>Open</span>";
+																				break;
+																			case "1":
+																				echo "<span class='label label-success'>Posted</span>";
+																				break;
+																			case "2":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			default:
+																				echo "<span class='label label-default'>Open</span>";
+																		}
+																		?></strong></td>
 														</tr>
 														<tr>
 															<td width="250">Shipment Number </td>
@@ -177,22 +197,48 @@
 
 
 														<tr>
-															<th colspan="3" class="subtitle_head"><strong>e-Delivery Note</strong></th>
+															<td colspan="3" class="subtitle_head"><strong>e-Delivery Note</strong></td>
 														</tr>
+														<?php if (!empty($shiopen_data['EDNFILENAME'])) {
+															$origdnrcpshidate = substr($shiopen_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($shiopen_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($shiopen_data['ORIGDNRCPSHIDATE'], 0, 4);
+														?>
+															<tr>
+																<td colspan="3">
+																	<div class="table-responsive">
+																		<table class="table table-bordered table-striped table-hover">
+																			<thead>
+																				<tr>
+																					<th nowrap>e-Delivery Note File</th>
+																					<th>D/N Receipt</th>
+																					<th>Action</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td><strong>
+																							<a href="<?= base_url($shiopen_data['EDNFILEPATH']) ?>" download><?= $shiopen_data['EDNFILENAME'] ?></a>
+																						</strong>
+																					</td>
+																					<td>
+																						<strong>
+																							<?= $origdnrcpshidate ?>
+																						</strong>
+																					</td>
+																					<td>
+																						<a href="" data-href="<?= base_url("deliveryorders/deleteedn/" . $shiopen_data['SHIUNIQ']) ?>" class="btn bg-red btn-flat btn-sm" title="Delete Data" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash-o"></i></a>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																</td>
+															</tr>
 
-														<tr>
-															<td width="250">e-Delivery Note File</td>
-															<td width="1">:</td>
-															<td>
-																<?php if (!empty($shiopen_data['EDNFILENAME'])) { ?>
-																	<strong>
-																		<a href="<?= base_url($shiopen_data['EDNFILEPATH']) ?>" download><?= $shiopen_data['EDNFILENAME'] ?></a>
-																	</strong>
-																<?php } else {
-																	echo 'File e-Delivery Note Not Found!.';
-																} ?>
-															</td>
-														</tr>
+														<?php } else {
+															echo 'File e-Delivery Note Not Found!.';
+														} ?>
+
+
 
 
 													</tbody>
@@ -205,24 +251,37 @@
 											<form action="<?= base_url() . 'deliveryorders/edn_upload_action' ?>" method="post" enctype="multipart/form-data">
 												<div class="row">
 													<div class="col-sm-12">
-
-														<div class="form-group">
-															<label for="catatan">Upload e-Delivery Note</label>
-															<div class="input-group input-group-sm">
-																<input type="text" class="form-control" id="file_path" name="edn_path" style="width: 100%;">
-																<input type="file" class="hidden" id="file" name="edn_file">
-																<input type="hidden" name="old_edn_fname" value="<? //=$pamong['foto']
-																													?>">
-																<input type="hidden" name="shiuniq" value="<?= $shiopen_data['SHIUNIQ'] ?>">
-																<input type="hidden" name="shidocnum" value="<?= $shiopen_data['DOCNUMBER'] ?>">
-																<input type="hidden" name="shidate" value="<?= $shiopen_data['SHIDATE'] ?>">
-																<span class="input-group-btn">
-																	<button type="button" class="btn btn-info btn-flat" id="file_browser"><i class="fa fa-search"></i> Browse</button>
-																</span>
+														<div class="col-sm-4">
+															<div class="form-group">
+																<label for="catatan">Upload e-Delivery Note</label>
+																<div class="input-group input-group-sm">
+																	<input type="text" class="form-control" id="file_path" name="edn_path" style="width: 100%;">
+																	<input type="file" class="hidden" id="file" name="edn_file">
+																	<input type="hidden" name="old_edn_fname" value="<? //=$pamong['foto']
+																														?>">
+																	<input type="hidden" name="shiuniq" value="<?= $shiopen_data['SHIUNIQ'] ?>">
+																	<input type="hidden" name="shidocnum" value="<?= $shiopen_data['DOCNUMBER'] ?>">
+																	<input type="hidden" name="shidate" value="<?= $shiopen_data['SHIDATE'] ?>">
+																	<span class="input-group-btn">
+																		<button type="button" class="btn btn-info btn-flat" id="file_browser" <?php if (!empty($shiopen_data['EDNFILENAME'])) : echo 'disabled';
+																																				endif; ?>><i class="fa fa-search"></i> Browse</button>
+																	</span>
+																</div>
 															</div>
 														</div>
-
-														<button type="submit" class="btn btn-social btn-flat btn-info btn-sm pull-right"><i class='fa fa-upload'></i>Upload File</button>
+														<div class="col-sm-8">
+															<div class="form-group">
+																<label for="origdnrcpshidate">Original D/N Receipt</label>
+																<div class="input-group input-group-sm date">
+																	<div class="input-group-addon">
+																		<i class="fa fa-calendar"></i>
+																	</div>
+																	<input class="form-control input-sm pull-right" id="origdnrcpshidate" name="origdnrcpshidate" type="text" value="<?= $todaydate ?>" readonly>
+																</div>
+															</div>
+															<button type="submit" class="btn btn-social btn-flat btn-info btn-sm pull-right" <?php if (!empty($shiopen_data['EDNFILENAME'])) : echo 'disabled';
+																																				endif; ?>><i class='fa fa-upload'></i>Upload File</button>
+														</div>
 
 													</div>
 												</div>
@@ -311,7 +370,7 @@
 	</section>
 </div>
 
-<?php //$this->load->view('global/confirm_delete'); 
+<?php echo view('settings/modalbox/modal_confirm_delete')
 ?>
 
 <div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -6,6 +6,7 @@
     <p>
         Customer Received Date : <?= trim($CUSTRCPDATE) ?><br>
         Customer : <strong><?= trim($NAMECUST) ?></strong><br>
+        Original Receipt D/N Date : <?= $ORIGDNRCPSHIDATE ?><br>
         <hr>
     </p>
 </small>

@@ -167,6 +167,7 @@ class FillInvoice extends BaseController
 
     public function update($csruniq, $postingstat)
     {
+        session()->remove('success');
 
         $get_csrfin = $this->FinanceModel->get_csr_by_id($csruniq);
         if ($get_csrfin) {
@@ -248,9 +249,10 @@ class FillInvoice extends BaseController
                 session()->remove('success');
             } else if (empty($getfinuniq['FINKEY'])) {
                 // Insert Finance Header
-                if (isset($_POST["shichecked"])) {
-                    $add_fin = $this->FinanceModel->finance_insert($data1);
-                }
+
+                $add_fin = $this->FinanceModel->finance_insert($data1);
+
+
                 if ($add_fin) {
                     $getfinuniq = $this->FinanceModel->get_finuniq_open($csruniq, $idinvc);
                     $finuniq = $getfinuniq['FINUNIQ'];

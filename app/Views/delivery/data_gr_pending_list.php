@@ -182,7 +182,7 @@
 																										?>
 																										<?php if ($shiheader['SHIOFFLINESTAT'] == 1 and $shiheader['SHIATTACHED'] == 1) :
 																										?>
-																											<a href="<?= base_url("deliveryorders/sendnotif/" . $shiheader['SHIUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm"><i class="fa fa-send-o"></i>Send Notif</a>
+																											<a href="<?= base_url("deliveryorders/sendnotif/" . $shiheader['SHIUNIQ']) ?>" class="btn bg-orange btn-social btn-flat btn-sm"><i class="fa fa-send-o"></i>Send Notif</a>
 																										<?php
 																										endif;
 																										?>
@@ -211,7 +211,7 @@
 
 																										<?php if ($shiheader['SHIPOSTINGSTAT'] == 1 and $shiheader['SHIOFFLINESTAT'] == 1 and !empty($shiheader['EDNFILENAME'])) :
 																										?>
-																											<a href="<?= base_url("goodreceipt/sendnotif/" . $shiheader['SHIUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm 
+																											<a href="<?= base_url("deliveryorders/sendnotif/" . $shiheader['SHIUNIQ']) ?>" class="btn bg-blue btn-social btn-flat btn-sm 
 																											" title="Sending Notif Manually">
 																												<i class="fa fa-send-o"></i>Send Notif
 																											</a>
@@ -325,6 +325,7 @@
 																				<thead class="bg-gray disabled color-palette">
 																					<tr>
 																						<th>Last <br>D/N Date </th>
+																						<th>D/N No. </th>
 																						<th>D/N Qty <br>(Sum)</th>
 																						<th>D/N Qty <br>Outstanding(Sum)</th>
 
@@ -343,6 +344,11 @@
 																							<tr>
 																								<td>
 																									<?= $l_shidate; ?>
+																								</td>
+																								<td nowrap style="text-align: center;">
+																									<a href="<?= base_url('deliveryorders/view_shi_number/' . $items['POUNIQ'] . '/' . $items['ITEMNO']) ?>" title="View D/N Number" data-toggle="modal" data-target="#modalBox">
+																										View
+																									</a>
 																								</td>
 																								<td>
 																									<?= number_format($items['SHIQTY'], 0, ",", ".") ?>

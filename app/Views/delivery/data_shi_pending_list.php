@@ -68,6 +68,7 @@
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
 																<th style="vertical-align: top;" nowrap>Posting<br> Status </th>
+																<th style="vertical-align: top;" nowrap>Original D/N <br>Received Date </th>
 																<th style="vertical-align: top;" nowrap>D/N Origin<br> Status</th>
 
 															</tr>
@@ -88,6 +89,11 @@
 																	$custrcp_date = '';
 																} else {
 																	$custrcp_date = substr($shi_list['CUSTRCPDATE'], 4, 2) . "/" . substr($shi_list['CUSTRCPDATE'], 6, 2) . "/" . substr($shi_list['CUSTRCPDATE'], 0, 4);
+																}
+																if (null == $shi_list['ORIGDNRCPSLSDATE']) {
+																	$origdnrcpsls_date = '';
+																} else {
+																	$origdnrcpsls_date = substr($shi_list['ORIGDNRCPSLSDATE'], 4, 2) . "/" . substr($shi_list['ORIGDNRCPSLSDATE'], 6, 2) . "/" . substr($shi_list['ORIGDNRCPSLSDATE'], 0, 4);
 																}
 
 
@@ -175,6 +181,9 @@
 																				}
 
 																				?></td>
+																	<td nowrap>
+																		<?= $origdnrcpsls_date ?>
+																	</td>
 																	<td nowrap>
 																		<?php
 																		$dnstatus = $shi_list['DNSTATUS'];

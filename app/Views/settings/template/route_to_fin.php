@@ -7,6 +7,7 @@
         Customer Received Date : <?= trim($CUSTRCPDATE) ?><br>
         Customer : <strong><?= trim($NAMECUST) ?></strong><br>
         D/N Status : <strong><?= trim($DNSTATUS) ?></strong><br>
+        Original Receipt D/N Date : <strong><?= trim($ORIGDNRCPSLSDATE) ?></strong><br>
         <hr>
     </p>
 </small>

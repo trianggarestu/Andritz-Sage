@@ -163,6 +163,8 @@ class ConfirmdnOrigin extends BaseController
         $get_shi_l = $this->DeliveryordersModel->get_shi_l_by_id($shiuniq);
         if ($get_shi) {
             //if (!empty($get_shi['EDNFILENAME']) and empty($get_shi['DNSTATUS'])) {
+            $shidate = substr($get_shi['SHIDATE'], 4, 2) . "/" . substr($get_shi['SHIDATE'], 6, 2) . "/" . substr($get_shi['SHIDATE'], 0, 4);
+            $custrcpdate = substr($get_shi['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi['CUSTRCPDATE'], 6, 2) . "/" . substr($get_shi['CUSTRCPDATE'], 0, 4);
             $act = 'confirmdnorigin/update_action';
             if ($postingstat == 0) {
                 $button = 'Save';
@@ -176,8 +178,8 @@ class ConfirmdnOrigin extends BaseController
                 'shiuniq' => trim($get_shi['SHIUNIQ']),
                 'docnumber' => trim($get_shi['DOCNUMBER']),
                 'shinumber' => trim($get_shi['SHINUMBER']),
-                'shidate' => trim($get_shi['SHIDATE']),
-                'custrcpdate' => trim($get_shi['CUSTRCPDATE']),
+                'shidate' => $shidate,
+                'custrcpdate' => $custrcpdate,
                 'customer' => trim($get_shi['CUSTOMER']),
                 'cust_name' => trim($get_shi['NAMECUST']),
                 'ednfilename' => $get_shi['EDNFILENAME'],
@@ -213,6 +215,7 @@ class ConfirmdnOrigin extends BaseController
                 'AUDTUSER' => $this->audtuser['AUDTUSER'],
                 'AUDTORG' => $this->audtuser['AUDTORG'],
                 'DNSTATUS' => $this->request->getPost('dnstatus'),
+                'ORIGDNRCPSLSDATE' => $this->audtuser['AUDTDATE'],
                 'DNOTPROCESS' => $groupuser,
                 'DNPOSTINGSTAT' => $post_stat,
                 'DNOFFLINESTAT' => 1,
@@ -227,6 +230,7 @@ class ConfirmdnOrigin extends BaseController
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'ORIGDNRCPSLSDATE' => $this->audtuser['AUDTDATE'],
                     'DNPOSTINGSTAT' => 1,
                     'DNOFFLINESTAT' => 1,
 
@@ -244,6 +248,7 @@ class ConfirmdnOrigin extends BaseController
                             'AUDTUSER' => $this->audtuser['AUDTUSER'],
                             'AUDTORG' => $this->audtuser['AUDTORG'],
                             'DNSTATUS' => $this->request->getPost('dnstatus'),
+                            'ORIGDNRCPSLSDATE' => $this->audtuser['AUDTDATE'],
                         );
 
                         $this->DeliveryordersModel->ot_deliveryorders_update($csruniq, $csrluniq, $data2);
@@ -274,6 +279,7 @@ class ConfirmdnOrigin extends BaseController
                         $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
                         $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
                         $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+                        $origdnrcpslsdate = substr($get_shi_data['ORIGDNRCPSLSDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSLSDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSLSDATE'], 0, 4);
                         if ($get_shi_data['DNSTATUS'] == 1) {
                             $dnstatus = 'RECEIVED';
                         } else {
@@ -328,6 +334,7 @@ class ConfirmdnOrigin extends BaseController
                                 'SHIDATE' => $shidate,
                                 'CUSTRCPDATE' => $custrcpdate,
                                 'DNSTATUS' => $dnstatus,
+                                'ORIGDNRCPSLSDATE' => $origdnrcpslsdate,
 
                             );
                             $subject = $mail_tmpl['SUBJECT_MAIL'];
@@ -433,6 +440,8 @@ class ConfirmdnOrigin extends BaseController
         $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
         $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
         $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+        $origdnrcpslsdate = substr($get_shi_data['ORIGDNRCPSLSDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSLSDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSLSDATE'], 0, 4);
+
         if ($get_shi_data['DNSTATUS'] == 1) {
             $dnstatus = 'RECEIVED';
         } else {
@@ -487,6 +496,7 @@ class ConfirmdnOrigin extends BaseController
                 'SHIDATE' => $shidate,
                 'CUSTRCPDATE' => $custrcpdate,
                 'DNSTATUS' => $dnstatus,
+                'ORIGDNRCPSLSDATE' => $origdnrcpslsdate,
 
             );
             $subject = $mail_tmpl['SUBJECT_MAIL'];

@@ -182,6 +182,15 @@ class DeliveryOrders extends BaseController
         echo view('delivery/ajax_view_grlist', $data);
     }
 
+    public function view_shi_number($pouniq, $itemno)
+    {
+        $data = array(
+            'shilist_by_po_data' => $this->DeliveryordersModel->get_shilist_posting($pouniq, $itemno),
+
+        );
+        echo view('delivery/ajax_view_shilist', $data);
+    }
+
 
     public function add($csruniq, $post_stat, $delshiline)
     {
@@ -426,6 +435,40 @@ class DeliveryOrders extends BaseController
         $this->cart->remove($rowid);
         return redirect()->to(base_url('deliveryorders/add/' . $csr_uniq . '/' . $post_stat . '/' . $delshiline));
     }
+
+    public function deleteedn($shiuniq)
+    {
+        $chk_shi = $this->DeliveryordersModel->get_shipment_open($shiuniq);
+        if ($chk_shi['EDNPOSTINGSTAT'] == 1) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('deliveryorders/shipmentopenview/' . $shiuniq));
+            session()->remove('success');
+        } else {
+            // Remove an EDN
+            $data = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'SHIATTACHED' => 0,
+                'EDNFILENAME' => NULL,
+                'EDNFILEPATH' => NULL,
+                'ORIGDNRCPSHIDATE' => NULL,
+                'EDNPOSTINGSTAT' => NULL,
+
+            );
+            if (is_file('assets/files/edn_attached/' . trim($chk_shi['EDNFILENAME']))) {
+                unlink('assets/files/edn_attached/' . trim($chk_shi['EDNFILENAME']));
+            }
+
+            $shi_update = $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data);
+
+            session()->set('success', '1');
+            return redirect()->to(base_url('deliveryorders/shipmentopenview/' . $shiuniq));
+            session()->remove('success');
+        }
+    }
+
 
 
     public function insert_action()
@@ -875,23 +918,27 @@ class DeliveryOrders extends BaseController
             session()->remove('success');
         } else 
         */
+        $ufmt_today = $this->audtuser['AUDTDATE'];
+        $today = substr($ufmt_today, 4, 2) . "/" . substr($ufmt_today, 6, 2) . "/" .  substr($ufmt_today, 0, 4);
 
-        if (!empty($getshiopen['EDNFILENAME']) and $getshiopen['POSTINGSTAT'] == 1 and $getshiopen['OFFLINESTAT'] == 1) {
+        if (!empty($getshiopen['EDNFILENAME']) and $getshiopen['EDNPOSTINGSTAT'] == 1 and $getshiopen['OFFLINESTAT'] == 1) {
 
             $data = array(
                 'shiopen_data' =>  $getshiopen,
                 'shi_l_open_data' =>  $get_shi_l,
+                'todaydate' => $today,
                 'link_action' => 'deliveryorders/sendnotif/',
-                'btn_color' => 'bg-orange',
+                'btn_color' => 'bg-blue',
                 'button' => 'Send Notification Manually',
             );
-        } else {
+        } else if (!empty($getshiopen['EDNFILENAME']) and $getshiopen['EDNPOSTINGSTAT'] == 0 and $getshiopen['OFFLINESTAT'] == 1) {
             $data = array(
                 'shiopen_data' =>  $getshiopen,
                 'shi_l_open_data' =>  $get_shi_l,
+                'todaydate' => $today,
                 'link_action' => 'deliveryorders/posting/',
                 'btn_color' => 'bg-blue',
-                'button' => 'Posting D/N',
+                'button' => 'Posting e-D/N',
             );
         }
 
@@ -910,21 +957,38 @@ class DeliveryOrders extends BaseController
     {
         $shi_to_ot = $this->DeliveryordersModel->get_shi_open_by_id($shiuniq, $csruniq);
         $sender = $this->AdministrationModel->get_mailsender();
+        $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq, $shiuniq);
         $groupuser = 7;
 
-        $data = array(
-            'AUDTDATE' => $this->audtuser['AUDTDATE'],
-            'AUDTTIME' => $this->audtuser['AUDTTIME'],
-            'AUDTUSER' => $this->audtuser['AUDTUSER'],
-            'AUDTORG' => $this->audtuser['AUDTORG'],
-            'POSTINGSTAT' => 1,
-            'OFFLINESTAT' => 1,
+        if (!empty($get_shi['EDNFILENAME'])) {
+            //Untuk Update Status Posting Shipment
+            $data = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'EDNPOSTINGSTAT' => 1,
+                'POSTINGSTAT' => 1,
+                'OFFLINESTAT' => 1,
+            );
+        } else {
+            $data = array(
+                'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                'AUDTORG' => $this->audtuser['AUDTORG'],
+                'EDNPOSTINGSTAT' => 0,
+                'POSTINGSTAT' => 1,
+                'OFFLINESTAT' => 1,
 
-        );
+            );
+        }
         $shi_update = $this->DeliveryordersModel->deliveryorders_update($shiuniq, $data);
+
 
         if ($shi_update) {
             $get_shi = $this->DeliveryordersModel->get_delivery_post($csruniq, $shiuniq);
+
             foreach ($shi_to_ot as $data_shil) :
                 $csruniq = $data_shil['CSRUNIQ'];
                 $csrluniq = $data_shil['CSRLUNIQ'];
@@ -952,6 +1016,7 @@ class DeliveryOrders extends BaseController
                     'SHINUMBER' => $get_shi['SHINUMBER'],
                     'SHIDATE' => $get_shi['SHIDATE'],
                     'CUSTRCPDATE' => $get_shi['CUSTRCPDATE'],
+                    'ORIGDNRCPSHIDATE' => $get_shi['ORIGDNRCPSHIDATE'],
                     'SHIQTY' => $data_shil['S_SHIQTY'],
                     'SHIQTYOUTSTANDING' => ($data_shil['QTY'] - $data_shil['S_SHIQTY']),
                     'POCUSTSTATUS' => $shistatus,
@@ -971,6 +1036,7 @@ class DeliveryOrders extends BaseController
                         'AUDTTIME' => $this->audtuser['AUDTTIME'],
                         'AUDTUSER' => $this->audtuser['AUDTUSER'],
                         'AUDTORG' => $this->audtuser['AUDTORG'],
+                        'EDNPOSTINGSTAT' => 1,
                         'POSTINGSTAT' => 1,
                         'OFFLINESTAT' => 0,
                     );
@@ -988,6 +1054,9 @@ class DeliveryOrders extends BaseController
                     $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
                     $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
                     $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+                    $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
+
+
                     if (!empty($get_shi_data['EDNFILENAME'])) {
 
                         $is_attachment = 1;
@@ -1041,6 +1110,7 @@ class DeliveryOrders extends BaseController
                             'SHINUMBER' => $get_shi_data['SHINUMBER'],
                             'SHIDATE' => $shidate,
                             'CUSTRCPDATE' => $custrcpdate,
+                            'ORIGDNRCPSHIDATE' => $origdnrcpshidate,
 
                         );
                         $subject = $mail_tmpl['SUBJECT_MAIL'];
@@ -1150,6 +1220,8 @@ class DeliveryOrders extends BaseController
                 'SHIATTACHED' => 1,
                 'EDNFILENAME' => $filename,
                 'EDNFILEPATH' => 'assets/files/edn_attached/' . $filename,
+                'ORIGDNRCPSHIDATE' => $this->audtuser['AUDTDATE'],
+                'EDNPOSTINGSTAT' => 0,
 
             );
 
@@ -1245,6 +1317,7 @@ class DeliveryOrders extends BaseController
                 'SHINUMBER' => $get_shi_data['SHINUMBER'],
                 'SHIDATE' => $shidate,
                 'CUSTRCPDATE' => $custrcpdate,
+                'ORIGDNRCPSHIDATE' => $origdnrcpshidate,
 
             );
             $subject = $mail_tmpl['SUBJECT_MAIL'];
