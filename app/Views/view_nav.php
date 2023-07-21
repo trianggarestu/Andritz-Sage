@@ -88,10 +88,10 @@
 																		} ?>">
 									<a href="<?= base_url() . 'mailsendersetup'; ?>"><i class="fa fa-paper-plane"></i>Mail Sender Setup</a>
 								</li>
-								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'emailtemplate') {
+								<li style="padding-left: 15px;" class="<?php if ($active_navd == 'mailtemplatesetup') {
 																			echo 'active';
 																		} ?>">
-									<a href="<?= base_url() . 'emailtemplate'; ?>"><i class="fa  fa-sticky-note"></i>E-mail Templates</a>
+									<a href="<?= base_url() . 'mailtemplatesetup'; ?>"><i class="fa  fa-sticky-note"></i>E-mail Templates</a>
 								</li>
 							</ul>
 						</li>

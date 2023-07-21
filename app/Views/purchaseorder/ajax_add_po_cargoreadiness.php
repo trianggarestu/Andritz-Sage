@@ -34,15 +34,15 @@
                                             $po_date = substr($data['PODATE'], 6, 2) . "/" . substr($data['PODATE'], 4, 2) . "/" . substr($data['PODATE'], 0, 4);
                                         ?>
                                             <option value="<?= trim($data['PONUMBER'])
-                                                            ?>"><?= trim($data['PONUMBER'])
-                                                                ?> - <?= $po_date . " - " . $data['DESCRIPTIO']
-                                                                        ?>
+                                                            ?>" <?php if ($po_number == trim($data['PONUMBER'])) :
+                                                                    echo 'selected';
+                                                                endif; ?>><?= trim($data['PONUMBER'])
+                                                                            ?> - <?= $po_date . " - " . $data['DESCRIPTIO']
+                                                                                    ?>
                                             </option>
                                         <?php endforeach;
-                                        if (!empty($po_number)) :
                                         ?>
-                                            <option option value="<?= $po_number ?>" selected><?= $po_number ?></option>
-                                        <?php endif; ?>
+
                                     </select>
                                 </div>
                             </div>

@@ -82,9 +82,39 @@ class Setup_model extends Model
         return $query->getRowArray();
     }
 
+    public function get_mailtemplate()
+    {
+        $query = $this->db->query("select c.GROUPNAME as ROUTEFROM,c.GROUPDESC as ROUTEFROMDESC,b.GROUPNAME as ROUTETO,b.GROUPDESC as ROUTETODESC,a.* from webot_MAILTEMPLATE a 
+        inner join webot_USERGROUP b on b.GROUPID=a.MAILROUTE
+        left join webot_USERGROUP c on c.GROUPID=(a.MAILROUTE-1)
+        order by a.MAILROUTE asc");
+        return $query->getResultArray();
+    }
+
+    public function get_mailtemplate_by_id($tmpltid)
+    {
+        $query = $this->db->query("select c.GROUPNAME as ROUTEFROM,c.GROUPDESC as ROUTEFROMDESC,b.GROUPNAME as ROUTETO,b.GROUPDESC as ROUTETODESC,
+        a.* from webot_MAILTEMPLATE a 
+        inner join webot_USERGROUP b on b.GROUPID=a.MAILROUTE
+        left join webot_USERGROUP c on c.GROUPID=(a.MAILROUTE-1)
+        where a.TMPLTUNIQ='$tmpltid'
+        order by a.MAILROUTE asc");
+        return $query->getRowArray();
+    }
+
+
+
+
     public function mailsender_update($id, $data)
     {
         $query = $this->db->table('webot_MAILSENDER')->update($data, array('ID' => $id));
+        //Tanpa return juga bisa jalan
+        return $query;
+    }
+
+    public function mailtemplate_update($tmpltuniq, $data)
+    {
+        $query = $this->db->table('webot_MAILTEMPLATE')->update($data, array('TMPLTUNIQ' => $tmpltuniq));
         //Tanpa return juga bisa jalan
         return $query;
     }
