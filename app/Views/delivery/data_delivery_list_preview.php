@@ -46,7 +46,10 @@
                                     <th>Document No</th>
                                     <th>Customer Name</th>
                                     <th>Receipts Customer(Date)</th>
+                                    <th>Origin e-D/N Upload Date</th>
                                     <th>Shipment Reference</th>
+
+
                                     <th style="background-color: white;"></th>
                                     <th>Contract</th>
                                     <th>Project</th>
@@ -69,6 +72,7 @@
                                 <?php foreach ($deli_data as $data_list) {
                                     $shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);
                                     $cusdate = substr($data_list['CUSTRCPDATE'], 4, 2) . "/" . substr($data_list['CUSTRCPDATE'], 6, 2) . "/" .  substr($data_list['CUSTRCPDATE'], 0, 4);
+                                    $oridndate = substr($data_list['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($data_list['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($data_list['ORIGDNRCPSHIDATE'], 0, 4);
                                     // $creadinessdate = substr($data_list['CARGOREADINESSDATE'], 4, 2) . "/" . substr($data_list['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($data_list['CARGOREADINESSDATE'], 0, 4);
                                     // $etdorigindate = substr($data_list['ETDORIGINDATE'], 4, 2) . "/" . substr($data_list['ETDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ETDORIGINDATE'], 0, 4);
                                     // $atdorigindate = substr($data_list['ATDORIGINDATE'], 4, 2) . "/" . substr($data_list['ATDORIGINDATE'], 6, 2) . "/" .  substr($data_list['ATDORIGINDATE'], 0, 4);
@@ -99,6 +103,7 @@
                                         <td><?= $data_list['DOCNUMBER']; ?></td>
                                         <td><?= $data_list['NAMECUST']; ?></td>
                                         <td><?= $cusdate; ?></td>
+                                        <td><?= $oridndate; ?></td>
                                         <td><?= $data_list['SHIREFERENCE']; ?></td>
                                         <td style="background-color: white;"></td>
                                         <td><?= $data_list['CONTRACT']; ?></td>

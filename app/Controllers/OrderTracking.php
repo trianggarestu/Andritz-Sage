@@ -24,6 +24,8 @@ class OrderTracking extends BaseController
     {
         //parent::__construct();
         helper('form', 'url');
+        $this->db_name = \Config\Database::connect();
+
         $this->LoginModel = new Login_model();
         $this->AdministrationModel = new Administration_model();
         $this->NotifModel = new Notif_model();
@@ -37,8 +39,9 @@ class OrderTracking extends BaseController
         } else {
             $user = session()->get('username');
             $infouser = $this->LoginModel->datapengguna($user);
-            if (session()->get('keylog') == $infouser['passlgn'] and session()->get('userhash') == $infouser['userhashlgn']) {
 
+
+            if (session()->get('keylog') == $infouser['passlgn'] and session()->get('userhash') == $infouser['userhashlgn']) {
                 $mailbox_unread = $this->NotifModel->get_mailbox_unread($user);
                 $this->header_data = [
                     'usernamelgn'   => $infouser['usernamelgn'],
@@ -53,7 +56,7 @@ class OrderTracking extends BaseController
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'ordertracking';
+                $activenavd = 'ordertrackinglist';
                 $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
                 $this->nav_data = [
                     'active_navd' => $activenavd,
@@ -62,6 +65,17 @@ class OrderTracking extends BaseController
                     //'ttl_inbox_unread' => $this->AdministrationModel->count_message(),
                     //'chkusernav' => $this->AdministrationModel->count_navigation($user), 
                     //'active_navh' => $this->AdministrationModel->get_activenavh($activenavd),
+                ];
+                date_default_timezone_set('Asia/Jakarta');
+                $today = date("d/m/Y H:i:s");
+
+                $this->audtuser = [
+                    'TODAY' => $today,
+                    'AUDTDATE' => substr($today, 6, 4) . "" . substr($today, 3, 2) . "" . substr($today, 0, 2),
+                    'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
+                    'AUDTUSER' => trim($infouser['usernamelgn']),
+                    'AUDTORG' => $this->db_name->database,
+
                 ];
             } else {
                 header('Location: ' . base_url());
@@ -80,6 +94,7 @@ class OrderTracking extends BaseController
             'ordtrack_data' => $ordtrackingdata,
             'keyword' => '',
         );
+
         //return view('welcome_message');
         echo view('view_header', $this->header_data);
         echo view('view_nav', $this->nav_data);
@@ -397,5 +412,40 @@ class OrderTracking extends BaseController
 
         $writer->save('php://output');
         exit();
+    }
+
+    public function preview()
+    {
+        $keyword = session()->get('cari');
+        $fromdate = session()->get('from_date');
+        $todate = session()->get('to_date');
+
+        if (empty($fromdate) and empty($todate)) {
+            $today = $this->audtuser['AUDTDATE'];
+            $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
+            $def_fr_date = date("m/01/Y", strtotime($def_date));
+            $nfromdate = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
+            $def_to_date = date("m/t/Y", strtotime($def_date));
+            $ntodate = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
+            $keyword = '';
+            $ord_data = $this->OrdertrackingModel->get_inv_preview_open($nfromdate, $ntodate);
+        } else {
+            $keyword = session()->get('cari');
+            $fromdate = session()->get('from_date');
+            $nfromdate = substr($fromdate, 6, 4) . "" . substr($fromdate, 0, 2) . "" . substr($fromdate, 3, 2);
+            $todate = session()->get('to_date');
+            $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
+            $ord_data = $this->OrdertrackingModel->get_inv_preview_filter_open($keyword, $nfromdate, $ntodate);
+        }
+
+        $data = array(
+            'ord_data' => $ord_data,
+            'keyword' => $keyword,
+            'fromdate' => $nfromdate,
+            'todate' => $ntodate,
+
+        );
+
+        echo view('rpt/data_ot_list_preview_open', $data);
     }
 }

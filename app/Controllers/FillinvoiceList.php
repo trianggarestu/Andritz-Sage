@@ -214,9 +214,9 @@ class FillinvoiceList extends BaseController
                 ->orlike('csr.EMAIL1CUST', $keyword)
                 ->orlike('csr.CRMNO', $keyword)
                 ->orlike('csr.ORDERDESC', $keyword)
-
+                ->orlike('csr.CTDESC', $keyword)
                 ->orlike('csr.CRMREMARKS', $keyword)
-
+                ->orlike('webot_FINANCE.SHIREFERENCE', $keyword)
                 ->orlike('webot_FINANCE.IDINVC', $keyword)
                 ->orlike('webot_FINANCE.DOCNUMBER', $keyword)
                 ->orlike('shi.SHINUMBER', $keyword)

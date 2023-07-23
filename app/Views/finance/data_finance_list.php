@@ -71,6 +71,8 @@
 															<th>No.</th>
 															<th>Invoice Number</th>
 															<th>Invioce Date</th>
+															<th>Origin D/N Date</th>
+
 
 
 															<th style="background-color: white;"></th>
@@ -89,7 +91,7 @@
 														?>
 														<?php foreach ($fin_data as $data_list) {
 															$invdate = substr($data_list['DATEINVC'], 4, 2) . "/" . substr($data_list['DATEINVC'], 6, 2) . "/" .  substr($data_list['DATEINVC'], 0, 4);
-
+															$orgdate = substr($data_list['ORIGDNRCPFINDATE'], 4, 2) . "/" . substr($data_list['ORIGDNRCPFINDATE'], 6, 2) . "/" .  substr($data_list['ORIGDNRCPFINDATE'], 0, 4);
 
 														?>
 
@@ -97,6 +99,9 @@
 																<td><?= ++$no ?></td>
 																<td><?= $data_list['IDINVC'] ?></td>
 																<td><?= $invdate; ?></td>
+																<td><?= $orgdate; ?></td>
+
+
 
 
 

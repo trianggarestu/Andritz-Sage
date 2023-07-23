@@ -130,7 +130,9 @@
 													</thead>
 													<tbody>
 														<?php
-														$no = 0;
+
+														$no = 0 + (20 * ($currentpage - 1));
+
 
 														?>
 														<?php foreach ($ord_data as $ot_list) {
@@ -277,10 +279,10 @@
 																			echo "Open";
 																			break;
 																		case "1":
-																			echo "Posted";
+																			echo "Completed";
 																			break;
 																		case "2":
-																			echo "Done";
+																			echo "";
 																			break;
 																		default:
 																			echo "";
@@ -307,51 +309,9 @@
 										</div>
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">
-												<ul class="pagination">
-													<?php //if ($paging->start_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->start_link) 
-																	?>" aria-label="First"><span aria-hidden="true">First</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->prev) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->prev) 
-																	?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //for ($i = $paging->start_link; $i <= $paging->end_link; $i++) : 
-													?>
-
-													<li class='active'>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $i) 
-																	?>"><? //= $i 
-																		?>
-															1</a>
-													</li>
-													<?php //endfor; 
-													?>
-													<?php //if ($paging->next) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->next) 
-																	?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-													</li>
-													<?php //endif; 
-													?>
-													<?php //if ($paging->end_link) : 
-													?>
-													<li>
-														<a href="<? //= site_url('covid19/data_pemudik/' . $paging->end_link) 
-																	?>" aria-label="Last"><span aria-hidden="true">Last</span></a>
-													</li>
-													<?php //endif; 
-													?>
-												</ul>
+												<?= $pager->links('ord_data', 'bootstrap_pagination');
+												//$pager = \Config\Services::pager();
+												?>
 											</div>
 										</div>
 

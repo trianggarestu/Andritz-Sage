@@ -121,7 +121,7 @@ class DeliveryOrdersList extends BaseController
         $perpage = 20;
         $data = array(
             'keyword' => '',
-            'deli_data' => $deli_data->paginate($perpage, 'csr_data'),
+            'deli_data' => $deli_data->paginate($perpage, 'deli_data'),
             'pager' => $deli_data->pager,
             'success_code' => session()->get('success'),
             'currentpage' => $currentpage,

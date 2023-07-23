@@ -250,7 +250,7 @@ class Finance_model extends Model
         (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.MANAGER like '%$keyword%' or b.SALESNAME like '%$keyword%'
         or b.PROJECT like '%$keyword%' or b.PRJDESC like '%$keyword%' or b.PONUMBERCUST like '%$keyword%' or b.CUSTOMER like '%$keyword%'
         or b.NAMECUST like '%$keyword%' or b.EMAIL1CUST like '%$keyword%' or b.CRMNO like '%$keyword%' or b.ORDERDESC like '%$keyword%'
-       or b.CRMREMARKS like '%$keyword%' 
+       or b.CRMREMARKS like '%$keyword%'   or a.SHIREFERENCE like '%$keyword%'  or a.SHIREFERENCE like '%$keyword%'
         or a.IDINVC like '%$keyword%' or c.SHIDATE like '%$keyword%') and
         (a.DATEINVC>=$nfromdate and a.DATEINVC<=$ntodate)
         order by a.DATEINVC asc");

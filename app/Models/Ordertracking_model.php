@@ -25,7 +25,7 @@ class Ordertracking_model extends Model
 
     function get_ordertracking()
     {
-        $query = $this->db->query('select * from webot_ORDERTRACKING where (RRSTATUS is NULL or RRSTATUS<>2) order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc');
+        $query = $this->db->query('select * from webot_ORDERTRACKING where (RRSTATUS is NULL or RRSTATUS = 0) order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc');
         return $query->getResultArray();
     }
 
@@ -52,19 +52,38 @@ class Ordertracking_model extends Model
     }
     function get_inv_preview()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING ");
+        $query = $this->db->query("select * from webot_ORDERTRACKING");
         return $query->getResultArray();
     }
     function get_inv_preview_filter($keyword, $nfromdate, $ntodate)
     {
         $query = $this->db->query("select * from webot_ORDERTRACKING
-                where (RRSTATUS is NULL or RRSTATUS<>2) and 
+                where (RRSTATUS is NULL or RRSTATUS = 1) and 
         (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%' or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%'
         or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%' or CUSTOMER like '%$keyword%'
         or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
         or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
         or STOCKUNIT like '%$keyword%' or IDINVC like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' 
-        or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'  or SHIREFERENCE like '%$keyword%' ) and
+        or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%' or ORIGINCOUNTRY like '%$keyword%' ) and
+        (PODATECUST>=$nfromdate and PODATECUST<=$ntodate)
+        order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc");
+        return $query->getResultArray();
+    }
+    function get_inv_preview_open()
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING where RRSTATUS = 0 ");
+        return $query->getResultArray();
+    }
+    function get_inv_preview_filter_open($keyword, $nfromdate, $ntodate)
+    {
+        $query = $this->db->query("select * from webot_ORDERTRACKING
+                where RRSTATUS = 0 and 
+        (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%' or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%'
+        or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%' or CUSTOMER like '%$keyword%'
+        or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
+        or SERVICETYPE like '%$keyword%' or CRMREMARKS like '%$keyword%' or ITEMNO like '%$keyword%' or MATERIALNO like '%$keyword%'
+        or STOCKUNIT like '%$keyword%' or IDINVC like '%$keyword%' or RQNNUMBER like '%$keyword%' or PONUMBER like '%$keyword%' 
+        or SHINUMBER like '%$keyword%' or RECPNUMBER like '%$keyword%' or SHIDOCNUMBER like '%$keyword%'  ) and
         (PODATECUST>=$nfromdate and PODATECUST<=$ntodate)
         order by PODATECUST asc,CUSTOMER asc, CONTRACT asc,CSRLUNIQ asc");
         return $query->getResultArray();

@@ -113,7 +113,7 @@ class OrdertrackingList extends BaseController
         $perpage = 20;
         $data = array(
             'keyword' => '',
-            'ord_data' => $ord_data->paginate($perpage, 'csr_data'),
+            'ord_data' => $ord_data->paginate($perpage, 'ord_data'),
             'pager' => $ord_data->pager,
             'success_code' => session()->get('success'),
             'currentpage' => $currentpage,
@@ -201,20 +201,20 @@ class OrdertrackingList extends BaseController
                 ->orlike('CRMNO', $keyword)
                 ->orlike('ORDERDESC', $keyword)
                 ->orlike('CRMREMARKS', $keyword)
-                ->orlike('RQNUMBER', $keyword)
+                ->orlike('RQNNUMBER', $keyword)
                 ->orlike('PONUMBER', $keyword)
-                ->orlike('COUNTRYORIGIN', $keyword)
+                ->orlike('ORIGINCOUNTRY', $keyword)
                 ->orlike('POREMARKS', $keyword)
                 ->orlike('VENDSHISTATUS', $keyword)
                 ->orlike('SHINUMBER', $keyword)
 
                 ->groupEnd()
-                ->orderBy('webot_FINANCE.FINUNIQ', 'ASC');
+                ->orderBy('OTSEQ', 'ASC');
             //$so_data = $this->OrdertrackingModel ->get_csr_list_post_search($keyword);
         }
         $data = array(
             'keyword' => $keyword,
-            'ord_data' => $ord_data->paginate($perpage, 'req_data'),
+            'ord_data' => $ord_data->paginate($perpage, 'ord_data'),
             'pager' => $ord_data->pager,
             'success_code' => session()->get('success'),
             'currentpage' => $currentpage,
@@ -341,6 +341,7 @@ class OrdertrackingList extends BaseController
             ->setCellValue('AU1', 'Ontime Delivery')
             ->setCellValue('AV1', 'PO to DN');
 
+
         $rows = 2;
         // tulis data mobil ke cell
         $no = 1;
@@ -405,11 +406,11 @@ class OrdertrackingList extends BaseController
                     $rrstat = "Open";
                     break;
                 case "1":
-                    $rrstat = "Done";
+                    $rrstat = "Completed";
                     break;
 
                 default:
-                    $postingstatus = "Done";
+                    $postingstatus = " ";
             }
             $dd = substr($data['PODATECUST'], 6, 2);
             $mm = substr($data['PODATECUST'], 4, 2);
@@ -421,9 +422,9 @@ class OrdertrackingList extends BaseController
             $yyyy = substr($data['CRMREQDATE'], 0, 4);
             $crmreqdate = $mm . '/' . $dd . '/' . $yyyy;
 
-            $dd = substr($data['INVOICEDATE'], 6, 2);
-            $mm = substr($data['INVOICEDATE'], 4, 2);
-            $yyyy = substr($data['INVOICEDATE'], 0, 4);
+            $dd = substr($data['DATEINVC'], 6, 2);
+            $mm = substr($data['DATEINVC'], 4, 2);
+            $yyyy = substr($data['DATEINVC'], 0, 4);
             $invdate = $mm . '/' . $dd . '/' . $yyyy;
 
             $dd = substr($data['CUSTRCPDATE'], 6, 2);
@@ -530,16 +531,16 @@ class OrdertrackingList extends BaseController
                 ->setCellValue('AP' . $rows, $invdate)
                 ->setCellValue('AQ' . $rows, $invpostingstatus)
                 ->setCellValue('AR' . $rows, $rrstat)
-                ->setCellValue('AR' . $rows, $data['POCUSTTOPRDAYS'])
-                ->setCellValue('AR' . $rows, $data['POTOPODAYS'])
-                ->setCellValue('AR' . $rows, $data['ONTIMEDELDAYS'])
-                ->setCellValue('AR' . $rows, $data['POTODNDAYS'])
+                ->setCellValue('AS' . $rows, $data['POCUSTTOPRDAYS'])
+                ->setCellValue('AT' . $rows, $data['POTOPODAYS'])
+                ->setCellValue('AU' . $rows, $data['ONTIMEDELDAYS'])
+                ->setCellValue('AV' . $rows, $data['POTODNDAYS'])
 
 
 
 
 
-                ->setCellValue('AS' . $rows, '');
+                ->setCellValue('AX' . $rows, '');
             $rows++;
         }
         // tulis dalam format .xlsx
