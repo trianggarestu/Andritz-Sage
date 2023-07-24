@@ -98,7 +98,7 @@
 													<tbody>
 														<?php
 
-														$no = 0 + (5 * ($currentpage - 1));
+														$no = 0 + ($perpage * ($currentpage - 1));
 														?>
 														<?php foreach ($deli_data as $data_list) {
 															$shidate = substr($data_list['SHIDATE'], 4, 2) . "/" . substr($data_list['SHIDATE'], 6, 2) . "/" .  substr($data_list['SHIDATE'], 0, 4);

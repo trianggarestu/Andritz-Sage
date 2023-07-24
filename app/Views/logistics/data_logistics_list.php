@@ -89,7 +89,7 @@
 													</thead>
 													<tbody>
 														<?php
-														$no = 0;
+														$no = 0 + ($perpage * ($currentpage - 1));
 														?>
 														<?php foreach ($log_data as $data_list) {
 															$povendate = substr($data_list['PODATE'], 4, 2) . "/" . substr($data_list['PODATE'], 6, 2) . "/" .  substr($data_list['PODATE'], 0, 4);

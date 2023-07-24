@@ -122,7 +122,9 @@ class FillinvoiceList extends BaseController
             'fin_data' => $fin_data->paginate($perpage, 'csr_data'),
             'pager' => $fin_data->pager,
             'success_code' => session()->get('success'),
-            'currentpage' => $currentpage,
+            // 'currentpage' => $currentpage,
+            'perpage' => $perpage,
+            'currentpage' => $fin_data->pager->getCurrentPage('fin_data'),
             'def_fr_date' => $def_fr_date,
             'def_to_date' => $def_to_date,
             //'fr_date' => $fr_date,
@@ -170,7 +172,7 @@ class FillinvoiceList extends BaseController
         $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
         $def_to_date = date("m/t/Y", strtotime($def_date));
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
-        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        // $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         $perpage = 20;
         $keyword = session()->get('cari');
         $fromdate = session()->get('from_date');
@@ -229,7 +231,9 @@ class FillinvoiceList extends BaseController
             'fin_data' => $fin_data->paginate($perpage, 'req_data'),
             'pager' => $fin_data->pager,
             'success_code' => session()->get('success'),
-            'currentpage' => $currentpage,
+            //    'currentpage' => $currentpage,
+            'perpage' => $perpage,
+            'currentpage' => $fin_data->pager->getCurrentPage('fin_data'),
             'def_fr_date' => session()->get('from_date'),
             'def_to_date' => session()->get('to_date'),
         );

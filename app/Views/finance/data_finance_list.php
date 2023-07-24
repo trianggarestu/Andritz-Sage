@@ -87,7 +87,7 @@
 													</thead>
 													<tbody>
 														<?php
-														$no = 0;
+														$no = 0 + ($perpage * ($currentpage - 1));
 														?>
 														<?php foreach ($fin_data as $data_list) {
 															$invdate = substr($data_list['DATEINVC'], 4, 2) . "/" . substr($data_list['DATEINVC'], 6, 2) . "/" .  substr($data_list['DATEINVC'], 0, 4);

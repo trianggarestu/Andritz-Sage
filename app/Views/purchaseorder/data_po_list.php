@@ -90,7 +90,7 @@
 													</thead>
 													<tbody>
 														<?php
-														$no = 0;
+														$no = 0 + ($perpage * ($currentpage - 1));
 														?>
 														<?php foreach ($po_data as $po_list) {
 															$povendate = substr($po_list['PODATE'], 4, 2) . "/" . substr($po_list['PODATE'], 6, 2) . "/" .  substr($po_list['PODATE'], 0, 4);

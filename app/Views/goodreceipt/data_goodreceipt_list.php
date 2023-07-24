@@ -87,7 +87,7 @@
 													</thead>
 													<tbody>
 														<?php
-														$no = 0;
+														$no = 0 + ($perpage * ($currentpage - 1));
 														?>
 														<?php foreach ($gr_data as $data_list) {
 															$rcpdate = substr($data_list['RECPDATE'], 4, 2) . "/" . substr($data_list['RECPDATE'], 6, 2) . "/" .  substr($data_list['RECPDATE'], 0, 4);

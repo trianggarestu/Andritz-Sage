@@ -106,7 +106,7 @@
 													</thead>
 													<tbody>
 														<?php
-														$no = 0 + (5 * ($currentpage - 1));
+														$no = 0 + ($perpage * ($currentpage - 1));
 
 														?>
 														<?php foreach ($pr_data as $ot_list) {
@@ -171,7 +171,7 @@
 										</div>
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">
-												<div><?= $pager->links('req_data', 'bootstrap_pagination'); ?>
+												<div><?= $pager->links('pr_data', 'bootstrap_pagination'); ?>
 												</div>
 											</div>
 										</div>
