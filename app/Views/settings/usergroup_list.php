@@ -23,9 +23,9 @@
 			<div class="col-md-12">
 				<div class="box box-info">
 					<div class="box-header with-border">
-						<a href="<?= base_url() ?>usergroupsetup/add" class="btn btn-social btn-flat btn-success btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Add Group">
+						<!--<a href="<?= base_url() ?>usergroupsetup/add" class="btn btn-social btn-flat btn-success btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" title="Add Group">
 							<i class="fa fa-plus"></i>Add Group
-						</a>
+						</a>-->
 					</div>
 					<div class="box-body">
 

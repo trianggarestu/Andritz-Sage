@@ -131,7 +131,7 @@
 													<tbody>
 														<?php
 
-														$no = 0 + (20 * ($currentpage - 1));
+														$no = 0 + ($perpage * ($currentpage - 1));
 
 
 														?>
@@ -303,9 +303,10 @@
 									</div>
 									</form>
 									<div class="row">
-										<!-- Pagination template-->
-										<div class="col-sm-6">
 
+										<div class="col-sm-6">
+											<?php //=$currentpage
+											?>
 										</div>
 										<div class="col-sm-6">
 											<div class="dataTables_paginate paging_simple_numbers">

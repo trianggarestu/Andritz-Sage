@@ -96,7 +96,7 @@ class OrdertrackingList extends BaseController
         $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
         $def_to_date = date("m/t/Y", strtotime($def_date));
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
-        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        //$currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         //session()->remove('success');
         $ord_data = $this->OrdertrackingModel->select('*')
             // webot_FINANCE.*,a.DOCNUMBER,a.SHINUMBER,a.SHIDATE,b.CONTRACT,b.PROJECT,b.CTDESC')
@@ -116,7 +116,9 @@ class OrdertrackingList extends BaseController
             'ord_data' => $ord_data->paginate($perpage, 'ord_data'),
             'pager' => $ord_data->pager,
             'success_code' => session()->get('success'),
-            'currentpage' => $currentpage,
+            //'currentpage' => $currentpage,
+            'perpage' => $perpage,
+            'currentpage' => $ord_data->pager->getCurrentPage('ord_data'),
             'def_fr_date' => $def_fr_date,
             'def_to_date' => $def_to_date,
             //'fr_date' => $fr_date,
@@ -164,7 +166,7 @@ class OrdertrackingList extends BaseController
         $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
         $def_to_date = date("m/t/Y", strtotime($def_date));
         $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
-        $currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
+        //$currentpage = $this->request->getVar('page') ? $this->request->getVar('page') : 1;
         $perpage = 20;
         $keyword = session()->get('cari');
         $fromdate = session()->get('from_date');
@@ -217,7 +219,9 @@ class OrdertrackingList extends BaseController
             'ord_data' => $ord_data->paginate($perpage, 'ord_data'),
             'pager' => $ord_data->pager,
             'success_code' => session()->get('success'),
-            'currentpage' => $currentpage,
+            //'currentpage' => $currentpage,
+            'perpage' => $perpage,
+            'currentpage' => $ord_data->pager->getCurrentPage('ord_data'),
             'def_fr_date' => session()->get('from_date'),
             'def_to_date' => session()->get('to_date'),
         );
