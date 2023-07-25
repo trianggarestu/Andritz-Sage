@@ -24,7 +24,7 @@
                                     <label for="so_service">Service Type <code> (choose) </code> </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <select name="so_service" class="form-control input-sm required" readonly>
+                                    <select name="so_service_temp" class="form-control input-sm required" readonly disabled>
                                         <option value="">--Choose One--</option>
                                         <option value="SPAREPARTS" selected>SPAREPARTS</option>
                                         <option value="SERVICES" <?php //if ($so_service == "SERVICES") {
@@ -33,6 +33,7 @@
                                                                     ?>>SERVICES</option>
 
                                     </select>
+                                    <input type="hidden" id="so_service" name="so_service" value="SPAREPARTS">
                                 </div>
                             </div>
                         </div>
@@ -56,6 +57,7 @@
                                         <?php endforeach;
                                         ?>
                                     </select>
+
                                 </div>
                             </div>
                         </div>

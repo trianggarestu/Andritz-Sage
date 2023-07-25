@@ -90,10 +90,11 @@ class Ordertracking_model extends Model
     }
 
     //Check Duplikat Entry - Return False if double post
-    function get_ot_key($csruniq, $csrluniq)
+    function get_ot_key($contract, $project, $itemno, $csruniq, $csrluniq)
     {
         $query = $this->db->query("select OTSEQ,CSRUNIQ,CSRLUNIQ,OTKEY,CONTRACT,PROJECT,CUSTOMER,ITEMNO 
-        from webot_ORDERTRACKING where CSRUNIQ='$csruniq' and CSRLUNIQ='$csrluniq'");
+        from webot_ORDERTRACKING where CONTRACT='$contract' and PROJECT='$project' and ITEMNO='$itemno' and 
+        CSRUNIQ='$csruniq' and CSRLUNIQ='$csrluniq'");
         return $query->getRowArray();
     }
 }

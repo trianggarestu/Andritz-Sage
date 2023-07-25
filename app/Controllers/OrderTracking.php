@@ -56,7 +56,7 @@ class OrderTracking extends BaseController
                     'usernamelgn'   => $infouser['usernamelgn'],
                 ];
                 // Assign the model result to the badly named Class Property
-                $activenavd = 'ordertrackinglist';
+                $activenavd = 'ordertracking';
                 $activenavh = $this->AdministrationModel->get_activenavh($activenavd);
                 $this->nav_data = [
                     'active_navd' => $activenavd,

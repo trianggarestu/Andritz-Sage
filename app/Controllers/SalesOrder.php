@@ -1007,8 +1007,10 @@ class SalesOrder extends BaseController
                 $csruniq = $ot['CSRUNIQ'];
                 $csrluniq = $ot['CSRLUNIQ'];
 
-                $getotuniq = $this->OrdertrackingModel->get_ot_key($csruniq, $csrluniq);
-                if (!empty($getotuniq['OTKEY']) and $getotuniq['OTKEY'] == $csrreplace . '-' . $contract . '-' . $project . '-' . $itemno . '-' . $csruniq . '-' . $csrluniq) {
+                $getotuniq = $this->OrdertrackingModel->get_ot_key($contract, $project, $itemno, $csruniq, $csrluniq);
+                if (!empty($getotuniq['OTKEY'])
+                    // and $getotuniq['OTKEY'] == $csrreplace . '-' . $contract . '-' . $project . '-' . $itemno . '-' . $csruniq . '-' . $csrluniq)
+                ) {
                     session()->set('success', '-1');
                     return redirect()->to(base_url('/salesorder/csropenview/' . $csruniq));
                     session()->remove('success');
