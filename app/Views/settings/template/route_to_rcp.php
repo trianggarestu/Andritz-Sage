@@ -6,5 +6,3 @@
 <p>You can access Order Tracking System Portal via the URL below: <br /><a href="http://jktsms025:8082/Andritz-sage/public">http://jktsms025:8082/Andritz-sage/public</a> Thanks for your cooperation.</p>
 <p><br /><br /></p>
 <p><?= $FROMNAME ?></p>
-<p>&nbsp;</p>
-<p><?= $ETDORIGINDATE ?> <?= $ATDORIGINDATE ?> <?= $ETAPORTDATE ?> <?= $ETAPORTDATE ?>&nbsp; <?= $PIBDATE ?> <?= $VENDSHISTATUS ?></p>

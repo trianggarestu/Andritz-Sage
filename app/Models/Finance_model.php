@@ -27,14 +27,17 @@ class Finance_model extends Model
     function get_shi_pending_to_finance()
     {
         $query = $this->db->query("select 
-        a.CSRUNIQ,a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
+        a.CSRUNIQ,a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . "  as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
         a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
-        c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
+        b.ROWSHI,d.ROWSHI_F,c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
         from webot_CSR a 
+		left join (select CSRUNIQ,count(SHIUNIQ) as ROWSHI from webot_SHIPMENTS
+		group by CSRUNIQ) b on b.CSRUNIQ=a.CSRUNIQ
         left join (select x.CSRUNIQ,COUNT(x.FINUNIQ) as ROWARINV,MIN(x.POSTINGSTAT) as ARPOSTINGSTAT,MAX(x.OFFLINESTAT) as AROFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATARPOST 
 		from webot_FINANCE x
 		group by x.CSRUNIQ)  c on c.CSRUNIQ=a.CSRUNIQ
-        where (a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL)");
+		left join (select CSRUNIQ,COUNT(FINLUNIQ) as ROWSHI_F from webot_FINMULTISHI group by CSRUNIQ) d on d.CSRUNIQ=a.CSRUNIQ
+        where (a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL or b.ROWSHI<>d.ROWSHI_F)");
 
         return $query->getResultArray();
     }
@@ -66,14 +69,17 @@ class Finance_model extends Model
     function get_shi_pending_to_finance_search($keyword)
     {
         $query = $this->db->query("select 
-        a.CSRUNIQ,a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . " as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
+        a.CSRUNIQ,a.CTDESC,a.PRJDESC,a.PONUMBERCUST,a.PODATECUST,a.NAMECUST," . 'a."CONTRACT"' . "  as CSRCONTRACT,a.CTDESC,a.PROJECT as CSRPROJECT,a.CRMNO,a.CRMREQDATE,
         a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
-        c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
+        b.ROWSHI,d.ROWSHI_F,c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
         from webot_CSR a 
+		left join (select CSRUNIQ,count(SHIUNIQ) as ROWSHI from webot_SHIPMENTS
+		group by CSRUNIQ) b on b.CSRUNIQ=a.CSRUNIQ
         left join (select x.CSRUNIQ,COUNT(x.FINUNIQ) as ROWARINV,MIN(x.POSTINGSTAT) as ARPOSTINGSTAT,MAX(x.OFFLINESTAT) as AROFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATARPOST 
 		from webot_FINANCE x
 		group by x.CSRUNIQ)  c on c.CSRUNIQ=a.CSRUNIQ
-        where (a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL)
+		left join (select CSRUNIQ,COUNT(FINLUNIQ) as ROWSHI_F from webot_FINMULTISHI group by CSRUNIQ) d on d.CSRUNIQ=a.CSRUNIQ
+        where ((a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL or b.ROWSHI<>d.ROWSHI_F))
         and (a.CONTRACT like '%$keyword%' or a.PROJECT like '%$keyword%' or a.CRMNO like '%$keyword%' or a.CTDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' 
         or a.NAMECUST like '%$keyword%')");
 
