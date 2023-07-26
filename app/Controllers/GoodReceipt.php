@@ -599,6 +599,7 @@ class GoodReceipt extends BaseController
                                         'PRJDESC' => $get_rcp_data['PRJDESC'],
                                         'CUSTOMER' => $get_rcp_data['CUSTOMER'],
                                         'NAMECUST' => $get_rcp_data['NAMECUST'],
+                                        'EMAIL1CUST' => $get_rcp_data['EMAIL1CUST'],
                                         'PONUMBERCUST' => $get_rcp_data['PONUMBERCUST'],
                                         'PODATECUST' => $crmpodate,
                                         'CRMNO' => $get_rcp_data['CRMNO'],
@@ -623,10 +624,10 @@ class GoodReceipt extends BaseController
                                         'PIBDATE' => $pibdate,
                                         'VENDSHISTATUS' => $get_rcp_data['VENDSHISTATUS'],
                                         //DATA VARIABLE RECEIPTS
-                                        'RECPNUMBER' => $get_rcp_data['RECPNUMBER'],
+                                        'RECPNUMBER' => trim($get_rcp_data['RECPNUMBER']),
                                         'RECPDATE' => $rcpdate,
-                                        'VDNAME' => $get_rcp_data['VDNAME'],
-                                        'DESCRIPTIO' => $get_rcp_data['DESCRIPTIO'],
+                                        'VDNAME' => trim($get_rcp_data['VDNAME']),
+                                        'DESCRIPTIO' => trim($get_rcp_data['DESCRIPTIO']),
 
                                     );
                                     $subject = $mail_tmpl['SUBJECT_MAIL'];
@@ -810,6 +811,7 @@ class GoodReceipt extends BaseController
                         'PRJDESC' => $get_rcp_data['PRJDESC'],
                         'CUSTOMER' => $get_rcp_data['CUSTOMER'],
                         'NAMECUST' => $get_rcp_data['NAMECUST'],
+                        'EMAIL1CUST' => $get_rcp_data['EMAIL1CUST'],
                         'PONUMBERCUST' => $get_rcp_data['PONUMBERCUST'],
                         'PODATECUST' => $crmpodate,
                         'CRMNO' => $get_rcp_data['CRMNO'],
@@ -834,10 +836,10 @@ class GoodReceipt extends BaseController
                         'PIBDATE' => $pibdate,
                         'VENDSHISTATUS' => $get_rcp_data['VENDSHISTATUS'],
                         //DATA VARIABLE RECEIPTS
-                        'RECPNUMBER' => $get_rcp_data['RECPNUMBER'],
+                        'RECPNUMBER' => trim($get_rcp_data['RECPNUMBER']),
                         'RECPDATE' => $rcpdate,
-                        'VDNAME' => $get_rcp_data['VDNAME'],
-                        'DESCRIPTIO' => $get_rcp_data['DESCRIPTIO'],
+                        'VDNAME' => trim($get_rcp_data['VDNAME']),
+                        'DESCRIPTIO' => trim($get_rcp_data['DESCRIPTIO']),
 
                     );
                     $subject = $mail_tmpl['SUBJECT_MAIL'];
@@ -953,6 +955,7 @@ class GoodReceipt extends BaseController
                 'PRJDESC' => $get_rcp_data['PRJDESC'],
                 'CUSTOMER' => $get_rcp_data['CUSTOMER'],
                 'NAMECUST' => $get_rcp_data['NAMECUST'],
+                'EMAIL1CUST' => $get_rcp_data['EMAIL1CUST'],
                 'PONUMBERCUST' => $get_rcp_data['PONUMBERCUST'],
                 'PODATECUST' => $crmpodate,
                 'CRMNO' => $get_rcp_data['CRMNO'],
@@ -977,10 +980,10 @@ class GoodReceipt extends BaseController
                 'PIBDATE' => $pibdate,
                 'VENDSHISTATUS' => $get_rcp_data['VENDSHISTATUS'],
                 //DATA VARIABLE RECEIPTS
-                'RECPNUMBER' => $get_rcp_data['RECPNUMBER'],
+                'RECPNUMBER' => trim($get_rcp_data['RECPNUMBER']),
                 'RECPDATE' => $rcpdate,
-                'VDNAME' => $get_rcp_data['VDNAME'],
-                'DESCRIPTIO' => $get_rcp_data['DESCRIPTIO'],
+                'VDNAME' => trim($get_rcp_data['VDNAME']),
+                'DESCRIPTIO' => trim($get_rcp_data['DESCRIPTIO']),
 
             );
             $subject = $mail_tmpl['SUBJECT_MAIL'];

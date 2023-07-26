@@ -693,6 +693,7 @@ class DeliveryOrders extends BaseController
                                     if (!empty($get_shi_data['EDNFILENAME'])) {
 
                                         $is_attachment = 1;
+                                        $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
                                     } else {
                                         $is_attachment = 0;
                                     }
@@ -710,6 +711,7 @@ class DeliveryOrders extends BaseController
                                             'PRJDESC' => $get_shi_data['PRJDESC'],
                                             'CUSTOMER' => $get_shi_data['CUSTOMER'],
                                             'NAMECUST' => $get_shi_data['NAMECUST'],
+                                            'EMAIL1CUST' => $get_shi_data['EMAIL1CUST'],
                                             'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
                                             'PODATECUST' => $crmpodate,
                                             'CRMNO' => $get_shi_data['CRMNO'],
@@ -743,6 +745,7 @@ class DeliveryOrders extends BaseController
                                             'SHINUMBER' => $get_shi_data['SHINUMBER'],
                                             'SHIDATE' => $shidate,
                                             'CUSTRCPDATE' => $custrcpdate,
+                                            'ORIGDNRCPSHIDATE' => $origdnrcpshidate,
 
                                         );
                                         $subject = $mail_tmpl['SUBJECT_MAIL'];
@@ -922,7 +925,6 @@ class DeliveryOrders extends BaseController
         $today = substr($ufmt_today, 4, 2) . "/" . substr($ufmt_today, 6, 2) . "/" .  substr($ufmt_today, 0, 4);
 
         if (!empty($getshiopen['EDNFILENAME']) and $getshiopen['EDNPOSTINGSTAT'] == 1 and $getshiopen['OFFLINESTAT'] == 1) {
-
             $data = array(
                 'shiopen_data' =>  $getshiopen,
                 'shi_l_open_data' =>  $get_shi_l,
@@ -931,7 +933,7 @@ class DeliveryOrders extends BaseController
                 'btn_color' => 'bg-blue',
                 'button' => 'Send Notification Manually',
             );
-        } else if (!empty($getshiopen['EDNFILENAME']) and $getshiopen['EDNPOSTINGSTAT'] == 0 and $getshiopen['OFFLINESTAT'] == 1) {
+        } else {
             $data = array(
                 'shiopen_data' =>  $getshiopen,
                 'shi_l_open_data' =>  $get_shi_l,
@@ -1054,12 +1056,13 @@ class DeliveryOrders extends BaseController
                     $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
                     $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
                     $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
-                    $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
+
 
 
                     if (!empty($get_shi_data['EDNFILENAME'])) {
 
                         $is_attachment = 1;
+                        $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
                     } else {
                         $is_attachment = 0;
                     }
@@ -1077,6 +1080,7 @@ class DeliveryOrders extends BaseController
                             'PRJDESC' => $get_shi_data['PRJDESC'],
                             'CUSTOMER' => $get_shi_data['CUSTOMER'],
                             'NAMECUST' => $get_shi_data['NAMECUST'],
+                            'EMAIL1CUST' => $get_shi_data['EMAIL1CUST'],
                             'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
                             'PODATECUST' => $crmpodate,
                             'CRMNO' => $get_shi_data['CRMNO'],
@@ -1267,6 +1271,7 @@ class DeliveryOrders extends BaseController
         if (!empty($get_shi_data['EDNFILENAME'])) {
 
             $is_attachment = 1;
+            $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
         } else {
             $is_attachment = 0;
         }
@@ -1284,6 +1289,7 @@ class DeliveryOrders extends BaseController
                 'PRJDESC' => $get_shi_data['PRJDESC'],
                 'CUSTOMER' => $get_shi_data['CUSTOMER'],
                 'NAMECUST' => $get_shi_data['NAMECUST'],
+                'EMAIL1CUST' => $get_shi_data['EMAIL1CUST'],
                 'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
                 'PODATECUST' => $crmpodate,
                 'CRMNO' => $get_shi_data['CRMNO'],

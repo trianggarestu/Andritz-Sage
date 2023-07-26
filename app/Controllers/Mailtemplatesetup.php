@@ -58,6 +58,7 @@ class Mailtemplatesetup extends BaseController
                     'photolgn' => $infouser['photolgn'],
                     'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
+                    'success_code' => session()->get('success'),
                 ];
                 $this->footer_data = [
                     'usernamelgn'   => $infouser['usernamelgn'],
@@ -83,6 +84,7 @@ class Mailtemplatesetup extends BaseController
                     'AUDTTIME' => substr($today, 11, 2) . "" . substr($today, 14, 2) . "" . substr($today, 17, 2),
                     'AUDTUSER' => $infouser['usernamelgn'],
                     'AUDTORG' => $this->db_name->database,
+                    'NAMELGN' => $infouser['namalgn'],
 
                 ];
             }
@@ -115,6 +117,7 @@ class Mailtemplatesetup extends BaseController
 
         $data = array(
             'tmpltuniq' => $mailtemplate_by_id['TMPLTUNIQ'],
+            'groupuser' => $mailtemplate_by_id['MAILROUTE'],
             'subject' => $subject,
             'mail_body' => $bodyemail,
             'filename' => $mailtemplate_by_id['FILENAME'],

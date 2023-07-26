@@ -279,6 +279,7 @@ class ConfirmdnOrigin extends BaseController
                         $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
                         $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
                         $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+                        $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
                         $origdnrcpslsdate = substr($get_shi_data['ORIGDNRCPSLSDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSLSDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSLSDATE'], 0, 4);
                         if ($get_shi_data['DNSTATUS'] == 1) {
                             $dnstatus = 'RECEIVED';
@@ -300,6 +301,7 @@ class ConfirmdnOrigin extends BaseController
                                 'PRJDESC' => $get_shi_data['PRJDESC'],
                                 'CUSTOMER' => $get_shi_data['CUSTOMER'],
                                 'NAMECUST' => $get_shi_data['NAMECUST'],
+                                'EMAIL1CUST' => $get_shi_data['EMAIL1CUST'],
                                 'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
                                 'PODATECUST' => $crmpodate,
                                 'CRMNO' => $get_shi_data['CRMNO'],
@@ -333,6 +335,8 @@ class ConfirmdnOrigin extends BaseController
                                 'SHINUMBER' => $get_shi_data['SHINUMBER'],
                                 'SHIDATE' => $shidate,
                                 'CUSTRCPDATE' => $custrcpdate,
+                                'ORIGDNRCPSHIDATE' => $origdnrcpshidate,
+                                //DATA VARIABLE SALESADMIN
                                 'DNSTATUS' => $dnstatus,
                                 'ORIGDNRCPSLSDATE' => $origdnrcpslsdate,
 
@@ -440,6 +444,7 @@ class ConfirmdnOrigin extends BaseController
         $pibdate = substr($get_shi_data['PIBDATE'], 4, 2) . "/" . substr($get_shi_data['PIBDATE'], 6, 2) . "/" .  substr($get_shi_data['PIBDATE'], 0, 4);
         $shidate = substr($get_shi_data['SHIDATE'], 4, 2) . "/" . substr($get_shi_data['SHIDATE'], 6, 2) . "/" .  substr($get_shi_data['SHIDATE'], 0, 4);
         $custrcpdate = substr($get_shi_data['CUSTRCPDATE'], 4, 2) . "/" . substr($get_shi_data['CUSTRCPDATE'], 6, 2) . "/" .  substr($get_shi_data['CUSTRCPDATE'], 0, 4);
+        $origdnrcpshidate = substr($get_shi_data['ORIGDNRCPSHIDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSHIDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSHIDATE'], 0, 4);
         $origdnrcpslsdate = substr($get_shi_data['ORIGDNRCPSLSDATE'], 4, 2) . "/" . substr($get_shi_data['ORIGDNRCPSLSDATE'], 6, 2) . "/" .  substr($get_shi_data['ORIGDNRCPSLSDATE'], 0, 4);
 
         if ($get_shi_data['DNSTATUS'] == 1) {
@@ -462,6 +467,7 @@ class ConfirmdnOrigin extends BaseController
                 'PRJDESC' => $get_shi_data['PRJDESC'],
                 'CUSTOMER' => $get_shi_data['CUSTOMER'],
                 'NAMECUST' => $get_shi_data['NAMECUST'],
+                'EMAIL1CUST' => $get_shi_data['EMAIL1CUST'],
                 'PONUMBERCUST' => $get_shi_data['PONUMBERCUST'],
                 'PODATECUST' => $crmpodate,
                 'CRMNO' => $get_shi_data['CRMNO'],
@@ -495,6 +501,8 @@ class ConfirmdnOrigin extends BaseController
                 'SHINUMBER' => $get_shi_data['SHINUMBER'],
                 'SHIDATE' => $shidate,
                 'CUSTRCPDATE' => $custrcpdate,
+                'ORIGDNRCPSHIDATE' => $origdnrcpshidate,
+                //DATA VARIABLE SALES ADMIN
                 'DNSTATUS' => $dnstatus,
                 'ORIGDNRCPSLSDATE' => $origdnrcpslsdate,
 

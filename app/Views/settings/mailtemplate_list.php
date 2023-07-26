@@ -17,6 +17,17 @@
 		</ol>
 	</section>
 
+	<input id="success-code" type="hidden" value="<?= $success_code ?>">
+	<!-- Untuk menampilkan modal bootstrap umum  -->
+	<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+
+				<div class="fetched-data"></div>
+			</div>
+		</div>
+	</div>
+
 
 	<section class="content" id="maincontent">
 		<div class="row">
@@ -51,7 +62,7 @@
 													<td class="text-center"><?= ++$no; ?></td>
 													<td nowrap>
 														<a href="<?= base_url('mailtemplatesetup/update/' . $data['TMPLTUNIQ']); ?>" class=" btn bg-orange btn-flat btn-sm" title="Update Data"><i class="fa fa-edit"></i></a>
-														<a href="<?= base_url() . 'usergroupsetup/role/'; ?>" class=" btn bg-aqua btn-flat btn-sm" title="Security Groups"><i class="fa fa-sitemap"></i></a>
+
 													</td>
 													<td>E-mail Template - Route from <strong><?= ucfirst(strtolower($data['ROUTEFROM'])) ?></strong> to <strong><?= ucfirst(strtolower($data['ROUTETO'])) ?></strong></td>
 													<td><?= $data['SUBJECT_MAIL'] ?></td>
