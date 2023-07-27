@@ -89,9 +89,12 @@
 					} else if ($('#success-code').val() == -3) {
 						notify = 'error';
 						notify_msg = 'data failed to save -> Old password is wrong!.';
-					} else if ($('#success-code').val() == -3) {
+					} else if ($('#success-code').val() == -4) {
 						notify = 'error';
 						notify_msg = 'data failed to save, Password & Retype Password Mismatch!.';
+					} else if ($('#success-code').val() == -5) {
+						notify = 'error';
+						notify_msg = 'The user has exceeded the maximum number limit!.';
 					} else if ($('#success-code').val() == -9) {
 						notify = 'error';
 						notify_msg = 'Send Email failed. Error!.';

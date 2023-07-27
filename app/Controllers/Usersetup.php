@@ -182,8 +182,13 @@ class Usersetup extends BaseController
         } else {
             $username = strtoupper($this->request->getVar('username'));
             $chek = $this->SetupModel->checkusername($username);
+            $chkctuser = $this->SetupModel->count_users();
+
             if ($chek > 0) {
                 session()->set('success', '-2');
+                return redirect()->to(base_url('/usersetup/add/'))->withInput();
+            } else if ($chkctuser > 8) {
+                session()->set('success', '-5');
                 return redirect()->to(base_url('/usersetup/add/'))->withInput();
             } else {
 

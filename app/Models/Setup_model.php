@@ -195,6 +195,14 @@ class Setup_model extends Model
         return $query->getNumRows();
     }
 
+    function count_users()
+    {
+        $builder = $this->db->table('webot_USERAUTH');
+        $builder->where('ISDELETED', 0);
+        $builder->where('ISSUPERUSER', 0);
+        return $builder->countAllResults();
+    }
+
 
     public function get_users_by_hash($hashuser)
     {
