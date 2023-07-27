@@ -58,7 +58,7 @@ class Ordertracking_model extends Model
     function get_inv_preview_filter($keyword, $nfromdate, $ntodate)
     {
         $query = $this->db->query("select * from webot_ORDERTRACKING
-                where (RRSTATUS is NULL or RRSTATUS = 1) and 
+                where ( RRSTATUS = 1) and 
         (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%' or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%'
         or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%' or CUSTOMER like '%$keyword%'
         or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
@@ -71,13 +71,13 @@ class Ordertracking_model extends Model
     }
     function get_inv_preview_open()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where RRSTATUS = 0 ");
+        $query = $this->db->query("select * from webot_ORDERTRACKING where RRSTATUS = 0 or RRSTATUS is NULL");
         return $query->getResultArray();
     }
     function get_inv_preview_filter_open($keyword, $nfromdate, $ntodate)
     {
         $query = $this->db->query("select * from webot_ORDERTRACKING
-                where RRSTATUS = 0 and 
+                where (RRSTATUS = 0 or RRSTATUS is NULL) and 
         (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%' or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%'
         or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%' or CUSTOMER like '%$keyword%'
         or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
