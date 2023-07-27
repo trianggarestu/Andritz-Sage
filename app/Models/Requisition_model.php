@@ -99,10 +99,11 @@ class Requisition_model extends Model
         // Sementara Untuk simulasi, Cari Request yang ketemu sampai Received
         // kalau sudah Go Live, Hapus Inner Join POPORH1 & inner join PORCPH1
         // Kalau mau job relate tambahkan where $contract
+        //inner join POPORH1 b on b.RQNNUMBER=a.RQNNUMBER
+        //inner join PORCPH1 c on c.PONUMBER=b.PONUMBER
+
         $query = $this->db->query("select DISTINCT a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
         from ENRQNH a 
-        inner join POPORH1 b on b.RQNNUMBER=a.RQNNUMBER
-        inner join PORCPH1 c on c.PONUMBER=b.PONUMBER
         where " . 'a."DATE"' . ">='$pocust_date' and
         a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
         order by " . 'a."DATE"' . " desc");

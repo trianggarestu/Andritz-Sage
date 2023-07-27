@@ -475,7 +475,7 @@ class DeliveryOrders extends BaseController
     {
         if (!$this->validate([
             'shi_number' => 'required|min_length[3]|max_length[22]',
-            'dn_number' => 'required|min_length[3]|max_length[60]',
+            'dn_number' => 'required|min_length[3]|max_length[120]',
             'shi_date' => 'required',
             'received_date' => 'required',
             'shi_ref' => 'required',

@@ -180,9 +180,8 @@ class FillinvoiceList extends BaseController
         $todate = session()->get('to_date');
         $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
         if (empty($keyword)) {
-            $fin_data = $this->FinanceModel->select('webot_FINANCE.*,csr.*,shi.*')
+            $fin_data = $this->FinanceModel->select('webot_FINANCE.*,csr.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_FINANCE.CSRUNIQ', 'left')
-                ->join('webot_SHIPMENTS shi', 'shi.SHIUNIQ=webot_FINANCE.SHIUNIQ', 'left')
                 ->groupStart()
                 ->where('webot_FINANCE.POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -192,9 +191,8 @@ class FillinvoiceList extends BaseController
                 ->groupEnd()
                 ->orderBy('webot_FINANCE.DATEINVC', 'ASC');
         } else {
-            $fin_data = $this->FinanceModel->select('webot_FINANCE.*,csr.*,shi.*')
+            $fin_data = $this->FinanceModel->select('webot_FINANCE.*,csr.*')
                 ->join('webot_CSR csr', 'csr.CSRUNIQ = webot_FINANCE.CSRUNIQ', 'left')
-                ->join('webot_SHIPMENTS shi', 'shi.SHIUNIQ=webot_FINANCE.SHIUNIQ', 'left')
                 ->groupStart()
                 ->where('webot_FINANCE.POSTINGSTAT =', 1)
                 ->groupEnd()
@@ -205,23 +203,10 @@ class FillinvoiceList extends BaseController
                 ->groupStart()
 
                 ->like('csr.CONTRACT', $keyword)
-                ->orlike('csr.PROJECT', $keyword)
-                ->orlike('csr.MANAGER', $keyword)
-                ->orlike('csr.SALESNAME', $keyword)
+                ->orlike('csr.CTDESC', $keyword)
                 ->orlike('csr.PROJECT', $keyword)
                 ->orlike('csr.PRJDESC', $keyword)
-                ->orlike('csr.PONUMBERCUST', $keyword)
-                ->orlike('csr.CUSTOMER', $keyword)
-                ->orlike('csr.NAMECUST', $keyword)
-                ->orlike('csr.EMAIL1CUST', $keyword)
-                ->orlike('csr.CRMNO', $keyword)
-                ->orlike('csr.ORDERDESC', $keyword)
-                ->orlike('csr.CTDESC', $keyword)
-                ->orlike('csr.CRMREMARKS', $keyword)
-                ->orlike('webot_FINANCE.SHIREFERENCE', $keyword)
                 ->orlike('webot_FINANCE.IDINVC', $keyword)
-                ->orlike('webot_FINANCE.DOCNUMBER', $keyword)
-                ->orlike('shi.SHINUMBER', $keyword)
                 ->groupEnd()
                 ->orderBy('webot_FINANCE.FINUNIQ', 'ASC');
             //$so_data = $this->FinanceModel ->get_csr_list_post_search($keyword);

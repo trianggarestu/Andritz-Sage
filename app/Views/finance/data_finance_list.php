@@ -72,13 +72,14 @@
 															<th>Invoice Number</th>
 															<th>Invioce Date</th>
 															<th>Origin D/N Date</th>
-
-
+															<th>DPP Amount</th>
 
 															<th style="background-color: white;"></th>
 															<th>Contract</th>
-															<th>Project</th>
 															<th>Contract Desc</th>
+															<th>Project</th>
+															<th>Est. Current Cost </th>
+															<th>Act. Cost</th>
 															<th>RR Status</th>
 															<th>Status</th>
 
@@ -100,6 +101,7 @@
 																<td><?= $data_list['IDINVC'] ?></td>
 																<td><?= $invdate; ?></td>
 																<td><?= $orgdate; ?></td>
+																<td><?= number_format($data_list['AMTINVCTOT'], 0, ",", ".") ?></td>
 
 
 
@@ -107,8 +109,10 @@
 
 																<td style="background-color: white;"></td>
 																<td><?= $data_list['CONTRACT']; ?></td>
-																<td><?= $data_list['PROJECT']; ?></td>
 																<td nowrap><?= $data_list['CTDESC']; ?></td>
+																<td><?= $data_list['PROJECT']; ?></td>
+																<td nowrap><?= number_format($data_list['TCURCOSTHM'], 0, ",", "."); ?></td>
+																<td nowrap><?= number_format($data_list['TACTCOSTHM'], 0, ",", "."); ?></td>
 																<td><?php $postingstat = $data_list['RRSTATUS'];
 																	switch ($postingstat) {
 																		case "0":
