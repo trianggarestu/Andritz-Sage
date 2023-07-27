@@ -175,15 +175,19 @@ class OrdertrackingList extends BaseController
         $ntodate = substr($todate, 6, 4) . "" . substr($todate, 0, 2) . "" . substr($todate, 3, 2);
         if (empty($keyword)) {
             $ord_data = $this->OrdertrackingModel->select('*')
-
+                ->groupStart()
+                ->where('RRSTATUS=', 1)
+                ->groupEnd()
                 ->groupStart()
                 ->where('PODATECUST >=', $nfromdate)
                 ->where('PODATECUST <=', $ntodate)
                 ->groupEnd()
-                ->orderBy('PODATECUST', 'ASC');
+                ->orderBy('OTSEQ', 'ASC');
         } else {
             $ord_data = $this->OrdertrackingModel->select('*')
-
+                ->groupStart()
+                ->where('RRSTATUS=', 1)
+                ->groupEnd()
                 ->groupStart()
                 ->where('PODATECUST >=', $nfromdate)
                 ->where('PODATECUST <=', $ntodate)
