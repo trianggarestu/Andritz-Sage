@@ -180,6 +180,10 @@ class FillrrStatus extends BaseController
                 'idinvc' => trim($get_fin['IDINVC']),
                 'invdate' => $inv_date,
                 'finstatus' => trim($get_fin['FINSTATUS']),
+                'tcurcosthm' => $get_fin['TCURCOSTHM'],
+                'tactcosthm' => $get_fin['TACTCOSTHM'],
+                'vtcurcosthm' => number_format($get_fin['TCURCOSTHM'], 0, ",", "."),
+                'vtactcosthm' => number_format($get_fin['TACTCOSTHM'], 0, ",", "."),
                 'rrstatus' => trim($get_fin['RRSTATUS']),
                 'form_action' => base_url($act),
                 'post_stat' => $postingstat,
@@ -209,6 +213,8 @@ class FillrrStatus extends BaseController
                 'AUDTUSER' => $this->audtuser['AUDTUSER'],
                 'AUDTORG' => $this->audtuser['AUDTORG'],
                 'RRSTATUS' => $this->request->getPost('rrstatus'),
+                'TCURCOSTHM' => $this->request->getPost('tcurcosthm'),
+                'TACTCOSTHM' => $this->request->getPost('tactcosthm'),
                 'RRPOSTINGSTAT' => $post_stat,
             );
             $this->FinanceModel->finance_update($finuniq, $data1);

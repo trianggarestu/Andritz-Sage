@@ -92,10 +92,10 @@ class Finance_model extends Model
     {
         $query = $this->db->query("select a.*,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,c.CURMATECHM,c.ACTMATECHM,a.IDINVC,a.DATEINVC
+        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,c.TCURCOSTHM,c.TACTCOSTHM,a.IDINVC,a.DATEINVC
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-		left join (select CONTRACT,PROJECT,CURMATECHM,ACTMATECHM,ORJMATEBHM from PMPROJS) c on c.CONTRACT=b.CONTRACT and c.PROJECT=b.PROJECT
+		left join (select y.CONTRACT,x.TCURCOSTHM,x.TACTCOSTHM from PMCONTT x inner join PMCONTS y on y.CTUNIQ=x.CTUNIQ) c on c.CONTRACT=b.CONTRACT
         where a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0");
 
         return $query->getResultArray();
@@ -106,10 +106,10 @@ class Finance_model extends Model
     {
         $query = $this->db->query("select a.*,
         b.CTDESC,b.PRJDESC,b.PONUMBERCUST,b.PODATECUST,b.NAMECUST," . 'b."CONTRACT"' . " as CSRCONTRACT,b.CTDESC,b.PROJECT as CSRPROJECT,b.CRMNO,b.CRMREQDATE,
-        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,c.CURMATECHM,c.ACTMATECHM,a.IDINVC,a.DATEINVC
+        b.CRMREMARKS,b.MANAGER,b.SALESNAME,b.ORDERDESC,c.TCURCOSTHM,c.TACTCOSTHM,a.IDINVC,a.DATEINVC
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
-		left join (select CONTRACT,PROJECT,CURMATECHM,ACTMATECHM,ORJMATEBHM from PMPROJS) c on c.CONTRACT=b.CONTRACT and c.PROJECT=b.PROJECT
+		left join (select y.CONTRACT,x.TCURCOSTHM,x.TACTCOSTHM from PMCONTT x inner join PMCONTS y on y.CTUNIQ=x.CTUNIQ) c on c.CONTRACT=b.CONTRACT
         where (a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0)
         and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
         or a.IDINVC like '%$keyword%')");
@@ -127,7 +127,10 @@ class Finance_model extends Model
 
     function get_fin_by_id($finuniq)
     {
-        $query = $this->db->query("select a.* from webot_FINANCE a
+        $query = $this->db->query("select a.*,c.TCURCOSTHM,c.TACTCOSTHM
+        from webot_FINANCE a 
+        left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
+		left join (select y.CONTRACT,x.TCURCOSTHM,x.TACTCOSTHM from PMCONTT x inner join PMCONTS y on y.CTUNIQ=x.CTUNIQ) c on c.CONTRACT=b.CONTRACT
         where a.FINUNIQ='$finuniq' ");
         return $query->getRowArray();
     }

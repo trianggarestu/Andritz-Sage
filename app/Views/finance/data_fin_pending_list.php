@@ -101,9 +101,9 @@
 
 																	<td style="vertical-align: top;" nowrap><?= $crmreq_date;
 																											?></td>
-																	<td style="vertical-align: top;" nowrap><?= number_format($fin_list['CURMATECHM'], 0, ",", ".");
+																	<td style="vertical-align: top;" nowrap><?= number_format($fin_list['TCURCOSTHM'], 0, ",", ".");
 																											?></td>
-																	<td style="vertical-align: top;" nowrap><?= number_format($fin_list['ACTMATECHM'], 0, ",", ".");
+																	<td style="vertical-align: top;" nowrap><?= number_format($fin_list['TACTCOSTHM'], 0, ",", ".");
 																											?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>

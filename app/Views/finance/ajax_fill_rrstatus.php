@@ -38,6 +38,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-sm-12" style="margin: 2px;">
+                                <div class="col-sm-3" style="text-align: right;">
+                                    <label for="tcurcosthm">Current Est. Cost : </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm required" id="vtcurcosthm" name="vtcurcosthm" placeholder="" value="<?= $vtcurcosthm; ?>" readonly />
+                                    <input type="hidden" id="tcurcosthm" name="tcurcosthm" value="<?= $tcurcosthm; ?>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12" style="margin: 2px;">
+                                <div class="col-sm-3" style="text-align: right;">
+                                    <label for="tactcosthm">Current Act. Cost : </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm required" id="vtactcosthm" name="vtactcosthm" placeholder="" value="<?= $vtactcosthm; ?>" readonly />
+                                    <input type="hidden" id="tactcosthm" name="tactcosthm" value="<?= $tactcosthm; ?>">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="col-sm-12" style="margin: 2px;">
