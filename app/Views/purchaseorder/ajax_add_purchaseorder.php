@@ -91,7 +91,7 @@
                                     <label for="origin_country">Origin Country : </label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm required" id="origin_country" name="origin_country" placeholder="" value="<?= $origin_country; ?>" />
+                                    <input type="text" class="form-control input-sm required" id="origin_country" name="origin_country" placeholder="" value="<?= $origin_country; ?>" minlength="3" maxlength="60" />
 
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                     <label for="po_remarks">Remarks : </label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm required" id="po_remarks" name="po_remarks" placeholder="" value="<?= $po_remarks; ?>" />
+                                    <input type="text" class="form-control input-sm required" id="po_remarks" name="po_remarks" placeholder="" value="<?= $po_remarks; ?>" minlength="3" maxlength="60" />
 
                                 </div>
                             </div>

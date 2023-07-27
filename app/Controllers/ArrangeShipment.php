@@ -244,70 +244,302 @@ class ArrangeShipment extends BaseController
 
     public function insert_action()
     {
-        $id_so = $this->request->getPost('id_so');
-        $id_po = $this->request->getPost('id_po');
-        $po_number = $this->request->getPost('po_number');
-        $etdorigin_date = $this->request->getPost('etdorigin_date');
-        $atdorigin_date = $this->request->getPost('atdorigin_date');
-        $etaport_date = $this->request->getPost('etaport_date');
-        $pib_date = $this->request->getPost('pib_date');
-        $vendorshi_status = $this->request->getPost('vendorshi_status');
-        $post_stat = $this->request->getPost('post_stat');
-        if (null == $id_po and null == $etdorigin_date) {
-            session()->set('success', '-1');
-            return redirect()->to(base_url('arrangeshipment'));
-        } else {
-            $sender = $this->AdministrationModel->get_mailsender();
-            $n_etdorigin_date = substr($etdorigin_date, 6, 4) . substr($etdorigin_date, 0, 2) . substr($etdorigin_date, 3, 2);
-            if (null == $atdorigin_date) {
-                $n_atdorigin_date = '';
-            } else {
-                $n_atdorigin_date = substr($atdorigin_date, 6, 4) . substr($atdorigin_date, 0, 2) . substr($atdorigin_date, 3, 2);
-            }
-            if (null == $etaport_date) {
-                $n_etaport_date = '';
-            } else {
-                $n_etaport_date = substr($etaport_date, 6, 4) . substr($etaport_date, 0, 2) . substr($etaport_date, 3, 2);
-            }
-            if (null == $pib_date) {
-                $n_pib_date = '';
-            } else {
-                $n_pib_date = substr($pib_date, 6, 4) . substr($pib_date, 0, 2) . substr($pib_date, 3, 2);
-            }
-            $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
-            $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
-            $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
-            $n_vendorshi_status  = empty($vendorshi_status) ? NULL : $vendorshi_status;
-            $groupuser = 5;
+        session()->remove('success');
+        if (!$this->validate([
+            'vendorshi_status' => 'required|min_length[3]|max_length[60]',
 
-            $data1 = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'LOGKEY' => $id_so . '-' . trim($po_number),
-                'CSRUNIQ' => $id_so,
-                'POUNIQ' => $id_po,
-                'PONUMBER' => trim($po_number),
-                'ETDORIGINDATE' => $n_etdorigin_date,
-                'ATDORIGINDATE' => $n_atdorigin_date,
-                'ETAPORTDATE' => $n_etaport_date,
-                'PIBDATE' => $n_pib_date,
-                'VENDSHISTATUS' => $n_vendorshi_status,
-                'OTPROCESS' => $groupuser,
-                'POSTINGSTAT' => $post_stat,
-                'OFFLINESTAT' => 1,
-            );
-            //print_r($data1);
-            $getloguniq = $this->LogisticsModel->get_loguniq_open($id_so, $id_po);
-            if (!empty($getloguniq['LOGKEY'])) {
+        ])) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('arrangeshipment'))->withInput();
+            session()->remove('success');
+        } else {
+            $id_so = $this->request->getPost('id_so');
+            $id_po = $this->request->getPost('id_po');
+            $po_number = $this->request->getPost('po_number');
+            $etdorigin_date = $this->request->getPost('etdorigin_date');
+            $atdorigin_date = $this->request->getPost('atdorigin_date');
+            $etaport_date = $this->request->getPost('etaport_date');
+            $pib_date = $this->request->getPost('pib_date');
+            $vendorshi_status = $this->request->getPost('vendorshi_status');
+            $post_stat = $this->request->getPost('post_stat');
+            if (null == $id_po and null == $etdorigin_date) {
                 session()->set('success', '-1');
                 return redirect()->to(base_url('arrangeshipment'));
-                session()->remove('success');
-            } else if (empty($getloguniq['LOGKEY'])) {
-                // Insert webot_LOGistics
-                $this->LogisticsModel->arrangeshipment_insert($data1);
-                // Jika Posting
+            } else {
+                $sender = $this->AdministrationModel->get_mailsender();
+                $n_etdorigin_date = substr($etdorigin_date, 6, 4) . substr($etdorigin_date, 0, 2) . substr($etdorigin_date, 3, 2);
+                if (null == $atdorigin_date) {
+                    $n_atdorigin_date = '';
+                } else {
+                    $n_atdorigin_date = substr($atdorigin_date, 6, 4) . substr($atdorigin_date, 0, 2) . substr($atdorigin_date, 3, 2);
+                }
+                if (null == $etaport_date) {
+                    $n_etaport_date = '';
+                } else {
+                    $n_etaport_date = substr($etaport_date, 6, 4) . substr($etaport_date, 0, 2) . substr($etaport_date, 3, 2);
+                }
+                if (null == $pib_date) {
+                    $n_pib_date = '';
+                } else {
+                    $n_pib_date = substr($pib_date, 6, 4) . substr($pib_date, 0, 2) . substr($pib_date, 3, 2);
+                }
+                $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
+                $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
+                $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
+                $n_vendorshi_status  = empty($vendorshi_status) ? NULL : $vendorshi_status;
+                $groupuser = 5;
+
+                $data1 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'LOGKEY' => $id_so . '-' . trim($po_number),
+                    'CSRUNIQ' => $id_so,
+                    'POUNIQ' => $id_po,
+                    'PONUMBER' => trim($po_number),
+                    'ETDORIGINDATE' => $n_etdorigin_date,
+                    'ATDORIGINDATE' => $n_atdorigin_date,
+                    'ETAPORTDATE' => $n_etaport_date,
+                    'PIBDATE' => $n_pib_date,
+                    'VENDSHISTATUS' => $n_vendorshi_status,
+                    'OTPROCESS' => $groupuser,
+                    'POSTINGSTAT' => $post_stat,
+                    'OFFLINESTAT' => 1,
+                );
+                //print_r($data1);
+                $getloguniq = $this->LogisticsModel->get_loguniq_open($id_so, $id_po);
+                if (!empty($getloguniq['LOGKEY'])) {
+                    session()->set('success', '-1');
+                    return redirect()->to(base_url('arrangeshipment'));
+                    session()->remove('success');
+                } else if (empty($getloguniq['LOGKEY'])) {
+                    // Insert webot_LOGistics
+                    $this->LogisticsModel->arrangeshipment_insert($data1);
+                    // Jika Posting
+                    if ($post_stat == 1) {
+
+                        $data2 = array(
+                            'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                            'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                            'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                            'AUDTORG' => $this->audtuser['AUDTORG'],
+                            'ETDORIGINDATE' => $n_etdorigin_date,
+                            'ATDORIGINDATE' => $n_atdorigin_date,
+                            'ETAPORTDATE' => $n_etaport_date,
+                            'PIBDATE' => $n_pib_date,
+                            'VENDSHISTATUS' => $vendorshi_status,
+                        );
+
+                        $this->LogisticsModel->ot_logistics_update($id_so, $po_number, $data2);
+
+                        if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($vendorshi_status)) {
+
+                            if ($sender['OFFLINESTAT'] == 0) {
+                                $getlog = $this->LogisticsModel->get_loguniq_open($id_so, $id_po);
+                                $n_loguniq = $getlog['LOGUNIQ'];
+                                $get_log_data = $this->LogisticsModel->get_logjoincsr_by_po($n_loguniq);
+                                $crmpodate = substr($get_log_data['PODATECUST'], 4, 2) . "/" . substr($get_log_data['PODATECUST'], 6, 2) . "/" .  substr($get_log_data['PODATECUST'], 0, 4);
+                                $crmreqdate = substr($get_log_data['CRMREQDATE'], 4, 2) . '/' . substr($get_log_data['CRMREQDATE'], 6, 2) . '/' . substr($get_log_data['CRMREQDATE'], 0, 4);
+                                $rqndate = substr($get_log_data['RQNDATE'], 4, 2) . "/" . substr($get_log_data['RQNDATE'], 6, 2) . "/" .  substr($get_log_data['RQNDATE'], 0, 4);
+                                $povendordate = substr($get_log_data['PODATE'], 4, 2) . "/" . substr($get_log_data['PODATE'], 6, 2) . "/" .  substr($get_log_data['PODATE'], 0, 4);
+                                $etddate = substr($get_log_data['ETDDATE'], 4, 2) . "/" . substr($get_log_data['ETDDATE'], 6, 2) . "/" .  substr($get_log_data['ETDDATE'], 0, 4);
+                                $cargoreadinessdate = substr($get_log_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_log_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_log_data['CARGOREADINESSDATE'], 0, 4);
+                                $etdorigindate = substr($get_log_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_log_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_log_data['ETDORIGINDATE'], 0, 4);
+                                $atdorigindate = substr($get_log_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_log_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_log_data['ATDORIGINDATE'], 0, 4);
+                                $etaportdate = substr($get_log_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_log_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_log_data['ETAPORTDATE'], 0, 4);
+                                $pibdate = substr($get_log_data['PIBDATE'], 4, 2) . "/" . substr($get_log_data['PIBDATE'], 6, 2) . "/" .  substr($get_log_data['PIBDATE'], 0, 4);
+
+                                //Untuk Update Status Posting PO
+                                $data3 = array(
+                                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                                    'POSTINGSTAT' => 1,
+                                    'OFFLINESTAT' => 0,
+                                );
+
+                                $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
+                                $mail_tmpl = $this->NotifModel->get_template($groupuser);
+
+                                foreach ($notiftouser_data as $sendto_user) :
+                                    $var_email = array(
+                                        'TONAME' => $sendto_user['NAME'],
+                                        'FROMNAME' => $this->audtuser['NAMELGN'],
+                                        'CONTRACT' => $get_log_data['CONTRACT'],
+                                        'CTDESC' => $get_log_data['CTDESC'],
+                                        'PROJECT' => $get_log_data['PROJECT'],
+                                        'PRJDESC' => $get_log_data['PRJDESC'],
+                                        'CUSTOMER' => $get_log_data['CUSTOMER'],
+                                        'NAMECUST' => $get_log_data['NAMECUST'],
+                                        'EMAIL1CUST' => $get_log_data['EMAIL1CUST'],
+                                        'PONUMBERCUST' => $get_log_data['PONUMBERCUST'],
+                                        'PODATECUST' => $crmpodate,
+                                        'CRMNO' => $get_log_data['CRMNO'],
+                                        'REQDATE' => $crmreqdate,
+                                        'ORDERDESC' => $get_log_data['ORDERDESC'],
+                                        'REMARKS' => $get_log_data['CRMREMARKS'],
+                                        'SALESCODE' => $get_log_data['MANAGER'],
+                                        'SALESPERSON' => $get_log_data['SALESNAME'],
+                                        'RQNDATE' => $rqndate,
+                                        'RQNNUMBER' => $get_log_data['RQNNUMBER'],
+                                        //DATA VARIABLE PO
+                                        'PODATE' => $povendordate,
+                                        'PONUMBER' => $get_log_data['PONUMBER'],
+                                        'ETDDATE' => $etddate,
+                                        'CARGOREADINESSDATE' => $cargoreadinessdate,
+                                        'ORIGINCOUNTRY' => $get_log_data['ORIGINCOUNTRY'],
+                                        'POREMARKS' => $get_log_data['POREMARKS'],
+                                        //DATA VARIABLE LOGISTICS
+                                        'ETDORIGINDATE' => $etdorigindate,
+                                        'ATDORIGINDATE' => $atdorigindate,
+                                        'ETAPORTDATE' => $etaportdate,
+                                        'PIBDATE' => $pibdate,
+                                        'VENDSHISTATUS' => $get_log_data['VENDSHISTATUS'],
+                                    );
+                                    $subject = $mail_tmpl['SUBJECT_MAIL'];
+                                    $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
+
+                                    $data_email = array(
+                                        'hostname'       => $sender['HOSTNAME'],
+                                        'sendername'       => $sender['SENDERNAME'],
+                                        'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
+                                        'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
+                                        'smtpauth'       => $sender['SMTPAUTH'],
+                                        'ssl'       => $sender['SSL'],
+                                        'smtpport'       => $sender['SMTPPORT'],
+                                        'to_email' => $sendto_user['EMAIL'],
+                                        'subject' =>  $subject,
+                                        'message' => $message,
+                                    );
+
+
+                                    $data_notif = array(
+                                        'MAILKEY' => $groupuser . '-' . $get_log_data['POUNIQ'] . '-' . trim($sendto_user['USERNAME']),
+                                        'FROM_USER' => $this->header_data['usernamelgn'],
+                                        'FROM_EMAIL' => $this->header_data['emaillgn'],
+                                        'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
+                                        'TO_USER' => $sendto_user['USERNAME'],
+                                        'TO_EMAIL' => $sendto_user['EMAIL'],
+                                        'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
+                                        'SUBJECT' => $subject,
+                                        'MESSAGE' => $message,
+                                        'SENDING_DATE' => $this->audtuser['AUDTDATE'],
+                                        'SENDING_TIME' => $this->audtuser['AUDTTIME'],
+                                        'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                        'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                        'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
+                                        'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
+                                        'IS_READ' => 0,
+                                        'IS_ARCHIVED' => 0,
+                                        'IS_TRASHED' => 0,
+                                        'IS_DELETED' => 0,
+                                        'IS_ATTACHED' => 0,
+                                        'IS_STAR' => 0,
+                                        'IS_READSENDER' => 1,
+                                        'IS_ARCHIVEDSENDER' => 0,
+                                        'IS_TRASHEDSENDER' => 0,
+                                        'IS_DELETEDSENDER' => 0,
+                                        'SENDING_STATUS' => 1,
+                                        'OTPROCESS' => $groupuser,
+                                        'UNIQPROCESS' => $get_log_data['LOGUNIQ'],
+                                    );
+
+                                    //Check Duplicate Entry & Sending Mail
+                                    $touser = trim($sendto_user['USERNAME']);
+                                    $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_log_data['LOGUNIQ'], $touser);
+                                    if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_log_data['POUNIQ'] . '-' . $touser) {
+                                        session()->set('success', '-1');
+                                        return redirect()->to(base_url('/arrangeshipment'));
+                                        session()->remove('success');
+                                    } else if (empty($getmailuniq['MAILKEY'])) {
+                                        $post_email = $this->NotifModel->mailbox_insert($data_notif);
+                                        if ($post_email) {
+                                            $sending_mail = $this->send($data_email);
+                                        }
+                                    }
+
+                                endforeach;
+
+                                $this->LogisticsModel->arrangeshipment_update($get_log_data['LOGUNIQ'], $data3);
+                            }
+                        }
+                    }
+                    session()->set('success', '1');
+                    return redirect()->to(base_url('/arrangeshipment'));
+                    session()->remove('success');
+                }
+            }
+        }
+    }
+
+
+    public function update_action()
+    {
+        session()->remove('success');
+        if (!$this->validate([
+            'vendorshi_status' => 'required|min_length[3]|max_length[60]',
+
+        ])) {
+            session()->set('success', '-1');
+            return redirect()->to(base_url('arrangeshipment'))->withInput();
+            session()->remove('success');
+        } else {
+
+            $id_so = $this->request->getPost('id_so');
+            $id_po = $this->request->getPost('id_po');
+            $po_number = $this->request->getPost('po_number');
+            $id_log = $this->request->getPost('id_log');
+            $etdorigin_date = $this->request->getPost('etdorigin_date');
+            $atdorigin_date = $this->request->getPost('atdorigin_date');
+            $etaport_date = $this->request->getPost('etaport_date');
+            $pib_date = $this->request->getPost('pib_date');
+            $vendorshi_status = $this->request->getPost('vendorshi_status');
+            $post_stat = $this->request->getPost('post_stat');
+            $post_stat_data = $this->request->getPost('post_stat_data');
+            if (null == $id_po and null == $etdorigin_date and null == $vendorshi_status) {
+                session()->set('success', '-1');
+                return redirect()->to(base_url('arrangeshipment'));
+            } else {
+                $sender = $this->AdministrationModel->get_mailsender();
+                $n_etdorigin_date = substr($etdorigin_date, 6, 4) . substr($etdorigin_date, 0, 2) . substr($etdorigin_date, 3, 2);
+                if (null == $atdorigin_date) {
+                    $n_atdorigin_date = '';
+                } else {
+                    $n_atdorigin_date = substr($atdorigin_date, 6, 4) . substr($atdorigin_date, 0, 2) . substr($atdorigin_date, 3, 2);
+                }
+                if (null == $etaport_date) {
+                    $n_etaport_date = '';
+                } else {
+                    $n_etaport_date = substr($etaport_date, 6, 4) . substr($etaport_date, 0, 2) . substr($etaport_date, 3, 2);
+                }
+                if (null == $pib_date) {
+                    $n_pib_date = '';
+                } else {
+                    $n_pib_date = substr($pib_date, 6, 4) . substr($pib_date, 0, 2) . substr($pib_date, 3, 2);
+                }
+                $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
+                $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
+                $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
+                $n_vendorshi_status  = empty($vendorshi_status) ? NULL : $vendorshi_status;
+                $groupuser = 5;
+                $data1 = array(
+                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
+                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
+                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
+                    'AUDTORG' => $this->audtuser['AUDTORG'],
+                    'ETDORIGINDATE' => $n_etdorigin_date,
+                    'ATDORIGINDATE' => $n_atdorigin_date,
+                    'ETAPORTDATE' => $n_etaport_date,
+                    'PIBDATE' => $n_pib_date,
+                    'VENDSHISTATUS' => $n_vendorshi_status,
+                    'OTPROCESS' => $groupuser,
+                    'POSTINGSTAT' => $post_stat,
+                    'OFFLINESTAT' => 1,
+                );
+                $this->LogisticsModel->arrangeshipment_update($id_log, $data1);
+
                 if ($post_stat == 1) {
 
                     $data2 = array(
@@ -319,17 +551,13 @@ class ArrangeShipment extends BaseController
                         'ATDORIGINDATE' => $n_atdorigin_date,
                         'ETAPORTDATE' => $n_etaport_date,
                         'PIBDATE' => $n_pib_date,
-                        'VENDSHISTATUS' => $vendorshi_status,
+                        'VENDSHISTATUS' => $n_vendorshi_status,
                     );
-
                     $this->LogisticsModel->ot_logistics_update($id_so, $po_number, $data2);
 
-                    if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($vendorshi_status)) {
-
+                    if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($n_vendorshi_status)) {
                         if ($sender['OFFLINESTAT'] == 0) {
-                            $getlog = $this->LogisticsModel->get_loguniq_open($id_so, $id_po);
-                            $n_loguniq = $getlog['LOGUNIQ'];
-                            $get_log_data = $this->LogisticsModel->get_logjoincsr_by_po($n_loguniq);
+                            $get_log_data = $this->LogisticsModel->get_logjoincsr_by_po($id_log);
                             $crmpodate = substr($get_log_data['PODATECUST'], 4, 2) . "/" . substr($get_log_data['PODATECUST'], 6, 2) . "/" .  substr($get_log_data['PODATECUST'], 0, 4);
                             $crmreqdate = substr($get_log_data['CRMREQDATE'], 4, 2) . '/' . substr($get_log_data['CRMREQDATE'], 6, 2) . '/' . substr($get_log_data['CRMREQDATE'], 0, 4);
                             $rqndate = substr($get_log_data['RQNDATE'], 4, 2) . "/" . substr($get_log_data['RQNDATE'], 6, 2) . "/" .  substr($get_log_data['RQNDATE'], 0, 4);
@@ -353,7 +581,6 @@ class ArrangeShipment extends BaseController
 
                             $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
                             $mail_tmpl = $this->NotifModel->get_template($groupuser);
-
                             foreach ($notiftouser_data as $sendto_user) :
                                 $var_email = array(
                                     'TONAME' => $sendto_user['NAME'],
@@ -452,223 +679,16 @@ class ArrangeShipment extends BaseController
                                 }
 
                             endforeach;
-
                             $this->LogisticsModel->arrangeshipment_update($get_log_data['LOGUNIQ'], $data3);
                         }
                     }
                 }
-                session()->set('success', '1');
-                return redirect()->to(base_url('/arrangeshipment'));
-                session()->remove('success');
             }
+            session()->set('success', '1');
+            return redirect()->to(base_url('/arrangeshipment'));
+            session()->remove('success');
         }
     }
-
-
-    public function update_action()
-    {
-        $id_so = $this->request->getPost('id_so');
-        $id_po = $this->request->getPost('id_po');
-        $po_number = $this->request->getPost('po_number');
-        $id_log = $this->request->getPost('id_log');
-        $etdorigin_date = $this->request->getPost('etdorigin_date');
-        $atdorigin_date = $this->request->getPost('atdorigin_date');
-        $etaport_date = $this->request->getPost('etaport_date');
-        $pib_date = $this->request->getPost('pib_date');
-        $vendorshi_status = $this->request->getPost('vendorshi_status');
-        $post_stat = $this->request->getPost('post_stat');
-        $post_stat_data = $this->request->getPost('post_stat_data');
-        if (null == $id_po and null == $etdorigin_date and null == $vendorshi_status) {
-            session()->set('success', '-1');
-            return redirect()->to(base_url('arrangeshipment'));
-        } else {
-            $sender = $this->AdministrationModel->get_mailsender();
-            $n_etdorigin_date = substr($etdorigin_date, 6, 4) . substr($etdorigin_date, 0, 2) . substr($etdorigin_date, 3, 2);
-            if (null == $atdorigin_date) {
-                $n_atdorigin_date = '';
-            } else {
-                $n_atdorigin_date = substr($atdorigin_date, 6, 4) . substr($atdorigin_date, 0, 2) . substr($atdorigin_date, 3, 2);
-            }
-            if (null == $etaport_date) {
-                $n_etaport_date = '';
-            } else {
-                $n_etaport_date = substr($etaport_date, 6, 4) . substr($etaport_date, 0, 2) . substr($etaport_date, 3, 2);
-            }
-            if (null == $pib_date) {
-                $n_pib_date = '';
-            } else {
-                $n_pib_date = substr($pib_date, 6, 4) . substr($pib_date, 0, 2) . substr($pib_date, 3, 2);
-            }
-            $n_atdorigin_date  = empty($n_atdorigin_date) ? NULL : $n_atdorigin_date;
-            $n_etaport_date  = empty($n_etaport_date) ? NULL : $n_etaport_date;
-            $n_pib_date  = empty($n_pib_date) ? NULL : $n_pib_date;
-            $n_vendorshi_status  = empty($vendorshi_status) ? NULL : $vendorshi_status;
-            $groupuser = 5;
-            $data1 = array(
-                'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                'AUDTORG' => $this->audtuser['AUDTORG'],
-                'ETDORIGINDATE' => $n_etdorigin_date,
-                'ATDORIGINDATE' => $n_atdorigin_date,
-                'ETAPORTDATE' => $n_etaport_date,
-                'PIBDATE' => $n_pib_date,
-                'VENDSHISTATUS' => $n_vendorshi_status,
-                'OTPROCESS' => $groupuser,
-                'POSTINGSTAT' => $post_stat,
-                'OFFLINESTAT' => 1,
-            );
-            $this->LogisticsModel->arrangeshipment_update($id_log, $data1);
-
-            if ($post_stat == 1) {
-
-                $data2 = array(
-                    'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                    'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                    'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                    'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'ETDORIGINDATE' => $n_etdorigin_date,
-                    'ATDORIGINDATE' => $n_atdorigin_date,
-                    'ETAPORTDATE' => $n_etaport_date,
-                    'PIBDATE' => $n_pib_date,
-                    'VENDSHISTATUS' => $n_vendorshi_status,
-                );
-                $this->LogisticsModel->ot_logistics_update($id_so, $po_number, $data2);
-
-                if (!empty($n_etdorigin_date) and !empty($n_atdorigin_date) and !empty($n_etaport_date) and !empty($n_pib_date) and !empty($n_vendorshi_status)) {
-                    if ($sender['OFFLINESTAT'] == 0) {
-                        $get_log_data = $this->LogisticsModel->get_logjoincsr_by_po($id_log);
-                        $crmpodate = substr($get_log_data['PODATECUST'], 4, 2) . "/" . substr($get_log_data['PODATECUST'], 6, 2) . "/" .  substr($get_log_data['PODATECUST'], 0, 4);
-                        $crmreqdate = substr($get_log_data['CRMREQDATE'], 4, 2) . '/' . substr($get_log_data['CRMREQDATE'], 6, 2) . '/' . substr($get_log_data['CRMREQDATE'], 0, 4);
-                        $rqndate = substr($get_log_data['RQNDATE'], 4, 2) . "/" . substr($get_log_data['RQNDATE'], 6, 2) . "/" .  substr($get_log_data['RQNDATE'], 0, 4);
-                        $povendordate = substr($get_log_data['PODATE'], 4, 2) . "/" . substr($get_log_data['PODATE'], 6, 2) . "/" .  substr($get_log_data['PODATE'], 0, 4);
-                        $etddate = substr($get_log_data['ETDDATE'], 4, 2) . "/" . substr($get_log_data['ETDDATE'], 6, 2) . "/" .  substr($get_log_data['ETDDATE'], 0, 4);
-                        $cargoreadinessdate = substr($get_log_data['CARGOREADINESSDATE'], 4, 2) . "/" . substr($get_log_data['CARGOREADINESSDATE'], 6, 2) . "/" .  substr($get_log_data['CARGOREADINESSDATE'], 0, 4);
-                        $etdorigindate = substr($get_log_data['ETDORIGINDATE'], 4, 2) . "/" . substr($get_log_data['ETDORIGINDATE'], 6, 2) . "/" .  substr($get_log_data['ETDORIGINDATE'], 0, 4);
-                        $atdorigindate = substr($get_log_data['ATDORIGINDATE'], 4, 2) . "/" . substr($get_log_data['ATDORIGINDATE'], 6, 2) . "/" .  substr($get_log_data['ATDORIGINDATE'], 0, 4);
-                        $etaportdate = substr($get_log_data['ETAPORTDATE'], 4, 2) . "/" . substr($get_log_data['ETAPORTDATE'], 6, 2) . "/" .  substr($get_log_data['ETAPORTDATE'], 0, 4);
-                        $pibdate = substr($get_log_data['PIBDATE'], 4, 2) . "/" . substr($get_log_data['PIBDATE'], 6, 2) . "/" .  substr($get_log_data['PIBDATE'], 0, 4);
-
-                        //Untuk Update Status Posting PO
-                        $data3 = array(
-                            'AUDTDATE' => $this->audtuser['AUDTDATE'],
-                            'AUDTTIME' => $this->audtuser['AUDTTIME'],
-                            'AUDTUSER' => $this->audtuser['AUDTUSER'],
-                            'AUDTORG' => $this->audtuser['AUDTORG'],
-                            'POSTINGSTAT' => 1,
-                            'OFFLINESTAT' => 0,
-                        );
-
-                        $notiftouser_data = $this->NotifModel->get_sendto_user($groupuser);
-                        $mail_tmpl = $this->NotifModel->get_template($groupuser);
-                        foreach ($notiftouser_data as $sendto_user) :
-                            $var_email = array(
-                                'TONAME' => $sendto_user['NAME'],
-                                'FROMNAME' => $this->audtuser['NAMELGN'],
-                                'CONTRACT' => $get_log_data['CONTRACT'],
-                                'CTDESC' => $get_log_data['CTDESC'],
-                                'PROJECT' => $get_log_data['PROJECT'],
-                                'PRJDESC' => $get_log_data['PRJDESC'],
-                                'CUSTOMER' => $get_log_data['CUSTOMER'],
-                                'NAMECUST' => $get_log_data['NAMECUST'],
-                                'EMAIL1CUST' => $get_log_data['EMAIL1CUST'],
-                                'PONUMBERCUST' => $get_log_data['PONUMBERCUST'],
-                                'PODATECUST' => $crmpodate,
-                                'CRMNO' => $get_log_data['CRMNO'],
-                                'REQDATE' => $crmreqdate,
-                                'ORDERDESC' => $get_log_data['ORDERDESC'],
-                                'REMARKS' => $get_log_data['CRMREMARKS'],
-                                'SALESCODE' => $get_log_data['MANAGER'],
-                                'SALESPERSON' => $get_log_data['SALESNAME'],
-                                'RQNDATE' => $rqndate,
-                                'RQNNUMBER' => $get_log_data['RQNNUMBER'],
-                                //DATA VARIABLE PO
-                                'PODATE' => $povendordate,
-                                'PONUMBER' => $get_log_data['PONUMBER'],
-                                'ETDDATE' => $etddate,
-                                'CARGOREADINESSDATE' => $cargoreadinessdate,
-                                'ORIGINCOUNTRY' => $get_log_data['ORIGINCOUNTRY'],
-                                'POREMARKS' => $get_log_data['POREMARKS'],
-                                //DATA VARIABLE LOGISTICS
-                                'ETDORIGINDATE' => $etdorigindate,
-                                'ATDORIGINDATE' => $atdorigindate,
-                                'ETAPORTDATE' => $etaportdate,
-                                'PIBDATE' => $pibdate,
-                                'VENDSHISTATUS' => $get_log_data['VENDSHISTATUS'],
-                            );
-                            $subject = $mail_tmpl['SUBJECT_MAIL'];
-                            $message = view(trim($mail_tmpl['PATH_TEMPLATE']), $var_email);
-
-                            $data_email = array(
-                                'hostname'       => $sender['HOSTNAME'],
-                                'sendername'       => $sender['SENDERNAME'],
-                                'senderemail'       => $sender['SENDEREMAIL'], // silahkan ganti dengan alamat email Anda
-                                'passwordemail'       => $sender['PASSWORDEMAIL'], // silahkan ganti dengan password email Anda
-                                'smtpauth'       => $sender['SMTPAUTH'],
-                                'ssl'       => $sender['SSL'],
-                                'smtpport'       => $sender['SMTPPORT'],
-                                'to_email' => $sendto_user['EMAIL'],
-                                'subject' =>  $subject,
-                                'message' => $message,
-                            );
-
-
-                            $data_notif = array(
-                                'MAILKEY' => $groupuser . '-' . $get_log_data['POUNIQ'] . '-' . trim($sendto_user['USERNAME']),
-                                'FROM_USER' => $this->header_data['usernamelgn'],
-                                'FROM_EMAIL' => $this->header_data['emaillgn'],
-                                'FROM_NAME' => ucwords(strtolower($this->header_data['namalgn'])),
-                                'TO_USER' => $sendto_user['USERNAME'],
-                                'TO_EMAIL' => $sendto_user['EMAIL'],
-                                'TO_NAME' => ucwords(strtolower($sendto_user['NAME'])),
-                                'SUBJECT' => $subject,
-                                'MESSAGE' => $message,
-                                'SENDING_DATE' => $this->audtuser['AUDTDATE'],
-                                'SENDING_TIME' => $this->audtuser['AUDTTIME'],
-                                'UPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                                'UPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                                'SENDERUPDATEDAT_DATE' => $this->audtuser['AUDTDATE'],
-                                'SENDERUPDATEDAT_TIME' => $this->audtuser['AUDTTIME'],
-                                'IS_READ' => 0,
-                                'IS_ARCHIVED' => 0,
-                                'IS_TRASHED' => 0,
-                                'IS_DELETED' => 0,
-                                'IS_ATTACHED' => 0,
-                                'IS_STAR' => 0,
-                                'IS_READSENDER' => 1,
-                                'IS_ARCHIVEDSENDER' => 0,
-                                'IS_TRASHEDSENDER' => 0,
-                                'IS_DELETEDSENDER' => 0,
-                                'SENDING_STATUS' => 1,
-                                'OTPROCESS' => $groupuser,
-                                'UNIQPROCESS' => $get_log_data['LOGUNIQ'],
-                            );
-
-                            //Check Duplicate Entry & Sending Mail
-                            $touser = trim($sendto_user['USERNAME']);
-                            $getmailuniq = $this->NotifModel->get_mail_key($groupuser, $get_log_data['LOGUNIQ'], $touser);
-                            if (!empty($getmailuniq['MAILKEY']) and $getmailuniq['MAILKEY'] == $groupuser . '-' . $get_log_data['POUNIQ'] . '-' . $touser) {
-                                session()->set('success', '-1');
-                                return redirect()->to(base_url('/arrangeshipment'));
-                                session()->remove('success');
-                            } else if (empty($getmailuniq['MAILKEY'])) {
-                                $post_email = $this->NotifModel->mailbox_insert($data_notif);
-                                if ($post_email) {
-                                    $sending_mail = $this->send($data_email);
-                                }
-                            }
-
-                        endforeach;
-                        $this->LogisticsModel->arrangeshipment_update($get_log_data['LOGUNIQ'], $data3);
-                    }
-                }
-            }
-        }
-        session()->set('success', '1');
-        return redirect()->to(base_url('/arrangeshipment'));
-        session()->remove('success');
-    }
-
 
     public function sendnotif($loguniq)
     {

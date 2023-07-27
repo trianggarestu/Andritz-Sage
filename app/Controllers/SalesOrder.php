@@ -625,10 +625,10 @@ class SalesOrder extends BaseController
             'prj_desc' => 'required',
             'po_cust' => 'required',
             'prj_startdate' => 'required',
-            'crm_no' => 'required|min_length[1]',
+            'crm_no' => 'required|alpha_numeric_space|min_length[1]|max_length[16]',
             'req_date' => 'required',
-            'ord_desc' => 'required',
-            'so_remarks' => 'required|min_length[3]',
+            'ord_desc' => 'required|alpha_numeric_punct|min_length[3]|max_length[255]',
+            'so_remarks' => 'required|alpha_numeric_punct|min_length[3]|max_length[255]',
 
         ])) {
             $ct_no = $this->request->getPost('ct_no');
@@ -793,10 +793,10 @@ class SalesOrder extends BaseController
             'prj_desc' => 'required',
             'po_cust' => 'required',
             'prj_startdate' => 'required',
-            'crm_no' => 'required|min_length[1]',
+            'crm_no' => 'required|alpha_numeric_space|min_length[1]|max_length[16]',
             'req_date' => 'required',
-            'ord_desc' => 'required',
-            'so_remarks' => 'required|min_length[3]',
+            'ord_desc' => 'required|alpha_numeric_punct|min_length[3]|max_length[120]',
+            'so_remarks' => 'required|alpha_numeric_punct|min_length[3]|max_length[120]',
 
         ])) {
             $ct_no = $this->request->getPost('ct_no');

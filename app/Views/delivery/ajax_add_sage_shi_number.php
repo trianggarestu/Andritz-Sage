@@ -23,7 +23,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="tf_dn_number">D/N Number : </label>
-                                <input type="text" class="form-control input-sm" id="tf_dn_number" name="tf_dn_number" placeholder="" value="" />
+                                <input type="text" class="form-control input-sm" id="tf_dn_number" name="tf_dn_number" placeholder="" value="" maxlength="60" />
 
                             </div>
 
@@ -85,7 +85,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="pjc_dn_number">D/N Number : </label>
-                                <input type="text" class="form-control input-sm" id="pjc_dn_number" name="pjc_dn_number" placeholder="" value="" />
+                                <input type="text" class="form-control input-sm" id="pjc_dn_number" name="pjc_dn_number" placeholder="" value="" maxlength="60" />
 
                             </div>
 

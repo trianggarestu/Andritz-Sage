@@ -334,7 +334,7 @@ class DeliveryOrders extends BaseController
         }
 
 
-        return redirect()->to(base_url('deliveryorders/add/' . $csruniq . '/' . $post_stat . '/' . $delshiline));
+        return redirect()->to(base_url('deliveryorders/add/' . $csruniq . '/' . $post_stat . '/' . $delshiline))->withInput();
     }
 
     public function form_update_item($csr_uniq, $post_stat, $rowid, $itemno, $delshiline)
@@ -474,8 +474,8 @@ class DeliveryOrders extends BaseController
     public function insert_action()
     {
         if (!$this->validate([
-            'shi_number' => 'required',
-            'dn_number' => 'required',
+            'shi_number' => 'required|min_length[3]|max_length[22]',
+            'dn_number' => 'required|min_length[3]|max_length[60]',
             'shi_date' => 'required',
             'received_date' => 'required',
             'shi_ref' => 'required',

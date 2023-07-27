@@ -260,6 +260,11 @@
 										</div>
 									</form>
 									<div class="row">
+										<div class='col-sm-12'>
+											<?= validation_list_errors() ?>
+										</div>
+									</div>
+									<div class="row">
 										<div class="col-sm-12">&nbsp;
 										</div>
 										<div class="col-sm-12">

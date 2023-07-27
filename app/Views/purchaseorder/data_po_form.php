@@ -491,9 +491,10 @@
 											</tbody>
 										</table>
 									</div>
-									<div class='col-sm-12'>
-
-										<?= validation_list_errors() ?>
+									<div class="row">
+										<div class='col-sm-12'>
+											<?= validation_list_errors() ?>
+										</div>
 									</div>
 									<div class='box-footer'>
 										<input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
