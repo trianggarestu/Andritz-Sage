@@ -32,7 +32,7 @@ class Ordertracking_model extends Model
 
     function get_ordertracking_search($keyword)
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING where (RRSTATUS is NULL or RRSTATUS<>2) and 
+        $query = $this->db->query("select * from webot_ORDERTRACKING where (RRSTATUS is NULL or RRSTATUS = 0) and 
         (CONTRACT like '%$keyword%' or CTDESC like '%$keyword%'
         or MANAGER like '%$keyword%' or SALESNAME like '%$keyword%' or PROJECT like '%$keyword%' or PRJDESC like '%$keyword%' or PONUMBERCUST like '%$keyword%'
         or CUSTOMER like '%$keyword%' or NAMECUST like '%$keyword%' or EMAIL1CUST like '%$keyword%' or CRMNO like '%$keyword%' or ORDERDESC like '%$keyword%'
@@ -52,7 +52,7 @@ class Ordertracking_model extends Model
     }
     function get_inv_preview()
     {
-        $query = $this->db->query("select * from webot_ORDERTRACKING");
+        $query = $this->db->query("select * from webot_ORDERTRACKING where RRSTATUS = 1");
         return $query->getResultArray();
     }
     function get_inv_preview_filter($keyword, $nfromdate, $ntodate)

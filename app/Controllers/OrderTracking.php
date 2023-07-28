@@ -147,7 +147,7 @@ class OrderTracking extends BaseController
     public function export_excel()
     {
         //$peoples = $this->builder->get()->getResultArray();
-        $ordtrackingdata = $this->OrdertrackingModel->get_ordertracking();
+        $ord_data = $this->OrdertrackingModel->get_ordertracking();
         $spreadsheet = new Spreadsheet();
         // tulis header/nama kolom 
         $spreadsheet->setActiveSheetIndex(0)
@@ -280,9 +280,9 @@ class OrderTracking extends BaseController
             $yyyy = substr($data['CRMREQDATE'], 0, 4);
             $crmreqdate = $mm . '/' . $dd . '/' . $yyyy;
 
-            $dd = substr($data['INVOICEDATE'], 6, 2);
-            $mm = substr($data['INVOICEDATE'], 4, 2);
-            $yyyy = substr($data['INVOICEDATE'], 0, 4);
+            $dd = substr($data['DATEINVC'], 6, 2);
+            $mm = substr($data['DATEINVC'], 4, 2);
+            $yyyy = substr($data['DATEINVC'], 0, 4);
             $invdate = $mm . '/' . $dd . '/' . $yyyy;
 
             $dd = substr($data['CUSTRCPDATE'], 6, 2);
