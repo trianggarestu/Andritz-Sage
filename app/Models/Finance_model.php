@@ -31,13 +31,14 @@ class Finance_model extends Model
         a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
         b.ROWSHI,d.ROWSHI_F,c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
         from webot_CSR a 
-		left join (select CSRUNIQ,count(SHIUNIQ) as ROWSHI from webot_SHIPMENTS
+		left join (select CSRUNIQ,count(SHIUNIQ) as ROWSHI from webot_SHIPMENTS where POSTINGSTAT=1 and EDNPOSTINGSTAT=1
+		and DNPOSTINGSTAT=1 and DNSTATUS=1
 		group by CSRUNIQ) b on b.CSRUNIQ=a.CSRUNIQ
         left join (select x.CSRUNIQ,COUNT(x.FINUNIQ) as ROWARINV,MIN(x.POSTINGSTAT) as ARPOSTINGSTAT,MAX(x.OFFLINESTAT) as AROFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATARPOST 
 		from webot_FINANCE x
 		group by x.CSRUNIQ)  c on c.CSRUNIQ=a.CSRUNIQ
 		left join (select CSRUNIQ,COUNT(FINLUNIQ) as ROWSHI_F from webot_FINMULTISHI group by CSRUNIQ) d on d.CSRUNIQ=a.CSRUNIQ
-        where (a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL or b.ROWSHI<>d.ROWSHI_F)");
+        where (a.POSTINGSTAT=1) and b.ROWSHI is NOT NULL and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL or b.ROWSHI<>d.ROWSHI_F)");
 
         return $query->getResultArray();
     }
@@ -73,13 +74,14 @@ class Finance_model extends Model
         a.CRMREMARKS,a.MANAGER,a.SALESNAME,a.ORDERDESC,
         b.ROWSHI,d.ROWSHI_F,c.ROWARINV,c.ARPOSTINGSTAT,c.AROFFLINESTAT,c.CTPOSTINGSTATARPOST
         from webot_CSR a 
-		left join (select CSRUNIQ,count(SHIUNIQ) as ROWSHI from webot_SHIPMENTS
+		left join (select CSRUNIQ,count(SHIUNIQ) as ROWSHI from webot_SHIPMENTS where POSTINGSTAT=1 and EDNPOSTINGSTAT=1
+		and DNPOSTINGSTAT=1 and DNSTATUS=1
 		group by CSRUNIQ) b on b.CSRUNIQ=a.CSRUNIQ
         left join (select x.CSRUNIQ,COUNT(x.FINUNIQ) as ROWARINV,MIN(x.POSTINGSTAT) as ARPOSTINGSTAT,MAX(x.OFFLINESTAT) as AROFFLINESTAT,COUNT( DISTINCT x.POSTINGSTAT) as CTPOSTINGSTATARPOST 
 		from webot_FINANCE x
 		group by x.CSRUNIQ)  c on c.CSRUNIQ=a.CSRUNIQ
 		left join (select CSRUNIQ,COUNT(FINLUNIQ) as ROWSHI_F from webot_FINMULTISHI group by CSRUNIQ) d on d.CSRUNIQ=a.CSRUNIQ
-        where ((a.POSTINGSTAT=1) and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL or b.ROWSHI<>d.ROWSHI_F))
+        where ((a.POSTINGSTAT=1) and b.ROWSHI is NOT NULL and (c.ARPOSTINGSTAT=0 or c.ARPOSTINGSTAT IS NULL or b.ROWSHI<>d.ROWSHI_F))
         and (a.CONTRACT like '%$keyword%' or a.PROJECT like '%$keyword%' or a.CRMNO like '%$keyword%' or a.CTDESC like '%$keyword%' or a.PONUMBERCUST like '%$keyword%' 
         or a.NAMECUST like '%$keyword%')");
 
