@@ -367,6 +367,11 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class='col-sm-12'>
+				<?= validation_list_errors() ?>
+			</div>
+		</div>
 	</section>
 </div>
 

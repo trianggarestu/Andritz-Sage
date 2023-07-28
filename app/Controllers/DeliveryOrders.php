@@ -1205,7 +1205,7 @@ class DeliveryOrders extends BaseController
         if (!$this->validate([
             'edn_file' => 'uploaded[edn_file]|max_size[edn_file,2048]|mime_in[edn_file,image/jpg,image/jpeg,application/pdf]',
         ])) {
-            return redirect()->to(base_url('/deliveryorders/shipmentopenview/' . $shiuniq));
+            return redirect()->to(base_url('/deliveryorders/shipmentopenview/' . $shiuniq))->withInput();
         } else {
             $shidate = $this->request->getPost('shidate');
             $shidocnum = trim($this->request->getPost('shidocnum'));
