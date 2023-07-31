@@ -214,9 +214,9 @@ class PurchaseOrder extends BaseController
                 endforeach;
             }
 
-            if ($this->cart->totalItems() == 0) {
+            /*if ($this->cart->totalItems() == 0) {
                 return redirect()->to(base_url('purchaseorder'));
-            }
+            }*/
 
 
             $data = array(

@@ -1,3 +1,7 @@
+<!-- Bootstrap Date time Picker -->
+<link rel="stylesheet" href="<?= base_url() ?>assets/bootstrap/css/bootstrap-datetimepicker.min.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="<?= base_url() ?>assets/bootstrap/css/bootstrap-datepicker.min.css">
 <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>assets/js/validasi.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>assets/js/localization/messages_id.js"></script>
@@ -130,7 +134,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12" style="margin: 2px;">
-                                <div class="col-sm-3" style="text-align: right;">
+                                <div class="col-sm-4" style="text-align: right;">
                                     <label for="dnstatus">Confirm D/N Origin :</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -145,18 +149,42 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <div class="col-sm-12" style="margin: 2px;">
+                                <div class="col-sm-4" style="text-align: right;">
+                                    <label for="origdnrcpshidate">Original D/N Receipt :</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input class="form-control input-sm pull-right datepicker" id="origdnrcpslsdate" name="origdnrcpslsdate" type="text" value="<?= $todaydate ?>" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
+    </div>
+    <div class="modal-footer">
 
-            <input type="hidden" id="shiuniq" name="shiuniq" value="<?= $shiuniq ?>">
-            <input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
-            <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
-            <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
-            <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>
-        </div>
+        <input type="hidden" id="shiuniq" name="shiuniq" value="<?= $shiuniq ?>">
+        <input type="hidden" id="csruniq" name="csruniq" value="<?= $csruniq ?>">
+        <input type="hidden" id="post_stat" name="post_stat" value="<?= $post_stat ?>">
+        <button type="reset" class="btn btn-social btn-flat btn-danger btn-sm" data-dismiss="modal"><i class='fa fa-sign-out'></i> Close</button>
+        <button type="submit" class="btn btn-social btn-flat btn-info btn-sm" id="ok"><i class='fa fa-check'></i> <?= $button ?></button>
+    </div>
     </div>
 </form>
+
+
+
+<!-- bootstrap Date picker -->
+<script src="<?= base_url() ?>assets/bootstrap/js/bootstrap-datepicker.min.js"></script>
+<script src="<?= base_url() ?>assets/bootstrap/js/bootstrap-datepicker.id.min.js"></script>
+<!-- Script-->
+<script src="<?= base_url() ?>assets/js/script.js"></script>

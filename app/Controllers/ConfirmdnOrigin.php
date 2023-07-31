@@ -172,6 +172,9 @@ class ConfirmdnOrigin extends BaseController
                 $button = 'Posting';
             }
 
+            $ufmt_today = $this->audtuser['AUDTDATE'];
+            $today = substr($ufmt_today, 4, 2) . "/" . substr($ufmt_today, 6, 2) . "/" .  substr($ufmt_today, 0, 4);
+
             $shiuniq = $get_shi['SHIUNIQ'];
             $data = array(
                 'csruniq' => trim($get_shi['CSRUNIQ']),
@@ -185,6 +188,7 @@ class ConfirmdnOrigin extends BaseController
                 'ednfilename' => $get_shi['EDNFILENAME'],
                 'ednfilepath' => $get_shi['EDNFILEPATH'],
                 'shi_l' => $get_shi_l,
+                'todaydate' => $today,
                 'dnstatus' => $get_shi['DNSTATUS'],
                 'form_action' => base_url($act),
                 'post_stat' => $postingstat,
@@ -206,8 +210,10 @@ class ConfirmdnOrigin extends BaseController
             $sender = $this->AdministrationModel->get_mailsender();
             $csruniq = $this->request->getPost('csruniq');
             $docnumber = $this->request->getPost('docnumber');
+            $origdnrcpslsdate = $this->request->getPost('origdnrcpslsdate');
             $post_stat = $this->request->getPost('post_stat');
             $choose_shi = $this->DeliveryordersModel->get_dn_by_id($shiuniq);
+            $n_origdnrcpslsdate = substr($origdnrcpslsdate, 6, 4) . substr($origdnrcpslsdate, 0, 2) . substr($origdnrcpslsdate, 3, 2);
             $groupuser = 8;
             $data1 = array(
                 'AUDTDATE' => $this->audtuser['AUDTDATE'],
@@ -215,7 +221,7 @@ class ConfirmdnOrigin extends BaseController
                 'AUDTUSER' => $this->audtuser['AUDTUSER'],
                 'AUDTORG' => $this->audtuser['AUDTORG'],
                 'DNSTATUS' => $this->request->getPost('dnstatus'),
-                'ORIGDNRCPSLSDATE' => $this->audtuser['AUDTDATE'],
+                'ORIGDNRCPSLSDATE' => $n_origdnrcpslsdate,
                 'DNOTPROCESS' => $groupuser,
                 'DNPOSTINGSTAT' => $post_stat,
                 'DNOFFLINESTAT' => 1,
@@ -230,7 +236,7 @@ class ConfirmdnOrigin extends BaseController
                     'AUDTTIME' => $this->audtuser['AUDTTIME'],
                     'AUDTUSER' => $this->audtuser['AUDTUSER'],
                     'AUDTORG' => $this->audtuser['AUDTORG'],
-                    'ORIGDNRCPSLSDATE' => $this->audtuser['AUDTDATE'],
+                    'ORIGDNRCPSLSDATE' => $n_origdnrcpslsdate,
                     'DNPOSTINGSTAT' => 1,
                     'DNOFFLINESTAT' => 1,
 
@@ -248,7 +254,7 @@ class ConfirmdnOrigin extends BaseController
                             'AUDTUSER' => $this->audtuser['AUDTUSER'],
                             'AUDTORG' => $this->audtuser['AUDTORG'],
                             'DNSTATUS' => $this->request->getPost('dnstatus'),
-                            'ORIGDNRCPSLSDATE' => $this->audtuser['AUDTDATE'],
+                            'ORIGDNRCPSLSDATE' => $n_origdnrcpslsdate,
                         );
 
                         $this->DeliveryordersModel->ot_deliveryorders_update($csruniq, $csrluniq, $data2);

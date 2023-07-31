@@ -276,7 +276,7 @@
 																	<div class="input-group-addon">
 																		<i class="fa fa-calendar"></i>
 																	</div>
-																	<input class="form-control input-sm pull-right" id="origdnrcpshidate" name="origdnrcpshidate" type="text" value="<?= $todaydate ?>" readonly>
+																	<input class="form-control input-sm pull-right datepicker" id="origdnrcpshidate" name="origdnrcpshidate" type="text" value="<?= $todaydate ?>" readonly>
 																</div>
 															</div>
 															<button type="submit" class="btn btn-social btn-flat btn-info btn-sm pull-right" <?php if (!empty($shiopen_data['EDNFILENAME'])) : echo 'disabled';

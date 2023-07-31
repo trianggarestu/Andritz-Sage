@@ -493,6 +493,7 @@
 									</div>
 									<div class="row">
 										<div class='col-sm-12'>
+											<?= $cart->totalItems() ?>
 											<?= validation_list_errors() ?>
 										</div>
 									</div>
