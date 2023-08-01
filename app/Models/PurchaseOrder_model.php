@@ -244,9 +244,11 @@ class Purchaseorder_model extends Model
     {
         $query = $this->db->query("select RQNNUMBER," . '"DATE"' . " as PODATE,EXPARRIVAL,PONUMBER,VDCODE,VDNAME,DESCRIPTIO,REFERENCE 
         from POPORH1 
-        where PONUMBER not in (select DISTINCT PONUMBER from webot_PO where POSTINGSTAT=1) and RQNNUMBER='$rqnnumber'");
+        where RQNNUMBER='$rqnnumber'");
         return $query->getResultArray();
     }
+    //Condition Tidak boleh double nomor P/O
+    // and PONUMBER not in (select DISTINCT PONUMBER from webot_PO where POSTINGSTAT=1)
 
     function get_PurchaseOrder_open()
     {

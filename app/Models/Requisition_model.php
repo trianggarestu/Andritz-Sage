@@ -105,13 +105,13 @@ class Requisition_model extends Model
         $query = $this->db->query("select DISTINCT a.RQNHSEQ,a.RQNNUMBER," . 'a."DATE"' . ",a.DESCRIPTIO,a.DOCSTATUS  
         from ENRQNH a 
         where " . 'a."DATE"' . ">='$pocust_date' 
-        and a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
+        
         order by " . 'a."DATE"' . " desc");
 
 
         // untuk Data Live
         // Condition jika request sudah di pilih
-        //
+        //and a.RQNNUMBER not in (select distinct RQNNUMBER from webot_REQUISITION where POSTINGSTAT=1)
         //
         /*
         

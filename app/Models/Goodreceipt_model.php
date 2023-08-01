@@ -152,9 +152,11 @@ class Goodreceipt_model extends Model
     function list_gr_by_po($ponumber)
     {
         $query = $this->db->query("select DISTINCT b.RCPHSEQ,b.PONUMBER,b.RCPNUMBER," . 'b."DATE"' . " as RCPDATE,b.VDNAME from PORCPH1 b
-        where b.PONUMBER='$ponumber'  and b.RCPNUMBER not in (select RECPNUMBER from webot_RECEIPTS) ");
+        where b.PONUMBER='$ponumber' ");
         return $query->getResultArray();
     }
+    // Condition Not In already input gr
+    //  and b.RCPNUMBER not in (select RECPNUMBER from webot_RECEIPTS) 
 
     function list_pol_by_po($po_uniq)
     {
