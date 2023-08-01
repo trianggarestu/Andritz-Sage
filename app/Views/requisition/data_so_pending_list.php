@@ -66,9 +66,7 @@
 																<th style="vertical-align: top;">S/O Status</th>
 																<th style="background-color: white;"></th>
 																<th style="vertical-align: top;">Action</th>
-																<th>Requisition No.</th>
-																<th>Requisition Date.</th>
-																<th>Status</th>
+																<th>Requisition Info.</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -153,30 +151,50 @@
 																		</div>
 
 																	</td>
-																	<td><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
-																	<td><?= $rqndate ?></td>
 																	<td>
-																		<?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
-																		switch ($postingstat) {
-																			case "00":
-																				echo "<span class='label label-default'>Open</span>";
-																				break;
-																			case "11":
-																				echo "<span class='label label-warning'>Posted Pending Notif</span>";
-																				break;
-																			case "10":
-																				echo "<span class='label label-success'>Posted & Sending Notif</span>";
-																				break;
-																			case "20":
-																				echo "<span class='label label-danger'>Deleted</span>";
-																				break;
-																			case "21":
-																				echo "<span class='label label-danger'>Deleted</span>";
-																				break;
-																			default:
-																				echo "<span class='label label-default'>Open</span>";
-																		} ?>
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<tbody>
+																					<tr>
+																						<td>Requisition No. </td>
+																						<td>: </td>
+																						<td><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
+																					</tr>
+																					<tr>
+																						<td>Date </td>
+																						<td>: </td>
+																						<td><strong><?= $rqndate ?></strong></td>
+																					</tr>
+																					<tr>
+																						<td>Status </td>
+																						<td>: </td>
+																						<td><?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
+																							switch ($postingstat) {
+																								case "00":
+																									echo "<span class='label label-default'>Open</span>";
+																									break;
+																								case "11":
+																									echo "<span class='label label-warning'>Posted Pending Notif</span>";
+																									break;
+																								case "10":
+																									echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																									break;
+																								case "20":
+																									echo "<span class='label label-danger'>Deleted</span>";
+																									break;
+																								case "21":
+																									echo "<span class='label label-danger'>Deleted</span>";
+																									break;
+																								default:
+																									echo "<span class='label label-default'>Open</span>";
+																							} ?></td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
 																	</td>
+
+
 																</tr>
 																<tr>
 																	<td style="vertical-align: top;" nowrap></td>

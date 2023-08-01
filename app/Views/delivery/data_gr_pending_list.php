@@ -276,8 +276,10 @@
 																														?></td>
 																								<td style="width: 12%;"><?= $items['MATERIALNO']
 																														?></td>
-																								<td nowrap><?= $items['ITEMDESC']
-																											?></td>
+																								<td nowrap><?= substr($items['ITEMDESC'], 0, 30);
+																											?><br>
+																									<?= substr($items['ITEMDESC'], 31, 60);
+																									?></td>
 																								<td nowrap style="width: 10%;"><?= number_format($items['QTY'], 0, ",", ".")
 																																?></td>
 																								<td nowrap style="width: 10%;"><?= $items['STOCKUNIT']
@@ -327,7 +329,7 @@
 																						<th>Last <br>D/N Date </th>
 																						<th>D/N No. </th>
 																						<th>D/N Qty <br>(Sum)</th>
-																						<th>D/N Qty <br>Outstanding(Sum)</th>
+																						<th>D/N Qty <br>Outstanding<br>(Sum)</th>
 
 																					</tr>
 																				</thead>

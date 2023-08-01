@@ -91,12 +91,12 @@
 																				<td width="150">Customer </td>
 																				<td width="1">:</td>
 																				<td><strong>
-																						<?= $rqnopen_data['CUSTOMER'] . ' - ' . $rqnopen_data['NAMECUST']; ?>
+																						<?= $rqnopen_data['CUSTOMER'] . ' - ' . trim($rqnopen_data['NAMECUST']); ?>
 																					</strong>
 
 																					<br>
 																					<small>
-																						< <?= $rqnopen_data['EMAIL1CUST']; ?>>
+																						< <?= trim($rqnopen_data['EMAIL1CUST']); ?>>
 																					</small>
 
 																				</td>
@@ -104,7 +104,7 @@
 																			<tr>
 																				<td width="150">Sales Person </td>
 																				<td width="1">:</td>
-																				<td><strong><?= $rqnopen_data['MANAGER'] . '(' . $rqnopen_data['SALESNAME'] . ')'; ?></strong></td>
+																				<td><strong><?= $rqnopen_data['MANAGER'] . '(' . trim($rqnopen_data['SALESNAME']) . ')'; ?></strong></td>
 																			</tr>
 																		</table>
 																	</div>

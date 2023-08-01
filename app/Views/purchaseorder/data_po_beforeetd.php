@@ -67,9 +67,7 @@
 																<th style="vertical-align: top;">Contract/Project/CRM<br>Contract Desc.<br>P/O Customer<br>Customer</th>
 																<th style="vertical-align: top;">Req. Date</th>
 																<th style="background-color: white;"></th>
-																<th style="vertical-align: top;">Rqn. Number</th>
-																<th style="vertical-align: top;">Rqn. Date</th>
-																<th style="vertical-align: top;">P/O Info</th>
+																<th style="vertical-align: top;">Requisition Info</th>
 
 
 															</tr>
@@ -195,28 +193,50 @@
 																											?></td>
 
 																	<td style="background-color: white;"></td>
-																	<td style="vertical-align: top;"><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
-																	<td style="vertical-align: top;"><?= $rqn_date; ?></td>
-																	<td style="vertical-align: top;"><?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
-																										switch ($postingstat) {
-																											case "00":
-																												echo "<span class='label label-default'>Open</span>";
-																												break;
-																											case "11":
-																												echo "<span class='label label-warning'>Posted Pending Notif</span>";
-																												break;
-																											case "10":
-																												echo "<span class='label label-success'>Posted & Sending Notif</span>";
-																												break;
-																											case "20":
-																												echo "<span class='label label-danger'>Deleted</span>";
-																												break;
-																											case "21":
-																												echo "<span class='label label-danger'>Deleted</span>";
-																												break;
-																											default:
-																												echo "<span class='label label-default'>Open</span>";
-																										} ?></td>
+																	<td style="vertical-align: top;">
+
+																		<div class="table-responsive">
+																			<table class="table table-bordered dataTable table-hover nowrap">
+																				<tbody>
+																					<tr>
+																						<td>Requisition No. </td>
+																						<td>: </td>
+																						<td><strong><?= $ot_list['RQNNUMBER']; ?></strong></td>
+																					</tr>
+																					<tr>
+																						<td>Date </td>
+																						<td>: </td>
+																						<td><strong><?= $rqn_date; ?></strong></td>
+																					</tr>
+																					<tr>
+																						<td>Status </td>
+																						<td>: </td>
+																						<td><?php $postingstat = $ot_list['RQNPOSTINGSTAT'] . $ot_list['RQNOFFLINESTAT'];
+																							switch ($postingstat) {
+																								case "00":
+																									echo "<span class='label label-default'>Open</span>";
+																									break;
+																								case "11":
+																									echo "<span class='label label-warning'>Posted Pending Notif</span>";
+																									break;
+																								case "10":
+																									echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																									break;
+																								case "20":
+																									echo "<span class='label label-danger'>Deleted</span>";
+																									break;
+																								case "21":
+																									echo "<span class='label label-danger'>Deleted</span>";
+																									break;
+																								default:
+																									echo "<span class='label label-default'>Open</span>";
+																							} ?></td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+																	</td>
+
 
 
 

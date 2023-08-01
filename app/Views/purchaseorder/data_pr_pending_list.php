@@ -167,7 +167,12 @@
 
 																						?>
 																								<tr>
-																									<td style="width: 32%;"><?= trim($poheader['PONUMBER']) ?> <small>(<?= $povend_date ?>)</small></td>
+																									<td style="width: 32%;">
+																										<strong>
+																											<a href="<?= base_url("administration/popostedview/" . $poheader['POUNIQ']) ?>" title="Click here for detail" target="_blank"><?= trim($poheader['PONUMBER']) ?></a>
+																										</strong>
+																										<small>(<?= $povend_date ?>)</small>
+																									</td>
 
 																									<td>
 																										<?php if ($poheader['POPOSTINGSTAT'] == 0) :
@@ -296,10 +301,8 @@
 																						<th class="padat">Status</th>
 																						<th>P/O Number</th>
 																						<th>P/O <br>(Date)</th>
-																						<th>ETD <br>(Date)</th>
-																						<th>Cargo Readiness<br> (Date)</th>
-																						<th>Original Country</th>
-																						<th>Remarks</th>
+																						<th>Cargo Readiness <br>(Date)</th>
+
 
 
 
@@ -359,14 +362,9 @@
 																														?></td>
 																								<td style="width: 10%;"><?= $podate
 																														?></td>
-																								<td style="width: 12%;"><?= $etddate
+																								<td style="width: 10%;"><?= $cargoreadinessdate
 																														?></td>
-																								<td style="width: 12%;"><?= $cargoreadinessdate
-																														?></td>
-																								<td style="width: 12%;"><?= $items['ORIGINCOUNTRY']
-																														?></td>
-																								<td style="width: 12%;"><?= $items['POREMARKS']
-																														?></td>
+
 
 
 

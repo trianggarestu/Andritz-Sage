@@ -158,7 +158,7 @@ class ConfirmdnOrigin extends BaseController
 
     public function update($shiuniq, $postingstat)
     {
-
+        session()->remove('success');
         $get_shi = $this->DeliveryordersModel->get_dn_by_id($shiuniq);
         $get_shi_l = $this->DeliveryordersModel->get_shi_l_by_id($shiuniq);
         if ($get_shi) {
@@ -175,6 +175,13 @@ class ConfirmdnOrigin extends BaseController
             $ufmt_today = $this->audtuser['AUDTDATE'];
             $today = substr($ufmt_today, 4, 2) . "/" . substr($ufmt_today, 6, 2) . "/" .  substr($ufmt_today, 0, 4);
 
+            if (empty($get_shi['ORIGDNRCPSLSDATE'])) {
+                $origdnrcpslsdate = $today;
+            } else {
+                $origdnrcpslsdate = substr($get_shi['ORIGDNRCPSLSDATE'], 4, 2) . "/" . substr($get_shi['ORIGDNRCPSLSDATE'], 6, 2) . "/" .  substr($get_shi['ORIGDNRCPSLSDATE'], 0, 4);
+            }
+
+
             $shiuniq = $get_shi['SHIUNIQ'];
             $data = array(
                 'csruniq' => trim($get_shi['CSRUNIQ']),
@@ -188,7 +195,7 @@ class ConfirmdnOrigin extends BaseController
                 'ednfilename' => $get_shi['EDNFILENAME'],
                 'ednfilepath' => $get_shi['EDNFILEPATH'],
                 'shi_l' => $get_shi_l,
-                'todaydate' => $today,
+                'origdnrcpslsdate' => $origdnrcpslsdate,
                 'dnstatus' => $get_shi['DNSTATUS'],
                 'form_action' => base_url($act),
                 'post_stat' => $postingstat,

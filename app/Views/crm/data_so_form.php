@@ -137,8 +137,9 @@
 																																							}  ?>" readonly />
 											<span class="input-group-btn">
 												<a href="<?= base_url('salesorder/form_input_email/' . $ct_no . '/' . $prj_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block 
-												<?php if ((empty($ct_email) and empty($ct_no)) or (!empty($ct_email) and !empty($ct_no) and empty($csruniq)) or (!empty($chk_email) and  !empty($csruniq))) : echo 'disabled';
-												endif; ?>">
+												<?php //if ((empty($ct_email) and empty($ct_no)) or (!empty($ct_email) and !empty($ct_no) and empty($csruniq)) or (!empty($chk_email) and  !empty($csruniq))) : echo 'disabled';
+												//endif; 
+												?>">
 													Input !
 												</a>
 											</span>

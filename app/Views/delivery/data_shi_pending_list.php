@@ -120,20 +120,20 @@
 
 																	</td>
 																	<td style="vertical-align: top;"><?= $shi_date ?></td>
-																	<td style="vertical-align: top;"><?php $postingstat = $shi_list['POSTINGSTAT'];
-																										switch ($postingstat) {
-																											case "0":
-																												echo "<span class='label label-default'>Open</span>";
-																												break;
-																											case "1":
-																												echo "<span class='label label-success'>Posted</span>";
-																												break;
-																											case "2":
-																												echo "<span class='label label-danger'>Deleted</span>";
-																												break;
-																											default:
-																												echo "<span class='label label-default'>Open</span>";
-																										} ?></td>
+																	<td><?php $postingstat = $shi_list['POSTINGSTAT'];
+																		switch ($postingstat) {
+																			case "0":
+																				echo "<span class='label label-default'>Open</span>";
+																				break;
+																			case "1":
+																				echo "<span class='label label-success'>Posted</span>";
+																				break;
+																			case "2":
+																				echo "<span class='label label-danger'>Deleted</span>";
+																				break;
+																			default:
+																				echo "<span class='label label-default'>Open</span>";
+																		} ?></td>
 																	<td style="background-color: white;"></td>
 																	<td style="vertical-align: top;" nowrap>
 																		<div class="btn-group">

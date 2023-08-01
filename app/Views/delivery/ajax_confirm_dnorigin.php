@@ -97,7 +97,7 @@
 
                                             <th>Type </th>
                                             <th>Inventory No.</th>
-                                            <th>Item Desc</th>
+                                            <th width="30%">Item Desc</th>
                                             <th>Qty.</th>
                                             <th>Uom</th>
 
@@ -116,8 +116,12 @@
 
                                                 <td><?= $items['ITEMNO']
                                                     ?></td>
-                                                <td><?= $items['ITEMDESC']
-                                                    ?></td>
+                                                <td>
+                                                    <?= substr($items['ITEMDESC'], 0, 30);
+                                                    ?><br>
+                                                    <?= substr($items['ITEMDESC'], 31, 60);
+                                                    ?>
+                                                </td>
 
                                                 <td style="text-align: center;"><?= number_format($items['QTY'], 0, ",", ".")
                                                                                 ?></td>
@@ -137,7 +141,7 @@
                                 <div class="col-sm-4" style="text-align: right;">
                                     <label for="dnstatus">Confirm D/N Origin :</label>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-8">
                                     <select class="form-control input-sm select2 required" id="dnstatus" name="dnstatus" style="width:100%;">
                                         <option option value="">-- Select Status --</option>
 
@@ -154,12 +158,12 @@
                                 <div class="col-sm-4" style="text-align: right;">
                                     <label for="origdnrcpshidate">Original D/N Receipt :</label>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-8">
                                     <div class="input-group input-group-sm date">
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input class="form-control input-sm pull-right datepicker" id="origdnrcpslsdate" name="origdnrcpslsdate" type="text" value="<?= $todaydate ?>" readonly>
+                                        <input class="form-control input-sm pull-right datepicker" id="origdnrcpslsdate" name="origdnrcpslsdate" type="text" value="<?= $origdnrcpslsdate ?>" readonly>
                                     </div>
                                 </div>
                             </div>
