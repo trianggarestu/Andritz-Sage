@@ -93,7 +93,7 @@
                                         <option value="">--Choose One--</option>
                                         <option value="Pcs" <?php if ($so_uom == "Pcs") {
                                                                 echo "selected";
-                                                            } ?>>Set</option>
+                                                            } ?>>Pcs</option>
                                         <option value="Set" <?php if ($so_uom == "Set") {
                                                                 echo "selected";
                                                             } ?>>Set</option>

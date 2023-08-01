@@ -130,15 +130,18 @@
 									<div class="form-group">
 										<label for="ct_email">Customer Email</label>
 										<div class="input-group input-group-sm">
-											<input type="text" class="form-control input-sm required" id="ct_email" name="ct_email" placeholder="" value="<?php if (empty($ct_email)) {
-																																								echo session()->get('cust_email');
-																																							} else {
-																																								echo $ct_email;
-																																							}  ?>" readonly />
+											<input type="text" class="form-control input-sm required" id="ct_email" name="ct_email" placeholder="" value="<?php //if (empty($ct_email)) {
+																																							echo session()->get('cust_email');
+																																							//} else {
+																																							//echo $ct_email;
+																																							//}  
+																																							?>" readonly />
 											<span class="input-group-btn">
 												<a href="<?= base_url('salesorder/form_input_email/' . $ct_no . '/' . $prj_no); ?>" data-remote="false" data-toggle="modal" data-target="#modalBox" class="btn btn-social btn-flat bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block 
 												<?php //if ((empty($ct_email) and empty($ct_no)) or (!empty($ct_email) and !empty($ct_no) and empty($csruniq)) or (!empty($chk_email) and  !empty($csruniq))) : echo 'disabled';
 												//endif; 
+												if (empty($ct_no)) : echo 'disabled';
+												endif;
 												?>">
 													Input !
 												</a>

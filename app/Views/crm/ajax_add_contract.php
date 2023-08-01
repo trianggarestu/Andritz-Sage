@@ -50,3 +50,9 @@
             </div>
         </div>
 </form>
+
+<script>
+    $(".reset").click(function() {
+        document.location.reload(true);
+    });
+</script>
