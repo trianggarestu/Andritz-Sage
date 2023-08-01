@@ -91,6 +91,9 @@
                                 <div class="col-sm-8">
                                     <select name="so_uom" class="form-control input-sm required">
                                         <option value="">--Choose One--</option>
+                                        <option value="Pcs" <?php if ($so_uom == "Pcs") {
+                                                                echo "selected";
+                                                            } ?>>Set</option>
                                         <option value="Set" <?php if ($so_uom == "Set") {
                                                                 echo "selected";
                                                             } ?>>Set</option>
