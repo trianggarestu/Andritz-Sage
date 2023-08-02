@@ -73,7 +73,7 @@ class Deliveryorders_model extends Model
 
     function get_shilist_on_shiopen()
     {
-        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.SHIATTACHED,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT
+        $query = $this->db->query("select distinct c.CSRUNIQ,C.SHIUNIQ,c.SHIDATE,c.DOCNUMBER,c.SHINUMBER,c.SHIATTACHED,c.EDNPOSTINGSTAT,c.POSTINGSTAT as SHIPOSTINGSTAT,c.OFFLINESTAT as SHIOFFLINESTAT
         from webot_CSR a
         inner join webot_SHIPMENTS c on c.CSRUNIQ=a.CSRUNIQ 
         where (a.POSTINGSTAT=1 and c.RCPUNIQ IS NULL) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=0) or (a.POSTINGSTAT=1 and c.POSTINGSTAT=1)
