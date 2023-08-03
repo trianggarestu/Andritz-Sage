@@ -142,7 +142,10 @@
 
 																<td><?= $data_list['SHIREFERENCE']; ?></td>
 																<td style="background-color: white;"></td>
-																<td><?= $data_list['CONTRACT']; ?></td>
+																<td><strong><a href="<?= base_url('administration/csrpostedview/' . $data_list['CSRUNIQ']) ?>" target="_blank">
+																			<?= $data_list['CONTRACT']; ?>
+																		</a></strong>
+																</td>
 																<td><?= $data_list['PROJECT']; ?></td>
 																<td><?= $data_list['PONUMBERCUST'] ?></td>
 																<td><?= $data_list['RQNNUMBER'] ?></a></td>

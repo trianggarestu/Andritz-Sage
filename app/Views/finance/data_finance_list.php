@@ -98,7 +98,13 @@
 
 															<tr>
 																<td><?= ++$no ?></td>
-																<td><?= $data_list['IDINVC'] ?></td>
+																<td>
+																	<strong>
+																		<a href="<?= base_url('administration/finpostedview/' . $data_list['FINUNIQ']) ?>" target="_blank">
+																			<?= $data_list['IDINVC'] ?>
+																		</a>
+																	</strong>
+																</td>
 																<td><?= $invdate; ?></td>
 																<td><?= $orgdate; ?></td>
 																<td><?= number_format($data_list['AMTINVCTOT'], 0, ",", ".") ?></td>
@@ -108,7 +114,12 @@
 
 
 																<td style="background-color: white;"></td>
-																<td><?= $data_list['CONTRACT']; ?></td>
+																<td><strong>
+																		<a href="<?= base_url('administration/csrpostedview/' . $data_list['CSRUNIQ']) ?>" target="_blank">
+																			<?= $data_list['CONTRACT']; ?>
+																		</a>
+																	</strong>
+																</td>
 																<td nowrap><?= $data_list['CTDESC']; ?></td>
 																<td><?= $data_list['PROJECT']; ?></td>
 																<td nowrap><?= number_format($data_list['TCURCOSTHM'], 0, ",", "."); ?></td>
@@ -122,7 +133,7 @@
 																			echo "Done";
 																			break;
 																		default:
-																			echo "Done";
+																			echo "Open";
 																	} ?>
 																</td>
 																<td><?php $dnpostingstat = $data_list['POSTINGSTAT'];

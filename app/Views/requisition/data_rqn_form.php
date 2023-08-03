@@ -111,7 +111,7 @@
 
 																					<br>
 																					<small>
-																						< <?= $csropen_data['EMAIL1CUST']; ?>>
+																						< <?= trim($csropen_data['EMAIL1CUST']); ?>>
 																					</small>
 
 																				</td>
@@ -119,7 +119,7 @@
 																			<tr>
 																				<td width="150">Sales Person </td>
 																				<td width="1">:</td>
-																				<td><strong><?= $csropen_data['MANAGER'] . '(' . $csropen_data['SALESNAME'] . ')'; ?></strong></td>
+																				<td><strong><?= $csropen_data['MANAGER'] . '(' . trim($csropen_data['SALESNAME']) . ')'; ?></strong></td>
 																			</tr>
 																		</table>
 																	</div>

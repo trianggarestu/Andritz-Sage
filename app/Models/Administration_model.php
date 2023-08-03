@@ -215,4 +215,28 @@ class Administration_model extends Model
         $query = $this->db->query("select a.* from webot_SHIL a where a.SHIUNIQ='$shiuniq'");
         return $query->getResultArray();
     }
+
+
+    function get_fin_post($finuniq)
+    {
+        $query = $this->db->query("select a.*,b.*,c.*,e.*,
+        d.LOGUNIQ,d.ETDORIGINDATE,d.ATDORIGINDATE,d.ETAPORTDATE,d.PIBDATE,d.VENDSHISTATUS,d.LOGREMARKS
+        from webot_FINANCE a 
+                left join webot_CSR b on b.CSRUNIQ = a.CSRUNIQ
+                left join webot_REQUISITION c on c.CSRUNIQ = b.CSRUNIQ
+                left join webot_LOGISTICS d on d.CSRUNIQ=a.CSRUNIQ
+				 left join webot_PO e on e.CSRUNIQ=a.CSRUNIQ
+                where a.POSTINGSTAT = 1 and a.FINUNIQ='$finuniq'");
+
+        return $query->getRowArray();
+    }
+
+
+    function get_finl_post($finuniq)
+    {
+        $query = $this->db->query("select a.*,b.SHINUMBER,b.SHIDATE,b.CUSTRCPDATE from webot_FINMULTISHI a
+        left join webot_SHIPMENTS b on b.SHIUNIQ=a.SHIUNIQ 
+        where a.FINUNIQ='$finuniq'");
+        return $query->getResultArray();
+    }
 }

@@ -199,10 +199,10 @@
 																	<td style="vertical-align: top;" nowrap>
 																		<?php $rrstatus = $fin_list['RRSTATUS'];
 																		switch ($rrstatus) {
-																			case "1":
+																			case "0":
 																				echo "OPEN";
 																				break;
-																			case "2":
+																			case "1":
 																				echo "DONE";
 																				break;
 																				echo "";

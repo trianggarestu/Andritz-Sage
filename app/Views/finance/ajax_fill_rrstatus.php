@@ -95,10 +95,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <select class="form-control input-sm select2 required" id="rrstatus" name="rrstatus" style="width:100%;">
-                                        <option value="0" <?php if ($rrstatus == 0) {
-                                                                echo "selected";
-                                                            } ?>>OPEN
-                                        </option>
+                                        <option option value="">-- Select Status --</option>
                                         <option value="1" <?php if ($rrstatus == 1) {
                                                                 echo "selected";
                                                             } ?>>DONE

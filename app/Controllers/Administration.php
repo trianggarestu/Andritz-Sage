@@ -198,4 +198,23 @@ class Administration extends BaseController
             return redirect()->to(base_url('administration'));
         }
     }
+
+    // Preview Finance Details
+    public function finpostedview($finuniq)
+    {
+        $getfinpost = $this->AdministrationModel->get_fin_post($finuniq);
+        $getfinlpost = $this->AdministrationModel->get_finl_post($finuniq);
+        if (!empty($getfinpost['FINUNIQ'])) {
+
+            $data = array(
+                'finposted_data' =>  $getfinpost,
+                'finlposted_data' =>  $getfinlpost,
+
+            );
+
+            echo view('home/data_fin_preview', $data);
+        } else {
+            return redirect()->to(base_url('administration'));
+        }
+    }
 }
