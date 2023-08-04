@@ -89,8 +89,6 @@
 																		<?= " / " . $ot_list['PROJECT'] . " / " . $ot_list['CRMNO']; ?><br>
 																		<strong><?= $ot_list['CTDESC']; ?></strong><br>
 																		<small>(<?= $ot_list['NAMECUST']; ?>)</small><br>
-
-
 																	</td>
 																	<td style="vertical-align: top;">
 																		<strong><?= $ot_list['PONUMBERCUST']; ?></strong><br>

@@ -89,34 +89,16 @@ class Rollbackprocess extends BaseController
 
     public function index()
     {
-        $today = $this->audtuser['AUDTDATE'];
-        $def_date = substr($today, 4, 2) . "/" . substr($today, 6, 2) . "/" .  substr($today, 0, 4);
-        $def_fr_date = date("m/01/Y", strtotime($def_date));
-        $fr_date = substr($this->audtuser['AUDTDATE'], 0, 6) . '01';
-        $def_to_date = date("m/t/Y", strtotime($def_date));
-        $to_date = substr($def_to_date, 6, 4) . "" . substr($def_to_date, 0, 2) . "" . substr($def_to_date, 3, 2);
 
-        $otheader_data = $this->AdminmenuModel->select('*')
-            ->groupStart()
-            ->where('PODATECUST >=', $fr_date)
-            ->where('PODATECUST <=', $to_date)
-            ->groupEnd()
-            ->orderBy('PODATECUST', 'ASC')
-            ->orderBy('CUSTOMER', 'ASC')
-            ->orderBy('CONTRACT', 'ASC');
-        $perpage = 20;
+        $contract_data = $this->AdminmenuModel->get_contract();
+        $otheader_data = $this->AdminmenuModel->get_otheader($keyword = '');
+
+
 
         $data = array(
             'keyword' => '',
-            'otheader_data' => $otheader_data->paginate($perpage, 'csrposting_data'),
-            'pager' => $otheader_data->pager,
-            'success_code' => session()->get('success'),
-            //'currentpage' => $currentpage,
-            'perpage' => $perpage,
-            'currentpage' => $otheader_data->pager->getCurrentPage('csrposting_data'),
-            'def_fr_date' => $def_fr_date,
-            'def_to_date' => $def_to_date,
-
+            'contract_data' => $contract_data,
+            'otheader_data' => $otheader_data,
         );
 
         echo view('view_header', $this->header_data);
@@ -124,5 +106,158 @@ class Rollbackprocess extends BaseController
         echo view('adminmenu/rollbackordertracking_list', $data);
         echo view('view_footer', $this->footer_data);
         session()->remove('success');
+    }
+
+    public function search()
+    {
+
+        session()->remove('success');
+        session()->set('success', '0');
+        $cari = $this->request->getPost('contract_no');
+
+        if ($cari != '') {
+            session()->set('cari', $cari);
+        } else {
+            session()->remove('cari');
+        }
+        return redirect()->to(base_url('rollbackprocess/filter'));
+    }
+
+    public function filter()
+    {
+
+        $keyword = session()->get('cari');
+        $contract_data = $this->AdminmenuModel->get_contract();
+        if (empty($keyword)) {
+            $otheader_data = $this->AdminmenuModel->get_otheader($keyword = '');
+        } else {
+            $otheader_data = $this->AdminmenuModel->get_otheader_search($keyword);
+        }
+        $data = array(
+            'keyword' => $keyword,
+            'contract_data' => $contract_data,
+            'otheader_data' => $otheader_data,
+        );
+
+        echo view('view_header', $this->header_data);
+        echo view('view_nav', $this->nav_data);
+        echo view('adminmenu/rollbackordertracking_list', $data);
+        echo view('view_footer', $this->footer_data);
+        session()->remove('success');
+    }
+
+    public function form($csruniq)
+    {
+        $otheader_data = $this->AdminmenuModel->get_otheader_by_csruniq($csruniq);
+        $data = array(
+            'csruniq' => $csruniq,
+            'csrheader_data' => $otheader_data,
+            'button' => 'Cancel from this process',
+            'form_action' => base_url('rollbackprocess/rollback_action'),
+        );
+
+        echo view('adminmenu/ajax_rollback_process', $data);
+    }
+
+    public function rollback_action()
+    {
+        session()->remove('success');
+        $csruniq = $this->request->getPost('csruniq');
+
+        // Roll Back Confirm DN Process
+        if ($_POST['rollbackprocess'] == 'dn_process') {
+            //Script untuk hapus Attached Document
+            $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);
+            foreach ($chk_shi as $ednfile) :
+                if (is_file('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']))) {
+                    unlink('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']));
+                }
+            endforeach;
+            $dataot = array(
+                //DN Data
+                'SHIDOCNUMBER' => NULL,
+                'SHINUMBER' => NULL,
+                'SHIDATE' => NULL,
+                'CUSTRCPDATE' => NULL,
+                'ORIGDNRCPSHIDATE' => NULL,
+                'SHIQTY' => NULL,
+                'SHIQTYOUTSTANDING' => NULL,
+                'SHIUNIT' => NULL,
+                'POCUSTSTATUS' => NULL,
+                'ONTIMEDELDAYS' =>  NULL,
+                'POTODNDAYS' => NULL,
+                //EDN Data
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                //Fin Data
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                //RR Data
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_dn($csruniq);
+            $this->AdminmenuModel->rollback_dnl($csruniq);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back Confirm e DN Process
+        if ($_POST['rollbackprocess'] == 'edn_process') {
+            $dataedn = array(
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                'DNOTPROCESS' => NULL,
+                'DNPOSTINGSTAT' => NULL,
+                'DNOFFLINESTAT' => NULL,
+            );
+            $dataot = array(
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_edn($csruniq, $dataedn);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back Finance
+        if ($_POST['rollbackprocess'] == 'fin_process') {
+
+            $dataot = array(
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back RR
+        if ($_POST['rollbackprocess'] == 'rr_process') {
+            $datarr = array(
+                'RRSTATUS' => NULL,
+                'TCURCOSTHM' => NULL,
+                'TACTCOSTHM' => NULL,
+                'RRPOSTINGSTAT' => NULL,
+            );
+            $dataot = array(
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_rr($csruniq, $datarr);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+        session()->set('success', '1');
+        return redirect()->to(base_url('rollbackprocess'));
     }
 }

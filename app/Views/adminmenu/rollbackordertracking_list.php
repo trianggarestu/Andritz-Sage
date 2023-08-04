@@ -10,7 +10,7 @@
 	</script>
 	<div class="content-wrapper">
 		<section class="content-header">
-			<h1>Order Tracking Header List</h1>
+			<h1>Select Order Tracking Header</h1>
 			<ol class="breadcrumb">
 				<li><a href="<?= base_url() ?>administration"><i class="fa fa-home"></i> Home</a></li>
 
@@ -36,34 +36,39 @@
 										<form id="mainform" name="mainform" action="" method="post">
 											<div class="row">
 												<div class="col-sm-9">
-													<label for="daterange">Filter by P/O Customer Date : </label>
-													<div class="input-group input-group-sm date">
-														<div class="input-group-addon">From Date :
-															<i class="fa fa-calendar"></i>
-														</div>
-														<input class="datepicker form-control input-sm required" id="from_date" name="from_date" type="text" value="<?= $def_fr_date ?>" readonly>
-													</div>
-													<div class="input-group input-group-sm date">
-														<div class="input-group-addon">To Date :
-															<i class="fa fa-calendar"></i>
-														</div>
-														<input class="datepicker form-control input-sm required" id="to_date" name="to_date" type="text" value="<?= $def_to_date ?>" readonly>
+													<div class="form-group" style="width:100%;max-width:90%;">
+														<label for="daterange">Filter by Contract Number : </label>
+														<div class="input-group input-group-sm">
+															<div class="input-group-addon">Contract No. :
+																<i class="fa fa-angle-double-down"></i>
+															</div>
 
-														<div class="input-group-btn">
-															<button type="submit" class="btn btn-default bg-maroon" onclick="$('#'+'mainform').attr('action', '<?= base_url('rollbackprocess/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-filter"></i>Go!</button>
+															<select class="form-control input-sm select2 required" id="contract_no" name="contract_no">
+																<option option value="">
+																	-----SELECT CONTRACT-----
+																</option>
+																<?php foreach ($contract_data as $ctr) :
+																?>
+																	<option value="<?= trim($ctr['CONTRACT'])
+																					?>" <?php if ($keyword == trim($ctr['CONTRACT'])) {
+																							echo "selected";
+																						} ?>><?= trim($ctr['CONTRACT'])
+																								?> - <?= $ctr['CTDESC']
+																										?>
+																	</option>
+																<?php endforeach;
+																?>
+															</select>
+
+															<div class="input-group-btn">
+																<button type="submit" class="btn btn-default bg-maroon" onclick="$('#'+'mainform').attr('action', '<?= base_url('rollbackprocess/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-filter"></i>Go!</button>
+															</div>
 
 														</div>
 													</div>
 												</div>
 												<div class="col-sm-3">
-													<div class="box-tools">
-														<div class="input-group input-group-sm pull-right">
-															<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="<?= $keyword ?>" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', '<?= base_url('rollbackprocess/search') ?>');$('#'+'mainform').submit();}">
-															<div class="input-group-btn">
-																<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', '<?= base_url('rollbackprocess/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
-															</div>
-														</div>
-													</div>
+
 												</div>
 											</div>
 										</form>
@@ -75,24 +80,129 @@
 															<tr>
 																<th width="1%">No</th>
 																<th width="5%">Action</th>
-																<th>Contract</th>
-																<th>Desc</th>
+																<th nowrap>Contract/Project/CRM<br>Contract Desc.<br>Customer</th>
+																<th nowrap>PO Customer - P/O Date<br>Customer Name<br>Customer Email</th>
+																<th style="vertical-align: top;">P/O Cust.<br>Date</th>
+																<th style="vertical-align: top;">CRM Req.<br> Date</th>
+																<th style="vertical-align: top;">S/O Status</th>
+																<th style="vertical-align: top;">Requisition<br>Process</th>
+																<th style="vertical-align: top;">P/O<br>Process</th>
+																<th style="vertical-align: top;">Logistics<br>Process</th>
+																<th style="vertical-align: top;">G/R Process</th>
+																<th style="vertical-align: top;">D/N Process</th>
+																<th style="vertical-align: top;">Confirm D/N<br>Origin<br> Process</th>
+																<th style="vertical-align: top;">Fill Invoice<br> Process</th>
+																<th style="vertical-align: top;">Fill RR Status<br> Process</th>
 
 															</tr>
 														</thead>
 														<tbody>
 															<?php
 															$no = 0;
-															foreach ($otheader_data as $data) : ?>
-																<tr>
-																	<td class="text-center"><?= ++$no; ?></td>
-																	<td nowrap>
-																		<a href="<?= base_url() . 'menusetup/form/' . $data['CSRUNIQ']; ?>" class=" btn bg-orange btn-flat btn-sm" title="Update Data"><i class="fa fa-edit"></i></a>
-																	</td>
-																	<td><?= $data['CONTRACT'] ?></td>
-																	<td><?= $data['CTDESC'] ?></td>
-																</tr>
-															<?php endforeach; ?>
+															if (is_array($otheader_data)) {
+																foreach ($otheader_data as $data) :
+																	$crmpodate = substr($data['PODATECUST'], 4, 2) . "/" . substr($data['PODATECUST'], 6, 2) . "/" .  substr($data['PODATECUST'], 0, 4);
+																	$crmreqdate = substr($data['CRMREQDATE'], 4, 2) . '/' . substr($data['CRMREQDATE'], 6, 2) . '/' . substr($data['CRMREQDATE'], 0, 4);
+															?>
+																	<tr>
+																		<td class="text-center"><?= ++$no; ?></td>
+																		<td nowrap>
+																			<a href="<?= base_url() . 'rollbackprocess/form/' . $data['CSRUNIQ']; ?>" class=" btn btn-danger btn-flat btn-sm" title="Rollback Process" data-remote="false" data-toggle="modal" data-target="#modalBox"><i class="fa fa-undo"></i>Rollback</a>
+																		</td>
+																		<td nowrap><strong><a href="<?= base_url('administration/csrpostedview/' . $data['CSRUNIQ']) ?>" target="_blank"><?= $data['CONTRACT'] ?></a></strong>
+																			<?= " / " . $data['PROJECT'] . " / " . $data['CRMNO']; ?><br>
+																			<strong><?= $data['CTDESC']; ?></strong><br>
+																			<small>(<?= $data['NAMECUST']; ?>)</small><br>
+																		</td>
+																		<td style="vertical-align: top;">
+																			<strong><?= $data['PONUMBERCUST']; ?></strong><br>
+																			<?= $data['ORDERDESC']; ?><br>
+																			CRM Remarks : <?= $data['CRMREMARKS']; ?>
+
+																		</td>
+																		<td style="vertical-align: top;" nowrap><?= $crmpodate; ?></td>
+																		<td style="vertical-align: top;" nowrap><?= $crmreqdate; ?></td>
+																		<td nowrap>
+																			<?php $postingstat = $data['POSTINGSTAT'] . $data['OFFLINESTAT'];
+																			switch ($postingstat) {
+																				case "00":
+																					echo "<span class='label label-warning'>Open</span>";
+																					break;
+																				case "11":
+																					echo "<span class='label label-warning'>Posted Pending Notif</span>";
+																					break;
+																				case "10":
+																					echo "<span class='label label-success'>Posted & Sending Notif</span>";
+																					break;
+																				case "20":
+																					echo "<span class='label label-danger'>Deleted</span>";
+																					break;
+																				case "21":
+																					echo "<span class='label label-danger'>Deleted</span>";
+																					break;
+																				default:
+																					echo "<span class='label label-warning'>Open</span>";
+																			} ?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['RQNSTAT'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTPO'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTLOG'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTGR'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTDN'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTEDN'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTFIN'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																		<td style="text-align: center;" nowrap>
+																			<?php if (!empty($data['CTRR'])) { ?>
+																				<span title="Process" class="badge bg-green"><i class='fa fa-check-circle'></i></span>
+
+																			<?php }
+																			?>
+																		</td>
+																	</tr>
+															<?php endforeach;
+															} ?>
 														</tbody>
 													</table>
 												</div>
@@ -105,11 +215,7 @@
 												?>
 											</div>
 											<div class="col-sm-6">
-												<div class="dataTables_paginate paging_simple_numbers">
-													<?= $pager->links('csrposting_data', 'bootstrap_pagination');
-													//$pager = \Config\Services::pager();
-													?>
-												</div>
+
 											</div>
 
 										</div>

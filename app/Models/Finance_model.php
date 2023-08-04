@@ -98,7 +98,7 @@ class Finance_model extends Model
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
 		left join (select y.CONTRACT,x.TCURCOSTHM,x.TACTCOSTHM from PMCONTT x inner join PMCONTS y on y.CTUNIQ=x.CTUNIQ) c on c.CONTRACT=b.CONTRACT
-        where a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0");
+        where a.POSTINGSTAT=1 and (a.RRPOSTINGSTAT=0 or a.RRPOSTINGSTAT is NULL)");
 
         return $query->getResultArray();
     }
@@ -112,7 +112,7 @@ class Finance_model extends Model
         from webot_FINANCE a 
         left join webot_CSR b on b.CSRUNIQ=a.CSRUNIQ
 		left join (select y.CONTRACT,x.TCURCOSTHM,x.TACTCOSTHM from PMCONTT x inner join PMCONTS y on y.CTUNIQ=x.CTUNIQ) c on c.CONTRACT=b.CONTRACT
-        where (a.POSTINGSTAT=1 and a.RRPOSTINGSTAT=0)
+        where a.POSTINGSTAT=1 and (a.RRPOSTINGSTAT=0 or a.RRPOSTINGSTAT is NULL)
         and (b.CONTRACT like '%$keyword%' or b.CTDESC like '%$keyword%' or b.CRMNO like '%$keyword%' or b.NAMECUST like '%$keyword%'
         or a.IDINVC like '%$keyword%')");
 
