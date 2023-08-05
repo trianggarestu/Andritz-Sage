@@ -164,7 +164,247 @@ class Rollbackprocess extends BaseController
         session()->remove('success');
         $csruniq = $this->request->getPost('csruniq');
 
-        // Roll Back Confirm DN Process
+        // Roll Back Logistics Process
+        if ($_POST['rollbackprocess'] == 'so_process') {
+            $dataso = array(
+                'POSTINGSTAT' => 0,
+                'OFFLINESTAT' => 1,
+            );
+
+            $this->AdminmenuModel->rollback_so($csruniq, $dataso);
+            $this->AdminmenuModel->rollback_rqn($csruniq);
+            $this->AdminmenuModel->rollback_po($csruniq);
+            $this->AdminmenuModel->rollback_pol($csruniq);
+            $this->AdminmenuModel->rollback_log($csruniq);
+            $this->AdminmenuModel->rollback_gr($csruniq);
+            $this->AdminmenuModel->rollback_grl($csruniq);
+            $this->AdminmenuModel->rollback_dn($csruniq);
+            $this->AdminmenuModel->rollback_dnl($csruniq);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->permanent_del_ot($csruniq);
+        }
+
+
+
+
+        // Roll Back PO Process
+        if ($_POST['rollbackprocess'] == 'rqn_process') {
+
+            $dataot = array(
+                //RQN Data
+                'RQNDATE' => NULL,
+                'RQNNUMBER' => NULL,
+                //PO Data
+                'PODATE' => NULL,
+                'PONUMBER' => NULL,
+                'ETDDATE' => NULL,
+                'CARGOREADINESSDATE' => NULL,
+                'ORIGINCOUNTRY' => NULL,
+                'POREMARKS' => NULL,
+                //Logistics Data
+                'ETDORIGINDATE' => NULL,
+                'ATDORIGINDATE' => NULL,
+                'ETAPORTDATE' => NULL,
+                'PIBDATE' => NULL,
+                'VENDSHISTATUS' => NULL,
+                'LOGREMARKS' => NULL,
+                //GR Data
+                'RECPNUMBER' => NULL,
+                'RECPDATE' => NULL,
+                'RECPQTY' => NULL,
+                'RECPUNIT' => NULL,
+                'GRSTATUS' => NULL,
+                //DN Data
+                'SHIDOCNUMBER' => NULL,
+                'SHINUMBER' => NULL,
+                'SHIDATE' => NULL,
+                'CUSTRCPDATE' => NULL,
+                'ORIGDNRCPSHIDATE' => NULL,
+                'SHIQTY' => NULL,
+                'SHIQTYOUTSTANDING' => NULL,
+                'SHIUNIT' => NULL,
+                'POCUSTSTATUS' => NULL,
+                'ONTIMEDELDAYS' =>  NULL,
+                'POTODNDAYS' => NULL,
+                //EDN Data
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                //Fin Data
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                //RR Data
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_rqn($csruniq);
+            $this->AdminmenuModel->rollback_po($csruniq);
+            $this->AdminmenuModel->rollback_pol($csruniq);
+            $this->AdminmenuModel->rollback_log($csruniq);
+            $this->AdminmenuModel->rollback_gr($csruniq);
+            $this->AdminmenuModel->rollback_grl($csruniq);
+            $this->AdminmenuModel->rollback_dn($csruniq);
+            $this->AdminmenuModel->rollback_dnl($csruniq);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back PO Process
+        if ($_POST['rollbackprocess'] == 'po_process') {
+
+            $dataot = array(
+
+                //PO Data
+                'PODATE' => NULL,
+                'PONUMBER' => NULL,
+                'ETDDATE' => NULL,
+                'CARGOREADINESSDATE' => NULL,
+                'ORIGINCOUNTRY' => NULL,
+                'POREMARKS' => NULL,
+                //Logistics Data
+                'ETDORIGINDATE' => NULL,
+                'ATDORIGINDATE' => NULL,
+                'ETAPORTDATE' => NULL,
+                'PIBDATE' => NULL,
+                'VENDSHISTATUS' => NULL,
+                'LOGREMARKS' => NULL,
+                //GR Data
+                'RECPNUMBER' => NULL,
+                'RECPDATE' => NULL,
+                'RECPQTY' => NULL,
+                'RECPUNIT' => NULL,
+                'GRSTATUS' => NULL,
+                //DN Data
+                'SHIDOCNUMBER' => NULL,
+                'SHINUMBER' => NULL,
+                'SHIDATE' => NULL,
+                'CUSTRCPDATE' => NULL,
+                'ORIGDNRCPSHIDATE' => NULL,
+                'SHIQTY' => NULL,
+                'SHIQTYOUTSTANDING' => NULL,
+                'SHIUNIT' => NULL,
+                'POCUSTSTATUS' => NULL,
+                'ONTIMEDELDAYS' =>  NULL,
+                'POTODNDAYS' => NULL,
+                //EDN Data
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                //Fin Data
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                //RR Data
+                'RRSTATUS' => NULL,
+            );
+
+            $this->AdminmenuModel->rollback_po($csruniq);
+            $this->AdminmenuModel->rollback_pol($csruniq);
+            $this->AdminmenuModel->rollback_log($csruniq);
+            $this->AdminmenuModel->rollback_gr($csruniq);
+            $this->AdminmenuModel->rollback_grl($csruniq);
+            $this->AdminmenuModel->rollback_dn($csruniq);
+            $this->AdminmenuModel->rollback_dnl($csruniq);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back Logistics Process
+        if ($_POST['rollbackprocess'] == 'log_process') {
+
+            $dataot = array(
+                //Logistics Data
+                'ETDORIGINDATE' => NULL,
+                'ATDORIGINDATE' => NULL,
+                'ETAPORTDATE' => NULL,
+                'PIBDATE' => NULL,
+                'VENDSHISTATUS' => NULL,
+                'LOGREMARKS' => NULL,
+                //GR Data
+                'RECPNUMBER' => NULL,
+                'RECPDATE' => NULL,
+                'RECPQTY' => NULL,
+                'RECPUNIT' => NULL,
+                'GRSTATUS' => NULL,
+                //DN Data
+                'SHIDOCNUMBER' => NULL,
+                'SHINUMBER' => NULL,
+                'SHIDATE' => NULL,
+                'CUSTRCPDATE' => NULL,
+                'ORIGDNRCPSHIDATE' => NULL,
+                'SHIQTY' => NULL,
+                'SHIQTYOUTSTANDING' => NULL,
+                'SHIUNIT' => NULL,
+                'POCUSTSTATUS' => NULL,
+                'ONTIMEDELDAYS' =>  NULL,
+                'POTODNDAYS' => NULL,
+                //EDN Data
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                //Fin Data
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                //RR Data
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_log($csruniq);
+            $this->AdminmenuModel->rollback_gr($csruniq);
+            $this->AdminmenuModel->rollback_grl($csruniq);
+            $this->AdminmenuModel->rollback_dn($csruniq);
+            $this->AdminmenuModel->rollback_dnl($csruniq);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back GR Process
+        if ($_POST['rollbackprocess'] == 'gr_process') {
+
+            $dataot = array(
+                //GR Data
+                'RECPNUMBER' => NULL,
+                'RECPDATE' => NULL,
+                'RECPQTY' => NULL,
+                'RECPUNIT' => NULL,
+                'GRSTATUS' => NULL,
+                //DN Data
+                'SHIDOCNUMBER' => NULL,
+                'SHINUMBER' => NULL,
+                'SHIDATE' => NULL,
+                'CUSTRCPDATE' => NULL,
+                'ORIGDNRCPSHIDATE' => NULL,
+                'SHIQTY' => NULL,
+                'SHIQTYOUTSTANDING' => NULL,
+                'SHIUNIT' => NULL,
+                'POCUSTSTATUS' => NULL,
+                'ONTIMEDELDAYS' =>  NULL,
+                'POTODNDAYS' => NULL,
+                //EDN Data
+                'DNSTATUS' => NULL,
+                'ORIGDNRCPSLSDATE' => NULL,
+                //Fin Data
+                'IDINVC' => NULL,
+                'DATEINVC' => NULL,
+                'ORIGDNRCPFINDATE' => NULL,
+                'FINSTATUS' => NULL,
+                //RR Data
+                'RRSTATUS' => NULL,
+            );
+            $this->AdminmenuModel->rollback_gr($csruniq);
+            $this->AdminmenuModel->rollback_grl($csruniq);
+            $this->AdminmenuModel->rollback_dn($csruniq);
+            $this->AdminmenuModel->rollback_dnl($csruniq);
+            $this->AdminmenuModel->rollback_fin($csruniq);
+            $this->AdminmenuModel->rollback_finl($csruniq);
+            $this->AdminmenuModel->rollback_ot($csruniq, $dataot);
+        }
+
+        // Roll Back DN Process
         if ($_POST['rollbackprocess'] == 'dn_process') {
             //Script untuk hapus Attached Document
             $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);

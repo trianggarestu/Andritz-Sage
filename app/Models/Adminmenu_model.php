@@ -124,6 +124,42 @@ class Adminmenu_model extends Model
         return $query->getResultArray();
     }
 
+    function rollback_so($csruniq, $dataso)
+    {
+        $query = $this->db->table('webot_CSR')->update($dataso, array('CSRUNIQ' => $csruniq));
+        return $query;
+    }
+
+    function rollback_rqn($csruniq)
+    {
+        return $this->db->table('webot_REQUISITION')->delete(['CSRUNIQ' => $csruniq]);
+    }
+
+    function rollback_po($csruniq)
+    {
+        return $this->db->table('webot_PO')->delete(['CSRUNIQ' => $csruniq]);
+    }
+
+    function rollback_pol($csruniq)
+    {
+        return $this->db->table('webot_POL')->delete(['CSRUNIQ' => $csruniq]);
+    }
+
+    function rollback_log($csruniq)
+    {
+        return $this->db->table('webot_LOGISTICS')->delete(['CSRUNIQ' => $csruniq]);
+    }
+
+    function rollback_gr($csruniq)
+    {
+        return $this->db->table('webot_RECEIPTS')->delete(['CSRUNIQ' => $csruniq]);
+    }
+
+    function rollback_grl($csruniq)
+    {
+        return $this->db->table('webot_RCPL')->delete(['CSRUNIQ' => $csruniq]);
+    }
+
     function rollback_dn($csruniq)
     {
         return $this->db->table('webot_SHIPMENTS')->delete(['CSRUNIQ' => $csruniq]);
@@ -161,5 +197,10 @@ class Adminmenu_model extends Model
     {
         $query = $this->db->table('webot_ORDERTRACKING')->update($dataot, array('CSRUNIQ' => $csruniq, 'OTSEQ >' => 181));
         return $query;
+    }
+
+    function permanent_del_ot($csruniq)
+    {
+        return $this->db->table('webot_ORDERTRACKING')->delete(['CSRUNIQ' => $csruniq, 'OTSEQ >' => 181]);
     }
 }
