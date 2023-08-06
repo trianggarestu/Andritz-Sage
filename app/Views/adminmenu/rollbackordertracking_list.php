@@ -20,6 +20,17 @@
 			</ol>
 		</section>
 
+		<!-- Untuk menampilkan modal bootstrap action success, failed  -->
+		<input id="success-code" type="hidden" value="<?= $success_code ?>">
+		<div class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class='modal-dialog'>
+				<div class='modal-content'>
+
+					<div class="fetched-data"></div>
+				</div>
+			</div>
+		</div>
+
 
 		<section class="content" id="maincontent">
 			<div class="row">

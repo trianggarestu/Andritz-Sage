@@ -55,6 +55,7 @@ class Rollbackprocess extends BaseController
                     'photolgn' => $infouser['photolgn'],
                     'userhashlgn' => $infouser['userhashlgn'],
                     'notif_messages' => $mailbox_unread,
+                    'success_code' => session()->get('success'),
                 ];
                 $this->footer_data = [
                     'usernamelgn'   => $infouser['usernamelgn'],
@@ -166,10 +167,22 @@ class Rollbackprocess extends BaseController
 
         // Roll Back Logistics Process
         if ($_POST['rollbackprocess'] == 'so_process') {
+
+            //Script untuk hapus Attached Document
+            $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);
+            if (is_array($chk_shi)) {
+                foreach ($chk_shi as $ednfile) :
+                    if (is_file('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']))) {
+                        unlink('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']));
+                    }
+                endforeach;
+            }
+
             $dataso = array(
                 'POSTINGSTAT' => 0,
                 'OFFLINESTAT' => 1,
             );
+
 
             $this->AdminmenuModel->rollback_so($csruniq, $dataso);
             $this->AdminmenuModel->rollback_rqn($csruniq);
@@ -190,6 +203,16 @@ class Rollbackprocess extends BaseController
 
         // Roll Back PO Process
         if ($_POST['rollbackprocess'] == 'rqn_process') {
+
+            //Script untuk hapus Attached Document
+            $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);
+            if (is_array($chk_shi)) {
+                foreach ($chk_shi as $ednfile) :
+                    if (is_file('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']))) {
+                        unlink('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']));
+                    }
+                endforeach;
+            }
 
             $dataot = array(
                 //RQN Data
@@ -238,6 +261,8 @@ class Rollbackprocess extends BaseController
                 //RR Data
                 'RRSTATUS' => NULL,
             );
+
+
             $this->AdminmenuModel->rollback_rqn($csruniq);
             $this->AdminmenuModel->rollback_po($csruniq);
             $this->AdminmenuModel->rollback_pol($csruniq);
@@ -253,6 +278,16 @@ class Rollbackprocess extends BaseController
 
         // Roll Back PO Process
         if ($_POST['rollbackprocess'] == 'po_process') {
+
+            //Script untuk hapus Attached Document
+            $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);
+            if (is_array($chk_shi)) {
+                foreach ($chk_shi as $ednfile) :
+                    if (is_file('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']))) {
+                        unlink('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']));
+                    }
+                endforeach;
+            }
 
             $dataot = array(
 
@@ -315,6 +350,16 @@ class Rollbackprocess extends BaseController
         // Roll Back Logistics Process
         if ($_POST['rollbackprocess'] == 'log_process') {
 
+            //Script untuk hapus Attached Document
+            $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);
+            if (is_array($chk_shi)) {
+                foreach ($chk_shi as $ednfile) :
+                    if (is_file('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']))) {
+                        unlink('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']));
+                    }
+                endforeach;
+            }
+
             $dataot = array(
                 //Logistics Data
                 'ETDORIGINDATE' => NULL,
@@ -352,6 +397,7 @@ class Rollbackprocess extends BaseController
                 //RR Data
                 'RRSTATUS' => NULL,
             );
+
             $this->AdminmenuModel->rollback_log($csruniq);
             $this->AdminmenuModel->rollback_gr($csruniq);
             $this->AdminmenuModel->rollback_grl($csruniq);
@@ -364,6 +410,16 @@ class Rollbackprocess extends BaseController
 
         // Roll Back GR Process
         if ($_POST['rollbackprocess'] == 'gr_process') {
+
+            //Script untuk hapus Attached Document
+            $chk_shi = $this->AdminmenuModel->get_shi_data($csruniq);
+            if (is_array($chk_shi)) {
+                foreach ($chk_shi as $ednfile) :
+                    if (is_file('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']))) {
+                        unlink('assets/files/edn_attached/' . trim($ednfile['EDNFILENAME']));
+                    }
+                endforeach;
+            }
 
             $dataot = array(
                 //GR Data
@@ -395,6 +451,8 @@ class Rollbackprocess extends BaseController
                 //RR Data
                 'RRSTATUS' => NULL,
             );
+
+
             $this->AdminmenuModel->rollback_gr($csruniq);
             $this->AdminmenuModel->rollback_grl($csruniq);
             $this->AdminmenuModel->rollback_dn($csruniq);

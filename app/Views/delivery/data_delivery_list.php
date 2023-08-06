@@ -54,7 +54,7 @@
 											<div class="col-sm-3">
 												<div class="box-tools">
 													<div class="input-group input-group-sm pull-right">
-														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', 'http://localhost:8082/OpenSID/index.php/surat_masuk/search');$('#'+'mainform').submit();}">
+														<input name="cari" id="cari" class="form-control" placeholder="Search..." type="text" value="<?= $keyword ?>" onkeypress="if (event.keyCode == 13){$('#'+'mainform').attr('action', '<?= base_url('deliveryorderslist/search') ?>';$('#'+'mainform').submit();">
 														<div class="input-group-btn">
 															<button type="submit" class="btn btn-default" onclick="$('#'+'mainform').attr('action', '<?= base_url('deliveryorderslist/search') ?>');$('#'+'mainform').submit();"><i class="fa fa-search"></i></button>
 														</div>
