@@ -246,7 +246,8 @@ class ArrangeShipment extends BaseController
     {
         session()->remove('success');
         if (!$this->validate([
-            'vendorshi_status' => 'required|min_length[3]|max_length[60]',
+            //'vendorshi_status' => 'required|min_length[3]|max_length[60]',
+            'etdorigin_date' => 'required',
 
         ])) {
             session()->set('success', '-1');
@@ -479,7 +480,8 @@ class ArrangeShipment extends BaseController
     {
         session()->remove('success');
         if (!$this->validate([
-            'vendorshi_status' => 'required|min_length[3]|max_length[60]',
+            //'vendorshi_status' => 'required|min_length[3]|max_length[60]',
+            'etdorigin_date' => 'required',
 
         ])) {
             session()->set('success', '-1');
