@@ -187,7 +187,7 @@ class Usersetup extends BaseController
             if ($chek > 0) {
                 session()->set('success', '-2');
                 return redirect()->to(base_url('/usersetup/add/'))->withInput();
-            } else if ($chkctuser > 8) {
+            } else if ($chkctuser > 9) {
                 session()->set('success', '-5');
                 return redirect()->to(base_url('/usersetup/add/'))->withInput();
             } else {
