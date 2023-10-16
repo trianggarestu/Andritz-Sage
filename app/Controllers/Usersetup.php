@@ -108,7 +108,7 @@ class Usersetup extends BaseController
     {
         session()->remove('success');
         session()->set('success', '0');
-
+        $chkctuser = $this->SetupModel->count_users();
         $data = array(
             'button' => 'Add New User',
             'form_action' => base_url('/usersetup/create_action'),
@@ -119,6 +119,7 @@ class Usersetup extends BaseController
             'password' => set_value('PASSWORD'),
             'groupdesc' => set_value('GROUPNAME'),
             'photo' => set_value('PATH_PHOTO'),
+            'chkctuser' => $chkctuser,
             'groupuser' => $this->SetupModel->get_usergroup(),
         );
 
@@ -187,7 +188,7 @@ class Usersetup extends BaseController
             if ($chek > 0) {
                 session()->set('success', '-2');
                 return redirect()->to(base_url('/usersetup/add/'))->withInput();
-            } else if ($chkctuser > 9) {
+            } else if ($chkctuser >= 9) {
                 session()->set('success', '-5');
                 return redirect()->to(base_url('/usersetup/add/'))->withInput();
             } else {
